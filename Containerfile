@@ -13,6 +13,9 @@ ENV NEXT_TELEMETRY_DISABLED=1 DATABASE_URL=postgres://build:build@127.0.0.1:1/bu
 RUN pnpm build
 
 FROM build AS run
+# The commit the image was built from, answered by /api/version. The release workflow passes it.
+ARG APP_REVISION=unknown
+ENV APP_REVISION=$APP_REVISION
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0
 ENV DATABASE_URL=
 USER node
