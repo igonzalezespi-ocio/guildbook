@@ -1,3 +1,8 @@
+> **This is a fork** of [Guildbook](https://github.com/Guildbook/guildbook), adapted to run one guild on a
+> self-hosted server (Podman). Same licence (AGPL-3.0-only); our changes are published here. Changes so far:
+> a production container image (`Containerfile`) published to GHCR, test-only switches that refuse to run on
+> any production server (not only on Vercel), and a secret scan in CI.
+
 <p align="center">
   <a href="https://guildbook.io"><img src="public/brand/guildbook/social/x-header.png" alt="Guildbook: guild sites for World of Warcraft: Forever" width="100%"></a>
 </p>

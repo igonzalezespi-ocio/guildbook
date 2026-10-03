@@ -1,5 +1,6 @@
 import { REGIONS, type Region, RULESETS, type Ruleset } from "@/lib/game";
 import type { SupportedGuildVersion } from "@/lib/game-versions";
+import { isProductionRuntime } from "@/lib/runtime-env";
 
 export { REGIONS, type Region };
 
@@ -165,7 +166,7 @@ export function blizzardConfigFromEnv(env: Record<string, string | undefined> = 
   const region = regionOr(env.BATTLENET_REGION, "us");
   const regions = list(env.BATTLENET_REGIONS).filter(isRegion);
   const mock = env.BATTLENET_MOCK === "1";
-  if (mock && env.VERCEL_ENV === "production") {
+  if (mock && isProductionRuntime(env)) {
     throw new Error("BATTLENET_MOCK must never be enabled in production.");
   }
   const profileNamespace = namespaceTemplate(env.BATTLENET_PROFILE_NAMESPACE?.trim() || DEFAULT_NAMESPACE);

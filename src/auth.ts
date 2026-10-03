@@ -7,6 +7,7 @@ import { z } from "zod";
 import { db } from "@/db";
 import { accounts, sessions, users, verificationTokens } from "@/db/schema";
 import { hostConfigFromEnv, validateRedirectTarget } from "@/lib/hosts";
+import { isProductionRuntime } from "@/lib/runtime-env";
 import { stripOAuthTokens } from "@/server/auth-adapter";
 
 const hostConfig = hostConfigFromEnv();
@@ -22,7 +23,7 @@ declare module "next-auth" {
 }
 
 export const testModeEnabled = process.env.AUTH_TEST_MODE === "1";
-if (testModeEnabled && process.env.VERCEL_ENV === "production") {
+if (testModeEnabled && isProductionRuntime()) {
   throw new Error("AUTH_TEST_MODE must never be enabled in production.");
 }
 
