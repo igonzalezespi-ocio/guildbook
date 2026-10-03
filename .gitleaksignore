@@ -1,0 +1,3 @@
+# Placeholder Discord user ID (123456789012345678) in an upstream test, not a credential.
+3eb0cf1e969143c0ad8db4a53279ba728a546e59:tests/integration/bootstrap.test.ts:discord-client-id:109
+3eb0cf1e969143c0ad8db4a53279ba728a546e59:tests/integration/bootstrap.test.ts:discord-client-id:120

@@ -68,6 +68,7 @@ describe("blizzardConfigFromEnv", () => {
     expect(realmSlugsFor(config, "us")).toEqual(["crusaders-reach", "silverpine"]);
     expect(realmSlugsFor(config, "eu")).toEqual(["crusaders-reach", "hollowmere"]);
     expect(() => blizzardConfigFromEnv({ BATTLENET_MOCK: "1", VERCEL_ENV: "production" })).toThrow(/production/);
+    expect(() => blizzardConfigFromEnv({ BATTLENET_MOCK: "1", NODE_ENV: "production" })).toThrow(/production/);
   });
 
   it("parses realm rulesets for every region or one region", () => {
