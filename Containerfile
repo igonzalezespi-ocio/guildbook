@@ -21,4 +21,7 @@ ENV DATABASE_URL=
 USER node
 EXPOSE 3000
 # `next start` directly: pnpm (corepack) needs a writable cache, and the container runs with a read-only filesystem.
-CMD ["node_modules/.bin/next", "start"]
+# DELIBERATELY BROKEN, temporary: an image that exits at once, to prove the server keeps the previous
+# release (update rollback test). The next PR puts the line above back.
+# CMD ["node_modules/.bin/next", "start"]
+CMD ["node", "-e", "process.exit(1)"]
