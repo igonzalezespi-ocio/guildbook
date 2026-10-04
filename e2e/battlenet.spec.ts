@@ -86,7 +86,7 @@ test("without Battle.net, manual entry still works and the officer sees it unver
 
   await signIn(page, "seed-ironvow", "Ironvow", "/admin/applications");
   const row = page.getByRole("link", { name: new RegExp(`${name} Handwritten`) });
-  await expect(row.getByText("Unverified", { exact: true })).toBeVisible();
+  await expect(row.getByText("Sin verificar", { exact: true })).toBeVisible();
   await row.click();
   await expect(page.getByText("Introducido a mano; no se ha comprobado con Battle.net.")).toBeVisible();
 });
@@ -106,9 +106,9 @@ test("a member imports verified characters and an officer syncs their levels", a
     ["Aldric", "Holy", "healer"],
     ["Brenna", "Shadow", "ranged"],
   ] as const) {
-    await page.getByLabel(`${name} surname`).fill(surname);
-    await chooseOption(page.getByLabel(`${name} spec`), spec);
-    await chooseOption(page.getByLabel(`${name} role`), role);
+    await page.getByLabel(`Apellido de ${name}`).fill(surname);
+    await chooseOption(page.getByLabel(`Especialización de ${name}`), spec);
+    await chooseOption(page.getByLabel(`Rol de ${name}`), role);
     await page.locator("li", { has: page.getByLabel(`Apellido de ${name}`) }).getByRole("button", { name: "Importar" }).click();
     await expect(page.getByText(`Importado como ${name} ${surname}`)).toBeVisible();
   }
@@ -144,7 +144,7 @@ test("the Guild Master verifies the guild through Battle.net", async ({ page }) 
     // tests have linked since; refreshing lists Tor's again.
     await expect(async () => {
       await account.getByRole("button", { name: "Actualizar personajes" }).click();
-      await expect(account.getByRole("status").filter({ hasText: /Found \d+ WoW: Forever characters/ })).toBeVisible({ timeout: 3000 });
+      await expect(account.getByRole("status").filter({ hasText: /Hemos encontrado \d+ personajes de WoW: Forever/ })).toBeVisible({ timeout: 3000 });
     }).toPass();
   }
   await expect(account).toContainText(/Pilgrim#\d{4}/);
