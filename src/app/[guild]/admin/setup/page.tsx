@@ -30,15 +30,15 @@ import { VERSION_INFO } from "@/lib/game-versions";
 import { listRanks } from "@/server/services/ranks";
 import { SetupProgress, STEP_COPY, StepStatusIcon } from "./steps";
 
-export const metadata: Metadata = { title: "Setup" };
+export const metadata: Metadata = { title: "Configuración" };
 
 function SkipButton({ slug, step }: { slug: string; step: SetupStep }) {
   if (step.status === "done" || step.key === "publish") return null;
   const skipped = step.status === "skipped";
   return (
     <ActionForm action={skipSetupStepAction.bind(null, slug, step.key, !skipped)} toast={false}>
-      <SubmitButton variant="ghost" size="sm" pendingLabel={skipped ? "Restoring…" : "Skipping…"}>
-        {skipped ? "Undo skip" : "Skip for now"}
+      <SubmitButton variant="ghost" size="sm" pendingLabel={skipped ? "Restaurando…" : "Omitiendo…"}>
+        {skipped ? "Deshacer omisión" : "Omitir por ahora"}
       </SubmitButton>
     </ActionForm>
   );
@@ -59,7 +59,7 @@ export default async function SetupPage({ params }: PageProps<"/[guild]/admin/se
     ranks: !order && canManageRanks && (
       <div className="space-y-4">
         <div>
-          <p className="field-label">Your ranks now</p>
+          <p className="field-label">Tus rangos ahora</p>
           <ol className="flex flex-wrap gap-2">
             {ranks.map((r) => (
               <li key={r.id} className="flex items-center gap-1.5 rounded border border-line px-2 py-1 text-xs text-bone">
@@ -75,22 +75,22 @@ export default async function SetupPage({ params }: PageProps<"/[guild]/admin/se
             <ActionForm
               action={applyRankPresetAction.bind(null, slug)}
               className="space-y-3"
-              confirm="Replace your rank names with this preset? Members keep their permission level, and anyone on a rank the preset doesn't have moves to the closest one."
+              confirm="¿Sustituir los nombres de tus rangos por esta plantilla? Los miembros conservan su nivel de permisos, y quien esté en un rango que la plantilla no tenga pasa al más parecido."
             >
               <PresetChoices name="preset" defaultKey={DEFAULT_RANK_PRESET} />
               <div className="flex flex-wrap items-center gap-3">
-                <SubmitButton variant="ghost" size="sm" pendingLabel="Applying…">
-                  Apply preset
+                <SubmitButton variant="ghost" size="sm" pendingLabel="Aplicando…">
+                  Aplicar plantilla
                 </SubmitButton>
                 <FormMessage />
               </div>
             </ActionForm>
             {summary.steps.find((s) => s.key === "ranks")?.status !== "done" && (
               <ActionForm action={confirmRanksAction.bind(null, slug)} className="flex flex-wrap items-center gap-3">
-                <SubmitButton size="sm" pendingLabel="Confirming…">
-                  Keep these ranks
+                <SubmitButton size="sm" pendingLabel="Confirmando…">
+                  Mantener estos rangos
                 </SubmitButton>
-                <span className="text-xs text-muted">You can still edit them any time.</span>
+                <span className="text-xs text-muted">Puedes editarlos cuando quieras.</span>
                 <FormMessage />
               </ActionForm>
             )}
@@ -101,19 +101,19 @@ export default async function SetupPage({ params }: PageProps<"/[guild]/admin/se
     invite: (
       <div className="space-y-2 text-sm">
         <p>
-          Your site: <a href={siteUrl} className="link font-mono break-all">{siteUrl.replace(/^https?:\/\//, "")}</a>
+          Tu sitio: <a href={siteUrl} className="link font-mono break-all">{siteUrl.replace(/^https?:\/\//, "")}</a>
         </p>
         {!guild.publishedAt &&
           (guild.setup.inviteCode ? (
             <p data-testid="draft-invite">
-              While you are a draft, guildmates apply through this private link:{" "}
+              Mientras seas un borrador, tus compañeros de hermandad envían su solicitud con este enlace privado:{" "}
               <span className="font-mono break-all text-bone">{`${siteUrl}/apply?invite=${guild.setup.inviteCode}`}</span>
             </p>
           ) : (
             <ActionForm action={createDraftInviteAction.bind(null, slug)} className="flex flex-wrap items-center gap-3">
-              <span className="text-muted">Applications open when you publish. Until then, guildmates can apply through a private link.</span>
-              <SubmitButton variant="ghost" size="sm" pendingLabel="Creating…">
-                Create invite link
+              <span className="text-muted">Las solicitudes se abren al publicar. Hasta entonces, tus compañeros pueden solicitar entrar con un enlace privado.</span>
+              <SubmitButton variant="ghost" size="sm" pendingLabel="Creando…">
+                Crear enlace de invitación
               </SubmitButton>
               <FormMessage />
             </ActionForm>
@@ -122,13 +122,13 @@ export default async function SetupPage({ params }: PageProps<"/[guild]/admin/se
     ),
     verify: !verificationSupported(guild.gameVersion) ? (
       <p className="rounded border border-gold-dim/60 bg-gold/5 px-3 py-2 text-sm text-bone" data-testid="setup-verify-coming-soon">
-        This can wait. Battle.net verification for {VERSION_INFO[guild.gameVersion].label} guilds is coming soon; skip this step
-        for now.
+        Esto puede esperar. La verificación con Battle.net para hermandades de {VERSION_INFO[guild.gameVersion].label} llegará pronto;
+        de momento, omite este paso.
       </p>
     ) : isPreLaunch(new Date(), guild.gameVersion) && (
       <p className="rounded border border-gold-dim/60 bg-gold/5 px-3 py-2 text-sm text-bone">
-        This can wait. Verification opens once WoW: Forever characters exist, from launch on Nov 4, 2026, and it needs the
-        in-game Guild Master&apos;s own Battle.net account.
+        Esto puede esperar. La verificación se abre cuando existan personajes de WoW: Forever, desde el lanzamiento el 4 de noviembre
+        de 2026, y necesita la cuenta de Battle.net del propio maestro de la hermandad en el juego.
       </p>
     ),
     publish: (
@@ -136,12 +136,12 @@ export default async function SetupPage({ params }: PageProps<"/[guild]/admin/se
         {guild.publishedAt ? (
           <ActionForm
             action={unpublishGuildAction.bind(null, slug)}
-            confirm="Return the guild to a draft? It leaves the directory and search engines, and applications close until you publish again."
+            confirm="¿Devolver la hermandad a borrador? Sale del directorio y de los buscadores, y las solicitudes se cierran hasta que vuelvas a publicar."
             className="flex flex-wrap items-center gap-3"
           >
-            <p className="text-sm text-bone">Your guild is public.</p>
-            <SubmitButton variant="ghost" size="sm" pendingLabel="Unpublishing…">
-              Return to draft
+            <p className="text-sm text-bone">Tu hermandad es pública.</p>
+            <SubmitButton variant="ghost" size="sm" pendingLabel="Despublicando…">
+              Volver a borrador
             </SubmitButton>
             <FormMessage />
           </ActionForm>
@@ -149,7 +149,7 @@ export default async function SetupPage({ params }: PageProps<"/[guild]/admin/se
           <>
             {summary.publishMissing.length > 0 && (
               <div className="text-sm" data-testid="publish-missing">
-                <p className="text-bone">Before you publish:</p>
+                <p className="text-bone">Antes de publicar:</p>
                 <ul className="mt-1 list-disc space-y-0.5 pl-5 text-muted">
                   {summary.publishMissing.map((m) => (
                     <li key={m}>{m}</li>
@@ -159,8 +159,8 @@ export default async function SetupPage({ params }: PageProps<"/[guild]/admin/se
             )}
             <ActionForm action={publishGuildAction.bind(null, slug)} className="flex flex-wrap items-center gap-3">
               <fieldset disabled={!summary.canPublish} className="disabled:opacity-50">
-                <SubmitButton variant="gold" pendingLabel="Publishing…">
-                  Publish guild
+                <SubmitButton variant="gold" pendingLabel="Publicando…">
+                  Publicar hermandad
                 </SubmitButton>
               </fieldset>
               <FormMessage />
@@ -173,31 +173,31 @@ export default async function SetupPage({ params }: PageProps<"/[guild]/admin/se
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <PageHeader title={`Set up ${guild.name}`} eyebrow="Guild setup">
+      <PageHeader title={`Configura ${guild.name}`} eyebrow="Configuración de la hermandad">
         <div className="mx-auto max-w-md space-y-2">
           <p className="text-sm" data-testid="setup-progress">
-            {summary.done} of {summary.total} steps done
+            {summary.done} de {summary.total} pasos hechos
           </p>
           <SetupProgress done={summary.done} total={summary.total} />
         </div>
       </PageHeader>
 
       {founderNotGm && (
-        <Panel title="The Guild Master verifies" className="border-gold-dim/70" actions={<Tag>Unverified</Tag>}>
+        <Panel title="Verifica el maestro de la hermandad" className="border-gold-dim/70" actions={<Tag>Sin verificar</Tag>}>
           <div className="space-y-2 text-sm" data-testid="founder-not-gm">
             <p className="leading-relaxed text-bone">
-              {founderNotGm.characterName} is in {guild.name} in game
-              {founderNotGm.rank != null ? ` (rank ${founderNotGm.rank})` : ""}, but isn&apos;t its Guild Master. Your guild
-              works fully as an unverified draft; only the in-game Guild Master can verify it.
+              {founderNotGm.characterName} está en {guild.name} en el juego
+              {founderNotGm.rank != null ? ` (rango ${founderNotGm.rank})` : ""}, pero no es su maestro de la hermandad. Tu hermandad
+              funciona del todo como borrador sin verificar; solo el maestro de la hermandad del juego puede verificarla.
             </p>
             <p className="leading-relaxed text-muted">
-              Send the Guild Master this invite link. Once they have joined, give them an admin rank under Members; they link
-              Battle.net on My Characters and check verification under Guild Settings. After that you can hand them the top
-              rank from the same panel.
+              Envía al maestro de la hermandad este enlace de invitación. Cuando se haya unido, dale un rango de administrador en Miembros;
+              vinculará Battle.net en Mis personajes y comprobará la verificación en Ajustes de la hermandad. Después podrás cederle el rango
+              más alto desde el mismo panel.
             </p>
             {inviteUrl && (
               <p data-testid="founder-invite">
-                Invite link: <span className="font-mono break-all text-bone">{inviteUrl}</span>
+                Enlace de invitación: <span className="font-mono break-all text-bone">{inviteUrl}</span>
               </p>
             )}
           </div>
@@ -205,22 +205,23 @@ export default async function SetupPage({ params }: PageProps<"/[guild]/admin/se
       )}
 
       {summary.offerNeutralDefaults && (
-        <Panel title="Start from neutral defaults" className="border-gold-dim/70" actions={<Tag>Recommended</Tag>}>
+        <Panel title="Empieza con predeterminados neutros" className="border-gold-dim/70" actions={<Tag>Recomendado</Tag>}>
           <div className="space-y-4 text-sm" data-testid="neutral-defaults">
             <p className="leading-relaxed text-muted">
-              Your guild still has the Order of Saint Michael&apos;s{" "}
-              {facts.ranksMatchOrder && facts.contentMatchesOrder ? "ranks and pages" : facts.ranksMatchOrder ? "ranks" : "pages"}, from
-              before new guilds got neutral defaults. Replace them with a starter ladder and starter pages. Members keep their permission level, pages you
-              have rewritten stay as they are, and the old text is kept in the page history.
+              Tu hermandad aún tiene{" "}
+              {facts.ranksMatchOrder && facts.contentMatchesOrder ? "los rangos y las páginas" : facts.ranksMatchOrder ? "los rangos" : "las páginas"} de la
+              Order of Saint Michael, de antes de que las hermandades nuevas recibieran predeterminados neutros. Sustitúyelos por una escala y unas
+              páginas de ejemplo. Los miembros conservan su nivel de permisos, las páginas que hayas reescrito se quedan como están y el texto
+              antiguo se guarda en el historial de la página.
             </p>
             <ActionForm
               action={neutralDefaultsAction.bind(null, slug)}
               className="space-y-3"
-              confirm="Replace the Order of Saint Michael's ranks and unedited pages with neutral defaults?"
+              confirm="¿Sustituir los rangos y las páginas sin editar de la Order of Saint Michael por predeterminados neutros?"
             >
               <PresetChoices name="preset" defaultKey={DEFAULT_RANK_PRESET} />
               <div className="flex flex-wrap items-center gap-3">
-                <SubmitButton pendingLabel="Replacing…">Use neutral defaults</SubmitButton>
+                <SubmitButton pendingLabel="Sustituyendo…">Usar predeterminados neutros</SubmitButton>
                 <FormMessage />
               </div>
             </ActionForm>
@@ -240,15 +241,15 @@ export default async function SetupPage({ params }: PageProps<"/[guild]/admin/se
                     <h2 className={step.status === "todo" ? "font-display text-gold" : "font-display text-gold-dim"}>
                       <span className="text-muted">{i + 1}.</span> {copy.title}
                     </h2>
-                    {step.requiredToPublish && step.status !== "done" && !guild.publishedAt && <Tag>Needed to publish</Tag>}
-                    {step.status === "skipped" && <Tag>Skipped</Tag>}
+                    {step.requiredToPublish && step.status !== "done" && !guild.publishedAt && <Tag>Necesario para publicar</Tag>}
+                    {step.status === "skipped" && <Tag>Omitido</Tag>}
                   </div>
                   <p className="text-sm leading-relaxed text-muted">{copy.body}</p>
                   {extra[step.key]}
                   {step.key !== "publish" && (
                     <div className="flex flex-wrap items-center gap-2">
                       <Link href={h(copy.href)} className={step.status === "done" ? "btn btn-ghost btn-sm" : "btn btn-primary btn-sm"}>
-                        {step.status === "done" ? "Review" : copy.cta}
+                        {step.status === "done" ? "Revisar" : copy.cta}
                       </Link>
                       <SkipButton slug={slug} step={step} />
                     </div>
@@ -264,18 +265,18 @@ export default async function SetupPage({ params }: PageProps<"/[guild]/admin/se
         {summary.dismissed ? (
           <ActionForm action={dismissSetupAction.bind(null, slug, false)}>
             <SubmitButton variant="ghost" size="sm">
-              Show this checklist on the admin home
+              Mostrar esta lista en la portada de administración
             </SubmitButton>
           </ActionForm>
         ) : (
           <ActionForm action={dismissSetupAction.bind(null, slug, true)}>
             <SubmitButton variant="ghost" size="sm">
-              Hide this checklist from the admin home
+              Ocultar esta lista de la portada de administración
             </SubmitButton>
           </ActionForm>
         )}
         <Link href={h("/admin")} className="link">
-          Go to the admin home
+          Ir a la portada de administración
         </Link>
       </div>
     </div>
