@@ -14,7 +14,7 @@ import { awardLootAction, reverseLootAction } from "@/server/actions/loot";
 import { requirePage } from "@/server/context";
 import { awardFormOptions, listLoot } from "@/server/services/loot";
 
-export const metadata: Metadata = { title: "Loot" };
+export const metadata: Metadata = { title: "Botín" };
 
 export default async function AdminLootPage({ params }: PageProps<"/[guild]/admin/loot">) {
   const { guild: slug } = await params;
@@ -25,17 +25,17 @@ export default async function AdminLootPage({ params }: PageProps<"/[guild]/admi
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Loot" eyebrow="Record what the raid handed out">
-        Award items one at a time here, or{" "}
+      <PageHeader title="Botín" eyebrow="Registra lo que repartió la banda">
+        Entrega objetos de uno en uno aquí, o{" "}
         <Link href={guildHref(slug, "/admin/loot/import")} className="text-gold hover:underline">
-          import a Gargul or RCLootCouncil export
+          importa una exportación de Gargul o RCLootCouncil
         </Link>
-        . Awards can&apos;t be edited; reverse a mistake and record it again.
+        . Las entregas no se pueden editar; anula el error y vuelve a registrarla.
       </PageHeader>
 
-      <Panel title="Quick award">
+      <Panel title="Entrega rápida">
         <ActionForm action={awardLootAction.bind(null, slug)} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <Field label="Item" name="item" hint="Item ID, in-game link, Wowhead link, or a known item's name">
+          <Field label="Objeto" name="item" hint="ID de objeto, enlace del juego, enlace de Wowhead o el nombre de un objeto conocido">
             <input id="item" name="item" className="field" list="loot-items" required autoComplete="off" />
           </Field>
           <datalist id="loot-items">
@@ -43,17 +43,17 @@ export default async function AdminLootPage({ params }: PageProps<"/[guild]/admi
               <option key={i.itemId} value={`${i.name} (#${i.itemId})`} />
             ))}
           </datalist>
-          <Field label="Recipient" name="characterId" hint="Leave empty when it was disenchanted or banked">
+          <Field label="Destinatario" name="characterId" hint="Déjalo vacío si se desencantó o fue al banco">
             <Listbox
               id="characterId"
               name="characterId"
-              options={[{ value: "", label: "Nobody" }, ...options.characters.map((c) => ({ value: c.id, label: fullName(c.name, c.surname) }))]}
+              options={[{ value: "", label: "Nadie" }, ...options.characters.map((c) => ({ value: c.id, label: fullName(c.name, c.surname) }))]}
               defaultValue=""
               searchable={options.characters.length > 12}
-              searchPlaceholder="Search characters"
+              searchPlaceholder="Buscar personajes"
             />
           </Field>
-          <Field label="Awarded for" name="response">
+          <Field label="Entregado por" name="response">
             <Listbox
               id="response"
               name="response"
@@ -61,33 +61,33 @@ export default async function AdminLootPage({ params }: PageProps<"/[guild]/admi
               defaultValue="main_spec"
             />
           </Field>
-          <Field label="Boss" name="bossId">
+          <Field label="Jefe" name="bossId">
             <Listbox
               id="bossId"
               name="bossId"
               options={[
-                { value: "", label: "Not recorded" },
+                { value: "", label: "Sin registrar" },
                 ...options.bosses.map((b) => ({ value: b.id, label: b.name, group: b.instanceName })),
               ]}
               defaultValue=""
               searchable={options.bosses.length > 12}
-              searchPlaceholder="Search bosses"
+              searchPlaceholder="Buscar jefes"
             />
           </Field>
-          <Field label="Raid night" name="awardedOn">
+          <Field label="Noche de banda" name="awardedOn">
             <input id="awardedOn" name="awardedOn" type="date" className="field" defaultValue={today} max={today} required />
           </Field>
-          <Field label="Note" name="note">
+          <Field label="Nota" name="note">
             <input id="note" name="note" className="field" maxLength={300} />
           </Field>
           <div className="flex flex-wrap items-center gap-3 sm:col-span-full">
-            <SubmitButton pendingLabel="Recording…">Record award</SubmitButton>
+            <SubmitButton pendingLabel="Registrando…">Registrar entrega</SubmitButton>
             <FormMessage />
           </div>
         </ActionForm>
       </Panel>
 
-      <Panel title="Recent loot">
+      <Panel title="Botín reciente">
         <LootTable
           slug={slug}
           rows={recent}
@@ -97,15 +97,15 @@ export default async function AdminLootPage({ params }: PageProps<"/[guild]/admi
                   row.reversal ? null : (
                     <ActionForm
                       action={reverseLootAction.bind(null, slug, row.id)}
-                      confirm={`Reverse ${row.itemName}? The award stays in the history, struck through.`}
+                      confirm={`¿Anular ${row.itemName}? La entrega se queda en el historial, tachada.`}
                       className="flex min-w-56 items-start gap-2"
                     >
                       <label className="sr-only" htmlFor={`reason-${row.id}`}>
-                        Reason for reversing {row.itemName}
+                        Motivo para anular {row.itemName}
                       </label>
-                      <input id={`reason-${row.id}`} name="reason" className="field py-1 text-xs" placeholder="Reason" required maxLength={300} />
-                      <SubmitButton size="sm" variant="ghost" pendingLabel="Reversing…">
-                        Reverse
+                      <input id={`reason-${row.id}`} name="reason" className="field py-1 text-xs" placeholder="Motivo" required maxLength={300} />
+                      <SubmitButton size="sm" variant="ghost" pendingLabel="Anulando…">
+                        Anular
                       </SubmitButton>
                       <FormMessage />
                     </ActionForm>

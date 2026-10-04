@@ -15,7 +15,7 @@ import {
 import { requirePage } from "@/server/context";
 import { getProgression } from "@/server/services/content";
 
-export const metadata: Metadata = { title: "Progression" };
+export const metadata: Metadata = { title: "Progreso" };
 
 export default async function AdminProgressionPage({ params }: PageProps<"/[guild]/admin/progression">) {
   const { guild: slug } = await params;
@@ -25,34 +25,34 @@ export default async function AdminProgressionPage({ params }: PageProps<"/[guil
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Progression" />
+      <PageHeader title="Progreso" />
 
-      <Panel title="Record a kill">
+      <Panel title="Registrar una muerte de jefe">
         <ActionForm
           action={recordBossKillAction.bind(null, slug)}
           className={`grid gap-3 sm:items-end ${guild.faction ? "sm:grid-cols-3" : "sm:grid-cols-4"}`}
         >
-          <Field label="Boss" name="bossId">
+          <Field label="Jefe" name="bossId">
             <Listbox
               id="bossId"
               name="bossId"
               options={progression.flatMap((i) => i.bosses.map((b) => ({ value: b.id, label: b.name, group: i.name })))}
-              placeholder="Choose a boss"
-              requiredMessage="Choose a boss"
+              placeholder="Elige un jefe"
+              requiredMessage="Elige un jefe"
               required
               searchable={progression.reduce((n, i) => n + i.bosses.length, 0) > 12}
-              searchPlaceholder="Search bosses"
+              searchPlaceholder="Buscar jefes"
             />
           </Field>
           {!guild.faction && (
-            <Field label="Faction" name="faction">
+            <Field label="Facción" name="faction">
               <Listbox id="faction" name="faction" options={FACTION_OPTIONS} />
             </Field>
           )}
-          <Field label="Date" name="killedOn">
+          <Field label="Fecha" name="killedOn">
             <input id="killedOn" name="killedOn" type="date" className="field" defaultValue={today} required />
           </Field>
-          <SubmitButton>Record kill</SubmitButton>
+          <SubmitButton>Registrar muerte</SubmitButton>
           <input type="hidden" name="note" value="" />
           <div className="sm:col-span-full">
             <FormMessage />
@@ -71,8 +71,8 @@ export default async function AdminProgressionPage({ params }: PageProps<"/[guil
                     <li key={k.id} className="flex items-center gap-1.5 rounded border border-line px-2 py-0.5 text-xs">
                       {!guild.faction && <FactionBadge faction={k.faction} />}
                       {formatDate(k.killedAt, guild.timezone)}
-                      <ActionForm action={deleteBossKillAction.bind(null, slug, k.id)} confirm="Delete this kill record?">
-                        <button type="submit" className="ml-1 text-red-300" aria-label="Delete kill">
+                      <ActionForm action={deleteBossKillAction.bind(null, slug, k.id)} confirm="¿Borrar este registro de muerte?">
+                        <button type="submit" className="ml-1 text-red-300" aria-label="Borrar muerte">
                           ×
                         </button>
                       </ActionForm>
@@ -84,27 +84,27 @@ export default async function AdminProgressionPage({ params }: PageProps<"/[guil
           </ul>
           <ActionForm action={createBossAction.bind(null, slug)} className="mt-3 flex gap-2">
             <input type="hidden" name="instanceId" value={instance.id} />
-            <input name="name" className="field" placeholder="New boss name" aria-label="New boss name" required />
+            <input name="name" className="field" placeholder="Nombre del nuevo jefe" aria-label="Nombre del nuevo jefe" required />
             <SubmitButton variant="ghost" size="sm">
-              Add boss
+              Añadir jefe
             </SubmitButton>
             <FormMessage />
           </ActionForm>
         </Panel>
       ))}
 
-      <Panel title="Add raid instance">
+      <Panel title="Añadir instancia de banda">
         <ActionForm action={createInstanceAction.bind(null, slug)} className="grid gap-3 sm:grid-cols-4 sm:items-end">
-          <Field label="Name" name="name">
+          <Field label="Nombre" name="name">
             <input id="inst-name" name="name" className="field" required />
           </Field>
-          <Field label="Short name" name="shortName">
+          <Field label="Nombre corto" name="shortName">
             <input id="inst-short" name="shortName" className="field" required />
           </Field>
-          <Field label="Size" name="size">
-            <Listbox id="inst-size" name="size" aria-label="Size" options={plainOptions(["10", "20", "25", "40"])} defaultValue="40" />
+          <Field label="Tamaño" name="size">
+            <Listbox id="inst-size" name="size" aria-label="Tamaño" options={plainOptions(["10", "20", "25", "40"])} defaultValue="40" />
           </Field>
-          <SubmitButton>Add instance</SubmitButton>
+          <SubmitButton>Añadir instancia</SubmitButton>
           <div className="sm:col-span-4">
             <FormMessage />
           </div>
