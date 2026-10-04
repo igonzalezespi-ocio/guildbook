@@ -13,7 +13,7 @@ import { setRecruitmentNeedAction, setRecruitmentOpenAction } from "@/server/act
 import { requirePage } from "@/server/context";
 import { listRecruitmentNeeds } from "@/server/services/content";
 
-export const metadata: Metadata = { title: "Recruitment" };
+export const metadata: Metadata = { title: "Reclutamiento" };
 
 export default async function RecruitmentPage({ params }: PageProps<"/[guild]/admin/recruitment">) {
   const { guild: slug } = await params;
@@ -22,36 +22,36 @@ export default async function RecruitmentPage({ params }: PageProps<"/[guild]/ad
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Recruitment" />
+      <PageHeader title="Reclutamiento" />
       <Panel>
         <ActionForm action={setRecruitmentOpenAction.bind(null, slug, !guild.recruitmentOpen)} className="flex flex-wrap items-center gap-3">
           <p>
-            Recruitment is <strong className="text-gold">{guild.recruitmentOpen ? "open" : "closed"}</strong>.
+            El reclutamiento está <strong className="text-gold">{guild.recruitmentOpen ? "abierto" : "cerrado"}</strong>.
           </p>
           <SubmitButton variant={guild.recruitmentOpen ? "danger" : "primary"} size="sm">
-            {guild.recruitmentOpen ? "Close recruitment" : "Open recruitment"}
+            {guild.recruitmentOpen ? "Cerrar reclutamiento" : "Abrir reclutamiento"}
           </SubmitButton>
           <FormMessage />
         </ActionForm>
       </Panel>
 
-      <Panel title="Set a need">
+      <Panel title="Indicar una necesidad">
         <ActionForm action={setRecruitmentNeedAction.bind(null, slug)} className="grid gap-3 sm:grid-cols-6 sm:items-end">
           <ClassSelect name="wowClass" className="sm:col-span-1" />
-          <Listbox name="role" aria-label="Role" options={ROLE_OPTIONS} />
+          <Listbox name="role" aria-label="Rol" options={ROLE_OPTIONS} />
           {!guild.faction && (
-            <Listbox name="faction" aria-label="Faction" options={[{ value: "", label: "Either faction" }, ...FACTION_OPTIONS]} />
+            <Listbox name="faction" aria-label="Facción" options={[{ value: "", label: "Cualquier facción" }, ...FACTION_OPTIONS]} />
           )}
           <PrioritySelect name="priority" />
-          <input name="note" className="field" placeholder="Note (optional)" aria-label="Note" />
-          <SubmitButton>Save</SubmitButton>
+          <input name="note" className="field" placeholder="Nota (opcional)" aria-label="Nota" />
+          <SubmitButton>Guardar</SubmitButton>
           <div className="sm:col-span-6">
             <FormMessage />
           </div>
         </ActionForm>
       </Panel>
 
-      <Panel title="Current needs">
+      <Panel title="Necesidades actuales">
         <ul className="divide-y divide-line text-sm">
           {needs
             .filter((n) => n.priority !== "closed")
@@ -74,7 +74,7 @@ export default async function RecruitmentPage({ params }: PageProps<"/[guild]/ad
                     <input type="hidden" name="faction" value={n.faction ?? ""} />
                     <input type="hidden" name="priority" value="closed" />
                     <SubmitButton variant="ghost" size="sm">
-                      Close
+                      Cerrar
                     </SubmitButton>
                   </ActionForm>
                 </span>

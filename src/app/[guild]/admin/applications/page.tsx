@@ -3,12 +3,12 @@ import Link from "next/link";
 import { ClassName, EmptyState, FactionBadge, PageHeader, RoleBadge, StatusPill, VerificationBadge } from "@/components/ui";
 import { db } from "@/db";
 import { formatDate } from "@/lib/format";
-import { fullName } from "@/lib/game";
+import { APPLICATION_STATUS_LABELS, fullName, specLabel } from "@/lib/game";
 import { guildHref } from "@/lib/paths";
 import { requirePage } from "@/server/context";
 import { listApplications } from "@/server/services/applications";
 
-export const metadata: Metadata = { title: "Applications" };
+export const metadata: Metadata = { title: "Solicitudes" };
 
 const FILTERS = ["pending", "trial", "accepted", "declined", "withdrawn"] as const;
 
@@ -21,7 +21,7 @@ export default async function ApplicationsPage({ params, searchParams }: PagePro
 
   return (
     <div>
-      <PageHeader title="Applications" />
+      <PageHeader title="Solicitudes" />
       <div className="mb-4 flex flex-wrap gap-2">
         {FILTERS.map((f) => (
           <Link
@@ -29,11 +29,11 @@ export default async function ApplicationsPage({ params, searchParams }: PagePro
             href={`${guildHref(slug, "/admin/applications")}?status=${f}`}
             className={`btn btn-sm capitalize ${f === status ? "btn-primary" : "btn-ghost"}`}
           >
-            {f}
+            {APPLICATION_STATUS_LABELS[f]}
           </Link>
         ))}
       </div>
-      {rows.length === 0 && <EmptyState>No {status} applications.</EmptyState>}
+      {rows.length === 0 && <EmptyState>No hay solicitudes en «{APPLICATION_STATUS_LABELS[status]}».</EmptyState>}
       <ul className="space-y-2">
         {rows.map(({ application: a, applicant }) => (
           <li key={a.id}>
@@ -45,14 +45,14 @@ export default async function ApplicationsPage({ params, searchParams }: PagePro
                 <p className="text-lg">
                   <ClassName wowClass={a.wowClass}>{fullName(a.characterName, a.characterSurname)}</ClassName>{" "}
                   <span className="text-sm text-muted">
-                    Level {a.level} {a.spec}
+                    Nivel {a.level} · {specLabel(a.spec)}
                   </span>
                 </p>
                 <p className="flex flex-wrap gap-x-4 text-xs text-muted">
                   <span>
                     {applicant.name} ({a.discordHandle})
                   </span>
-                  <span>Applied {formatDate(a.createdAt, guild.timezone)}</span>
+                  <span>Solicitó el {formatDate(a.createdAt, guild.timezone)}</span>
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
