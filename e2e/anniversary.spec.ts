@@ -53,8 +53,8 @@ async function importCharacter(page: Page, name: string, spec: string, role: str
   const details = main.locator("details", { has: page.getByTestId("import-version-heading") });
   if ((await details.getAttribute("open")) === null) await details.locator("summary").click();
   const row = details.locator("li", { hasText: name });
-  await chooseOption(row.getByLabel(`${name} spec`), spec);
-  await chooseOption(row.getByLabel(`${name} role`), role);
+  await chooseOption(row.getByLabel(`Especialización de ${name}`), spec);
+  await chooseOption(row.getByLabel(`Rol de ${name}`), role);
   await row.getByRole("button", { name: "Importar" }).click();
   await expect(row.getByText(`Importado como ${name}`)).toBeVisible();
 }
@@ -172,7 +172,7 @@ test.describe("TBC Anniversary", () => {
     await join.getByTestId("confirmed-join-charter").check();
     await join.getByRole("button", { name: "Entrar como miembro" }).click();
     await page.waitForURL(`${site}/members`);
-    await expect(page.getByText(/Bienvenido a Mirkwood. .*Mattaeis entra como/).first()).toBeVisible();
+    await expect(page.getByText(/Bienvenido a Mirkwood .*Mattaeis entra como/).first()).toBeVisible();
 
     await page.goto(`${site}/members/characters`);
     const card = page.getByRole("main").locator("li", { has: page.getByTestId("guild-member-tag") }).filter({ hasText: "Mattaeis" });
