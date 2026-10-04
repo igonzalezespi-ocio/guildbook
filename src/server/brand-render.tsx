@@ -406,14 +406,14 @@ export async function linkPreview(look: GuildLook, guild: PreviewFacts) {
           {guild.recruiting && (
             <Pill c={c}>
               <div style={{ width: 9, height: 9, borderRadius: 5, backgroundColor: "#5fd08a", boxShadow: "0 0 8px #5fd08a" }} />
-              Recruiting
+              Reclutando
             </Pill>
           )}
           {guild.verified && (
             <Pill c={c}>
               {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}
               <img src={seal(c.trim, c.ink)} width={22} height={22} />
-              Verified
+              Verificada
             </Pill>
           )}
         </div>

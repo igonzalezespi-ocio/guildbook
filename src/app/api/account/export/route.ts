@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 /** "Export my data": everything stored about the signed-in user, as a JSON download. */
 export async function GET() {
   const user = await getSessionUser();
-  if (!user) return NextResponse.json({ error: "Sign in to export your data." }, { status: 401 });
+  if (!user) return NextResponse.json({ error: "Inicia sesión para exportar tus datos." }, { status: 401 });
   const data = await exportUserData(db, user.id);
   const date = new Date().toISOString().slice(0, 10);
   return new NextResponse(JSON.stringify(data, null, 2), {
