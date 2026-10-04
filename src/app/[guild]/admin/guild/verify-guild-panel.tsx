@@ -20,11 +20,11 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 export async function VerifyGuildPanel({ guild }: { guild: Guild }) {
   if (!verificationSupported(guild.gameVersion)) {
     return (
-      <Panel title="Verify guild" actions={<Tag>Coming soon</Tag>}>
+      <Panel title="Verificar hermandad" actions={<Tag>Próximamente</Tag>}>
         <div className="space-y-2 text-sm" data-testid="verify-guild">
           <p className="rounded border border-gold-dim/60 bg-gold/5 px-3 py-2 text-bone" data-testid="verify-coming-soon">
-            Battle.net verification for {VERSION_INFO[guild.gameVersion].label} guilds is coming soon. Until then your guild
-            works as usual, without the verified seal.
+            La verificación con Battle.net para hermandades de {VERSION_INFO[guild.gameVersion].label} llegará pronto. Mientras tanto tu
+            hermandad funciona con normalidad, sin el sello de verificada.
           </p>
         </div>
       </Panel>
@@ -38,8 +38,8 @@ export async function VerifyGuildPanel({ guild }: { guild: Guild }) {
   const preLaunch = isPreLaunch(new Date(), guild.gameVersion);
   const versionLabel = VERSION_INFO[guild.gameVersion].label;
   const where = guild.realmSlug
-    ? `on ${realmLabel(guild.gameVersion, guild.realmSlug, guild.region)}`
-    : `on the ${RULESET_INFO[guild.ruleset].label} ruleset in the ${REGION_LABELS[guild.region]} region`;
+    ? `en ${realmLabel(guild.gameVersion, guild.realmSlug, guild.region)}`
+    : `en el tipo de reino ${RULESET_INFO[guild.ruleset].label} de la región de ${REGION_LABELS[guild.region]}`;
   const claim = !verified && result?.claim ? result.claim : null;
   const lapseOn = guild.verificationFailingSince
     ? new Date(guild.verificationFailingSince.getTime() + VERIFICATION_GRACE_DAYS * DAY_MS)
@@ -48,88 +48,88 @@ export async function VerifyGuildPanel({ guild }: { guild: Guild }) {
 
   return (
     <Panel
-      title="Verify guild"
-      actions={verified ? <VerifiedSeal label size={14} /> : <Tag>Not verified</Tag>}
+      title="Verificar hermandad"
+      actions={verified ? <VerifiedSeal label size={14} /> : <Tag>Sin verificar</Tag>}
     >
       <div className="space-y-4 text-sm" data-testid="verify-guild">
         <p className="leading-relaxed text-muted">
-          Verified guilds show a seal across Guildbook and come first in the directory. To verify, the Guild Master links
-          Battle.net on{" "}
+          Las hermandades verificadas muestran un sello en todo Guildbook y salen primero en el directorio. Para verificar, el maestro de la
+          hermandad vincula Battle.net en{" "}
           <Link href={guildHref(guild.slug, "/members/characters")} className="link">
-            My Characters
+            Mis personajes
           </Link>
-          . One of their {versionLabel} characters must be Guild Master (rank 0) of an in-game guild named exactly{" "}
-          <strong className="text-bone">{guild.name}</strong>, {FACTION_LABELS[guild.faction]}, {where}. Guildbook checks
-          again every day; after {VERIFICATION_GRACE_DAYS} days of failed checks the seal is removed.
+          . Uno de sus personajes de {versionLabel} debe ser maestro de la hermandad (rango 0) de una hermandad del juego llamada exactamente{" "}
+          <strong className="text-bone">{guild.name}</strong>, de la {FACTION_LABELS[guild.faction]}, {where}. Guildbook lo vuelve a
+          comprobar cada día; tras {VERIFICATION_GRACE_DAYS} días de comprobaciones fallidas, se retira el sello.
         </p>
         {!verified && founderNotGm && (
           <p className="rounded border border-gold-dim/60 bg-gold/5 px-3 py-2 text-bone" data-testid="verify-founder-not-gm">
-            {founderNotGm.characterName} is in {guild.name} in game
-            {founderNotGm.rank != null ? ` (rank ${founderNotGm.rank})` : ""} but isn&apos;t its Guild Master, so the Guild
-            Master verifies. Send them the invite link from the{" "}
+            {founderNotGm.characterName} está en {guild.name} en el juego
+            {founderNotGm.rank != null ? ` (rango ${founderNotGm.rank})` : ""} pero no es su maestro de la hermandad, así que verifica el
+            maestro de la hermandad. Envíale el enlace de invitación de la{" "}
             <Link href={guildHref(guild.slug, "/admin/setup")} className="link">
-              setup checklist
+              lista de configuración
             </Link>
-            , then give them an admin rank under Members once they have joined.
+            y, cuando se haya unido, dale un rango de administrador en Miembros.
           </p>
         )}
         {!verified && !founderNotGm && (
           <p className="leading-relaxed text-muted" data-testid="verify-not-gm">
-            Not the in-game Guild Master? The guild works fully without the seal. Send the Guild Master the invite link from
-            the setup checklist; once they have joined, give them an admin rank under Members so they can link Battle.net
-            and check from here.
+            ¿No eres el maestro de la hermandad en el juego? La hermandad funciona del todo sin el sello. Envía al maestro de la hermandad el
+            enlace de invitación de la lista de configuración; cuando se haya unido, dale un rango de administrador en Miembros para que
+            pueda vincular Battle.net y comprobarlo desde aquí.
           </p>
         )}
 
         {!verified && preLaunch && (
           <p className="rounded border border-gold-dim/60 bg-gold/5 px-3 py-2 text-bone" data-testid="verify-prelaunch">
-            Verification opens once WoW: Forever characters are available. Forever launches on Nov 4, 2026, and Blizzard
-            doesn&apos;t publish Forever characters before then.
+            La verificación se abre cuando haya personajes de WoW: Forever disponibles. Forever sale el 4 de noviembre de 2026 y Blizzard
+            no publica personajes de Forever antes de esa fecha.
           </p>
         )}
-        {!enabled && <p className="text-muted italic">Battle.net isn&apos;t configured on this site yet.</p>}
+        {!enabled && <p className="text-muted italic">Battle.net aún no está configurado en este sitio.</p>}
 
         {verified && guild.verifiedAt && (
           <p className="text-bone">
-            Verified on {formatDate(guild.verifiedAt, guild.timezone)}
-            {guild.verifiedCharacterName && <>: {guild.verifiedCharacterName} is the in-game Guild Master</>}.
+            Verificada el {formatDate(guild.verifiedAt, guild.timezone)}
+            {guild.verifiedCharacterName && <>: {guild.verifiedCharacterName} es el maestro de la hermandad en el juego</>}.
           </p>
         )}
         {verified && lapseOn && (
           <p className="text-red-300" data-testid="verify-grace">
-            The last checks failed. Unless a check succeeds, the seal is removed on {formatDate(lapseOn, guild.timezone)}.
+            Las últimas comprobaciones han fallado. Si ninguna sale bien, el sello se retira el {formatDate(lapseOn, guild.timezone)}.
           </p>
         )}
         {result && (!verified || !result.verified) && (
           <div className="rounded border border-line px-3 py-2" data-testid="verify-result">
             <p className={result.verified ? "text-emerald-300" : "text-bone"}>{result.message}</p>
             {guild.verificationCheckedAt && (
-              <p className="mt-1 text-xs text-muted">Checked {formatDate(guild.verificationCheckedAt, guild.timezone)}</p>
+              <p className="mt-1 text-xs text-muted">Comprobado el {formatDate(guild.verificationCheckedAt, guild.timezone)}</p>
             )}
           </div>
         )}
 
         <ActionForm action={verifyGuildAction.bind(null, guild.slug)}>
-          <SubmitButton variant="ghost" size="sm" pendingLabel="Checking…">
-            {verified ? "Check again" : "Check verification"}
+          <SubmitButton variant="ghost" size="sm" pendingLabel="Comprobando…">
+            {verified ? "Volver a comprobar" : "Comprobar verificación"}
           </SubmitButton>
           <FormMessage className="mt-2" />
         </ActionForm>
 
         {handover && (
           <div className="space-y-2 border-t border-line pt-4" data-testid="guild-master-handover">
-            <h3 className="font-display text-sm tracking-wide text-gold">Hand over the top rank</h3>
+            <h3 className="font-display text-sm tracking-wide text-gold">Ceder el rango más alto</h3>
             <p className="text-muted">
-              {handover.characterName ?? "The verified Guild Master"} verified the guild but isn&apos;t on its top rank,{" "}
-              {handover.topRank.name}. Give it to them so the site matches the game. Your own rank doesn&apos;t change; you can
-              step down under Members afterwards.
+              {handover.characterName ?? "El maestro de la hermandad verificado"} verificó la hermandad pero no tiene su rango más alto,{" "}
+              {handover.topRank.name}. Dáselo para que el sitio coincida con el juego. Tu propio rango no cambia; después puedes
+              bajarte de rango en Miembros.
             </p>
             <ActionForm
               action={promoteGuildMasterAction.bind(null, guild.slug)}
-              confirm={`Give ${handover.characterName ?? "the Guild Master"} the ${handover.topRank.name} rank?`}
+              confirm={`¿Dar el rango ${handover.topRank.name} a ${handover.characterName ?? "el maestro de la hermandad"}?`}
             >
-              <SubmitButton size="sm" variant="ghost" pendingLabel="Handing over...">
-                Give them {handover.topRank.name}
+              <SubmitButton size="sm" variant="ghost" pendingLabel="Cediendo...">
+                Darle {handover.topRank.name}
               </SubmitButton>
               <FormMessage className="mt-2" />
             </ActionForm>
@@ -138,32 +138,32 @@ export async function VerifyGuildPanel({ guild }: { guild: Guild }) {
 
         {claim && (
           <div className="space-y-2 border-t border-line pt-4" data-testid="claim-name">
-            <h3 className="font-display text-sm tracking-wide text-gold">Your in-game guild is {claim.name}</h3>
+            <h3 className="font-display text-sm tracking-wide text-gold">Tu hermandad del juego es {claim.name}</h3>
             {claim.holderVerified ? (
               <p className="text-muted">
-                A verified guild on Guildbook already uses that name, region, faction and ruleset, so it can&apos;t be claimed.{" "}
+                Una hermandad verificada de Guildbook ya usa ese nombre, región, facción y tipo de reino, así que no se puede reclamar.{" "}
                 <a href={`${current.apexOrigin}/support?category=battlenet`} className="text-gold underline-offset-2 hover:underline">
-                  Contact Guildbook support
+                  Contacta con el soporte de Guildbook
                 </a>{" "}
-                if you think this is a mistake.
+                si crees que es un error.
               </p>
             ) : (
               <>
                 <p className="text-muted">
                   {claim.holderName
-                    ? `An unverified guild, ${claim.holderName}, holds that name on Guildbook. As the in-game Guild Master you can claim it: your guild is renamed ${claim.name} and verified, and the other guild is renamed "${claim.name} (unverified)" with a notice to its admins. Subdomains and custom domains don't move.`
-                    : `No other guild uses that name. Take it to rename your guild ${claim.name} and verify it.`}
+                    ? `Una hermandad sin verificar, ${claim.holderName}, tiene ese nombre en Guildbook. Como maestro de la hermandad en el juego puedes reclamarlo: tu hermandad pasa a llamarse ${claim.name} y queda verificada, y la otra pasa a llamarse «${claim.name} (sin verificar)» con un aviso a sus administradores. Los subdominios y dominios propios no se mueven.`
+                    : `Ninguna otra hermandad usa ese nombre. Cógelo para llamar a tu hermandad ${claim.name} y verificarla.`}
                 </p>
                 <ActionForm
                   action={claimGuildNameAction.bind(null, guild.slug)}
                   confirm={
                     claim.holderName
-                      ? `Claim the name ${claim.name}? ${claim.holderName} will be renamed.`
-                      : `Rename your guild ${claim.name} and verify it?`
+                      ? `¿Reclamar el nombre ${claim.name}? ${claim.holderName} cambiará de nombre.`
+                      : `¿Llamar a tu hermandad ${claim.name} y verificarla?`
                   }
                 >
-                  <SubmitButton size="sm" pendingLabel="Claiming…">
-                    {claim.holderName ? `Claim ${claim.name}` : `Take the name ${claim.name}`}
+                  <SubmitButton size="sm" pendingLabel="Reclamando…">
+                    {claim.holderName ? `Reclamar ${claim.name}` : `Coger el nombre ${claim.name}`}
                   </SubmitButton>
                   <FormMessage className="mt-2" />
                 </ActionForm>
@@ -174,20 +174,20 @@ export async function VerifyGuildPanel({ guild }: { guild: Guild }) {
 
         {slugClaim && claimHost && (
           <div className="space-y-2 border-t border-line pt-4" data-testid="claim-slug">
-            <h3 className="font-display text-sm tracking-wide text-gold">Subdomain</h3>
+            <h3 className="font-display text-sm tracking-wide text-gold">Subdominio</h3>
             <p className="text-muted">
               {slugClaim.holderName
-                ? `${claimHost} matches your guild's name and is held by an unverified guild, ${slugClaim.holderName}. As a verified guild you can claim it: that guild moves to ${slugClaim.holderMovesTo ?? "another subdomain"} and its admins are told why.`
-                : `${claimHost} matches your guild's name and is free.`}{" "}
-              Your current subdomain is released and won&apos;t redirect, so update links you&apos;ve shared (and re-pair Vigil
-              companions). Custom domains keep working.
+                ? `${claimHost} coincide con el nombre de tu hermandad y lo tiene una hermandad sin verificar, ${slugClaim.holderName}. Como hermandad verificada puedes reclamarlo: esa hermandad pasa a ${slugClaim.holderMovesTo ?? "otro subdominio"} y se explica el motivo a sus administradores.`
+                : `${claimHost} coincide con el nombre de tu hermandad y está libre.`}{" "}
+              Tu subdominio actual se libera y no redirigirá, así que actualiza los enlaces que hayas compartido (y vuelve a emparejar las
+              apps de Vigil). Los dominios propios siguen funcionando.
             </p>
             <ActionForm
               action={claimGuildSlugAction.bind(null, guild.slug)}
-              confirm={`Move your guild to ${claimHost}? Your current subdomain stops working.`}
+              confirm={`¿Mover tu hermandad a ${claimHost}? Tu subdominio actual dejará de funcionar.`}
             >
-              <SubmitButton size="sm" variant="ghost" pendingLabel="Moving…">
-                Move to {claimHost}
+              <SubmitButton size="sm" variant="ghost" pendingLabel="Moviendo…">
+                Mover a {claimHost}
               </SubmitButton>
               <FormMessage className="mt-2" />
             </ActionForm>
