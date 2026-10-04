@@ -73,7 +73,7 @@ export default async function RosterPage({ params, searchParams }: PageProps<"/[
                         </p>
                         <p className="text-xs text-muted">
                           {specLabel(m.spec)}
-                          {m.level < maxLevel && ` · nivel ${m.level}`}
+                          {m.level < maxLevel && ` de nivel ${m.level}`}
                         </p>
                         <p className="mt-0.5 flex items-center gap-1.5 text-xs text-gold-dim">
                           <RankInsignia insignia={insigniaFor({ insignia: m.rankInsignia, tier: m.rankTier })} tier={m.rankTier} size={18} />
