@@ -6,14 +6,14 @@ export function formatDuration(ms: number): string {
 }
 
 export function formatSeconds(ms: number): string {
-  return `${(ms / 1000).toFixed(1)}s`;
+  return `${(ms / 1000).toFixed(1).replace(".", ",")} s`;
 }
 
-export const formatNumber = (n: number) => Math.round(n).toLocaleString("en-US");
+export const formatNumber = (n: number) => Math.round(n).toLocaleString("es-ES");
 
 export const formatPct = (ratio: number) => `${Math.round(ratio * 100)}%`;
 
-export const METRIC_LABELS = { damage: "Damage", threat: "Threat", healing: "Healing" } as const;
+export const METRIC_LABELS = { damage: "Daño", threat: "Amenaza", healing: "Sanación" } as const;
 
 /** Crimson below 60, gold from 60, bright gold from 85. */
 export function scoreTone(score: number): string {

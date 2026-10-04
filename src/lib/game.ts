@@ -12,16 +12,45 @@ export const CLASSES = [
 export type WowClass = (typeof CLASSES)[number];
 
 export const CLASS_INFO: Record<WowClass, { label: string; color: string; specs: readonly string[] }> = {
-  warrior: { label: "Warrior", color: "#C69B6D", specs: ["Arms", "Fury", "Protection"] },
-  paladin: { label: "Paladin", color: "#F48CBA", specs: ["Holy", "Protection", "Retribution"] },
-  hunter: { label: "Hunter", color: "#AAD372", specs: ["Beast Mastery", "Marksmanship", "Survival"] },
-  rogue: { label: "Rogue", color: "#FFF468", specs: ["Assassination", "Combat", "Subtlety"] },
-  priest: { label: "Priest", color: "#FFFFFF", specs: ["Discipline", "Holy", "Shadow"] },
-  shaman: { label: "Shaman", color: "#0070DD", specs: ["Elemental", "Enhancement", "Restoration"] },
-  mage: { label: "Mage", color: "#3FC7EB", specs: ["Arcane", "Fire", "Frost"] },
-  warlock: { label: "Warlock", color: "#8788EE", specs: ["Affliction", "Demonology", "Destruction"] },
-  druid: { label: "Druid", color: "#FF7C0A", specs: ["Balance", "Feral", "Restoration"] },
+  warrior: { label: "Guerrero", color: "#C69B6D", specs: ["Arms", "Fury", "Protection"] },
+  paladin: { label: "Paladín", color: "#F48CBA", specs: ["Holy", "Protection", "Retribution"] },
+  hunter: { label: "Cazador", color: "#AAD372", specs: ["Beast Mastery", "Marksmanship", "Survival"] },
+  rogue: { label: "Pícaro", color: "#FFF468", specs: ["Assassination", "Combat", "Subtlety"] },
+  priest: { label: "Sacerdote", color: "#FFFFFF", specs: ["Discipline", "Holy", "Shadow"] },
+  shaman: { label: "Chamán", color: "#0070DD", specs: ["Elemental", "Enhancement", "Restoration"] },
+  mage: { label: "Mago", color: "#3FC7EB", specs: ["Arcane", "Fire", "Frost"] },
+  warlock: { label: "Brujo", color: "#8788EE", specs: ["Affliction", "Demonology", "Destruction"] },
+  druid: { label: "Druida", color: "#FF7C0A", specs: ["Balance", "Feral", "Restoration"] },
 };
+
+/** Spanish (es-ES client) display name of a spec. The stored value stays the English key above. */
+export const SPEC_LABELS: Record<string, string> = {
+  Arms: "Armas",
+  Fury: "Furia",
+  Protection: "Protección",
+  Holy: "Sagrado",
+  Retribution: "Reprensión",
+  "Beast Mastery": "Dominio de bestias",
+  Marksmanship: "Puntería",
+  Survival: "Supervivencia",
+  Assassination: "Asesinato",
+  Combat: "Combate",
+  Subtlety: "Sutileza",
+  Discipline: "Disciplina",
+  Shadow: "Sombra",
+  Elemental: "Elemental",
+  Enhancement: "Mejora",
+  Restoration: "Restauración",
+  Arcane: "Arcano",
+  Fire: "Fuego",
+  Frost: "Escarcha",
+  Affliction: "Aflicción",
+  Demonology: "Demonología",
+  Destruction: "Destrucción",
+  Balance: "Equilibrio",
+  Feral: "Feral",
+};
+export const specLabel = (spec: string): string => SPEC_LABELS[spec] ?? spec;
 
 export function isValidSpec(wowClass: WowClass, spec: string): boolean {
   return CLASS_INFO[wowClass].specs.includes(spec);
@@ -30,10 +59,10 @@ export function isValidSpec(wowClass: WowClass, spec: string): boolean {
 export const ROLES = ["tank", "healer", "melee", "ranged"] as const;
 export type RaidRole = (typeof ROLES)[number];
 export const ROLE_LABELS: Record<RaidRole, string> = {
-  tank: "Tank",
-  healer: "Healer",
-  melee: "Melee DPS",
-  ranged: "Ranged DPS",
+  tank: "Tanque",
+  healer: "Sanador",
+  melee: "DPS cuerpo a cuerpo",
+  ranged: "DPS a distancia",
 };
 
 /** "Name Surname", or just the name where the game has no surnames (anything but WoW: Forever). */
@@ -41,7 +70,7 @@ export const fullName = (name: string, surname: string | null | undefined) => (s
 
 export const FACTIONS = ["alliance", "horde"] as const;
 export type Faction = (typeof FACTIONS)[number];
-export const FACTION_LABELS: Record<Faction, string> = { alliance: "Alliance", horde: "Horde" };
+export const FACTION_LABELS: Record<Faction, string> = { alliance: "Alianza", horde: "Horda" };
 
 /**
  * Battle.net regions Guildbook supports. Regions are separate worlds: characters, guilds and names exist per region,
@@ -50,12 +79,12 @@ export const FACTION_LABELS: Record<Faction, string> = { alliance: "Alliance", h
  */
 export const REGIONS = ["us", "eu"] as const;
 export type Region = (typeof REGIONS)[number];
-export const REGION_LABELS: Record<Region, string> = { us: "Americas", eu: "Europe" };
+export const REGION_LABELS: Record<Region, string> = { us: "América", eu: "Europa" };
 /** Compact tag for character lists. */
 export const REGION_TAGS: Record<Region, string> = { us: "US", eu: "EU" };
 export const REGION_INFO: Record<Region, { label: string; description: string }> = {
-  us: { label: "Americas", description: "North and South America and Oceania" },
-  eu: { label: "Europe", description: "Europe, Russia and the Middle East" },
+  us: { label: "América", description: "Norteamérica, Sudamérica y Oceanía" },
+  eu: { label: "Europa", description: "Europa, Rusia y Oriente Medio" },
 };
 
 /**
@@ -69,10 +98,10 @@ export const REGION_INFO: Record<Region, { label: string; description: string }>
 export const RULESETS = ["normal", "pvp", "rp", "hardcore"] as const;
 export type Ruleset = (typeof RULESETS)[number];
 export const RULESET_INFO: Record<Ruleset, { label: string; description: string; note?: string }> = {
-  normal: { label: "Normal", description: "Questing and cooperation, PvP when you choose it" },
-  pvp: { label: "PvP", description: "Open-world conflict in contested territory" },
-  rp: { label: "Roleplaying", description: "For players who lean into the fantasy of Azeroth" },
-  hardcore: { label: "Hardcore", description: "One life; death has lasting consequences", note: "Opens after launch" },
+  normal: { label: "Normal", description: "Misiones y cooperación; JcJ cuando tú quieras" },
+  pvp: { label: "JcJ", description: "Conflicto en el mundo abierto en territorio en disputa" },
+  rp: { label: "Rol", description: "Para quienes se sumergen en la fantasía de Azeroth" },
+  hardcore: { label: "Hardcore", description: "Una sola vida; la muerte tiene consecuencias duraderas", note: "Abre después del lanzamiento" },
 };
 
 /**
@@ -104,18 +133,18 @@ export const PROFESSIONS = [
 ] as const;
 export type Profession = (typeof PROFESSIONS)[number];
 export const PROFESSION_LABELS: Record<Profession, string> = {
-  alchemy: "Alchemy",
-  blacksmithing: "Blacksmithing",
-  enchanting: "Enchanting",
-  engineering: "Engineering",
-  herbalism: "Herbalism",
-  leatherworking: "Leatherworking",
-  mining: "Mining",
-  skinning: "Skinning",
-  tailoring: "Tailoring",
-  cooking: "Cooking",
-  first_aid: "First Aid",
-  fishing: "Fishing",
+  alchemy: "Alquimia",
+  blacksmithing: "Herrería",
+  enchanting: "Encantamiento",
+  engineering: "Ingeniería",
+  herbalism: "Herboristería",
+  leatherworking: "Peletería",
+  mining: "Minería",
+  skinning: "Desuello",
+  tailoring: "Sastrería",
+  cooking: "Cocina",
+  first_aid: "Primeros auxilios",
+  fishing: "Pesca",
 };
 
 export const MAX_LEVEL = 60;
@@ -125,4 +154,4 @@ export const MAX_IN_GAME_RANKS = 10;
 /** World of Warcraft: Forever launch day (a Wednesday). Nothing happens in game before this date. */
 export const WOWF_LAUNCH_DATE = "2026-11-04";
 
-export const DAYS_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] as const;
+export const DAYS_OF_WEEK = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"] as const;
