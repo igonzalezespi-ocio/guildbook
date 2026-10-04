@@ -28,11 +28,11 @@ test.describe("Guildbook platform", () => {
     // The guild site preview links to the Order on its subdomain.
     await expect(page.getByRole("link", { name: "Visita Order of Saint Michael" })).toHaveAttribute("href", guildOrigin("osm"));
     // Its theme picker switches to an example guild, which links to guild creation instead.
-    await page.getByRole("button", { name: "Wardens of the Greenwood theme" }).click();
-    await expect(page.getByRole("button", { name: "Wardens of the Greenwood theme" })).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: "Wardens of the Greenwood (tema)" }).click();
+    await expect(page.getByRole("button", { name: "Wardens of the Greenwood (tema)" })).toHaveAttribute("aria-pressed", "true");
     await expect(page.getByTestId("preview-address")).toHaveText(/^greenwood\./);
     await expect(page.getByRole("link", { name: "Tu hermandad aquí" })).toHaveAttribute("href", "/create");
-    await page.getByRole("button", { name: "Order of Saint Michael theme" }).click();
+    await page.getByRole("button", { name: "Order of Saint Michael (tema)" }).click();
     await expect(page.getByRole("link", { name: "Visita Order of Saint Michael" })).toBeVisible();
 
     // www redirects to the bare apex, keeping the path.
@@ -62,7 +62,7 @@ test.describe("Guildbook platform", () => {
     await expect(page.getByTestId("directory").getByRole("link", { name: "Order of Saint Michael" })).toBeVisible();
 
     await page.goto(`${guildOrigin("osm")}/charter`);
-    await expect(page.getByRole("heading", { name: /Charter/ }).first()).toBeVisible();
+    await expect(page.getByRole("heading", { name: /reglamento/i }).first()).toBeVisible();
     // Links on a guild subdomain carry no slug prefix.
     await expect(page.locator('a[href^="/osm/"]')).toHaveCount(0);
 
@@ -136,18 +136,18 @@ test.describe("Guildbook platform", () => {
 
     await page.goto(`${guildOrigin(slug)}/charter`);
     await expect(page.getByRole("heading", { name: "Reglamento de la hermandad" }).first()).toBeVisible();
-    await expect(page.getByRole("heading", { name: `Ranks of ${name}` })).toBeVisible();
-    await expect(page.getByRole("main").getByText(/the Order|Saint Michael|Grand Master|knight/i)).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: `Rangos de ${name}` })).toBeVisible();
+    await expect(page.getByRole("main").getByText(/the Order|la Orden|Saint Michael|San Miguel|Grand Master|Gran Maestro|knight|caballero/i)).toHaveCount(0);
 
     // The guild's other pages carry its own name, never the Order's wording.
     for (const [path, text] of [
-      ["/progression", `Deeds of ${name}`],
-      ["/addons", "Guild Addons"],
-      ["/roster", /^\d+ members? of /],
+      ["/progression", `Hazañas de ${name}`],
+      ["/addons", "Addons de la hermandad"],
+      ["/roster", /^\d+ miembros? de /],
     ] as const) {
       await page.goto(`${guildOrigin(slug)}${path}`);
       await expect(page.getByRole("main").getByText(text)).toBeVisible();
-      await expect(page.getByRole("main").getByText(/the Order|brothers and sisters/)).toHaveCount(0);
+      await expect(page.getByRole("main").getByText(/the Order|la Orden|brothers and sisters|hermanos y hermanas/)).toHaveCount(0);
     }
 
     // Custom domain foundations: a pending domain with DNS instructions.

@@ -45,7 +45,7 @@ test("an applicant links Battle.net, picks a character, and the officer sees it 
   await fillFreeText(application, applicantId);
   await application.getByRole("button", { name: "Enviar solicitud" }).click();
   await expect(page.getByRole("heading", { name: "Tu solicitud" })).toBeInViewport();
-  await expect(page.getByText("before applying.")).toHaveCount(0);
+  await expect(page.getByText("antes de enviar tu solicitud.")).toHaveCount(0);
   await expect(page.getByRole("main").getByRole("img", { name: "Verificado con Battle.net" })).toBeVisible();
 
   await signIn(page, "seed-ironvow", "Ironvow", "/admin/applications");
@@ -82,13 +82,13 @@ test("without Battle.net, manual entry still works and the officer sees it unver
   await fillFreeText(page, applicantId);
   await page.getByRole("button", { name: "Enviar solicitud" }).click();
   await expect(page.getByRole("heading", { name: "Tu solicitud" })).toBeInViewport();
-  await expect(page.getByText("before applying.")).toHaveCount(0);
+  await expect(page.getByText("antes de enviar tu solicitud.")).toHaveCount(0);
 
   await signIn(page, "seed-ironvow", "Ironvow", "/admin/applications");
   const row = page.getByRole("link", { name: new RegExp(`${name} Handwritten`) });
   await expect(row.getByText("Unverified", { exact: true })).toBeVisible();
   await row.click();
-  await expect(page.getByText("Entered by hand; not checked against Battle.net.")).toBeVisible();
+  await expect(page.getByText("Introducido a mano; no se ha comprobado con Battle.net.")).toBeVisible();
 });
 
 test("a member imports verified characters and an officer syncs their levels", async ({ page }, testInfo) => {

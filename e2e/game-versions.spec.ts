@@ -63,7 +63,7 @@ test.describe("Game versions", () => {
     await page.getByRole("button", { name: "Mantener estos rangos" }).click();
     await expect(page.getByTestId("setup-step-ranks")).toHaveAttribute("data-status", "done");
     await page.goto(`${site}/admin/guild#tabard`);
-    await page.getByRole("button", { name: "Save tabard and theme" }).click();
+    await page.getByRole("button", { name: "Guardar tabardo y tema" }).click();
     await expect(page.getByText("Tabardo y tema guardados").first()).toBeVisible();
     await expect(page.getByTestId("verify-guild")).toContainText("Uno de sus personajes de TBC Anniversary debe ser maestro de la hermandad (rango 0)");
     await expect(page.getByTestId("verify-guild")).toContainText("de la Horda, en Dreamscythe (US)");
@@ -110,18 +110,18 @@ test.describe("Game versions", () => {
     // The dev server can stall the parse worker's chunk while it is still compiling the page's other requests.
     await page.waitForLoadState("networkidle");
     await main.getByTestId("vigil-log-input").setInputFiles({ name: "WoWCombatLog.txt", mimeType: "text/plain", buffer: Buffer.from(tbcLog) });
-    await expect(main.getByTestId("vigil-log-info")).toContainText("build 2.5.6", { timeout: 30_000 });
-    await expect(main.getByLabel("Player in the log")).toHaveAttribute("data-value", /^Player-/);
-    await expect(main.getByLabel("Player in the log")).toHaveText("Tor (you)");
-    await main.getByRole("button", { name: "Find fights" }).click();
+    await expect(main.getByTestId("vigil-log-info")).toContainText("compilación 2.5.6", { timeout: 30_000 });
+    await expect(main.getByLabel("Jugador del registro")).toHaveAttribute("data-value", /^Player-/);
+    await expect(main.getByLabel("Jugador del registro")).toHaveText("Tor (tú)");
+    await main.getByRole("button", { name: "Buscar combates" }).click();
     const fights = main.getByTestId("vigil-fights");
     await expect(fights.getByText("Rockhide Boar", { exact: true })).toBeVisible();
     await fights.getByRole("checkbox").nth(1).uncheck();
-    await main.getByRole("button", { name: "Upload 1 report" }).click();
+    await main.getByRole("button", { name: "Subir 1 informe" }).click();
 
     await expect(page).toHaveURL(/\/vigil\/reports\/[0-9a-f-]{36}$/);
     const banner = main.getByTestId("vigil-version-mismatch");
-    await expect(banner).toContainText("This log is from TBC Anniversary, but Order of Saint Michael is a WoW: Forever guild.");
+    await expect(banner).toContainText("Este registro es de TBC Anniversary, pero Order of Saint Michael es una hermandad de WoW: Forever.");
     await expect(main.getByTestId("game-version-badge")).toHaveText("TBC");
     if (SHOTS && info.project.name === "desktop") await page.screenshot({ path: `${SHOTS}/report-mismatch-banner.png` });
   });

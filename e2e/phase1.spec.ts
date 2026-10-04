@@ -150,7 +150,7 @@ test("apply, officer accepts, new member appears on the roster", async ({ page, 
   await expect(page.getByRole("link", { name: "Inicia sesión con Discord para solicitar" })).toBeVisible();
 
   await signIn(page, applicantId, characterName, "/apply");
-  const charterLine = page.getByText("before applying.");
+  const charterLine = page.getByText("antes de enviar tu solicitud.");
   await expect(charterLine).toBeVisible();
   await page.getByLabel("Nombre", { exact: true }).fill(characterName);
   await page.getByLabel("Apellido").fill("Faithful");
@@ -233,11 +233,11 @@ test("a member registers an alt and makes it their main", async ({ page }) => {
   await chooseOption(page.getByLabel("Especialización", { exact: true }), "Beast Mastery");
   await chooseOption(page.getByLabel("Rol en banda", { exact: true }), "ranged");
   await page.getByLabel("Nivel", { exact: true }).fill("60");
-  await page.getByRole("checkbox", { name: "Herbalism" }).check();
+  await page.getByRole("checkbox", { name: "Herboristería" }).check();
   await page.getByRole("button", { name: "Registrar" }).click();
   await expect(page).toHaveURL(/\/members\/characters$/);
   // The action redirects, so the toast rides a flash cookie to the next page.
-  await expect(page.getByTestId("toast").filter({ hasText: `${alt} Oakenfield added to your characters.` })).toBeVisible();
+  await expect(page.getByTestId("toast").filter({ hasText: `${alt} Oakenfield añadido a tus personajes.` })).toBeVisible();
 
   const card = page.getByRole("main").locator("li", { hasText: alt });
   await expect(card).toBeVisible();

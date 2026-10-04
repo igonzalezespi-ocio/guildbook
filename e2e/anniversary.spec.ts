@@ -172,7 +172,7 @@ test.describe("TBC Anniversary", () => {
     await join.getByTestId("confirmed-join-charter").check();
     await join.getByRole("button", { name: "Entrar como miembro" }).click();
     await page.waitForURL(`${site}/members`);
-    await expect(page.getByText(/Welcome to Mirkwood .*Mattaeis joined as/).first()).toBeVisible();
+    await expect(page.getByText(/Bienvenido a Mirkwood. .*Mattaeis entra como/).first()).toBeVisible();
 
     await page.goto(`${site}/members/characters`);
     const card = page.getByRole("main").locator("li", { has: page.getByTestId("guild-member-tag") }).filter({ hasText: "Mattaeis" });

@@ -58,7 +58,7 @@ test.describe("Guild onboarding", () => {
     // Tabard: save the design as it is.
     await page.getByTestId("setup-step-look").getByRole("link", { name: "Diseñar tabardo" }).click();
     await page.waitForURL(`${site}/admin/guild#tabard`);
-    await page.getByRole("button", { name: "Save tabard and theme" }).click();
+    await page.getByRole("button", { name: "Guardar tabardo y tema" }).click();
     await expect(page.getByText("Tabardo y tema guardados").first()).toBeVisible();
 
     // Charter: write our own.

@@ -11,7 +11,7 @@ test("the server timezone is a searchable listbox that saves and keeps its value
   const pick = async (query: string, value: string) => {
     await expect(async () => {
       if ((await trigger.getAttribute("aria-expanded")) !== "true") await trigger.click();
-      await expect(page.getByRole("combobox", { name: "Buscar zona horaria del servidor" })).toBeFocused({ timeout: 1000 });
+      await expect(page.getByRole("combobox", { name: "Buscar: zona horaria del servidor" })).toBeFocused({ timeout: 1000 });
     }).toPass();
     await page.keyboard.type(query);
     await expect(page.getByRole("option").first()).toHaveAttribute("data-value", value);

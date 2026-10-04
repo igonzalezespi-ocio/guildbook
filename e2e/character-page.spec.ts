@@ -10,9 +10,9 @@ test("roster names open the character page, which links main and alts", async ({
   await expect(page).toHaveTitle("Tor Whitecross | Order of Saint Michael");
   await expect(main.getByRole("heading", { level: 1, name: "Tor Whitecross" })).toBeVisible();
   await expect(main.getByText("Paladín Sagrado de nivel 60", { exact: true })).toBeVisible();
-  await expect(main.getByText("Healer", { exact: true })).toBeVisible();
+  await expect(main.getByText("Sanador", { exact: true })).toBeVisible();
   await expect(main.getByText("Grand Master", { exact: true })).toBeVisible();
-  await expect(main.getByText(/^Joined the Order/)).toBeVisible();
+  await expect(main.getByText(/^Se unió a la Orden/)).toBeVisible();
   await expect(main.getByRole("heading", { name: "Profesiones" })).toBeVisible();
 
   await main.getByRole("link", { name: "Raphael Whitecross", exact: true }).click();
