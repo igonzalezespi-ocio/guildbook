@@ -167,10 +167,10 @@ test.describe("TBC Anniversary", () => {
     if (shoot) await join.locator("xpath=ancestor::section[1]").screenshot({ path: `${SHOTS}/confirmed-join-offer.png` });
 
     // The charter must be accepted first.
-    await join.getByRole("button", { name: "Join as a member" }).click();
+    await join.getByRole("button", { name: "Entrar como miembro" }).click();
     await expect(page).toHaveURL(/\/apply/);
     await join.getByTestId("confirmed-join-charter").check();
-    await join.getByRole("button", { name: "Join as a member" }).click();
+    await join.getByRole("button", { name: "Entrar como miembro" }).click();
     await page.waitForURL(`${site}/members`);
     await expect(page.getByText(/Welcome to Mirkwood .*Mattaeis joined as/).first()).toBeVisible();
 

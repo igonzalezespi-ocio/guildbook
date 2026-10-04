@@ -11,10 +11,10 @@ export function MarkdownEditor({ name, defaultValue }: { name: string; defaultVa
     <div>
       <div className="mb-2 flex gap-2">
         <button type="button" className={`btn btn-sm ${preview ? "btn-ghost" : "btn-primary"}`} onClick={() => setPreview(false)}>
-          Write
+          Escribir
         </button>
         <button type="button" className={`btn btn-sm ${preview ? "btn-primary" : "btn-ghost"}`} onClick={() => setPreview(true)}>
-          Preview
+          Vista previa
         </button>
       </div>
       <textarea

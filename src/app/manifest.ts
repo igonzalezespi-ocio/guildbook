@@ -9,6 +9,7 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
     name: guild?.name ?? "Guildbook",
     short_name: guild ? guild.name.slice(0, 24) : "Guildbook",
     description: guild?.description || GUILDBOOK_DESCRIPTION,
+    lang: "es",
     start_url: "/",
     display: "standalone",
     background_color: "#0b0908",

@@ -41,7 +41,7 @@ test("upload a combat log, keep one fight, open the report and control who sees 
   // Private: an officer gets a not-found page.
   await signIn(page, "seed-ironvow", "Ironvow", "/vigil");
   await page.goto(reportUrl);
-  await expect(main.getByRole("heading", { level: 1, name: "Lost in the Wilds" })).toBeVisible();
+  await expect(main.getByRole("heading", { level: 1, name: "Perdido en las tierras salvajes" })).toBeVisible();
 
   // Shared with officers: now the officer can read it.
   await signIn(page, "seed-tor", "Tor", "/vigil");

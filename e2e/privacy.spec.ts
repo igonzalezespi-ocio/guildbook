@@ -63,7 +63,7 @@ test.describe("Legal pages", () => {
     await page.context().clearCookies();
     await page.goto(`${APEX}/login`);
     const consent = page.getByTestId("legal-consent");
-    await expect(consent).toContainText("By signing in you agree to the Guildbook Terms of Service and Privacy Policy.");
+    await expect(consent).toContainText("Al iniciar sesión aceptas los Términos del servicio y la Política de privacidad de Guildbook.");
     await expect(consent.getByRole("link", { name: "Terms of Service" })).toHaveAttribute("href", /\/terms$/);
     await expect(consent.getByRole("link", { name: "Privacy Policy" })).toHaveAttribute("href", /\/privacy$/);
   });
@@ -90,9 +90,9 @@ test.describe("Account and privacy", () => {
     const panel = page.getByTestId("delete-account");
     const button = panel.getByRole("button", { name: "Delete my account" });
     await expect(button).toBeDisabled();
-    await panel.getByLabel(/Type .* to confirm/).fill("someone else");
+    await panel.getByLabel(/Escribe .* para confirmar/).fill("someone else");
     await expect(button).toBeDisabled();
-    await panel.getByLabel(/Type .* to confirm/).fill(name);
+    await panel.getByLabel(/Escribe .* para confirmar/).fill(name);
     await expect(button).toBeEnabled();
     await button.click();
 

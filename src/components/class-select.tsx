@@ -14,5 +14,5 @@ export const CLASS_OPTIONS = CLASSES.map((c) => ({
 
 /** Class listbox with each class's icon and colour. */
 export function ClassSelect({ name, className }: { name: string; className?: string }) {
-  return <Listbox name={name} aria-label="Class" options={CLASS_OPTIONS} defaultValue={CLASSES[0]} className={className} />;
+  return <Listbox name={name} aria-label="Clase" options={CLASS_OPTIONS} defaultValue={CLASSES[0]} className={className} />;
 }

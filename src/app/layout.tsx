@@ -22,7 +22,7 @@ export const viewport: Viewport = { themeColor: "#0b0908" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${cinzel.variable} ${cinzelDecorative.variable} ${inter.variable} h-full antialiased`}>
+    <html lang="es" className={`${cinzel.variable} ${cinzelDecorative.variable} ${inter.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         {children}
         <Toaster />
