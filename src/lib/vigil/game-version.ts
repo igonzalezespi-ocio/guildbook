@@ -14,8 +14,8 @@ export const LOG_VERSION_LABELS: Record<LogGameVersion, string> = {
   forever: "WoW: Forever",
   anniversary: "TBC Anniversary",
   era: "Classic Era",
-  seasonal: "Season of Discovery",
-  progression: "Classic progression",
+  seasonal: "Temporada de descubrimiento",
+  progression: "Classic con progresión",
 };
 
 export const FOREVER_PROJECT_IDS: readonly number[] = [18];

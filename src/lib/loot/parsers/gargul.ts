@@ -49,7 +49,7 @@ export const gargulJson: LootParser = {
   },
   parse(raw) {
     const entries = gargulEntries(raw);
-    if (!entries) return { rows: [], warnings: [{ line: 1, message: "This isn't valid JSON." }] };
+    if (!entries) return { rows: [], warnings: [{ line: 1, message: "Esto no es un JSON válido." }] };
     const rows: ParsedAward[] = [];
     const warnings: ParseWarning[] = [];
     entries.forEach((e, i) => {
@@ -59,7 +59,7 @@ export const gargulJson: LootParser = {
       const ts = typeof e.timestamp === "number" ? e.timestamp : positiveInt(e.timestamp);
       const awardedTo = typeof e.awardedTo === "string" ? e.awardedTo.trim() : "";
       if (!itemId || !ts || !awardedTo) {
-        warnings.push({ line, message: "Skipped an award without an item, player or time." });
+        warnings.push({ line, message: "Se ha omitido una entrega sin objeto, jugador u hora." });
         return;
       }
       const awardedAt = new Date(ts * 1000);
@@ -92,7 +92,7 @@ const TMB_HEADER = /^\s*datetime\s*,\s*character\s*,\s*itemid\s*,\s*offspec\s*,\
 
 export const gargulTmb: LootParser = {
   id: "gargul-tmb",
-  label: "Gargul (TMB export)",
+  label: "Gargul (exportación TMB)",
   source: "gargul",
   detect(raw) {
     const first = raw.trimStart().split(/\r?\n/, 1)[0] ?? "";
@@ -109,7 +109,7 @@ export const gargulTmb: LootParser = {
       const itemId = positiveInt(itemIdText);
       const awardedAt = date && zonedTime({ ...date, hour: 12 }, ctx.timezone);
       if (!awardedAt || !itemId || !character) {
-        warnings.push({ line, message: "Skipped a row without a date, player or item ID." });
+        warnings.push({ line, message: "Se ha omitido una fila sin fecha, jugador o ID de objeto." });
         continue;
       }
       const disenchanted = DISENCHANT_ID.test(character);
@@ -198,7 +198,7 @@ function matchShare(raw: string, template: string): number {
 function parseTemplated(raw: string, template: string, ctx: ParseContext): ParseResult {
   const compiled = compileTemplate(template);
   if (!compiled) {
-    return { rows: [], warnings: [{ line: 1, message: "The template needs @ID or @LINK, and @WINNER or @NORMALIZED." }] };
+    return { rows: [], warnings: [{ line: 1, message: "La plantilla necesita @ID o @LINK, y @WINNER o @NORMALIZED." }] };
   }
   const rows: ParsedAward[] = [];
   const warnings: ParseWarning[] = [];
@@ -209,7 +209,7 @@ function parseTemplated(raw: string, template: string, ctx: ParseContext): Parse
     const m = trimmed.match(compiled.regex);
     if (!m) {
       // Gargul can put a header line above the rows.
-      if (rows.length > 0 || warnings.length > 0 || line > 1) warnings.push({ line, message: "Skipped a line that doesn't match the template." });
+      if (rows.length > 0 || warnings.length > 0 || line > 1) warnings.push({ line, message: "Se ha omitido una línea que no encaja con la plantilla." });
       return;
     }
     const v: Record<string, string> = {};
@@ -226,7 +226,7 @@ function parseTemplated(raw: string, template: string, ctx: ParseContext): Parse
     const hasTime = hh !== undefined && mm !== undefined;
     const awardedAt = date && zonedTime({ ...date, hour: hasTime ? hh : 12, minute: hasTime ? mm : 0 }, ctx.timezone);
     if (!itemId || !player || !awardedAt) {
-      warnings.push({ line, message: "Skipped a line without an item ID, player or date." });
+      warnings.push({ line, message: "Se ha omitido una línea sin ID de objeto, jugador o fecha." });
       return;
     }
     const disenchanted = DISENCHANT_ID.test(player);
@@ -254,7 +254,7 @@ function parseTemplated(raw: string, template: string, ctx: ParseContext): Parse
 
 export const gargulCustom: LootParser = {
   id: "gargul-custom",
-  label: "Gargul (custom or RRobin format)",
+  label: "Gargul (formato propio o RRobin)",
   source: "gargul",
   detect(raw) {
     const share = Math.max(matchShare(raw, GARGUL_DEFAULT_TEMPLATE), matchShare(raw, RROBIN_TEMPLATE));

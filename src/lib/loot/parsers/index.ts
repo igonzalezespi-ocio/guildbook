@@ -33,14 +33,14 @@ export class LootParseError extends Error {
 
 /** Parses an export with the named parser (or the detected one), enforcing the size limits. */
 export function parseLootExport(raw: string, ctx: ParseContext & { parserId?: string | null }): ParseResult & { parser: LootParser } {
-  if (!raw.trim()) throw new LootParseError("Paste an export first.");
+  if (!raw.trim()) throw new LootParseError("Pega primero una exportación.");
   if (new TextEncoder().encode(raw).length > MAX_IMPORT_BYTES) {
-    throw new LootParseError("That export is too large. Export one raid night or a few weeks at a time.");
+    throw new LootParseError("Esa exportación es demasiado grande. Exporta una noche de banda o unas pocas semanas cada vez.");
   }
   const parser = ctx.parserId ? getLootParser(ctx.parserId) : detectLootParser(raw);
   if (!parser) {
     throw new LootParseError(
-      "That doesn't look like a Gargul or RCLootCouncil export. Choose the format by hand if it's a custom Gargul template.",
+      "Eso no parece una exportación de Gargul ni de RCLootCouncil. Elige el formato a mano si es una plantilla propia de Gargul.",
     );
   }
   const result = parser.parse(raw, ctx);

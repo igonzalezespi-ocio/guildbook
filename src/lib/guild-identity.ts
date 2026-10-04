@@ -49,7 +49,7 @@ export function describeIdentity(identity: DescribedIdentity): string {
 
 /** Name used for an unverified guild that lost its name to a verified claim: "Name (unverified)", then "(unverified 2)". */
 export function unverifiedName(name: string, attempt: number): string {
-  return attempt <= 1 ? `${name} (unverified)` : `${name} (unverified ${attempt})`;
+  return attempt <= 1 ? `${name} (sin verificar)` : `${name} (sin verificar ${attempt})`;
 }
 
 /** Days of failed daily checks before a verified guild loses its badge. */

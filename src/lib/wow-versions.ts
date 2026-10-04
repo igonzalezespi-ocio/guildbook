@@ -10,11 +10,11 @@ export const GAME_VERSION_LABELS: Record<GameVersion, string> = {
   forever: "WoW: Forever",
   era: "Classic Era",
   hardcore: "Classic Hardcore",
-  seasonal: "Season of Discovery",
+  seasonal: "Temporada de descubrimiento",
   anniversary: "TBC Anniversary",
-  progression: "Classic progression",
-  retail: "retail World of Warcraft",
-  unknown: "other",
+  progression: "Classic con progresión",
+  retail: "World of Warcraft (retail)",
+  unknown: "otro",
 };
 
 export type NamespaceFamily = "classic1x" | "classicann" | "classic" | "retail" | "other";

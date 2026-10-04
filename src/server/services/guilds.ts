@@ -47,43 +47,43 @@ export const DEFAULT_CONTENT_PAGES = [
   { slug: LORE_SLUG, title: LORE_TITLE, sortOrder: 5 },
 ] as const;
 
-export const STANDARD_CHARTER_MD = `> This is a starter charter for **{name}**. Officers can rewrite it under Admin, then Charter, to say how your guild really works.
+export const STANDARD_CHARTER_MD = `> Este es un reglamento de ejemplo para **{name}**. Los oficiales pueden reescribirlo en Administración > Reglamento para contar cómo funciona de verdad la hermandad.
 
-### Our rules
+### Nuestras normas
 
-1. **Be kind.** No harassment, slurs or drama in public channels. Treat guildmates, pugs and rivals with respect.
-2. **Keep your word.** If you sign up for an event, come prepared and on time. If plans change, let an officer know.
-3. **Come prepared.** Know what the group needs from you and keep your gear and addons up to date.
-4. **Settle disagreements in private.** Take concerns to an officer, not to guild chat.
+1. **Sé amable.** Nada de acoso, insultos ni dramas en los canales públicos. Trata con respeto a los compañeros de hermandad, a los de grupos aleatorios y a los rivales.
+2. **Cumple tu palabra.** Si te apuntas a un evento, ven preparado y a tiempo. Si cambian tus planes, avisa a un oficial.
+3. **Ven preparado.** Ten claro lo que el grupo necesita de ti y mantén al día tu equipo y tus addons.
+4. **Resuelve los desacuerdos en privado.** Lleva tus quejas a un oficial, no al chat de la hermandad.
 
-### Ranks
+### Rangos
 
-Our ranks, and what each one can do, are listed at the end of this charter.`;
+Nuestros rangos, y lo que puede hacer cada uno, aparecen al final de este reglamento.`;
 
-export const STANDARD_LOOT_MD = `Loot serves the guild's progression first.
+export const STANDARD_LOOT_MD = `El botín sirve primero al progreso de la hermandad.
 
-- **Loot council** or **soft reserve**: officers announce which system a raid uses before the first pull.
-- **Off-spec** rolls happen only after main-spec interest is settled.
-- Items no one needs are **disenchanted** for the guild bank.`;
+- **Consejo de botín** o **reserva (SR)**: los oficiales anuncian qué sistema usa cada banda antes del primer pull.
+- Las tiradas de **especialización secundaria** solo se hacen cuando ya está resuelto el interés por la principal.
+- Los objetos que nadie necesita se **desencantan** para el banco de la hermandad.`;
 
-export const STANDARD_STORY_MD = `> This page is a starting point. Officers can replace it under Admin, then Charter.
+export const STANDARD_STORY_MD = `> Esta página es un punto de partida. Los oficiales pueden sustituirla en Administración > Reglamento.
 
-## Who we are
+## Quiénes somos
 
-Tell visitors what the guild is about: how it started, what you value and what a raid night feels like.
+Cuenta a los visitantes de qué va la hermandad: cómo empezó, qué valoráis y cómo es una noche de banda.
 
-## What we play
+## A qué jugamos
 
-Raiding, dungeons, PvP or leveling together: say what the guild focuses on and when.
+Bandas, mazmorras, JcJ o subir de nivel juntos: di en qué se centra la hermandad y cuándo.
 
-## Joining
+## Unirse
 
-Explain who fits in best, and how to reach an officer on Discord.`;
+Explica quién encaja mejor y cómo contactar con un oficial en Discord.`;
 
 export const STANDARD_CONTENT_PAGES = [
-  { slug: "charter", title: "Guild Charter", sortOrder: 1, bodyMd: STANDARD_CHARTER_MD },
-  { slug: "loot-policy", title: "Loot Policy", sortOrder: 2, bodyMd: STANDARD_LOOT_MD },
-  { slug: LORE_SLUG, title: "Our Story", sortOrder: 3, bodyMd: STANDARD_STORY_MD },
+  { slug: "charter", title: "Reglamento de la hermandad", sortOrder: 1, bodyMd: STANDARD_CHARTER_MD },
+  { slug: "loot-policy", title: "Política de botín", sortOrder: 2, bodyMd: STANDARD_LOOT_MD },
+  { slug: LORE_SLUG, title: "Nuestra historia", sortOrder: 3, bodyMd: STANDARD_STORY_MD },
 ] as const;
 
 const PRESETS = {

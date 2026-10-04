@@ -43,7 +43,7 @@ function toAward(r: Record<string, unknown>, line: number, ctx: ParseContext, wa
   const exact = timeFromId(id);
   const awardedAt = exact ?? timeFromDate(nil(r.date), nil(r.time), ctx.timezone);
   if (!player || !itemId || !awardedAt) {
-    warnings.push({ line, message: "Skipped a row without a player, item ID or date." });
+    warnings.push({ line, message: "Se ha omitido una fila sin jugador, ID de objeto o fecha." });
     return null;
   }
   const responseText = nil(r.response);
@@ -76,7 +76,7 @@ export const rclcCsv: LootParser = {
     const records = parseCsv(raw.trim());
     const header = records.shift();
     if (!header || !HEADER.test(header.cells.join(","))) {
-      return { rows: [], warnings: [{ line: 1, message: "The first line should be RCLootCouncil's CSV header (player,date,time,id,...)." }] };
+      return { rows: [], warnings: [{ line: 1, message: "La primera línea debería ser la cabecera CSV de RCLootCouncil (player,date,time,id,...)." }] };
     }
     const columns = header.cells.map((c) => c.trim());
     const rows: ParsedAward[] = [];
@@ -104,14 +104,14 @@ export const rclcJson: LootParser = {
     try {
       json = JSON.parse(raw);
     } catch {
-      return { rows: [], warnings: [{ line: 1, message: "This isn't valid JSON." }] };
+      return { rows: [], warnings: [{ line: 1, message: "Esto no es un JSON válido." }] };
     }
     const list = Array.isArray(json) ? json : [json];
     const rows: ParsedAward[] = [];
     const warnings: ParseWarning[] = [];
     list.forEach((entry, i) => {
       if (!entry || typeof entry !== "object") {
-        warnings.push({ line: i + 1, message: "Skipped an entry that isn't an object." });
+        warnings.push({ line: i + 1, message: "Se ha omitido una entrada que no es un objeto." });
         return;
       }
       const award = toAward(entry as Record<string, unknown>, i + 1, ctx, warnings);

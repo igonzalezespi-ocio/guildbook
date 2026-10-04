@@ -3,17 +3,17 @@ export function guildWording(guild: { preset: string; name: string }) {
   const order = guild.preset === "order";
   const name = guild.name;
   return {
-    ranksHeading: order ? "Ranks of the Order" : `Ranks of ${name}`,
-    progressionEyebrow: order ? "Deeds of the Order" : `Deeds of ${name}`,
-    joined: order ? "Joined the Order" : `Joined ${name}`,
-    lootEyebrow: order ? "The spoils of the Order" : `The spoils of ${name}`,
-    addonsTitle: order ? "Addons of the Order" : "Guild Addons",
+    ranksHeading: order ? "Rangos de la Orden" : `Rangos de ${name}`,
+    progressionEyebrow: order ? "Hazañas de la Orden" : `Hazañas de ${name}`,
+    joined: order ? "Se unió a la Orden" : `Se unió a ${name}`,
+    lootEyebrow: order ? "El botín de la Orden" : `El botín de ${name}`,
+    addonsTitle: order ? "Addons de la Orden" : "Addons de la hermandad",
     addonsIntro: order
-      ? "Custom tools our members write to help the Order prepare, execute and improve."
-      : `Custom tools our members write to help ${name} prepare, execute and improve.`,
+      ? "Herramientas que escriben nuestros miembros para ayudar a la Orden a prepararse, ejecutar y mejorar."
+      : `Herramientas que escriben nuestros miembros para ayudar a ${name} a prepararse, ejecutar y mejorar.`,
     rosterEyebrow: (count: number) =>
-      order ? `${count} brothers and sisters in arms` : `${count} ${count === 1 ? "member" : "members"} of ${name}`,
+      order ? `${count} hermanos y hermanas de armas` : `${count} ${count === 1 ? "miembro" : "miembros"} de ${name}`,
     /** "Level 60 Holy Paladin" + this, for a character's page description. */
-    characterOf: order ? `of the ${name}` : `of ${name}`,
+    characterOf: `de ${name}`,
   };
 }

@@ -6,12 +6,12 @@ export const RANK_TIERS = ["applicant", "member", "raider", "officer", "admin"] 
 export type RankTier = (typeof RANK_TIERS)[number];
 
 export const TIER_LABELS: Record<Tier, string> = {
-  public: "Public",
-  applicant: "Applicant",
-  member: "Member",
+  public: "Público",
+  applicant: "Aspirante",
+  member: "Miembro",
   raider: "Raider",
-  officer: "Officer",
-  admin: "Admin",
+  officer: "Oficial",
+  admin: "Administrador",
 };
 
 export function tierLevel(tier: Tier): number {
