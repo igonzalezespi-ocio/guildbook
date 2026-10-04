@@ -22,7 +22,7 @@ export const RANK_PRESETS = {
     label: "Bandas",
     summary: "Un equipo de bandas con un núcleo fijo y pruebas.",
     ranks: [
-      { name: "Maestro de hermandad", description: "Líder de la hermandad", tier: "admin", insignia: "banner", inGame: true },
+      { name: "Líder", description: "Líder de la hermandad", tier: "admin", insignia: "banner", inGame: true },
       { name: "Oficial", description: "Organiza las bandas, el reclutamiento y el banco de la hermandad", tier: "officer", insignia: "laurel", inGame: true },
       { name: "Raider", description: "Raider del núcleo", tier: "raider", insignia: "helm", inGame: true },
       { name: "Miembro", description: "Miembro, social o subiendo de nivel", tier: "member", insignia: "chevron", inGame: true },
@@ -37,7 +37,7 @@ export const RANK_PRESETS = {
     label: "Social",
     summary: "Una hermandad de comunidad para subir de nivel, hacer mazmorras y estar con amigos.",
     ranks: [
-      { name: "Maestro de hermandad", description: "Líder de la hermandad", tier: "admin", insignia: "banner", inGame: true },
+      { name: "Líder", description: "Líder de la hermandad", tier: "admin", insignia: "banner", inGame: true },
       { name: "Oficial", description: "Mantiene la hermandad en marcha y da la bienvenida a los nuevos", tier: "officer", insignia: "laurel", inGame: true },
       { name: "Veterano", description: "Miembro de toda la vida", tier: "raider", insignia: "helm", inGame: true },
       { name: "Miembro", description: "Miembro de la hermandad", tier: "member", insignia: "chevron", inGame: true },

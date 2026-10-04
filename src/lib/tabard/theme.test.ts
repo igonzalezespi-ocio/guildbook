@@ -143,8 +143,8 @@ describe("low-distinction warnings", () => {
   it("flags buttons that vanish into the page and large lightness corrections", () => {
     const theme = computeTheme(t({ background: 45 }), "tome");
     const w = themeWarnings(theme);
-    expect(w.some((x) => /barely stand out/.test(x.message))).toBe(true);
+    expect(w.some((x) => /apenas destacarán/.test(x.message))).toBe(true);
     const navyTrim = computeTheme(t({ border: 10 }), "tome");
-    expect(themeWarnings(navyTrim).some((x) => /lightened noticeably/.test(x.message))).toBe(true);
+    expect(themeWarnings(navyTrim).some((x) => /se aclara bastante/.test(x.message))).toBe(true);
   });
 });

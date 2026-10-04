@@ -155,7 +155,7 @@ describe("Gargul custom", () => {
     expect(compileTemplate("@DATE @TIME")).toBeNull();
     const { rows, warnings } = getLootParser("gargul-custom")!.parse("x", { ...ctx, template: "@DATE" });
     expect(rows).toEqual([]);
-    expect(warnings[0]!.message).toMatch(/template needs/);
+    expect(warnings[0]!.message).toMatch(/plantilla necesita/);
   });
 });
 

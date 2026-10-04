@@ -16,17 +16,17 @@ describe("guild names", () => {
   });
 
   it("names unverified guilds that lost their name", () => {
-    expect(unverifiedName("Dawn", 1)).toBe("Dawn (unverified)");
-    expect(unverifiedName("Dawn", 3)).toBe("Dawn (unverified 3)");
+    expect(unverifiedName("Dawn", 1)).toBe("Dawn (sin verificar)");
+    expect(unverifiedName("Dawn", 3)).toBe("Dawn (sin verificar 3)");
   });
 
   it("describes an identity", () => {
-    expect(describeIdentity({ region: "eu", faction: "horde", ruleset: "rp" })).toBe("Europe, Horde, Roleplaying");
+    expect(describeIdentity({ region: "eu", faction: "horde", ruleset: "rp" })).toBe("Europa, Horda, Rol");
     expect(describeIdentity({ gameVersion: "forever", realmSlug: null, region: "us", faction: "horde", ruleset: "pvp" })).toBe(
-      "Americas, Horde, PvP",
+      "América, Horda, JcJ",
     );
     expect(describeIdentity({ gameVersion: "anniversary", realmSlug: "dreamscythe", region: "us", faction: "horde", ruleset: "normal" })).toBe(
-      "TBC Anniversary, Dreamscythe (US), Horde",
+      "TBC Anniversary, Dreamscythe (US), Horda",
     );
   });
 });
@@ -52,7 +52,7 @@ describe("guild creation input per game version", () => {
     expect(noRealm.success).toBe(false);
     expect(noRealm.error?.issues[0]?.path).toEqual(["realmSlug"]);
     const wrongRegion = createGuildInput.safeParse({ ...base, gameVersion: "anniversary", realmSlug: "thunderstrike" });
-    expect(wrongRegion.error?.issues[0]).toMatchObject({ path: ["realmSlug"], message: expect.stringContaining("another region") });
+    expect(wrongRegion.error?.issues[0]).toMatchObject({ path: ["realmSlug"], message: expect.stringContaining("otra región") });
     expect(createGuildInput.safeParse({ ...base, gameVersion: "anniversary", realmSlug: "doomhowl" }).success).toBe(false);
   });
 

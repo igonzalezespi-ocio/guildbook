@@ -107,7 +107,7 @@ describe("protection warrior model", () => {
   it("labels the replay as an estimate and never goes below actual", () => {
     for (const r of [trash!, boss!]) {
       expect(r.estimate!.estimated).toBeGreaterThanOrEqual(r.estimate!.actual);
-      expect(r.estimate!.assumptions[0]).toMatch(/^Estimate/);
+      expect(r.estimate!.assumptions[0]).toMatch(/^Es una estimación/);
       expect(r.score.overall).toBeGreaterThan(0);
       expect(r.score.overall).toBeLessThanOrEqual(100);
     }

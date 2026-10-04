@@ -35,7 +35,7 @@ describe("game versions", () => {
     expect(versionHasLaunched("forever", before)).toBe(false);
     expect(versionHasLaunched("forever", after)).toBe(true);
     expect(versionHasLaunched("anniversary", before)).toBe(true);
-    expect(versionLaunchLabel("forever")).toBe("Nov 4");
+    expect(versionLaunchLabel("forever")).toBe("4 nov");
     expect(versionLaunchLabel("anniversary")).toBeNull();
   });
 
