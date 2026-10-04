@@ -99,6 +99,20 @@ export default async function ApplyPage({ params, searchParams }: PageProps<"/[g
       : null;
   const offer = confirmed?.ok ? confirmed.offer : null;
 
+  const offerPanel = offer && (
+    <Panel title="Entra como miembro">
+      <ConfirmedJoinForm
+        action={joinAsConfirmedMemberAction.bind(null, slug, invite)}
+        character={offer.character}
+        inGameGuildName={offer.inGameGuildName}
+        rankName={offer.rank.name}
+        charterHref={guildHref(slug, "/charter")}
+        faithPledge={order}
+        gameVersion={guild.gameVersion}
+      />
+    </Panel>
+  );
+
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <PageHeader title={title} eyebrow={eyebrow}>
@@ -115,19 +129,8 @@ export default async function ApplyPage({ params, searchParams }: PageProps<"/[g
 
       <BattlenetNotice status={sp.bnet} />
 
-      {offer && (
-        <Panel title="Entra como miembro">
-          <ConfirmedJoinForm
-            action={joinAsConfirmedMemberAction.bind(null, slug, invite)}
-            character={offer.character}
-            inGameGuildName={offer.inGameGuildName}
-            rankName={offer.rank.name}
-            charterHref={guildHref(slug, "/charter")}
-            faithPledge={order}
-            gameVersion={guild.gameVersion}
-          />
-        </Panel>
-      )}
+      {/* With an application already pending, its card comes first: it is what the applicant came back to see. */}
+      {offer && !pending && offerPanel}
 
       {pending ? (
         <Panel title="Tu solicitud" actions={<StatusPill status={pending.status} />}>
@@ -182,6 +185,8 @@ export default async function ApplyPage({ params, searchParams }: PageProps<"/[g
           />
         </Panel>
       )}
+
+      {offer && pending && offerPanel}
 
       {history.filter((a) => a.status !== "pending").length > 0 && (
         <Panel title="Solicitudes anteriores">
