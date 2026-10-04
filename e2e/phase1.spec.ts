@@ -8,7 +8,7 @@ test.describe("public pages", () => {
     await expect(page.getByText("Quis ut Deus").first()).toBeVisible();
     await expect(page.getByRole("heading", { name: "Horario de bandas" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Reclutamiento" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Únete a la Orden" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Solicita el ingreso en la Orden" })).toBeVisible();
     if (isMobile) await openMenu(headerMenu(page, "Menú"));
     await expect(page.getByRole("banner").getByRole("link", { name: "Únete", exact: true }).filter({ visible: true })).toBeVisible();
     if (isMobile) await page.keyboard.press("Escape");
@@ -21,11 +21,11 @@ test.describe("public pages", () => {
 
   test("roster groups mains by class without faction filters in an Alliance-only guild", async ({ page }) => {
     await page.goto("/roster");
-    await expect(page.getByRole("heading", { name: /Paladin/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Paladín/ })).toBeVisible();
     await expect(page.getByText("Tor Whitecross", { exact: true })).toBeVisible();
     await expect(page.getByText("Brigid Hearthfire", { exact: true })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Horde" })).toHaveCount(0);
-    await expect(page.getByText("Horde", { exact: true })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: "Horda" })).toHaveCount(0);
+    await expect(page.getByText("Horda", { exact: true })).toHaveCount(0);
   });
 
   test("mobile menu closes on outside click, Escape and navigation", async ({ page, isMobile }) => {
