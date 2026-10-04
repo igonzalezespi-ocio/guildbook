@@ -11,18 +11,18 @@ import type { ActionResult } from "@/server/action-types";
 
 /** Summary labels for every field `guildSettingsInput` validates. */
 export const GUILD_SETTINGS_LABELS = {
-  name: "Name",
-  motto: "Motto",
-  description: "Home page description",
-  timezone: "Server timezone",
-  region: "Region",
-  realmSlug: "Realm",
-  faction: "Faction",
-  ruleset: "Ruleset",
-  discordInviteUrl: "Discord invite link",
-  recruitmentOpen: "Recruitment",
-  directoryListed: "Directory listing",
-  lootPublic: "Loot ledger visibility",
+  name: "Nombre",
+  motto: "Lema",
+  description: "Descripción de la portada",
+  timezone: "Zona horaria del servidor",
+  region: "Región",
+  realmSlug: "Reino",
+  faction: "Facción",
+  ruleset: "Tipo de reino",
+  discordInviteUrl: "Enlace de invitación de Discord",
+  recruitmentOpen: "Reclutamiento",
+  directoryListed: "Aparecer en el directorio",
+  lootPublic: "Visibilidad del registro de botín",
 } as const;
 
 export interface GuildSettingsValues {
@@ -53,66 +53,66 @@ export function GuildSettingsForm({
   const verified = Boolean(guild.verifiedAt);
   return (
     <ActionForm action={action} className="space-y-4" labels={GUILD_SETTINGS_LABELS}>
-      <Field label="Name" name="name">
+      <Field label="Nombre" name="name">
         <input id="name" name="name" className="field" defaultValue={guild.name} required />
       </Field>
-      <Field label="Motto" name="motto">
+      <Field label="Lema" name="motto">
         <input id="motto" name="motto" className="field" defaultValue={guild.motto ?? ""} />
       </Field>
-      <Field label="Home page description" name="description">
+      <Field label="Descripción de la portada" name="description">
         <textarea id="description" name="description" className="field" defaultValue={guild.description} />
       </Field>
-      <Field label="Server timezone" name="timezone" hint="Raid times and loot dates are shown in this timezone.">
+      <Field label="Zona horaria del servidor" name="timezone" hint="Los horarios de banda y las fechas del botín se muestran en esta zona horaria.">
         <TimezoneSelect defaultValue={guild.timezone} required />
       </Field>
       <div>
-        <p className="field-label">Game version</p>
+        <p className="field-label">Versión del juego</p>
         <p className="flex items-center gap-2 text-sm text-bone" data-testid="settings-game-version">
           <GameVersionBadge version={guild.gameVersion} always />
           {VERSION_INFO[guild.gameVersion].label}
         </p>
-        <p className="mt-1 text-xs text-muted">A guild&apos;s game version can&apos;t be changed.</p>
+        <p className="mt-1 text-xs text-muted">La versión del juego de una hermandad no se puede cambiar.</p>
       </div>
       {realms ? (
         <div>
           <label htmlFor="realmSlug" className="field-label">
-            Realm
+            Reino
           </label>
           <input type="hidden" name="region" value={guild.region} />
           <RealmSelect version={guild.gameVersion} defaultValue={guild.realmSlug ?? ""} disabled={verified} />
           <p className="mt-1 text-xs text-muted">
             {verified
-              ? "Your guild is verified, so its realm can't change. Changing its name or faction removes the verification until you verify again."
-              : "Name, realm and faction identify your guild on Guildbook and must match the in-game guild. The realm sets the region and ruleset."}
+              ? "Tu hermandad está verificada, así que su reino no puede cambiar. Si cambias su nombre o su facción, pierde la verificación hasta que vuelvas a verificarla."
+              : "El nombre, el reino y la facción identifican tu hermandad en Guildbook y deben coincidir con los de la hermandad del juego. El reino fija la región y el tipo de reino."}
           </p>
           <FieldError name="realmSlug" />
           <FieldError name="region" />
         </div>
       ) : (
         <fieldset>
-          <legend className="field-label">Region</legend>
+          <legend className="field-label">Región</legend>
           <RegionChoice defaultValue={guild.region} />
           <FieldError name="region" />
         </fieldset>
       )}
       <fieldset>
-        <legend className="field-label">Faction</legend>
+        <legend className="field-label">Facción</legend>
         <FactionChoice defaultValue={guild.faction} />
         <FieldError name="faction" />
       </fieldset>
       {!realms && (
         <fieldset>
-          <legend className="field-label">Ruleset</legend>
+          <legend className="field-label">Tipo de reino</legend>
           <RulesetChoice defaultValue={guild.ruleset} />
           <p className="mt-1 text-xs text-muted">
             {verified
-              ? "Your guild is verified. Changing its name, region, faction or ruleset removes the verification until you verify again."
-              : "Name, region, faction and ruleset identify your guild on Guildbook and must match the in-game guild to verify it."}
+              ? "Tu hermandad está verificada. Si cambias su nombre, región, facción o tipo de reino, pierde la verificación hasta que vuelvas a verificarla."
+              : "El nombre, la región, la facción y el tipo de reino identifican tu hermandad en Guildbook y deben coincidir con los de la hermandad del juego para verificarla."}
           </p>
           <FieldError name="ruleset" />
         </fieldset>
       )}
-      <Field label="Discord invite link" name="discordInviteUrl" hint="Shown in the site footer, e.g. https://discord.gg/yourcode">
+      <Field label="Enlace de invitación de Discord" name="discordInviteUrl" hint="Se muestra en el pie del sitio, p. ej. https://discord.gg/tucodigo">
         <input
           id="discordInviteUrl"
           name="discordInviteUrl"
@@ -125,26 +125,26 @@ export function GuildSettingsForm({
       <div>
         <label className="flex items-center gap-3 text-sm">
           <input type="checkbox" name="recruitmentOpen" defaultChecked={guild.recruitmentOpen} className="h-5 w-5 accent-crimson" />
-          Recruitment open
+          Reclutamiento abierto
         </label>
         <FieldError name="recruitmentOpen" />
       </div>
       <div>
         <label className="flex items-center gap-3 text-sm">
           <input type="checkbox" name="directoryListed" defaultChecked={guild.directoryListed} className="h-5 w-5 accent-crimson" />
-          List this guild in the public Guildbook directory
+          Mostrar esta hermandad en el directorio público de Guildbook
         </label>
         <FieldError name="directoryListed" />
       </div>
       <div>
         <label className="flex items-center gap-3 text-sm">
           <input type="checkbox" name="lootPublic" defaultChecked={guild.lootPublic} className="h-5 w-5 accent-crimson" />
-          Show the loot ledger to visitors (members always see it)
+          Mostrar el registro de botín a los visitantes (los miembros siempre lo ven)
         </label>
         <FieldError name="lootPublic" />
       </div>
       <FormMessage />
-      <SubmitButton>Save</SubmitButton>
+      <SubmitButton>Guardar</SubmitButton>
     </ActionForm>
   );
 }

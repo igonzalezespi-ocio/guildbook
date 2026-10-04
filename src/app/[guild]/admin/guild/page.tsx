@@ -15,12 +15,12 @@ import { GuildSettingsForm } from "./settings-form";
 import { TabardSection } from "./tabard-section";
 import { VerifyGuildPanel } from "./verify-guild-panel";
 
-export const metadata: Metadata = { title: "Guild Settings" };
+export const metadata: Metadata = { title: "Ajustes de la hermandad" };
 
 const STATUS_LABELS: Record<GuildDomain["status"], { label: string; className: string }> = {
-  pending: { label: "Waiting for DNS", className: "border-gold-dim text-gold" },
-  verified: { label: "Verified", className: "border-emerald-700 text-emerald-300" },
-  failed: { label: "Not verified", className: "border-crimson text-red-300" },
+  pending: { label: "Esperando al DNS", className: "border-gold-dim text-gold" },
+  verified: { label: "Verificado", className: "border-emerald-700 text-emerald-300" },
+  failed: { label: "Sin verificar", className: "border-crimson text-red-300" },
 };
 
 function DomainCard({ slug, domain, timezone }: { slug: string; domain: GuildDomain; timezone: string }) {
@@ -37,9 +37,9 @@ function DomainCard({ slug, domain, timezone }: { slug: string; domain: GuildDom
           <table className="w-full text-left text-xs">
             <thead className="text-gold-dim">
               <tr>
-                <th className="py-1 pr-3 font-normal">Type</th>
-                <th className="py-1 pr-3 font-normal">Name</th>
-                <th className="py-1 font-normal">Value</th>
+                <th className="py-1 pr-3 font-normal">Tipo</th>
+                <th className="py-1 pr-3 font-normal">Nombre</th>
+                <th className="py-1 font-normal">Valor</th>
               </tr>
             </thead>
             <tbody className="font-mono text-bone">
@@ -55,20 +55,20 @@ function DomainCard({ slug, domain, timezone }: { slug: string; domain: GuildDom
         </div>
       )}
       <p className="text-xs text-muted">
-        Added {formatDate(domain.createdAt, timezone)}
-        {domain.lastCheckedAt && <>. Last checked {formatDate(domain.lastCheckedAt, timezone)}</>}
-        {domain.verifiedAt && <>. Verified {formatDate(domain.verifiedAt, timezone)}</>}
+        Añadido el {formatDate(domain.createdAt, timezone)}
+        {domain.lastCheckedAt && <>. Última comprobación: {formatDate(domain.lastCheckedAt, timezone)}</>}
+        {domain.verifiedAt && <>. Verificado el {formatDate(domain.verifiedAt, timezone)}</>}
       </p>
       <div className="flex flex-wrap gap-2">
         <ActionForm action={verifyDomainAction.bind(null, slug, domain.id)}>
           <SubmitButton size="sm" variant="ghost">
-            {domain.status === "verified" ? "Recheck" : "Check verification"}
+            {domain.status === "verified" ? "Volver a comprobar" : "Comprobar verificación"}
           </SubmitButton>
           <FormMessage className="mt-2" />
         </ActionForm>
-        <ActionForm action={removeDomainAction.bind(null, slug, domain.id)} confirm={`Disconnect ${domain.domain}?`}>
+        <ActionForm action={removeDomainAction.bind(null, slug, domain.id)} confirm={`¿Desconectar ${domain.domain}?`}>
           <SubmitButton size="sm" variant="danger">
-            Remove
+            Quitar
           </SubmitButton>
         </ActionForm>
       </div>
@@ -85,7 +85,7 @@ export default async function GuildSettingsPage({ params }: PageProps<"/[guild]/
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <PageHeader title="Guild Settings" />
+      <PageHeader title="Ajustes de la hermandad" />
       <Panel>
         <GuildSettingsForm action={updateGuildSettingsAction.bind(null, slug)} guild={guild} />
       </Panel>
@@ -102,13 +102,13 @@ export default async function GuildSettingsPage({ params }: PageProps<"/[guild]/
         <TabardSection guild={guild} />
       </div>
 
-      <Panel title="Custom domains" actions={<Tag>Optional</Tag>}>
+      <Panel title="Dominios propios" actions={<Tag>Opcional</Tag>}>
         <div className="space-y-4 text-sm">
           <p className="leading-relaxed text-muted">
-            Your guild always lives at <span className="font-mono text-bone">{subdomain.replace(/^https?:\/\//, "")}</span>. You can
-            also serve it on a domain you own, like <span className="font-mono text-bone">yourguild.org</span>. Add the domain, create the
-            DNS records shown at your registrar, then check verification.
-            {!vercelManaged && " Once it is verified, the Guildbook team connects it to the hosting project."}
+            Tu hermandad siempre está en <span className="font-mono text-bone">{subdomain.replace(/^https?:\/\//, "")}</span>. También
+            puedes servirla en un dominio tuyo, como <span className="font-mono text-bone">tuhermandad.org</span>. Añade el dominio, crea en tu
+            registrador los registros DNS que se muestran y comprueba la verificación.
+            {!vercelManaged && " Cuando esté verificado, el equipo de Guildbook lo conecta al proyecto de alojamiento."}
           </p>
           {domains.length > 0 && (
             <ul className="space-y-3">
@@ -119,11 +119,11 @@ export default async function GuildSettingsPage({ params }: PageProps<"/[guild]/
           )}
           {domains.length < MAX_DOMAINS_PER_GUILD && (
             <ActionForm action={addDomainAction.bind(null, slug)} className="space-y-3">
-              <Field label="Domain" name="domain" hint="Without https://, e.g. yourguild.org or www.yourguild.org">
-                <input id="domain" name="domain" className="field" placeholder="yourguild.org" autoComplete="off" required />
+              <Field label="Dominio" name="domain" hint="Sin https://, p. ej. tuhermandad.org o www.tuhermandad.org">
+                <input id="domain" name="domain" className="field" placeholder="tuhermandad.org" autoComplete="off" required />
               </Field>
               <FormMessage />
-              <SubmitButton variant="ghost">Add domain</SubmitButton>
+              <SubmitButton variant="ghost">Añadir dominio</SubmitButton>
             </ActionForm>
           )}
         </div>

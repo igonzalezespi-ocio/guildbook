@@ -17,7 +17,7 @@ import { requirePage } from "@/server/context";
 import { getSyncStatus } from "@/server/services/battlenet";
 import { listMembers, listRanks } from "@/server/services/ranks";
 
-export const metadata: Metadata = { title: "Members" };
+export const metadata: Metadata = { title: "Miembros" };
 
 export default async function MembersPage({ params }: PageProps<"/[guild]/admin/members">) {
   const { guild: slug } = await params;
@@ -32,23 +32,23 @@ export default async function MembersPage({ params }: PageProps<"/[guild]/admin/
 
   return (
     <div>
-      <PageHeader title="Members" eyebrow={`${members.length} active`} />
+      <PageHeader title="Miembros" eyebrow={`${members.length} ${members.length === 1 ? "activo" : "activos"}`} />
       {(bnetEnabled || sync.verified > 0) && (
         <section className="panel mb-4 flex flex-wrap items-center justify-between gap-3 p-3" data-testid="battlenet-sync">
           <div className="min-w-0 text-sm">
             <p className="flex items-center gap-1.5">
               <VerifiedMark size={12} decorative />
-              {sync.verified} Battle.net verified {sync.verified === 1 ? "character" : "characters"}
+              {sync.verified} {sync.verified === 1 ? "personaje verificado" : "personajes verificados"} con Battle.net
             </p>
             <p className="text-xs text-muted">
-              {sync.lastSyncedAt ? `Last synced ${formatDateTime(sync.lastSyncedAt, guild.timezone)}` : "Not synced yet"}. Levels
-              also sync daily.
+              {sync.lastSyncedAt ? `Última sincronización: ${formatDateTime(sync.lastSyncedAt, guild.timezone)}` : "Aún sin sincronizar"}. Los niveles
+              también se sincronizan a diario.
             </p>
           </div>
           {bnetEnabled && (
             <ActionForm action={syncCharactersAction.bind(null, slug)} className="flex flex-col items-end gap-1">
-              <SubmitButton variant="ghost" size="sm" pendingLabel="Syncing…">
-                Sync now
+              <SubmitButton variant="ghost" size="sm" pendingLabel="Sincronizando…">
+                Sincronizar ahora
               </SubmitButton>
               <FormMessage />
             </ActionForm>
@@ -65,7 +65,7 @@ export default async function MembersPage({ params }: PageProps<"/[guild]/admin/
                   {m.mainId && m.mainClass && m.mainName && m.mainSurname !== null ? (
                     <CharacterLink guildSlug={slug} character={{ id: m.mainId, name: m.mainName, surname: m.mainSurname, wowClass: m.mainClass }} />
                   ) : (
-                    <span className="text-muted">No main</span>
+                    <span className="text-muted">Sin principal</span>
                   )}
                   <span className="ml-2 text-sm font-normal text-muted">
                     {m.userName} {m.discordUsername && `(@${m.discordUsername})`}
@@ -79,7 +79,7 @@ export default async function MembersPage({ params }: PageProps<"/[guild]/admin/
                   <Tag>{TIER_LABELS[m.rankTier]}</Tag>
                   {m.leftInGameGuild && (
                     <span className="rounded border border-gold-dim px-1.5 py-0.5 text-gold" data-testid="left-in-game-guild">
-                      Left the in-game guild
+                      Dejó la hermandad del juego
                     </span>
                   )}
                   {!guild.faction && m.mainFaction && <FactionBadge faction={m.mainFaction} />}
@@ -91,7 +91,7 @@ export default async function MembersPage({ params }: PageProps<"/[guild]/admin/
                     <input type="hidden" name="membershipId" value={m.membershipId} />
                     <Listbox
                       name="rankId"
-                      aria-label="Rank"
+                      aria-label="Rango"
                       options={assignable.map((r) => ({
                         value: r.id,
                         label: r.name,
@@ -102,16 +102,16 @@ export default async function MembersPage({ params }: PageProps<"/[guild]/admin/
                       className="w-44"
                     />
                     <SubmitButton variant="ghost" size="sm">
-                      Set
+                      Asignar
                     </SubmitButton>
                     <FormMessage />
                   </ActionForm>
                   <ActionForm
                     action={removeMemberAction.bind(null, slug, m.membershipId)}
-                    confirm={`Remove ${m.mainName && m.mainSurname !== null ? fullName(m.mainName, m.mainSurname) : m.userName} from the guild?`}
+                    confirm={`¿Expulsar a ${m.mainName && m.mainSurname !== null ? fullName(m.mainName, m.mainSurname) : m.userName} de la hermandad?`}
                   >
                     <SubmitButton variant="danger" size="sm">
-                      Remove
+                      Expulsar
                     </SubmitButton>
                     <FormMessage />
                   </ActionForm>
