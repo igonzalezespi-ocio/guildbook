@@ -31,7 +31,7 @@ test.describe("Guild onboarding", () => {
     await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
     await page.getByLabel("Horda").check();
     await page.getByLabel(/^Normal/).check();
-    await page.getByLabel(/public Guildbook directory/).check();
+    await page.getByLabel(/directorio público de Guildbook/).check();
     await page.getByRole("radio", { name: /^Social/ }).check();
     await page.getByRole("button", { name: "Crear hermandad" }).click();
 
