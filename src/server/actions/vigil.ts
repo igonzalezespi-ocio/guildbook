@@ -39,7 +39,7 @@ export async function setVigilVisibilityAction(
     const report = await setVigilReportVisibility(db, viewer.actor, id, fd.get("visibility"));
     refresh();
     const label = VISIBILITY_LABELS[report.visibility];
-    return report.changed ? `${report.fightLabel} ahora es ${label.toLowerCase()}.` : `${report.fightLabel} ya era ${label.toLowerCase()}.`;
+    return report.changed ? `Visibilidad de ${report.fightLabel}: ${label.toLowerCase()}.` : `${report.fightLabel} ya tenía esa visibilidad (${label.toLowerCase()}).`;
   });
 }
 
