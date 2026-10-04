@@ -33,9 +33,9 @@ async function createAnniversaryGuild(page: Page, roles: string, realm = "dreams
   await page.getByLabel("Nombre de la hermandad").fill(name);
   await page.getByLabel("Subdominio").fill(slug);
   await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
-  await page.getByLabel(/^Americas/).check();
+  await page.getByLabel(/^América/).check();
   await chooseOption(page.getByLabel("Reino", { exact: true }), realm);
-  await page.getByLabel("Horde").check();
+  await page.getByLabel("Horda").check();
   await page.getByRole("button", { name: "Crear hermandad" }).click();
   const site = guildOrigin(slug);
   await page.waitForURL(`${site}/admin/setup`);
@@ -92,7 +92,7 @@ test.describe("TBC Anniversary", () => {
     await page.goto(`${site}/members/characters`);
     await importCharacter(page, "Mattaeis", "Beast Mastery", "ranged");
     const card = page.getByRole("main").locator("li", { has: page.getByTestId("guild-member-tag") }).filter({ hasText: "Mattaeis" });
-    await expect(card.getByTestId("guild-member-tag")).toHaveText("Verified member");
+    await expect(card.getByTestId("guild-member-tag")).toHaveText("Miembro verificado");
     if (shoot) await page.screenshot({ path: `${SHOTS}/anniversary-my-characters.png`, fullPage: true });
   });
 
@@ -176,6 +176,6 @@ test.describe("TBC Anniversary", () => {
 
     await page.goto(`${site}/members/characters`);
     const card = page.getByRole("main").locator("li", { has: page.getByTestId("guild-member-tag") }).filter({ hasText: "Mattaeis" });
-    await expect(card.getByTestId("guild-member-tag")).toHaveText("Verified member");
+    await expect(card.getByTestId("guild-member-tag")).toHaveText("Miembro verificado");
   });
 });

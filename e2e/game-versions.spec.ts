@@ -31,7 +31,7 @@ test.describe("Game versions", () => {
     const site = guildOrigin(slug);
 
     await signInOnApex(page, `e2e-tbc-${suffix}`, `Founder ${suffix}`, "/create");
-    await expect(page.getByRole("heading", { name: "Create your guild" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Crea tu hermandad" })).toBeVisible();
     await expect(page.getByLabel("Versión del juego")).toHaveText(/WoW: Forever/);
     await expect(page.getByTestId("ruleset-choice")).toBeVisible();
 
@@ -41,15 +41,15 @@ test.describe("Game versions", () => {
     await page.getByLabel("Subdominio").fill(slug);
     await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
     // The realm sets the ruleset; Europe offers only its own realms.
-    await page.getByLabel(/^Europe/).check();
+    await page.getByLabel(/^Europa/).check();
     await expect(page.getByTestId("realm-ruleset")).toHaveText("El reino define el tipo de reino.");
     await chooseOption(page.getByLabel("Reino", { exact: true }), "spineshatter");
     await expect(page.getByTestId("realm-ruleset")).toContainText("JcJ");
-    await page.getByLabel(/^Americas/).check();
+    await page.getByLabel(/^América/).check();
     await expect(page.getByTestId("realm-ruleset")).toHaveText("El reino define el tipo de reino.");
     await chooseOption(page.getByLabel("Reino", { exact: true }), "dreamscythe");
     await expect(page.getByTestId("realm-ruleset")).toContainText("Normal");
-    await page.getByLabel("Horde").check();
+    await page.getByLabel("Horda").check();
     await page.getByLabel(/public Guildbook directory/).check();
     // The sticky site header would cover part of the form in an element screenshot.
     if (shoot) await page.addStyleTag({ content: "header { position: static !important; }" });

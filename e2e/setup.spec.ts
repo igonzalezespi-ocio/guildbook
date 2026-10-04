@@ -29,7 +29,7 @@ test.describe("Guild onboarding", () => {
     await page.getByLabel("Nombre de la hermandad").fill(name);
     await page.getByLabel("Subdominio").fill(slug);
     await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
-    await page.getByLabel("Horde").check();
+    await page.getByLabel("Horda").check();
     await page.getByLabel(/^Normal/).check();
     await page.getByLabel(/public Guildbook directory/).check();
     await page.getByRole("radio", { name: /^Social/ }).check();

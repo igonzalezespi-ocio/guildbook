@@ -23,7 +23,7 @@ async function createGuild(page: Page, slug: string, name: string) {
   await page.getByLabel("Nombre de la hermandad").fill(name);
   await page.getByLabel("Subdominio").fill(slug);
   await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
-  await page.getByLabel("Alliance").check();
+  await page.getByLabel("Alianza").check();
   await page.getByLabel(/^Normal/).check();
   await page.getByLabel("Lema").fill("Hold the line");
   await page.getByRole("button", { name: "Crear hermandad" }).click();

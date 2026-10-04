@@ -23,7 +23,7 @@ async function signInOnApex(page: Page, discordId: string, name: string, callbac
 test.describe("Guildbook platform", () => {
   test("apex landing and directory are served on the apex, guilds on their subdomains", async ({ page }) => {
     await page.goto(`${APEX}/`);
-    await expect(page.getByRole("heading", { name: "A home for your guild" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Un hogar para tu hermandad" })).toBeVisible();
     await expect(page).toHaveTitle(/Guildbook/);
     // The guild site preview links to the Order on its subdomain.
     await expect(page.getByRole("link", { name: "Visita Order of Saint Michael" })).toHaveAttribute("href", guildOrigin("osm"));
@@ -69,7 +69,7 @@ test.describe("Guildbook platform", () => {
     // Signing in on a guild subdomain goes through the apex.
     await page.goto(`${guildOrigin("osm")}/login`);
     await expect(page).toHaveURL(new RegExp(`^${APEX}/login\\?callbackUrl=`));
-    await expect(page.getByRole("heading", { name: "Sign in to Order of Saint Michael" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Inicia sesión en Order of Saint Michael" })).toBeVisible();
   });
 
   test("create a guild on the apex and land signed in on its admin subdomain", async ({ page }) => {
@@ -82,13 +82,13 @@ test.describe("Guildbook platform", () => {
 
     await signInOnApex(page, `e2e-founder-${suffix}`, `Founder ${suffix}`, "/create");
     await expect(page).toHaveURL(`${APEX}/create`);
-    await expect(page.getByRole("heading", { name: "Create your guild" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Crea tu hermandad" })).toBeVisible();
 
     const slugInput = page.getByLabel("Subdominio");
     await slugInput.fill("www");
-    await expect(page.getByTestId("slug-status")).toHaveText("That name is reserved");
+    await expect(page.getByTestId("slug-status")).toHaveText("Ese nombre está reservado");
     await slugInput.fill("osm");
-    await expect(page.getByTestId("slug-status")).toHaveText("That subdomain is taken");
+    await expect(page.getByTestId("slug-status")).toHaveText("Ese subdominio está ocupado");
     await slugInput.fill("");
 
     await page.getByLabel("Nombre de la hermandad").fill(name);
@@ -96,11 +96,11 @@ test.describe("Guildbook platform", () => {
     await slugInput.fill(slug);
     await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
     await expect(page.getByTestId("region-choice").getByRole("radio")).toHaveCount(2);
-    await expect(page.getByLabel(/^Americas/)).toBeChecked();
-    await page.getByLabel(/^Europe/).check();
+    await expect(page.getByLabel(/^América/)).toBeChecked();
+    await page.getByLabel(/^Europa/).check();
     await expect(page.getByTestId("faction-choice").getByRole("radio")).toHaveCount(2);
-    await page.getByLabel("Horde").check();
-    await page.getByLabel(/^PvP/).check();
+    await page.getByLabel("Horda").check();
+    await page.getByLabel(/^JcJ/).check();
     await page.getByLabel("Lema").fill("Hold the line");
 
     // A server-side rejection names the field, focuses it and offers subdomains that set this guild apart.
@@ -108,18 +108,18 @@ test.describe("Guildbook platform", () => {
     await expect(page.getByTestId("slug-suggestions").getByRole("button", { name: "osm-pvp" })).toBeVisible();
     await page.getByRole("button", { name: "Crear hermandad" }).click();
     const summary = page.getByTestId("form-error-summary");
-    await expect(summary).toContainText("Subdomain: That subdomain is taken");
+    await expect(summary).toContainText("Subdominio: Ese subdominio está ocupado");
     await expect(slugInput).toBeFocused();
     await expect(slugInput).toHaveAttribute("aria-invalid", "true");
     // A rejected submit keeps the choices already made.
-    await expect(page.getByLabel(/^Europe/)).toBeChecked();
-    await expect(page.getByLabel(/^PvP/)).toBeChecked();
+    await expect(page.getByLabel(/^Europa/)).toBeChecked();
+    await expect(page.getByLabel(/^JcJ/)).toBeChecked();
     await page.getByTestId("slug-suggestions").getByRole("button", { name: "osm-horde" }).click();
     await expect(slugInput).toHaveValue("osm-horde");
     await slugInput.fill(slug);
     await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
     // Left unlisted so repeated runs don't fill the local directory.
-    await expect(page.getByLabel(/public Guildbook directory/)).not.toBeChecked();
+    await expect(page.getByLabel(/directorio público de Guildbook/)).not.toBeChecked();
     await page.getByRole("button", { name: "Crear hermandad" }).click();
 
     // The handoff sets a session on the new subdomain and lands on its setup checklist, as an unlisted draft.
@@ -170,7 +170,7 @@ test.describe("Guildbook platform", () => {
     await signInOnApex(page, `e2e-visitor-${suffix}`, `Visitor ${suffix}`, `${guildOrigin("osm")}/apply`);
     await expect(page).toHaveURL(`${guildOrigin("osm")}/apply`);
     await expect(page.getByRole("heading", { name: "Apply to the Order" })).toBeVisible();
-    await expect(page.getByText(/Sign in with Discord/)).toHaveCount(0);
+    await expect(page.getByText(/sesión con Discord/)).toHaveCount(0);
   });
 
   test("rejects foreign callback URLs", async ({ page }) => {
@@ -178,7 +178,7 @@ test.describe("Guildbook platform", () => {
     await signInOnApex(page, `e2e-redirect-${suffix}`, `Redirect ${suffix}`, "https://evil.example.com/steal");
     expect(new URL(page.url()).host).toBe(`localhost:${PORT}`);
     // The redirect after a server action is rendered on the apex, not a guild.
-    await expect(page.getByRole("heading", { name: "A home for your guild" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Un hogar para tu hermandad" })).toBeVisible();
     await expect(page.getByTestId("platform-user")).toHaveText(`Redirect ${suffix}`);
   });
 });

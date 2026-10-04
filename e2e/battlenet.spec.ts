@@ -46,25 +46,25 @@ test("an applicant links Battle.net, picks a character, and the officer sees it 
   await application.getByRole("button", { name: "Submit application" }).click();
   await expect(page.getByRole("heading", { name: "Your application" })).toBeInViewport();
   await expect(page.getByText("before applying.")).toHaveCount(0);
-  await expect(page.getByRole("main").getByRole("img", { name: "Verified via Battle.net" })).toBeVisible();
+  await expect(page.getByRole("main").getByRole("img", { name: "Verificado con Battle.net" })).toBeVisible();
 
   await signIn(page, "seed-ironvow", "Ironvow", "/admin/applications");
   const row = page.getByRole("link", { name: new RegExp(`Brenna ${surname}`) });
-  await expect(row.getByText("Verified via Battle.net", { exact: true })).toBeVisible();
+  await expect(row.getByText("Verificado con Battle.net", { exact: true })).toBeVisible();
   await row.click();
-  await expect(page.getByRole("main").getByText("Verified via Battle.net", { exact: true })).toBeVisible();
+  await expect(page.getByRole("main").getByText("Verificado con Battle.net", { exact: true })).toBeVisible();
   await expect(page.getByText(/were read from Pilgrim#\d{4}/)).toBeVisible();
   await page.getByRole("button", { name: "Accept as member" }).click();
   await expect(page.getByText(/accepted on/)).toBeVisible();
 
   await signIn(page, applicantId, "Pilgrim", "/members/characters");
   const card = page.getByRole("main").locator("li", { hasText: `Brenna ${surname}` });
-  await expect(card.getByRole("img", { name: "Verified via Battle.net" })).toBeVisible();
+  await expect(card.getByRole("img", { name: "Verificado con Battle.net" })).toBeVisible();
   await expect(card.getByText("Unverified")).toHaveCount(0);
 
   await page.goto("/roster");
   const entry = page.getByRole("main").locator("li", { hasText: `Brenna ${surname}` });
-  await expect(entry.getByRole("img", { name: "Verified via Battle.net" })).toBeVisible();
+  await expect(entry.getByRole("img", { name: "Verificado con Battle.net" })).toBeVisible();
 });
 
 test("without Battle.net, manual entry still works and the officer sees it unverified", async ({ page }) => {
@@ -114,7 +114,7 @@ test("a member imports verified characters and an officer syncs their levels", a
   }
 
   const brenna = page.getByRole("main").locator("li.panel", { hasText: `Brenna ${surname}` });
-  await expect(brenna.getByRole("img", { name: "Verified via Battle.net" })).toBeVisible();
+  await expect(brenna.getByRole("img", { name: "Verificado con Battle.net" })).toBeVisible();
   await expect(brenna.getByText("Level 42 Shadow")).toBeVisible();
 
   await signIn(page, "seed-ironvow", "Ironvow", "/admin/members");

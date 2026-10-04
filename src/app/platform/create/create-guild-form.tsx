@@ -17,9 +17,9 @@ import { DEFAULT_RANK_PRESET } from "@/lib/rank-presets";
 import { checkSlugAction, createGuildAction } from "@/server/actions/platform";
 
 const PROBLEM_TEXT = {
-  length: "Use 3 to 30 characters",
-  characters: "Lowercase letters, numbers and single hyphens",
-  reserved: "That name is reserved",
+  length: "Usa entre 3 y 30 caracteres",
+  characters: "Minúsculas, números y guiones sueltos",
+  reserved: "Ese nombre está reservado",
 } as const;
 
 type Availability =
@@ -29,8 +29,8 @@ type Availability =
   | { state: "taken"; reason: string; suggestions: string[] };
 
 const VERSION_DESCRIPTIONS: Record<SupportedGuildVersion, string> = {
-  forever: "Launches Nov 4, 2026. No realms: your guild lives on a ruleset.",
-  anniversary: "The Burning Crusade on the Anniversary realms.",
+  forever: "Sale el 4 de noviembre de 2026. Sin reinos: tu hermandad vive en un tipo de reino.",
+  anniversary: "The Burning Crusade en los reinos Anniversary.",
 };
 
 const VERSION_OPTIONS: ListboxOption[] = SUPPORTED_GUILD_VERSIONS.map((v) => ({
@@ -42,17 +42,17 @@ const VERSION_OPTIONS: ListboxOption[] = SUPPORTED_GUILD_VERSIONS.map((v) => ({
 
 /** Summary labels for every field `createGuildInput` validates. */
 export const CREATE_GUILD_LABELS = {
-  gameVersion: "Game version",
-  realmSlug: "Realm",
-  name: "Guild name",
-  slug: "Subdomain",
-  region: "Region",
-  faction: "Faction",
-  ruleset: "Ruleset",
-  timezone: "Timezone",
-  motto: "Motto",
-  directoryListed: "Directory listing",
-  rankPreset: "Starting ranks",
+  gameVersion: "Versión del juego",
+  realmSlug: "Reino",
+  name: "Nombre de la hermandad",
+  slug: "Subdominio",
+  region: "Región",
+  faction: "Facción",
+  ruleset: "Tipo de reino",
+  timezone: "Zona horaria",
+  motto: "Lema",
+  directoryListed: "Aparecer en el directorio",
+  rankPreset: "Rangos iniciales",
 } as const;
 
 /** The server's subdomain error, until the subdomain is edited. */
@@ -88,7 +88,7 @@ function SlugSuggestions({ live, onPick }: { live: string[]; onPick: (slug: stri
   if (suggestions.length === 0) return null;
   return (
     <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs" data-testid="slug-suggestions">
-      <span className="text-muted">Try</span>
+      <span className="text-muted">Prueba</span>
       {suggestions.map((s) => (
         <button
           key={s}
@@ -158,16 +158,16 @@ export function CreateGuildForm({
     : problem
       ? { tone: "text-red-300", text: PROBLEM_TEXT[problem] }
       : availability.state === "available"
-        ? { tone: "text-emerald-300", text: "Available" }
+        ? { tone: "text-emerald-300", text: "Disponible" }
         : availability.state === "taken"
           ? { tone: "text-red-300", text: availability.reason }
-          : { tone: "text-muted", text: "Checking…" };
+          : { tone: "text-muted", text: "Comprobando…" };
 
   return (
     <ActionForm action={createGuildAction} className="space-y-5" labels={CREATE_GUILD_LABELS}>
       <div>
         <label htmlFor="gameVersion" className="field-label">
-          Game version
+          Versión del juego
         </label>
         <Listbox
           id="gameVersion"
@@ -177,11 +177,11 @@ export function CreateGuildForm({
           onChange={(v) => setGameVersion(v as SupportedGuildVersion)}
           data-testid="game-version-select"
         />
-        <p className="mt-1 text-xs text-muted">Each game is its own world. A guild belongs to one, and it can&apos;t be changed later.</p>
+        <p className="mt-1 text-xs text-muted">Cada juego es un mundo aparte. Una hermandad pertenece a uno y no se puede cambiar después.</p>
         <FieldError name="gameVersion" />
       </div>
 
-      <Field label="Guild name" name="name">
+      <Field label="Nombre de la hermandad" name="name">
         <input
           id="name"
           name="name"
@@ -199,7 +199,7 @@ export function CreateGuildForm({
 
       <div>
         <label htmlFor="slug" className="field-label">
-          Subdomain
+          Subdominio
         </label>
         <div className="flex items-stretch overflow-hidden rounded border border-line bg-ink focus-within:outline-2 focus-within:outline-gold-dim">
           {hostPrefix && <span className="flex items-center pl-3 font-mono text-sm text-muted">{hostPrefix}</span>}
@@ -232,7 +232,7 @@ export function CreateGuildForm({
       </div>
 
       <fieldset>
-        <legend className="field-label">Region</legend>
+        <legend className="field-label">Región</legend>
         <RegionChoice
           value={region}
           onChange={(v) => {
@@ -240,69 +240,69 @@ export function CreateGuildForm({
             setRealmSlug("");
           }}
         />
-        <p className="mt-1 text-xs text-muted">Americas and Europe are separate worlds with their own characters and guilds.</p>
+        <p className="mt-1 text-xs text-muted">América y Europa son mundos separados, con sus propios personajes y hermandades.</p>
         <FieldError name="region" />
       </fieldset>
 
       {realms && (
         <div>
           <label htmlFor="realmSlug" className="field-label">
-            Realm
+            Reino
           </label>
           <RealmSelect version={gameVersion} region={region} value={realmSlug} onChange={setRealmSlug} />
-          <p className="mt-1 text-xs text-muted">Name, realm and faction identify your guild on Guildbook, and must match the in-game guild.</p>
+          <p className="mt-1 text-xs text-muted">El nombre, el reino y la facción identifican tu hermandad en Guildbook y deben coincidir con la hermandad del juego.</p>
           <FieldError name="realmSlug" />
         </div>
       )}
 
       <fieldset>
-        <legend className="field-label">Faction</legend>
+        <legend className="field-label">Facción</legend>
         <FactionChoice value={faction} onChange={setFaction} />
-        <p className="mt-1 text-xs text-muted">Guilds are faction-locked in game, so a guild site has one faction too.</p>
+        <p className="mt-1 text-xs text-muted">En el juego, cada hermandad es de una sola facción, así que su web también.</p>
         <FieldError name="faction" />
       </fieldset>
 
       {!realms && (
         <fieldset>
-          <legend className="field-label">Ruleset</legend>
+          <legend className="field-label">Tipo de reino</legend>
           <RulesetChoice value={ruleset} onChange={setRuleset} />
           <p className="mt-1 text-xs text-muted">
-            WoW: Forever has no realms: your guild lives on one ruleset. Name, region, faction and ruleset together identify your guild, and
-            must match the in-game guild to verify it.
+            WoW: Forever no tiene reinos: tu hermandad vive en un tipo de reino. Nombre, región, facción y tipo de reino identifican
+            juntos a tu hermandad y deben coincidir con la hermandad del juego para verificarla.
           </p>
           <FieldError name="ruleset" />
         </fieldset>
       )}
 
-      <Field label="Timezone" name="timezone" hint="Raid times are shown in this timezone.">
+      <Field label="Zona horaria" name="timezone" hint="Las horas de las bandas se muestran en esta zona horaria.">
         <TimezoneSelect value={timezone} onChange={setTimezone} required />
       </Field>
 
-      <Field label="Motto" name="motto" hint="Optional. Shown under your guild's name.">
-        <input id="motto" name="motto" className="field" maxLength={120} value={motto} onChange={(e) => setMotto(e.target.value)} placeholder="Steel and patience" />
+      <Field label="Lema" name="motto" hint="Opcional. Se muestra bajo el nombre de tu hermandad.">
+        <input id="motto" name="motto" className="field" maxLength={120} value={motto} onChange={(e) => setMotto(e.target.value)} placeholder="Acero y paciencia" />
       </Field>
 
       <fieldset>
-        <legend className="field-label">Starting ranks</legend>
+        <legend className="field-label">Rangos iniciales</legend>
         <PresetChoices name="rankPreset" defaultKey={DEFAULT_RANK_PRESET} />
-        <p className="mt-1 text-xs text-muted">A starting point. You can rename, add and reorder ranks later to match your guild in game.</p>
+        <p className="mt-1 text-xs text-muted">Un punto de partida. Más adelante puedes renombrar, añadir y reordenar rangos para que coincidan con tu hermandad del juego.</p>
         <FieldError name="rankPreset" />
       </fieldset>
 
       <label className="flex items-start gap-3 text-sm">
         <input type="checkbox" name="directoryListed" checked={listed} onChange={(e) => setListed(e.target.checked)} className="mt-0.5 h-5 w-5 accent-gold" />
         <span>
-          List the guild in the public Guildbook directory
+          Mostrar la hermandad en el directorio público de Guildbook
           <span className="block text-xs text-muted">
-            Listing starts when you publish the guild. You can change this any time in the guild&apos;s settings.
+            Aparece en cuanto publiques la hermandad. Puedes cambiarlo cuando quieras en los ajustes de la hermandad.
           </span>
         </span>
       </label>
       <FieldError name="directoryListed" />
 
       <FormMessage />
-      <SubmitButton variant="gold" pendingLabel="Creating…">
-        Create guild
+      <SubmitButton variant="gold" pendingLabel="Creando…">
+        Crear hermandad
       </SubmitButton>
     </ActionForm>
   );

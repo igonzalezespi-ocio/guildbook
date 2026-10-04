@@ -35,10 +35,10 @@ test.describe("Legal pages", () => {
     await expect(body).toContainText(/se borran automáticamente \d+ días/);
     await expect(body).not.toContainText("{{");
 
-    const footer = page.getByRole("contentinfo").getByRole("navigation", { name: "Legal" });
-    await expect(footer.getByRole("link", { name: "Terms of Service" })).toHaveAttribute("href", "/terms");
-    await expect(footer.getByRole("link", { name: "Privacy Policy" })).toHaveAttribute("href", "/privacy");
-    await expect(footer.getByRole("link", { name: "Source on GitHub" })).toHaveAttribute("href", "https://github.com/Guildbook/guildbook");
+    const footer = page.getByRole("contentinfo").getByRole("navigation", { name: "Información legal" });
+    await expect(footer.getByRole("link", { name: "Términos del servicio" })).toHaveAttribute("href", "/terms");
+    await expect(footer.getByRole("link", { name: "Política de privacidad" })).toHaveAttribute("href", "/privacy");
+    await expect(footer.getByRole("link", { name: "Código fuente en GitHub" })).toHaveAttribute("href", "https://github.com/Guildbook/guildbook");
   });
 
   test("guild sites link to the apex policies and send /terms there", async ({ page, request }) => {
@@ -64,8 +64,8 @@ test.describe("Legal pages", () => {
     await page.goto(`${APEX}/login`);
     const consent = page.getByTestId("legal-consent");
     await expect(consent).toContainText("Al iniciar sesión aceptas los Términos del servicio y la Política de privacidad de Guildbook.");
-    await expect(consent.getByRole("link", { name: "Terms of Service" })).toHaveAttribute("href", /\/terms$/);
-    await expect(consent.getByRole("link", { name: "Privacy Policy" })).toHaveAttribute("href", /\/privacy$/);
+    await expect(consent.getByRole("link", { name: "Términos del servicio" })).toHaveAttribute("href", /\/terms$/);
+    await expect(consent.getByRole("link", { name: "Política de privacidad" })).toHaveAttribute("href", /\/privacy$/);
   });
 });
 
@@ -78,7 +78,7 @@ test.describe("Account and privacy", () => {
 
     await signInOnApex(page, `e2e-leaver-${suffix}`, name, "/account");
     await expect(page).toHaveURL(`${APEX}/account`);
-    await expect(page.getByRole("heading", { name: "Account and privacy" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Cuenta y privacidad" })).toBeVisible();
 
     const exported = await page.request.get(`${APEX}/api/account/export`);
     expect(exported.status()).toBe(200);
@@ -88,7 +88,7 @@ test.describe("Account and privacy", () => {
     expect(JSON.stringify(data)).not.toMatch(/access_token|refresh_token/);
 
     const panel = page.getByTestId("delete-account");
-    const button = panel.getByRole("button", { name: "Delete my account" });
+    const button = panel.getByRole("button", { name: "Borrar mi cuenta" });
     await expect(button).toBeDisabled();
     await panel.getByLabel(/Escribe .* para confirmar/).fill("someone else");
     await expect(button).toBeDisabled();
@@ -98,7 +98,7 @@ test.describe("Account and privacy", () => {
 
     await page.waitForURL(`${APEX}/account?deleted=1`);
     await expect(page.getByTestId("account-deleted")).toBeVisible();
-    await expect(page.getByRole("link", { name: "Sign in" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Iniciar sesión" })).toBeVisible();
     expect((await page.request.get(`${APEX}/api/account/export`)).status()).toBe(401);
   });
 });
