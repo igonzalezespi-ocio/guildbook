@@ -48,7 +48,7 @@ test("upload a combat log, keep one fight, open the report and control who sees 
   await page.goto(reportUrl);
   await chooseOption(main.getByLabel("Quién puede ver este informe"), "officers");
   await main.getByRole("button", { name: "Guardar" }).click();
-  await expect(main.getByText("Rockhide Boar ahora es compartido con los oficiales.")).toBeVisible();
+  await expect(main.getByText("Visibilidad de Rockhide Boar: compartido con los oficiales.")).toBeVisible();
   await page.goto("/vigil");
   await expect(main.getByTestId("vigil-my-reports").getByText("Rockhide Boar").first()).toBeVisible();
 
