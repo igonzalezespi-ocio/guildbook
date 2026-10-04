@@ -130,9 +130,12 @@ export function PlatformAccountMenu({
   user,
   guilds,
   guildHref,
+  singleGuild = false,
 }: {
   user: { name: string | null; image: string | null };
   guilds: UserGuild[];
+  /** The host serves one guild (see servesSingleGuild): no directory and no guild creation to link to. */
+  singleGuild?: boolean;
   /** Absolute URL on a guild's own host. Guild sites live on other hosts, so their links are plain anchors. */
   guildHref: (guild: UserGuild, path?: string) => string;
 }) {
@@ -186,14 +189,16 @@ export function PlatformAccountMenu({
           ) : (
             <div className="rounded border border-dashed border-line px-3 py-4 text-center">
               <p className="text-sm text-muted">Aún no te has unido a ninguna hermandad.</p>
-              <div className="mt-3 flex justify-center gap-2">
-                <Link href="/create" className="btn btn-gold btn-sm">
-                  Crea una hermandad
-                </Link>
-                <Link href="/guilds" className="btn btn-ghost btn-sm">
-                  Ver hermandades
-                </Link>
-              </div>
+              {!singleGuild && (
+                <div className="mt-3 flex justify-center gap-2">
+                  <Link href="/create" className="btn btn-gold btn-sm">
+                    Crea una hermandad
+                  </Link>
+                  <Link href="/guilds" className="btn btn-ghost btn-sm">
+                    Ver hermandades
+                  </Link>
+                </div>
+              )}
             </div>
           )}
         </section>
@@ -201,7 +206,7 @@ export function PlatformAccountMenu({
         <hr className="rule-gold" />
 
         <div className="flex flex-col">
-          {shown.length > 0 && (
+          {shown.length > 0 && !singleGuild && (
             <Link href="/create" className={`${MENU_ITEM} sm:hidden`}>
               <Icon name="create" />
               Crea una hermandad

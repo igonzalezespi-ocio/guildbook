@@ -118,3 +118,11 @@ export function guildOrigin(slug: string, current: RequestHost, customDomain?: s
   if (current.route.kind === "fallback" && current.route.defaultGuildSlug === slug) return current.origin;
   return guildSubdomainOrigin(slug, current.config, current);
 }
+
+/**
+ * A host that serves one guild as its own apex (DEFAULT_GUILD_SLUG on a host that is not a guild subdomain). The
+ * platform's legal and account pages render there, but the directory and guild creation do not exist on it.
+ */
+export function servesSingleGuild(current: RequestHost): boolean {
+  return current.route.kind === "fallback" && current.route.defaultGuildSlug !== null;
+}

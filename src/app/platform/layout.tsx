@@ -6,7 +6,7 @@ import { XIcon } from "@/components/x-icon";
 import { db } from "@/db";
 import { brandIcons, brandPreviewImage, GUILDBOOK_DESCRIPTION, SOURCE_URL, X_URL } from "@/lib/brand";
 import { getSessionUser } from "@/server/context";
-import { getRequestHost, guildOrigin } from "@/server/hosts";
+import { getRequestHost, guildOrigin, servesSingleGuild } from "@/server/hosts";
 import { listUserGuilds } from "@/server/services/platform";
 import { PlatformAccountMenu } from "./account-menu";
 
@@ -28,6 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PlatformLayout({ children }: LayoutProps<"/platform">) {
   const [user, current] = await Promise.all([getSessionUser(), getRequestHost()]);
   const myGuilds = user ? await listUserGuilds(db, user.id) : [];
+  const singleGuild = servesSingleGuild(current);
   const year = new Date().getFullYear();
 
   return (
@@ -38,16 +39,21 @@ export default async function PlatformLayout({ children }: LayoutProps<"/platfor
             <GuildbookWordmark />
           </Link>
           <nav aria-label="Principal" className="flex items-center gap-3 sm:gap-5">
-            <Link href="/guilds" className="font-display text-sm tracking-wider text-bone hover:text-gold">
-              Directorio
-            </Link>
-            <Link href="/create" className="btn btn-gold btn-sm hidden sm:inline-flex">
-              Crea una hermandad
-            </Link>
+            {!singleGuild && (
+              <>
+                <Link href="/guilds" className="font-display text-sm tracking-wider text-bone hover:text-gold">
+                  Directorio
+                </Link>
+                <Link href="/create" className="btn btn-gold btn-sm hidden sm:inline-flex">
+                  Crea una hermandad
+                </Link>
+              </>
+            )}
             {user ? (
               <PlatformAccountMenu
                 user={user}
                 guilds={myGuilds}
+                singleGuild={singleGuild}
                 guildHref={(g, path = "") => `${guildOrigin(g.slug, current, g.customDomain)}${path}`}
               />
             ) : (
@@ -67,9 +73,11 @@ export default async function PlatformLayout({ children }: LayoutProps<"/platfor
             es una marca registrada de Blizzard Entertainment, Inc.
           </p>
           <nav aria-label="Información legal" className="flex flex-wrap justify-center gap-4 text-xs">
-            <Link href="/vigil" className="text-bone/70 hover:text-gold">
-              App Vigil
-            </Link>
+            {!singleGuild && (
+              <Link href="/vigil" className="text-bone/70 hover:text-gold">
+                App Vigil
+              </Link>
+            )}
             <Link href="/terms" className="text-bone/70 hover:text-gold">
               Términos del servicio
             </Link>
