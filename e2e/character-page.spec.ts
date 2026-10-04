@@ -31,7 +31,7 @@ test("alt names on the roster link to the alt's page", async ({ page }) => {
 
 test("rank insignia gradient IDs stay unique across client navigations", async ({ page }) => {
   await signIn(page, "seed-tor", "Tor", "/");
-  await page.getByRole("contentinfo").getByRole("link", { name: "Roster", exact: true }).click();
+  await page.getByRole("contentinfo").getByRole("link", { name: "Plantilla", exact: true }).click();
   await expect(page).toHaveURL(/\/roster$/);
   await page.getByRole("main").getByRole("link", { name: "Tor Whitecross", exact: true }).click();
   await expect(page.getByRole("main").getByText("Grand Master", { exact: true })).toBeVisible();

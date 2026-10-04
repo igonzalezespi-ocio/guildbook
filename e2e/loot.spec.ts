@@ -24,22 +24,22 @@ test("an officer imports a Gargul export after reviewing names, and reverses an 
   await signIn(page, "seed-ironvow", "Ironvow", "/admin/loot/import");
   const main = page.getByRole("main");
   const raw = readFileSync(path.join(process.cwd(), "tests/fixtures/loot/gargul-custom.txt"), "utf8");
-  await main.getByLabel("Export").fill(raw);
-  await main.getByRole("button", { name: "Preview import" }).click();
+  await main.getByLabel("Exportación").fill(raw);
+  await main.getByRole("button", { name: "Previsualizar importación" }).click();
 
   await expect(page).toHaveURL(/\/admin\/loot\/import\?batch=/);
-  await expect(main.getByRole("heading", { name: "Review import" })).toBeVisible();
-  await expect(main.getByLabel("Who is Cassian?")).toHaveAttribute("data-value", /^char:/);
-  await main.getByRole("button", { name: /^Commit/ }).click();
+  await expect(main.getByRole("heading", { name: "Revisar importación" })).toBeVisible();
+  await expect(main.getByLabel("¿Quién es Cassian?")).toHaveAttribute("data-value", /^char:/);
+  await main.getByRole("button", { name: /^Confirmar/ }).click();
 
   await expect(page).toHaveURL(/\/admin\/loot$/);
-  await expect(page.getByTestId("toast").filter({ hasText: /added to the ledger/ })).toBeVisible();
+  await expect(page.getByTestId("toast").filter({ hasText: /al registro/ })).toBeVisible();
 
-  const reverse = main.locator("form").filter({ has: page.getByRole("button", { name: "Reverse" }) }).first();
-  await reverse.getByPlaceholder("Reason").fill("E2E reversal");
+  const reverse = main.locator("form").filter({ has: page.getByRole("button", { name: "Anular" }) }).first();
+  await reverse.getByPlaceholder("Motivo").fill("E2E reversal");
   page.once("dialog", (d) => d.accept());
-  await reverse.getByRole("button", { name: "Reverse" }).click();
-  await expect(page.getByTestId("toast").filter({ hasText: /reversed\./ })).toBeVisible();
+  await reverse.getByRole("button", { name: "Anular" }).click();
+  await expect(page.getByTestId("toast").filter({ hasText: /entrega anulada\./ })).toBeVisible();
   await expect(main.getByText("E2E reversal").first()).toBeVisible();
 });
 

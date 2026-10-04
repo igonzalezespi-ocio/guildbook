@@ -73,7 +73,7 @@ test.describe("Guild onboarding", () => {
     await expect(visitor.getByTestId("apply-draft")).toBeVisible();
     await visitor.goto(site);
     await expect(visitor.getByTestId("footer-opening-soon")).toBeVisible();
-    await expect(visitor.getByRole("link", { name: "Apply", exact: true })).toHaveCount(0);
+    await expect(visitor.getByRole("link", { name: "Únete", exact: true })).toHaveCount(0);
     await visitor.goto(`${APEX}/guilds`);
     await expect(visitor.getByTestId("directory").getByRole("link", { name })).toHaveCount(0);
 
@@ -91,7 +91,7 @@ test.describe("Guild onboarding", () => {
     await visitor.goto(site);
     await expect(visitor.locator('meta[name="robots"]')).toHaveCount(0);
     await expect(visitor.getByTestId("footer-opening-soon")).toHaveCount(0);
-    await expect(visitor.getByRole("link", { name: "Apply", exact: true }).first()).toBeVisible();
+    await expect(visitor.getByRole("link", { name: "Únete", exact: true }).first()).toBeVisible();
     await visitor.close();
 
     // The checklist can be hidden from the admin home and reached again under Setup.

@@ -39,10 +39,10 @@ test("the admin nav marks only the current section", async ({ page, isMobile }) 
   await signIn(page, "seed-tor", "Tor", "/admin");
   const admin = page.getByRole("navigation", { name: "Admin" });
 
-  await expect(admin.getByRole("link", { name: "Overview" })).toHaveAttribute("aria-current", "page");
+  await expect(admin.getByRole("link", { name: "Resumen" })).toHaveAttribute("aria-current", "page");
   await expect(admin.locator('a[aria-current="page"]')).toHaveCount(1);
 
-  for (const label of ["Applications", "Members", "Ranks", "Schedule", "Recruitment", "Progression", "Guild"]) {
+  for (const label of ["Solicitudes", "Miembros", "Rangos", "Horario", "Reclutamiento", "Progreso", "Hermandad"]) {
     await admin.getByRole("link", { name: label, exact: true }).click();
     await expect(admin.getByRole("link", { name: label, exact: true })).toHaveAttribute("aria-current", "page");
     await expect(admin.locator('a[aria-current="page"]')).toHaveCount(1);
@@ -51,8 +51,8 @@ test("the admin nav marks only the current section", async ({ page, isMobile }) 
   }
 
   // Rarely used sections sit in the More menu, which shows as current while one of them is open.
-  const more = admin.getByRole("button", { name: "More" });
-  for (const label of ["Addons", "Audit log"]) {
+  const more = admin.getByRole("button", { name: "Más" });
+  for (const label of ["Addons", "Registro de auditoría"]) {
     await more.click();
     await admin.getByRole("menuitem", { name: label }).click();
     await expect(page).toHaveURL(label === "Addons" ? /\/admin\/addons$/ : /\/admin\/audit$/);
@@ -63,7 +63,7 @@ test("the admin nav marks only the current section", async ({ page, isMobile }) 
   await page.keyboard.press("ArrowDown");
   await expect(admin.getByRole("menuitem", { name: "Addons" })).toBeFocused();
   await page.keyboard.press("ArrowDown");
-  await expect(admin.getByRole("menuitem", { name: "Audit log" })).toBeFocused();
+  await expect(admin.getByRole("menuitem", { name: "Registro de auditoría" })).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(admin.getByRole("menu")).toBeHidden();
   await expect(more).toBeFocused();

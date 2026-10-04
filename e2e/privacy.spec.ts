@@ -48,7 +48,7 @@ test.describe("Legal pages", () => {
     await expect(legal.getByRole("link", { name: "Privacy" })).toHaveAttribute("href", `${APEX}/privacy`);
     const footer = page.getByRole("contentinfo");
     await expect(footer.getByRole("link", { name: "Guildbook", exact: true })).toHaveAttribute("href", APEX);
-    await expect(footer.getByRole("link", { name: "Guildbook source on GitHub" })).toHaveAttribute(
+    await expect(footer.getByRole("link", { name: "Código fuente de Guildbook en GitHub" })).toHaveAttribute(
       "href",
       "https://github.com/Guildbook/guildbook",
     );

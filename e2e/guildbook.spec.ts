@@ -131,7 +131,7 @@ test.describe("Guildbook platform", () => {
     await expect(page.getByRole("heading", { name, level: 1 })).toBeVisible();
     await expect(page.getByRole("main").getByText("Hold the line")).toBeVisible();
     await expect(page.getByText("Sancte Michael Archangele")).toHaveCount(0);
-    await expect(page.getByTestId("footer-ruleset")).toHaveText("PvP");
+    await expect(page.getByTestId("footer-ruleset")).toHaveText("JcJ");
     await expect(page.getByTestId("footer-region")).toHaveText("Europa");
 
     await page.goto(`${guildOrigin(slug)}/charter`);

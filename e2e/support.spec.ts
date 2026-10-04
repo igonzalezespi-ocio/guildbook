@@ -26,7 +26,7 @@ test.describe("Support", () => {
 
     // Guild sites link to the apex page, and send /support there with its query.
     await page.goto(`${guildOrigin("osm")}/`);
-    await expect(page.getByRole("contentinfo").getByRole("link", { name: "Support" })).toHaveAttribute("href", `${APEX}/support`);
+    await expect(page.getByRole("contentinfo").getByRole("link", { name: "Soporte" })).toHaveAttribute("href", `${APEX}/support`);
     const res = await request.get(`${APEX}/support?category=vigil`, { maxRedirects: 0, headers: { host: `osm.localhost:${PORT}` } });
     expect([307, 308]).toContain(res.status());
     expect(res.headers().location).toMatch(/\/support\?category=vigil$/);

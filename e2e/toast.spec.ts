@@ -3,8 +3,8 @@ import { signIn } from "./helpers";
 
 test("saving guild settings shows a success toast that can be dismissed", async ({ page }) => {
   await signIn(page, "seed-tor", "Tor", "/admin/guild");
-  await page.getByRole("main").getByRole("button", { name: "Save", exact: true }).first().click();
-  const toast = page.getByTestId("toast").filter({ hasText: "Guild settings saved." });
+  await page.getByRole("main").getByRole("button", { name: "Guardar", exact: true }).first().click();
+  const toast = page.getByTestId("toast").filter({ hasText: "Ajustes de la hermandad guardados." });
   await expect(toast).toBeVisible();
   await expect(toast).toHaveAttribute("role", "status");
   await toast.getByRole("button", { name: "Cerrar notificación" }).click();

@@ -33,7 +33,7 @@ test.describe("lore of the Order", () => {
 
   test("the footer links to the lore", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("contentinfo").getByRole("link", { name: "Lore of the Order" }).click();
+    await page.getByRole("contentinfo").getByRole("link", { name: "Historia de la Orden" }).click();
     await expect(page).toHaveURL(/\/lore$/);
   });
 });

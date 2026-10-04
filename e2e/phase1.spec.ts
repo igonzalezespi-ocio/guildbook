@@ -14,9 +14,9 @@ test.describe("public pages", () => {
     if (isMobile) await page.keyboard.press("Escape");
 
     const footer = page.getByRole("contentinfo");
-    await expect(footer.getByRole("heading", { name: "Raid Nights" })).toBeVisible();
-    await expect(footer.getByText("Tuesday")).toBeVisible();
-    await expect(footer.getByRole("link", { name: "Prayer to Saint Michael" })).toBeVisible();
+    await expect(footer.getByRole("heading", { name: "Noches de banda" })).toBeVisible();
+    await expect(footer.getByText("Martes")).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Oración a san Miguel" })).toBeVisible();
   });
 
   test("roster groups mains by class without faction filters in an Alliance-only guild", async ({ page }) => {
@@ -99,7 +99,7 @@ test("the account card shows the main character, level, rank and a separate sign
   expect(signOutBox.y).toBeGreaterThanOrEqual(cardBox.y + cardBox.height);
 
   await expect(page.getByRole("banner").getByRole("link", { name: "Únete", exact: true })).toHaveCount(0);
-  await expect(page.getByRole("contentinfo").getByRole("link", { name: "Apply", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("contentinfo").getByRole("link", { name: "Únete", exact: true })).toHaveCount(0);
 
   await card.getByRole("link", { name: /Tor Whitecross/ }).click();
   await expect(page).toHaveURL(/\/roster\/[0-9a-f-]{36}$/);
