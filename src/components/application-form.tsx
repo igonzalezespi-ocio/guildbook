@@ -7,7 +7,7 @@ import { ClassSpecFields } from "@/components/class-spec-fields";
 import type { BattlenetCharacterSnapshot } from "@/db/schema";
 import { CLASS_INFO, raceLabel } from "@/lib/game";
 import { type GuildVersion, hasSurnames, maxLevelFor } from "@/lib/game-versions";
-import { jumpToTop, scrollIntoViewGently, scrollToTop } from "@/lib/scroll";
+import { scrollIntoViewGently, scrollToTop } from "@/lib/scroll";
 import type { ActionResult } from "@/server/action-types";
 
 /** Rejections without field errors scroll to the message; `ActionForm` focuses the first invalid field otherwise. */
@@ -57,10 +57,9 @@ export function ApplicationForm({
   const selected = manual ? undefined : characters.find((c) => c.id === selectedId);
 
   // On success the page re-renders with the Pending card at the top and this form unmounts, so scroll from here.
-  // A jump, not a smooth scroll: the re-render can stop a smooth one halfway (e2e battlenet.spec.ts:16 saw it).
   const submit = async (prev: ActionResult | null, fd: FormData) => {
     const result = await action(prev, fd);
-    if (result.ok) jumpToTop();
+    if (result.ok) scrollToTop();
     return result;
   };
 
