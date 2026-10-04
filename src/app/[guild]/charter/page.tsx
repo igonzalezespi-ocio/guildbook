@@ -13,7 +13,7 @@ import { listContentPages } from "@/server/services/content";
 import { listRanks } from "@/server/services/ranks";
 
 export async function generateMetadata({ params }: PageProps<"/[guild]/charter">): Promise<Metadata> {
-  return { title: "Charter", ...(await guildSocialMetadata((await params).guild, "charter")) };
+  return { title: "Reglamento", ...(await guildSocialMetadata((await params).guild, "charter")) };
 }
 
 export default async function CharterPage({ params }: PageProps<"/[guild]/charter">) {
@@ -24,8 +24,8 @@ export default async function CharterPage({ params }: PageProps<"/[guild]/charte
 
   return (
     <div className="mx-auto max-w-3xl">
-      <PageHeader title="The Charter" eyebrow={guild.name} />
-      <nav className="mb-6 flex flex-wrap justify-center gap-2" aria-label="Charter sections">
+      <PageHeader title="El reglamento" eyebrow={guild.name} />
+      <nav className="mb-6 flex flex-wrap justify-center gap-2" aria-label="Secciones del reglamento">
         {pages.map((p) => (
           <a key={p.id} href={`#${p.slug}`} className="btn btn-ghost btn-sm">
             {p.title}
@@ -33,7 +33,7 @@ export default async function CharterPage({ params }: PageProps<"/[guild]/charte
         ))}
         {ranks.length > 0 && (
           <a href="#ranks" className="btn btn-ghost btn-sm">
-            Ranks
+            Rangos
           </a>
         )}
       </nav>

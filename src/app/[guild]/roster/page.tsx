@@ -5,7 +5,7 @@ import { FactionIcon } from "@/components/faction-icon";
 import { RankInsignia } from "@/components/rank-insignia";
 import { CharacterLink, ClassName, EmptyState, FactionBadge, GuildMemberTag, PageHeader, RoleBadge, VerifiedMark } from "@/components/ui";
 import { db } from "@/db";
-import { CLASS_INFO, CLASSES, FACTION_LABELS, FACTIONS, type Faction } from "@/lib/game";
+import { CLASS_INFO, CLASSES, FACTION_LABELS, FACTIONS, type Faction, specLabel } from "@/lib/game";
 import { maxLevelFor } from "@/lib/game-versions";
 import { guildWording } from "@/lib/guild-wording";
 import { insigniaFor } from "@/lib/insignia";
@@ -15,7 +15,7 @@ import { guildSocialMetadata } from "@/server/guild-metadata";
 import { getRoster } from "@/server/services/characters";
 
 export async function generateMetadata({ params }: PageProps<"/[guild]/roster">): Promise<Metadata> {
-  return { title: "Roster", ...(await guildSocialMetadata((await params).guild, "roster")) };
+  return { title: "Plantilla", ...(await guildSocialMetadata((await params).guild, "roster")) };
 }
 
 export default async function RosterPage({ params, searchParams }: PageProps<"/[guild]/roster">) {
@@ -31,7 +31,7 @@ export default async function RosterPage({ params, searchParams }: PageProps<"/[
 
   return (
     <div>
-      <PageHeader title="Roster" eyebrow={guildWording(guild).rosterEyebrow(roster.length)} />
+      <PageHeader title="Plantilla" eyebrow={guildWording(guild).rosterEyebrow(roster.length)} />
       {multiFaction && (
         <div className="mb-6 flex justify-center gap-2">
           {[undefined, ...FACTIONS].map((f) => (
@@ -41,13 +41,13 @@ export default async function RosterPage({ params, searchParams }: PageProps<"/[
               className={`btn btn-sm ${faction === f ? "btn-primary" : "btn-ghost"}`}
             >
               {f && <FactionIcon faction={f} size={16} decorative className="border-0" />}
-              {f ? FACTION_LABELS[f] : "All"}
+              {f ? FACTION_LABELS[f] : "Todas"}
             </Link>
           ))}
         </div>
       )}
       {roster.length === 0 ? (
-        <EmptyState>No members yet.</EmptyState>
+        <EmptyState>Aún no hay miembros.</EmptyState>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {CLASSES.map((c) => {
@@ -72,8 +72,8 @@ export default async function RosterPage({ params, searchParams }: PageProps<"/[
                           {guild.verifiedAt && m.verified && m.inGuildConfirmedAt && <GuildMemberTag guildName={guild.name} className="ml-1" />}
                         </p>
                         <p className="text-xs text-muted">
-                          {m.level < maxLevel && `Level ${m.level} `}
-                          {m.spec}
+                          {specLabel(m.spec)}
+                          {m.level < maxLevel && ` · nivel ${m.level}`}
                         </p>
                         <p className="mt-0.5 flex items-center gap-1.5 text-xs text-gold-dim">
                           <RankInsignia insignia={insigniaFor({ insignia: m.rankInsignia, tier: m.rankTier })} tier={m.rankTier} size={18} />
@@ -81,7 +81,7 @@ export default async function RosterPage({ params, searchParams }: PageProps<"/[
                         </p>
                         {m.alts.length > 0 && (
                           <p className="mt-0.5 text-xs text-muted">
-                            <span className="mr-1">{m.alts.length === 1 ? "Alt:" : "Alts:"}</span>
+                            <span className="mr-1">{m.alts.length === 1 ? "Alter:" : "Alters:"}</span>
                             {m.alts.map((a, i) => (
                               <span key={a.id}>
                                 {i > 0 && ", "}

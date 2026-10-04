@@ -46,7 +46,7 @@ async function loadLore(slug: string) {
   const order = guild.preset === "order";
   return {
     guild,
-    title: page?.title || (order ? LORE_TITLE : "Our Story"),
+    title: page?.title || (order ? LORE_TITLE : "Nuestra historia"),
     bodyMd: page?.bodyMd.trim() ? page.bodyMd : order ? LORE_MD : null,
   };
 }
@@ -54,11 +54,11 @@ async function loadLore(slug: string) {
 export async function generateMetadata({ params }: PageProps<"/[guild]/lore">): Promise<Metadata> {
   const { guild: slug } = await params;
   const { guild, title } = await loadLore(slug);
-  const pageTitle = guild.preset === "order" ? "Lore" : title;
+  const pageTitle = guild.preset === "order" ? "Historia" : title;
   const description =
     guild.preset === "order"
-      ? `${title}: how the ${guild.name} understands Azeroth, the Light and its mission as pilgrims.`
-      : `${title}: the story of ${guild.name}.`;
+      ? `${title}: cómo entiende ${guild.name} Azeroth, la Luz y su misión como peregrinos.`
+      : `${title}: la historia de ${guild.name}.`;
   return { title: pageTitle, description, ...(await guildSocialMetadata(slug, "lore", { title: pageTitle, description })) };
 }
 
@@ -75,7 +75,7 @@ export default async function LorePage({ params }: PageProps<"/[guild]/lore">) {
         <h1 className="mt-3 font-title text-3xl break-words text-gold sm:text-5xl">{title}</h1>
         <hr className="rule-gold mx-auto mt-5 w-48" />
         <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed break-words text-muted italic sm:text-base">
-          {order ? `How the ${guild.name} sees the world it plays in, and the Light beyond it.` : `The story of ${guild.name}.`}
+          {order ? `Cómo ve ${guild.name} el mundo en el que juega, y la Luz más allá de él.` : `La historia de ${guild.name}.`}
         </p>
       </header>
 
@@ -84,14 +84,14 @@ export default async function LorePage({ params }: PageProps<"/[guild]/lore">) {
           <Markdown>{bodyMd}</Markdown>
         </article>
       ) : (
-        <EmptyState>{guild.name} has not written its story yet.</EmptyState>
+        <EmptyState>{guild.name} aún no ha escrito su historia.</EmptyState>
       )}
 
       {order && (
       <div className="mt-8 grid gap-6 md:grid-cols-2">
         <aside className="panel p-5 sm:p-6" aria-labelledby="not-claim-heading">
           <h2 id="not-claim-heading" className="font-display text-sm font-semibold tracking-[0.2em] text-gold uppercase">
-            What we do not claim
+            Lo que no afirmamos
           </h2>
           <hr className="rule-gold my-3 w-16" />
           <ul className="space-y-3 text-sm leading-relaxed text-bone/90">
@@ -106,7 +106,7 @@ export default async function LorePage({ params }: PageProps<"/[guild]/lore">) {
 
         <section className="panel p-5 sm:p-6" aria-labelledby="reading-heading">
           <h2 id="reading-heading" className="font-display text-sm font-semibold tracking-[0.2em] text-gold uppercase">
-            Further reading
+            Para seguir leyendo
           </h2>
           <hr className="rule-gold my-3 w-16" />
           <ul className="space-y-3">
@@ -115,7 +115,7 @@ export default async function LorePage({ params }: PageProps<"/[guild]/lore">) {
                 <a href={r.href} target="_blank" rel="noopener noreferrer" className="link font-display text-sm">
                   {r.title}
                 </a>
-                <span className="text-xs text-gold-dim"> by {r.author}</span>
+                <span className="text-xs text-gold-dim"> de {r.author}</span>
                 <p className="text-sm text-muted">{r.note}</p>
               </li>
             ))}

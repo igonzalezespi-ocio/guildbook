@@ -37,25 +37,25 @@ export default async function HomePage({ params }: PageProps<"/[guild]">) {
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           {!isMember && guild.publishedAt && guild.recruitmentOpen && (
             <Link href={guildHref(slug, "/apply")} className="btn btn-primary">
-              {order ? "Apply to the Order" : "Apply to join"}
+              {order ? "Únete a la Orden" : "Solicita unirte"}
             </Link>
           )}
           <Link href={guildHref(slug, "/charter")} className="btn btn-ghost">
-            Read the Charter
+            Leer el reglamento
           </Link>
         </div>
       </section>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Panel title="Raid Schedule">
+        <Panel title="Horario de bandas">
           <ScheduleList slots={slots} timezone={guild.timezone} showFaction={!guild.faction} />
         </Panel>
 
-        <Panel title="Recruitment">
+        <Panel title="Reclutamiento">
           {!guild.recruitmentOpen ? (
-            <p className="text-sm text-muted italic">Recruitment is closed at present. Social members are always welcome to reach out on Discord.</p>
+            <p className="text-sm text-muted italic">El reclutamiento está cerrado ahora mismo. Los miembros sociales siempre pueden escribirnos por Discord.</p>
           ) : openNeeds.length === 0 ? (
-            <p className="text-sm text-muted italic">We welcome applications from all classes.</p>
+            <p className="text-sm text-muted italic">Aceptamos solicitudes de todas las clases.</p>
           ) : (
             <ul className="space-y-2">
               {CLASSES.filter((c) => openNeeds.some((n) => n.wowClass === c)).map((c) => (
@@ -83,11 +83,11 @@ export default async function HomePage({ params }: PageProps<"/[guild]">) {
       </div>
 
       {(order || addonList.length > 0) && (
-        <Panel title={order ? "Custom Addons for the Order" : "Guild Addons"}>
+        <Panel title={order ? "Addons propios de la Orden" : "Addons de la hermandad"}>
           <p className="mb-4 text-sm leading-relaxed text-bone/90">
             {order
-              ? "Our members build addons made for how the Order raids: preparation, assignments and performance feedback. They are available to every member."
-              : "Addons our members build and use: preparation, assignments and performance feedback."}
+              ? "Nuestros miembros crean addons pensados para cómo hace bandas la Orden: preparación, asignaciones y valoración del rendimiento. Están a disposición de todos los miembros."
+              : "Addons que crean y usan nuestros miembros: preparación, asignaciones y valoración del rendimiento."}
           </p>
           {addonList.length > 0 && (
             <ul className="grid gap-3 sm:grid-cols-2">
@@ -103,7 +103,7 @@ export default async function HomePage({ params }: PageProps<"/[guild]">) {
             </ul>
           )}
           <Link href={guildHref(slug, "/addons")} className="link mt-4 inline-block text-sm">
-            See all addons →
+            Ver todos los addons →
           </Link>
         </Panel>
       )}
@@ -116,7 +116,7 @@ export default async function HomePage({ params }: PageProps<"/[guild]">) {
             devil…
           </p>
           <Link href={`${guildHref(slug, "/charter")}#prayer`} className="mt-3 inline-block text-sm underline">
-            Read the full prayer
+            Leer la oración completa
           </Link>
         </section>
       )}

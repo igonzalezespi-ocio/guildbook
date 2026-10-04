@@ -8,7 +8,7 @@ import { RegionTag } from "@/components/region";
 import { CharacterLink, ClassName, FactionBadge, GuildMemberTag, PageHeader, Panel, RoleBadge, Tag, VerifiedMark } from "@/components/ui";
 import { db } from "@/db";
 import { TIER_LABELS } from "@/lib/authz/tiers";
-import { CLASS_INFO, fullName, PROFESSION_LABELS } from "@/lib/game";
+import { CLASS_INFO, fullName, PROFESSION_LABELS, specLabel } from "@/lib/game";
 import { formatDate } from "@/lib/format";
 import { guildWording } from "@/lib/guild-wording";
 import { insigniaFor } from "@/lib/insignia";
@@ -25,7 +25,7 @@ const loadCharacter = cache(async (slug: string, characterId: string) => {
 });
 
 const classLine = (c: { level: number; spec: string; wowClass: PublicCharacter["wowClass"] }) =>
-  `Level ${c.level} ${c.spec} ${CLASS_INFO[c.wowClass].label}`;
+  `${CLASS_INFO[c.wowClass].label} ${specLabel(c.spec)} de nivel ${c.level}`;
 
 export async function generateMetadata({ params }: PageProps<"/[guild]/roster/[characterId]">): Promise<Metadata> {
   const { guild: slug, characterId } = await params;
@@ -39,8 +39,8 @@ export async function generateMetadata({ params }: PageProps<"/[guild]/roster/[c
 function otherCharactersTitle(others: PublicCharacter["otherCharacters"]) {
   const hasMain = others.some((o) => o.isMain);
   const hasAlts = others.some((o) => !o.isMain);
-  if (hasMain && hasAlts) return "Main and Alts";
-  return hasMain ? "Main" : "Alts";
+  if (hasMain && hasAlts) return "Principal y alters";
+  return hasMain ? "Principal" : "Alters";
 }
 
 export default async function CharacterPage({ params }: PageProps<"/[guild]/roster/[characterId]">) {
@@ -52,7 +52,7 @@ export default async function CharacterPage({ params }: PageProps<"/[guild]/rost
 
   return (
     <div className="mx-auto max-w-3xl">
-      <PageHeader title={fullName(c.name, c.surname)} eyebrow={c.isMain ? "Main character" : "Alt character"}>
+      <PageHeader title={fullName(c.name, c.surname)} eyebrow={c.isMain ? "Personaje principal" : "Personaje alter"}>
         <p className="inline-flex items-center gap-2 text-base sm:text-lg">
           <ClassIcon wowClass={c.wowClass} size={28} decorative />
           <ClassName wowClass={c.wowClass}>{classLine(c)}</ClassName>
@@ -63,7 +63,7 @@ export default async function CharacterPage({ params }: PageProps<"/[guild]/rost
           {c.verified && (
             <Tag className="gap-1 border-gold-dim text-gold">
               <VerifiedMark size={11} decorative />
-              Verified
+              Verificado
             </Tag>
           )}
           {guild.verifiedAt && c.verified && c.inGuildConfirmedAt && <GuildMemberTag guildName={guild.name} />}
@@ -72,7 +72,7 @@ export default async function CharacterPage({ params }: PageProps<"/[guild]/rost
       </PageHeader>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Panel title="Rank">
+        <Panel title="Rango">
           <div className="flex items-center gap-4">
             <RankInsignia insignia={insignia} tier={c.rankTier} size={64} className="shrink-0" />
             <div className="min-w-0 space-y-1">
@@ -80,7 +80,7 @@ export default async function CharacterPage({ params }: PageProps<"/[guild]/rost
               <p className="text-xs leading-none tracking-wider text-gold-dim uppercase">{TIER_LABELS[c.rankTier]}</p>
               {c.joinedAt && (
                 <p className="pt-1 text-sm leading-snug break-words text-muted">
-                  {guildWording(guild).joined} <time dateTime={c.joinedAt.toISOString()}>{formatDate(c.joinedAt, guild.timezone)}</time>
+                  {guildWording(guild).joined} el <time dateTime={c.joinedAt.toISOString()}>{formatDate(c.joinedAt, guild.timezone)}</time>
                 </p>
               )}
             </div>
@@ -88,7 +88,7 @@ export default async function CharacterPage({ params }: PageProps<"/[guild]/rost
         </Panel>
 
         {c.professions.length > 0 && (
-          <Panel title="Professions">
+          <Panel title="Profesiones">
             <ul className="divide-y divide-line">
               {c.professions.map((p) => (
                 <li key={p.profession} className="flex items-baseline justify-between py-1.5 text-sm">
@@ -112,7 +112,7 @@ export default async function CharacterPage({ params }: PageProps<"/[guild]/rost
                     </p>
                     <p className="text-xs text-muted">{classLine(o)}</p>
                   </div>
-                  {o.isMain && <span className="shrink-0 text-xs tracking-widest text-gold uppercase">Main</span>}
+                  {o.isMain && <span className="shrink-0 text-xs tracking-widest text-gold uppercase">Principal</span>}
                 </li>
               ))}
             </ul>
@@ -120,8 +120,8 @@ export default async function CharacterPage({ params }: PageProps<"/[guild]/rost
         )}
 
         {loot && (
-          <Panel title="Loot" className="sm:col-span-2">
-            <LootTable slug={slug} rows={loot} showRecipient={false} empty="No loot recorded for this character yet." />
+          <Panel title="Botín" className="sm:col-span-2">
+            <LootTable slug={slug} rows={loot} showRecipient={false} empty="Aún no hay botín registrado para este personaje." />
           </Panel>
         )}
       </div>

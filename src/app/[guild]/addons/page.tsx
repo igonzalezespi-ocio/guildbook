@@ -21,10 +21,10 @@ export default async function AddonsPage({ params }: PageProps<"/[guild]/addons"
 
   return (
     <div className="mx-auto max-w-4xl">
-      <PageHeader title={wording.addonsTitle} eyebrow="Built by our members">
+      <PageHeader title={wording.addonsTitle} eyebrow="Hechos por nuestros miembros">
         {wording.addonsIntro}
       </PageHeader>
-      {addonList.length === 0 && <EmptyState>The workshop is quiet for now.</EmptyState>}
+      {addonList.length === 0 && <EmptyState>De momento, el taller está en silencio.</EmptyState>}
       <div className="space-y-4">
         {addonList.map((a) => (
           <Panel key={a.id}>
@@ -44,18 +44,18 @@ export default async function AddonsPage({ params }: PageProps<"/[guild]/addons"
                 <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
                   {a.slug === "vigil" && vigilOpen && (
                     <Link href={guildHref(slug, "/vigil")} className="btn btn-primary btn-sm">
-                      Open Vigil
+                      Abrir Vigil
                     </Link>
                   )}
                   {a.version && <span className="text-muted">v{a.version}</span>}
                   {a.downloadUrl && (
                     <a href={a.downloadUrl} className="btn btn-primary btn-sm" rel="noopener noreferrer">
-                      Download
+                      Descargar
                     </a>
                   )}
                   {a.sourceUrl && (
                     <a href={a.sourceUrl} className="link" rel="noopener noreferrer">
-                      Source
+                      Código fuente
                     </a>
                   )}
                 </div>

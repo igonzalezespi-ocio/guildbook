@@ -6,11 +6,11 @@ export default async function DeniedPage({ params }: PageProps<"/[guild]/denied"
   const { guild: slug } = await params;
   return (
     <div className="mx-auto max-w-md">
-      <PageHeader title="The Gate Is Barred" />
+      <PageHeader title="La puerta está cerrada" />
       <Panel>
-        <p className="mb-4">Your rank does not grant access to that page.</p>
+        <p className="mb-4">Tu rango no da acceso a esa página.</p>
         <Link href={guildHref(slug, "/")} className="btn btn-ghost">
-          Return home
+          Volver al inicio
         </Link>
       </Panel>
     </div>
