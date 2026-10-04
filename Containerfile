@@ -18,6 +18,9 @@ ARG APP_REVISION=unknown
 ENV APP_REVISION=$APP_REVISION
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0
 ENV DATABASE_URL=
+# ROLLBACK TEST, undone by the next PR: without BUILD_ID `next start` exits with "Could not find a production build",
+# whatever command the host gives the container (the server sets its own, so changing CMD was not enough).
+RUN rm .next/BUILD_ID
 USER node
 EXPOSE 3000
 # `next start` directly: pnpm (corepack) needs a writable cache, and the container runs with a read-only filesystem.
