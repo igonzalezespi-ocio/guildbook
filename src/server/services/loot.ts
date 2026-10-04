@@ -49,8 +49,8 @@ async function guildLootSettings(db: Db, guildId: string) {
 async function assertViewLoot(db: Db, actor: Actor) {
   const guild = await guildLootSettings(db, actor.guildId);
   if (canViewLoot(actor, guild)) return guild;
-  if (!actor.userId) throw new AuthorizationError("You must sign in with Discord.", "unauthenticated");
-  throw new AuthorizationError("Requires member permissions.");
+  if (!actor.userId) throw new AuthorizationError("Tienes que iniciar sesión con Discord.", "unauthenticated");
+  throw new AuthorizationError("Necesitas permisos de Miembro.");
 }
 
 // --- Reading ----------------------------------------------------------------------------------------------------
@@ -220,10 +220,10 @@ export async function awardLoot(db: Db, actor: Actor, raw: unknown, deps: { clie
   const ref = parseItemRef(input.item);
   let itemId: number;
   let itemName: string;
-  if (!ref) throw new DomainError("Enter an item.");
+  if (!ref) throw new DomainError("Indica un objeto.");
   if (ref.itemId === null) {
     const known = await findItemByName(db, gameVersion, ref.name);
-    if (!known) throw new DomainError(`No item called "${ref.name}" is known yet. Paste its item ID, in-game link or Wowhead link.`);
+    if (!known) throw new DomainError(`Aún no conocemos ningún objeto llamado «${ref.name}». Pega su ID de objeto, su enlace del juego o su enlace de Wowhead.`);
     itemId = known.itemId;
     itemName = known.name;
   } else {
@@ -303,7 +303,7 @@ export async function reverseLoot(db: Db, actor: Actor, raw: unknown) {
       .from(lootEntries)
       .where(and(eq(lootEntries.guildId, actor.guildId), eq(lootEntries.id, input.entryId)));
     if (!award) throw new NotFoundError("Loot entry");
-    if (award.kind !== "award") throw new DomainError("Only awards can be reversed.");
+    if (award.kind !== "award") throw new DomainError("Solo se pueden anular entregas.");
     try {
       const [row] = await tx
         .insert(lootEntries)
@@ -335,7 +335,7 @@ export async function reverseLoot(db: Db, actor: Actor, raw: unknown) {
       });
       return { id: row!.id, itemName: award.itemName };
     } catch (err) {
-      if (isUniqueViolation(err)) throw new DomainError("That award has already been reversed.");
+      if (isUniqueViolation(err)) throw new DomainError("Esa entrega ya se anuló.");
       throw err;
     }
   });
@@ -352,7 +352,7 @@ export async function previewImport(db: Db, actor: Actor, raw: unknown, deps: { 
   assertCan(actor, "loot.import");
   const input = lootImportInput.parse(raw);
   const { timezone, gameVersion } = await guildLootSettings(db, actor.guildId);
-  if (input.parserId && !getLootParser(input.parserId)) throw new DomainError("Choose a known export format.");
+  if (input.parserId && !getLootParser(input.parserId)) throw new DomainError("Elige un formato de exportación conocido.");
 
   let parsed;
   try {
@@ -363,7 +363,7 @@ export async function previewImport(db: Db, actor: Actor, raw: unknown, deps: { 
   }
   if (parsed.rows.length === 0) {
     const first = parsed.warnings[0];
-    throw new DomainError(`No awards found in that ${parsed.parser.label} export${first ? ` (line ${first.line}: ${first.message})` : ""}.`);
+    throw new DomainError(`No se han encontrado entregas en esa exportación de ${parsed.parser.label}${first ? ` (línea ${first.line}: ${first.message})` : ""}.`);
   }
 
   await recordItemFacts(
@@ -443,7 +443,7 @@ async function draftBatch(db: Db, guildId: string, batchId: string, lock = false
     .where(and(eq(lootImportBatches.guildId, guildId), eq(lootImportBatches.id, batchId)));
   const [batch] = lock ? await q.for("update") : await q;
   if (!batch) throw new NotFoundError("Import");
-  if (batch.status !== "draft") throw new DomainError(batch.status === "committed" ? "That import was already committed." : "That import was discarded.");
+  if (batch.status !== "draft") throw new DomainError(batch.status === "committed" ? "Esa importación ya se confirmó." : "Esa importación se descartó.");
   return batch;
 }
 
@@ -545,7 +545,7 @@ export async function commitImport(db: Db, actor: Actor, raw: unknown) {
       else if (decision === "name") result = { character: null, skip: false };
       else if (decision?.startsWith("char:")) {
         const character = byId.get(decision.slice(5));
-        if (!character) throw new DomainError("One of the chosen characters isn't in this guild.");
+        if (!character) throw new DomainError("Uno de los personajes elegidos no está en esta hermandad.");
         result = { character, skip: false };
         if (input.remember && !(auto && auto.via !== "first_name" && auto.character.id === character.id)) {
           remembered.push({ alias: key, characterId: character.id });

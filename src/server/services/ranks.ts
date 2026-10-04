@@ -31,7 +31,7 @@ async function assertInGameLimit(tx: Db, guildId: string) {
     .from(ranks)
     .where(and(eq(ranks.guildId, guildId), eq(ranks.inGame, true)));
   if ((row?.n ?? 0) > MAX_IN_GAME_RANKS) {
-    throw new DomainError(`WoW allows at most ${MAX_IN_GAME_RANKS} in-game ranks.`);
+    throw new DomainError(`WoW permite como máximo ${MAX_IN_GAME_RANKS} rangos en el juego.`);
   }
 }
 
@@ -49,13 +49,13 @@ async function guardLastAdmin<T>(tx: Db, guildId: string, mutate: () => Promise<
   const before = await countActiveAdmins(tx, guildId);
   const result = await mutate();
   if (before > 0 && (await countActiveAdmins(tx, guildId)) === 0) {
-    throw new DomainError("The guild must keep at least one active member with Admin permissions.");
+    throw new DomainError("La hermandad debe conservar al menos un miembro activo con permisos de Administrador.");
   }
   return result;
 }
 
 function rethrowRankName(err: unknown): never {
-  if (isUniqueViolation(err)) throw new DomainError("A rank with that name already exists.");
+  if (isUniqueViolation(err)) throw new DomainError("Ya existe un rango con ese nombre.");
   throw err;
 }
 
@@ -127,10 +127,10 @@ export async function deleteRank(db: Db, actor: Actor, id: string) {
   await db.transaction(async (tx) => {
     const rank = await loadRank(tx, actor.guildId, id);
     const [inUse] = await tx.select({ n: count() }).from(memberships).where(eq(memberships.rankId, id));
-    if ((inUse?.n ?? 0) > 0) throw new DomainError("Move members off this rank before deleting it.");
+    if ((inUse?.n ?? 0) > 0) throw new DomainError("Saca a los miembros de este rango antes de borrarlo.");
     const [guild] = await tx.select().from(guilds).where(eq(guilds.id, actor.guildId));
     if (guild && [guild.applicantRankId, guild.acceptRankId, guild.trialRankId, guild.autoApproveRankId].includes(id)) {
-      throw new DomainError("This rank is used for applicants, trials or new members. Change that setting first.");
+      throw new DomainError("Este rango se usa para aspirantes, pruebas o miembros nuevos. Cambia primero ese ajuste.");
     }
     await tx.delete(ranks).where(eq(ranks.id, id));
     await recordAudit(tx, actor, { action: "rank.delete", targetType: "rank", targetId: id, before: rank });
@@ -144,9 +144,9 @@ export async function setRankDefaults(db: Db, actor: Actor, raw: unknown) {
     const applicant = await loadRank(tx, actor.guildId, input.applicantRankId);
     const accept = await loadRank(tx, actor.guildId, input.acceptRankId);
     const trial = await loadRank(tx, actor.guildId, input.trialRankId);
-    if (applicant.tier !== "applicant") throw new DomainError("The applicant rank must have the Applicant tier.");
+    if (applicant.tier !== "applicant") throw new DomainError("El rango de aspirantes debe tener el nivel Aspirante.");
     if (accept.tier === "applicant" || trial.tier === "applicant") {
-      throw new DomainError("Accepted and trial ranks must be member ranks.");
+      throw new DomainError("Los rangos de aceptados y de prueba deben ser rangos de miembro.");
     }
     await tx.update(guilds).set(input).where(eq(guilds.id, actor.guildId));
     await recordAudit(tx, actor, { action: "rank.defaults", targetType: "guild", targetId: actor.guildId, after: input });
@@ -219,11 +219,11 @@ export async function assignRank(db: Db, actor: Actor, raw: unknown) {
   return db.transaction(async (tx) => {
     const target = await loadMemberWithRank(tx, actor.guildId, membershipId);
     const newRank = await loadRank(tx, actor.guildId, rankId);
-    if (target.membership.status !== "active") throw new DomainError("Only active members can be assigned a rank.");
-    if (newRank.tier === "applicant") throw new DomainError("Use application review for applicants.");
+    if (target.membership.status !== "active") throw new DomainError("Solo se puede asignar rango a miembros activos.");
+    if (newRank.tier === "applicant") throw new DomainError("Para los aspirantes, usa la revisión de solicitudes.");
     const targetTier = resolveTier({ status: target.membership.status, rankTier: target.rankTier });
     if (!canAssignRank(actor, targetTier, newRank.tier)) {
-      throw new AuthorizationError("You cannot grant that rank or change this member's rank.");
+      throw new AuthorizationError("No puedes conceder ese rango ni cambiar el rango de este miembro.");
     }
     await guardLastAdmin(tx, actor.guildId, () =>
       tx
@@ -248,7 +248,7 @@ export async function removeMember(db: Db, actor: Actor, membershipId: string) {
     const target = await loadMemberWithRank(tx, actor.guildId, membershipId);
     const targetTier = resolveTier({ status: target.membership.status, rankTier: target.rankTier });
     if (!canAssignRank(actor, targetTier, "public")) {
-      throw new AuthorizationError("You cannot remove a member at or above your own tier.");
+      throw new AuthorizationError("No puedes expulsar a un miembro de tu mismo nivel o superior.");
     }
     await guardLastAdmin(tx, actor.guildId, () =>
       tx
@@ -287,7 +287,7 @@ export async function updateGuildSettings(db: Db, actor: Actor, raw: unknown) {
   const world = resolveGuildWorld(current.gameVersion, { region, ruleset: parsed.ruleset, realmSlug });
   if (!world.ok) throw new DomainError(world.message, { field: world.field });
   if (current.verifiedAt && current.realmSlug !== world.realmSlug) {
-    throw new DomainError("A verified guild can't move realm. The realm must match the in-game guild.", { field: "realmSlug" });
+    throw new DomainError("Una hermandad verificada no puede cambiar de reino. El reino debe coincidir con el de la hermandad del juego.", { field: "realmSlug" });
   }
   const input = { ...parsed, gameVersion: current.gameVersion, region, realmSlug: world.realmSlug, ruleset: world.ruleset };
   const holder = await findGuildByIdentity(db, input, actor.guildId);

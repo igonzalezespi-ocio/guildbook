@@ -238,52 +238,52 @@ export function describeCheck(
   identity: GuildIdentity,
 ): string {
   if (check.ok) {
-    return `Verified: ${check.character.name} is Guild Master of ${check.inGame.name} (${describeIdentity(identity)}).`;
+    return `Verificada: ${check.character.name} es maestro de la hermandad ${check.inGame.name} (${describeIdentity(identity)}).`;
   }
-  const who = "character" in check && check.character ? check.character.name : "The character";
+  const who = "character" in check && check.character ? check.character.name : "El personaje";
   const inGame = "inGame" in check ? check.inGame : undefined;
-  const guildName = inGame?.name ?? "its guild";
+  const guildName = inGame?.name ?? "su hermandad";
   const version = VERSION_INFO[identity.gameVersion].label;
   switch (check.reason) {
     case "battlenet_disabled":
-      return "Battle.net isn't configured on this site yet, so guilds can't be verified.";
+      return "Battle.net aún no está configurado en este sitio, así que no se pueden verificar hermandades.";
     case "no_link":
-      return "No admin of this guild has linked a Battle.net account. The Guild Master links theirs from My Characters, then checks again.";
+      return "Ningún administrador de esta hermandad ha vinculado una cuenta de Battle.net. El maestro de la hermandad vincula la suya desde Mis personajes y vuelve a comprobarlo.";
     case "version_unsupported":
-      return `Battle.net verification for ${VERSION_INFO[identity.gameVersion].label} guilds is coming soon. Until then the guild works as usual, without the verified badge.`;
+      return `La verificación con Battle.net para hermandades de ${VERSION_INFO[identity.gameVersion].label} llegará pronto. Mientras tanto la hermandad funciona con normalidad, sin el sello de verificada.`;
     case "prelaunch":
-      return `Verification opens once WoW: Forever characters exist. Forever launches on Nov 4, 2026, and Blizzard doesn't publish Forever characters yet. After launch, found the guild in game, refresh your Battle.net characters on My Characters and check again.`;
+      return `La verificación se abre cuando existan personajes de WoW: Forever. Forever sale el 4 de noviembre de 2026 y Blizzard aún no publica personajes de Forever. Tras el lanzamiento, funda la hermandad en el juego, actualiza tus personajes de Battle.net en Mis personajes y vuelve a comprobarlo.`;
     case "no_version_characters":
     case "no_forever_characters":
-      return `No ${version} characters in the ${REGION_LABELS[identity.region]} region were found on the admins' linked Battle.net accounts. Refresh your characters on My Characters (or reconnect Battle.net), then check again.`;
+      return `No se han encontrado personajes de ${version} en la región de ${REGION_LABELS[identity.region]} en las cuentas de Battle.net vinculadas de los administradores. Actualiza tus personajes en Mis personajes (o vuelve a conectar Battle.net) y vuelve a comprobarlo.`;
     case "version_mismatch":
-      return `The admins' linked Battle.net characters are in another game, but this is a ${version} guild. Refresh your characters on My Characters to pick up your ${version} characters, then check again.`;
+      return `Los personajes de Battle.net vinculados de los administradores son de otro juego, pero esta es una hermandad de ${version}. Actualiza tus personajes en Mis personajes para traer tus personajes de ${version} y vuelve a comprobarlo.`;
     case "region_mismatch":
-      return `The admins' ${version} characters are in another region, but this guild is in the ${REGION_LABELS[identity.region]} region. Regions are separate worlds; if the guild is in the wrong region, change it under Guild Settings.`;
+      return `Los personajes de ${version} de los administradores están en otra región, pero esta hermandad está en la región de ${REGION_LABELS[identity.region]}. Las regiones son mundos separados; si la hermandad está en la región equivocada, cámbiala en Ajustes de la hermandad.`;
     case "realm_mismatch":
-      return `${who}'s guild, ${guildName}, is on ${realmLabel(identity.gameVersion, inGame?.realmSlug ?? "another realm")}, but this guild is on ${identity.realmSlug ? realmLabel(identity.gameVersion, identity.realmSlug, identity.region) : "another realm"}. If the guild is on the wrong realm, change it under Guild Settings while it is unverified.`;
+      return `La hermandad de ${who}, ${guildName}, está en ${realmLabel(identity.gameVersion, inGame?.realmSlug ?? "otro reino")}, pero esta hermandad está en ${identity.realmSlug ? realmLabel(identity.gameVersion, identity.realmSlug, identity.region) : "otro reino"}. Si la hermandad está en el reino equivocado, cámbialo en Ajustes de la hermandad mientras no esté verificada.`;
     case "character_missing":
-      return `${who} wasn't found on Battle.net (renamed, deleted, transferred, or not visible yet: profiles update after the character logs out).`;
+      return `No se ha encontrado a ${who} en Battle.net (ha cambiado de nombre, se ha borrado, se ha transferido o aún no es visible: los perfiles se actualizan cuando el personaje cierra sesión).`;
     case "not_in_guild":
-      return `${who} isn't in a guild in game.`;
+      return `${who} no está en ninguna hermandad en el juego.`;
     case "faction_mismatch":
-      return `${who}'s guild, ${guildName}, is ${inGame?.faction ? FACTION_LABELS[inGame.faction] : "another faction"}, but this guild is ${FACTION_LABELS[identity.faction]}.`;
+      return `La hermandad de ${who}, ${guildName}, es ${inGame?.faction ? `de la ${FACTION_LABELS[inGame.faction]}` : "de otra facción"}, pero esta hermandad es de la ${FACTION_LABELS[identity.faction]}.`;
     case "ruleset_mismatch":
-      return `${who}'s guild, ${guildName}, is on the ${inGame?.ruleset ? RULESET_INFO[inGame.ruleset].label : "another"} ruleset, but this guild is ${RULESET_INFO[identity.ruleset].label}.`;
+      return `La hermandad de ${who}, ${guildName}, está en el tipo de reino ${inGame?.ruleset ? RULESET_INFO[inGame.ruleset].label : "otro"}, pero esta hermandad es ${RULESET_INFO[identity.ruleset].label}.`;
     case "ruleset_unknown":
-      return `Guildbook couldn't tell which ruleset ${who}'s realm (${inGame?.realmSlug ?? "unknown"}) belongs to. Try again later, or ask the Guildbook team to map it.`;
+      return `Guildbook no ha podido saber a qué tipo de reino pertenece el reino de ${who} (${inGame?.realmSlug ?? "desconocido"}). Inténtalo más tarde o pide al equipo de Guildbook que lo añada.`;
     case "roster_unavailable":
-      return `Battle.net didn't return ${guildName}'s roster, so the Guild Master rank couldn't be confirmed. Try again later.`;
+      return `Battle.net no ha devuelto la lista de miembros de ${guildName}, así que no se ha podido confirmar el rango de maestro de la hermandad. Inténtalo más tarde.`;
     case "not_guild_master": {
-      const rank = "rank" in check && check.rank != null ? ` (rank ${check.rank})` : "";
-      return `${who} is in ${guildName} but isn't its Guild Master${rank}. Link the Guild Master's character, then check again.`;
+      const rank = "rank" in check && check.rank != null ? ` (rango ${check.rank})` : "";
+      return `${who} está en ${guildName} pero no es su maestro de la hermandad${rank}. Vincula el personaje del maestro de la hermandad y vuelve a comprobarlo.`;
     }
     case "name_mismatch":
-      return `${who} is Guild Master of ${guildName}, but this guild is called ${identity.name}.`;
+      return `${who} es maestro de la hermandad ${guildName}, pero esta hermandad se llama ${identity.name}.`;
     case "gm_left":
-      return "The admin who verified this guild is no longer one of its admins.";
+      return "El administrador que verificó esta hermandad ya no es uno de sus administradores.";
     case "blizzard_error":
-      return "Battle.net didn't respond. Try again later.";
+      return "Battle.net no ha respondido. Inténtalo más tarde.";
   }
 }
 
@@ -520,7 +520,7 @@ async function freeUnverifiedName(tx: Db, identity: GuildIdentity): Promise<stri
       .where(sameIdentity({ ...identity, name: candidate }));
     if (!taken) return candidate;
   }
-  throw new DomainError("Couldn't find a free name for the unverified guild. Please contact the Guildbook team.");
+  throw new DomainError("No se ha encontrado un nombre libre para la hermandad sin verificar. Contacta con el equipo de Guildbook.");
 }
 
 function appendNotice(existing: string | null, notice: string): string {
@@ -536,7 +536,7 @@ function appendNotice(existing: string | null, notice: string): string {
 export async function claimGuildName(db: Db, actor: Actor, client: BlizzardClient, now = new Date()) {
   assertCan(actor, "guild.settings");
   const guild = await loadGuild(db, actor.guildId);
-  if (guild.verifiedAt) throw new DomainError("This guild is already verified.");
+  if (guild.verifiedAt) throw new DomainError("Esta hermandad ya está verificada.");
   const run = await runVerificationCheck(db, guild, client, { preferUserId: actor.userId, now });
   const { check } = run;
   if (check.ok) {
@@ -547,7 +547,7 @@ export async function claimGuildName(db: Db, actor: Actor, client: BlizzardClien
     throw new DomainError(run.message);
   }
   if (check.character.userId !== actor.userId) {
-    throw new DomainError(`Only the Guild Master (the owner of ${check.character.name}) can claim the guild name.`);
+    throw new DomainError(`Solo el maestro de la hermandad (el dueño de ${check.character.name}) puede reclamar el nombre de la hermandad.`);
   }
   const name = cleanGuildName(check.inGame.name);
   const identity = { ...identityOf(guild), name };
@@ -565,7 +565,7 @@ export async function claimGuildName(db: Db, actor: Actor, client: BlizzardClien
           throw new DomainError(`${holder.name} is a verified guild on Guildbook. A verified guild's name can't be claimed.`);
         }
         renamedHolder = await freeUnverifiedName(tx, identity);
-        const notice = `A verified guild claimed the name "${holder.name}" (${describeIdentity(identity)}) on ${now.toISOString().slice(0, 10)}: its Guild Master proved through Battle.net that they lead the in-game guild with that name. This guild was renamed "${renamedHolder}". Your subdomain, custom domains, members and content are unchanged. You can rename the guild under Guild Settings.`;
+        const notice = `Una hermandad verificada reclamó el nombre «${holder.name}» (${describeIdentity(identity)}) el ${now.toISOString().slice(0, 10)}: su maestro de la hermandad demostró con Battle.net que dirige la hermandad del juego con ese nombre. Esta hermandad ha pasado a llamarse «${renamedHolder}». Tu subdominio, tus dominios propios, tus miembros y tu contenido no cambian. Puedes cambiar el nombre de la hermandad en Ajustes de la hermandad.`;
         await tx
           .update(guilds)
           .set({ name: renamedHolder, adminNotice: appendNotice(holder.adminNotice, notice) })
@@ -594,7 +594,7 @@ export async function claimGuildName(db: Db, actor: Actor, client: BlizzardClien
           verificationResult: {
             verified: true,
             reason: null,
-            message: `Verified: ${check.character!.name} is Guild Master of ${name} (${describeIdentity(identity)}).`,
+            message: `Verificada: ${check.character!.name} es maestro de la hermandad ${name} (${describeIdentity(identity)}).`,
             conclusive: true,
             characterName: check.character!.name,
             inGameGuildName: check.inGame!.name,
@@ -618,7 +618,7 @@ export async function claimGuildName(db: Db, actor: Actor, client: BlizzardClien
       return { renamedHolder, name };
     });
   } catch (err) {
-    if (isUniqueViolation(err)) throw new DomainError("Another guild took that name at the same moment. Check again.");
+    if (isUniqueViolation(err)) throw new DomainError("Otra hermandad ha cogido ese nombre en ese mismo momento. Vuelve a comprobarlo.");
     throw err;
   }
 }
@@ -677,15 +677,15 @@ export async function claimGuildSlug(db: Db, actor: Actor, now = new Date()) {
     return await db.transaction(async (tx) => {
       const [guild] = await tx.select().from(guilds).where(eq(guilds.id, actor.guildId)).for("update");
       if (!guild) throw new NotFoundError("Guild");
-      if (!guild.verifiedAt) throw new DomainError("Only verified guilds can claim a subdomain.");
+      if (!guild.verifiedAt) throw new DomainError("Solo las hermandades verificadas pueden reclamar un subdominio.");
       const slug = claimableSlug(guild);
-      if (!slug) throw new DomainError("Your guild already uses the subdomain that matches its name, or its name can't be a subdomain.");
+      if (!slug) throw new DomainError("Tu hermandad ya usa el subdominio que corresponde a su nombre, o su nombre no puede ser un subdominio.");
       const [holder] = await tx.select().from(guilds).where(eq(guilds.slug, slug)).for("update");
       let movedHolderTo: string | null = null;
       if (holder) {
-        if (holder.verifiedAt) throw new DomainError("A verified guild uses that subdomain. It can't be claimed.");
+        if (holder.verifiedAt) throw new DomainError("Una hermandad verificada usa ese subdominio. No se puede reclamar.");
         movedHolderTo = await relocationSlug(tx, slug, holder, guild);
-        const notice = `A verified guild claimed the subdomain "${slug}" on ${now.toISOString().slice(0, 10)}: its Guild Master proved through Battle.net that they lead the in-game guild "${guild.name}". This guild's subdomain is now "${movedHolderTo}". Update any links you've shared. Your custom domains, members and content are unchanged.`;
+        const notice = `Una hermandad verificada reclamó el subdominio «${slug}» el ${now.toISOString().slice(0, 10)}: su maestro de la hermandad demostró con Battle.net que dirige la hermandad del juego «${guild.name}». El subdominio de esta hermandad ahora es «${movedHolderTo}». Actualiza los enlaces que hayas compartido. Tus dominios propios, tus miembros y tu contenido no cambian.`;
         await tx
           .update(guilds)
           .set({ slug: movedHolderTo, adminNotice: appendNotice(holder.adminNotice, notice) })
@@ -709,7 +709,7 @@ export async function claimGuildSlug(db: Db, actor: Actor, now = new Date()) {
       return { slug, previousSlug: guild.slug, movedHolderTo };
     });
   } catch (err) {
-    if (isUniqueViolation(err)) throw new DomainError("That subdomain was taken at the same moment. Try again.");
+    if (isUniqueViolation(err)) throw new DomainError("Alguien ha cogido ese subdominio en ese mismo momento. Inténtalo de nuevo.");
     throw err;
   }
 }
@@ -872,7 +872,7 @@ export async function promoteVerifiedGuildMaster(db: Db, actor: Actor) {
   return db.transaction(async (tx) => {
     const guild = await loadGuild(tx, actor.guildId);
     const handover = await guildMasterHandover(tx, guild);
-    if (!handover) throw new DomainError("The verified Guild Master already holds the top rank, or the guild isn't verified.");
+    if (!handover) throw new DomainError("El maestro de la hermandad verificado ya tiene el rango más alto, o la hermandad no está verificada.");
     await tx.update(memberships).set({ rankId: handover.topRank.id, updatedAt: sql`now()` }).where(eq(memberships.id, handover.membershipId));
     await recordAudit(tx, actor, {
       action: "member.assignRank",

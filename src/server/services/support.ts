@@ -163,12 +163,12 @@ export async function submitSupportTicket(
     .select({ id: users.id, name: users.name, discordId: users.discordId, discordUsername: users.discordUsername })
     .from(users)
     .where(eq(users.id, userId));
-  if (!user) throw new DomainError("Sign in again to send a support request.");
+  if (!user) throw new DomainError("Vuelve a iniciar sesión para enviar una solicitud de soporte.");
 
   let guild: SupportEmailDetails["guild"] = null;
   if (input.guildId) {
     const found = (await listSupportGuilds(db, userId)).find((g) => g.id === input.guildId);
-    if (!found) throw new DomainError("Choose one of your guilds", { field: "guildId" });
+    if (!found) throw new DomainError("Elige una de tus hermandades", { field: "guildId" });
     guild = { id: found.id, name: found.name, slug: found.slug };
   }
 
@@ -177,7 +177,7 @@ export async function submitSupportTicket(
     .from(supportTickets)
     .where(and(eq(supportTickets.userId, userId), gte(supportTickets.createdAt, new Date(now.getTime() - SUPPORT_RATE_WINDOW_MS))));
   if (recent >= SUPPORT_RATE_LIMIT) {
-    throw new DomainError(`You've sent ${SUPPORT_RATE_LIMIT} support requests in the last hour. Please wait a while before sending another.`);
+    throw new DomainError(`Has enviado ${SUPPORT_RATE_LIMIT} solicitudes de soporte en la última hora. Espera un rato antes de enviar otra.`);
   }
 
   const [ticket] = await db

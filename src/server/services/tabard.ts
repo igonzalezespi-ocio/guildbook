@@ -32,14 +32,14 @@ const hexOrBlank = z
   .string()
   .trim()
   .transform((v) => v.toLowerCase())
-  .refine((v) => v === "" || /^#[0-9a-f]{6}$/.test(v), "Use a hex colour like #a8182f, or leave it blank.");
+  .refine((v) => v === "" || /^#[0-9a-f]{6}$/.test(v), "Usa un color hexadecimal como #a8182f o déjalo en blanco.");
 
 /**
  * The tabard and theme form. `themeBase` only accepts the selectable styles, so no guild can pick the Order's
  * theme; overrides are optional per role (blank clears one).
  */
 export const tabardThemeInput = tabardSchema().extend({
-  themeBase: z.enum(SELECTABLE_BASE_IDS, { error: "Choose a base style." }),
+  themeBase: z.enum(SELECTABLE_BASE_IDS, { error: "Elige un estilo base." }),
   overridePrimary: hexOrBlank.optional().default(""),
   overrideTrim: hexOrBlank.optional().default(""),
   overrideHighlight: hexOrBlank.optional().default(""),
@@ -56,7 +56,7 @@ export async function updateGuildTabard(db: Db, actor: Actor, raw: unknown) {
   return db.transaction(async (tx) => {
     const [before] = await tx.select().from(guilds).where(eq(guilds.id, actor.guildId));
     if (!before) throw new NotFoundError("Guild");
-    if (isOrderLook(before)) throw new DomainError("The Order of Saint Michael's crest and theme are locked.");
+    if (isOrderLook(before)) throw new DomainError("El emblema y el tema de la Order of Saint Michael están bloqueados.");
     const [updated] = await tx
       .update(guilds)
       .set({
@@ -90,7 +90,7 @@ async function findInGameGuild(db: Db, guild: typeof guilds.$inferSelect, client
   const region = REGION_LABELS[guild.region];
   const versionLabel = VERSION_INFO[guild.gameVersion].label;
   if (!verificationSupported(guild.gameVersion) || !isSupportedVersion(guild.gameVersion)) {
-    throw new DomainError(`Importing the tabard from ${versionLabel} isn't available yet. Design it here for now.`);
+    throw new DomainError(`Aún no se puede importar el tabardo desde ${versionLabel}. De momento, diséñalo aquí.`);
   }
   const version = guild.gameVersion;
   const { links, candidates: all } = await adminCandidates(db, guild.id);
@@ -105,21 +105,21 @@ async function findInGameGuild(db: Db, guild: typeof guilds.$inferSelect, client
   for (const c of [...candidates].sort((a, b) => named(a) - named(b))) lookups.push({ name: c.name, realmSlug: c.realmSlug });
 
   if (lookups.length === 0) {
-    if (links === 0) throw new DomainError("No admin of this guild has linked Battle.net. Link it from My Characters, then import again.");
+    if (links === 0) throw new DomainError("Ningún administrador de esta hermandad ha vinculado Battle.net. Vincúlalo desde Mis personajes y vuelve a importar.");
     if (everywhere.length > 0) {
       throw new DomainError(
         guild.realmSlug
-          ? `None of the admins' ${versionLabel} characters is on ${realmLabel(version, guild.realmSlug, guild.region)}, this guild's realm.`
-          : `The admins' ${versionLabel} characters are in another region, but this guild is in the ${region} region.`,
+          ? `Ninguno de los personajes de ${versionLabel} de los administradores está en ${realmLabel(version, guild.realmSlug, guild.region)}, el reino de esta hermandad.`
+          : `Los personajes de ${versionLabel} de los administradores están en otra región, pero esta hermandad está en la región de ${region}.`,
       );
     }
     if (isPreLaunch(now, version)) {
       throw new DomainError(
-        "Importing opens once WoW: Forever characters exist. Forever launches on Nov 4, 2026; until then, design your tabard here.",
+        "La importación se abre cuando existan personajes de WoW: Forever. Forever sale el 4 de noviembre de 2026; hasta entonces, diseña tu tabardo aquí.",
       );
     }
     throw new DomainError(
-      `No ${versionLabel} characters in the ${region} region were found on the admins' linked Battle.net accounts. Refresh your characters on My Characters, then import again.`,
+      `No se han encontrado personajes de ${versionLabel} en la región de ${region} en las cuentas de Battle.net vinculadas de los administradores. Actualiza tus personajes en Mis personajes y vuelve a importar.`,
     );
   }
 
@@ -135,9 +135,9 @@ async function findInGameGuild(db: Db, guild: typeof guilds.$inferSelect, client
     const sameRealm = !guild.realmSlug || inGame?.realmSlug.toLowerCase() === guild.realmSlug;
     if (inGame && sameRealm && sameGuildName(inGame.name, guild.name) && (!inGame.faction || inGame.faction === guild.faction)) return inGame;
   }
-  if (failed) throw new DomainError("Battle.net didn't respond. Try again later.");
+  if (failed) throw new DomainError("Battle.net no ha respondido. Inténtalo más tarde.");
   throw new DomainError(
-    `None of the admins' ${versionLabel} characters is in an in-game guild named ${guild.name} ${guild.realmSlug ? `on ${realmLabel(version, guild.realmSlug, guild.region)}` : `in the ${region} region`}. Check the guild's name, or refresh your characters on My Characters.`,
+    `Ninguno de los personajes de ${versionLabel} de los administradores está en una hermandad del juego llamada ${guild.name} ${guild.realmSlug ? `en ${realmLabel(version, guild.realmSlug, guild.region)}` : `en la región de ${region}`}. Revisa el nombre de la hermandad o actualiza tus personajes en Mis personajes.`,
   );
 }
 
@@ -150,16 +150,16 @@ export async function importInGameTabard(db: Db, actor: Actor, client: BlizzardC
   assertCan(actor, "guild.settings");
   const [guild] = await db.select().from(guilds).where(eq(guilds.id, actor.guildId));
   if (!guild) throw new NotFoundError("Guild");
-  if (isOrderLook(guild)) throw new DomainError("The Order of Saint Michael's crest and theme are locked.");
+  if (isOrderLook(guild)) throw new DomainError("El emblema y el tema de la Order of Saint Michael están bloqueados.");
   if (!battlenetEnabled(client.config)) {
-    throw new DomainError("Battle.net isn't configured on this site yet, so the in-game tabard can't be imported.");
+    throw new DomainError("Battle.net aún no está configurado en este sitio, así que no se puede importar el tabardo del juego.");
   }
 
   const inGame = await findInGameGuild(db, guild, client, now);
   const lookup = await client.lookupGuild(guild.region, inGame.realmSlug, inGame.nameSlug, isSupportedVersion(guild.gameVersion) ? guild.gameVersion : "forever");
-  if (lookup.status === "error") throw new DomainError("Battle.net didn't respond. Try again later.");
+  if (lookup.status === "error") throw new DomainError("Battle.net no ha respondido. Inténtalo más tarde.");
   if (lookup.status !== "ok" || !lookup.crest) {
-    throw new DomainError(`Battle.net didn't return ${inGame.name}'s tabard. A guild that hasn't designed one in game has none to import.`);
+    throw new DomainError(`Battle.net no ha devuelto el tabardo de ${inGame.name}. Una hermandad que no ha diseñado uno en el juego no tiene nada que importar.`);
   }
   const current = guildLook(guild).tabard;
   const mapped = tabardFromCrest(lookup.crest, current);
