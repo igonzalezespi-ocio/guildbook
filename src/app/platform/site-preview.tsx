@@ -73,7 +73,7 @@ export function exampleSites(domain: string): PreviewSite[] {
     {
       key: "greenwood",
       name: "Wardens of the Greenwood",
-      motto: "Root and branch",
+      motto: "Raíz y rama",
       address: `greenwood.${domain}`,
       look: exampleLook({ background: 25, border: 14, borderStyle: "double", emblemColor: 15, emblemId: 193 }, "parchment"),
       recruitmentOpen: true,
@@ -89,7 +89,7 @@ export function exampleSites(domain: string): PreviewSite[] {
     {
       key: "emberfall",
       name: "Emberfall",
-      motto: "From ash, iron",
+      motto: "De la ceniza, hierro",
       address: `emberfall.${domain}`,
       look: exampleLook({ background: 5, border: 3, borderStyle: "studded", emblemColor: 3, emblemId: 21 }, "modern"),
       recruitmentOpen: true,
