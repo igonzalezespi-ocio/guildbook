@@ -47,7 +47,7 @@ describe("the bundled crest manifest", () => {
 
   it("has unique, contiguous ids from 0 and a name for every one", () => {
     expect(CREST_EMBLEMS.map((e) => e.id)).toEqual(CREST_EMBLEMS.map((_, i) => i));
-    for (const e of CREST_EMBLEMS) expect(e.name).not.toMatch(/^Emblem \d+$/);
+    for (const e of CREST_EMBLEMS) expect(e.name).not.toMatch(/^Emblema \d+$/);
     expect(new Set(CREST_EMBLEMS.map((e) => e.name.toLowerCase())).size).toBeGreaterThan(CREST_EMBLEMS.length * 0.9);
   });
 

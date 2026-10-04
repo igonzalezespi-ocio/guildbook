@@ -4,11 +4,11 @@ import { CREST_ART_VERSION } from "@/lib/tabard/crest-tone";
 import { BACKGROUND_COLORS, BORDER_COLORS, EMBLEM_COLORS } from "@/lib/tabard/palette";
 
 export const BORDER_STYLES = [
-  { id: "plain", name: "Plain" },
-  { id: "double", name: "Double" },
-  { id: "wide", name: "Wide" },
-  { id: "studded", name: "Studded" },
-  { id: "stitched", name: "Stitched" },
+  { id: "plain", name: "Lisa" },
+  { id: "double", name: "Doble" },
+  { id: "wide", name: "Ancha" },
+  { id: "studded", name: "Tachonada" },
+  { id: "stitched", name: "Cosida" },
 ] as const;
 export type BorderStyle = (typeof BORDER_STYLES)[number]["id"];
 export const BORDER_STYLE_IDS = BORDER_STYLES.map((s) => s.id) as [BorderStyle, ...BorderStyle[]];
@@ -51,8 +51,8 @@ export function tabardSchema() {
     emblemColor: index(EMBLEM_COLORS.length - 1),
     emblemId: z.coerce
       .string()
-      .regex(/^\d+$/, "Choose an emblem from the list.")
+      .regex(/^\d+$/, "Elige un emblema de la lista.")
       .transform(Number)
-      .refine(isCrestEmblem, "Choose an emblem from the list."),
+      .refine(isCrestEmblem, "Elige un emblema de la lista."),
   });
 }

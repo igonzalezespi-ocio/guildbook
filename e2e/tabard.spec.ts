@@ -48,7 +48,7 @@ test.describe("Guild tabard and theme", () => {
     const headingBefore = await heading.evaluate((el) => getComputedStyle(el).color);
 
     await page.getByRole("radiogroup", { name: "Background colour" }).getByRole("radio", { name: "Jade" }).click();
-    await page.getByRole("radiogroup", { name: "Border colour" }).getByRole("radio", { name: "Silver" }).click();
+    await page.getByRole("radiogroup", { name: "Border colour" }).getByRole("radio", { name: "Plata" }).click();
     // Before launch there's nothing to import yet, and the page says so.
     await expect(page.getByTestId("tabard-import-note")).toContainText("Importing opens once WoW: Forever characters exist");
 
@@ -72,7 +72,7 @@ test.describe("Guild tabard and theme", () => {
     expect(filterId).toBeTruthy();
     await expect(page.locator(`filter[id="${filterId}"]`)).toHaveCount(1);
     await page.getByRole("radiogroup", { name: "Emblem colour" }).getByRole("radio", { name: "Black" }).click();
-    await page.getByRole("radiogroup", { name: "Base style" }).getByRole("radio", { name: /^Parchment/ }).click();
+    await page.getByRole("radiogroup", { name: "Base style" }).getByRole("radio", { name: /^Pergamino/ }).click();
 
     await expect(page.getByRole("radiogroup", { name: "Background colour" }).getByRole("radio", { name: "Jade" })).toHaveAttribute("aria-checked", "true");
     await expect.poll(() => button.evaluate((el) => getComputedStyle(el).backgroundImage)).not.toBe(buttonBefore);
