@@ -132,12 +132,12 @@ export function Listbox({
   "aria-label": ariaLabel,
   "aria-describedby": describedBy,
   required = false,
-  requiredMessage = "Choose an option",
+  requiredMessage = "Elige una opción",
   disabled = false,
   invalid = false,
   searchable = false,
-  searchPlaceholder = "Search",
-  emptyText = "No matches",
+  searchPlaceholder = "Buscar",
+  emptyText = "Sin resultados",
   size = "md",
   className,
   triggerClassName,
@@ -415,7 +415,7 @@ export function Listbox({
                 aria-expanded
                 aria-controls={listId}
                 aria-activedescendant={activeId}
-                aria-label={labelText ? `Search ${labelText.toLowerCase()}` : "Search"}
+                aria-label={labelText ? `Buscar: ${labelText.toLowerCase()}` : "Buscar"}
                 autoComplete="off"
                 spellCheck={false}
                 value={query}

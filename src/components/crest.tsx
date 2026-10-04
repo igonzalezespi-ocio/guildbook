@@ -172,7 +172,7 @@ export function Crest({ className = "h-24 w-20" }: { className?: string }) {
   const p = `crest-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
   return (
     <span className={clsx("crest", className)}>
-      <svg viewBox="0 0 100 120" role="img" aria-label="Order of Saint Michael crest">
+      <svg viewBox="0 0 100 120" role="img" aria-label="Escudo de la Order of Saint Michael">
         <Defs p={p} />
         <Tiny p={p} />
         <Mark p={p} />

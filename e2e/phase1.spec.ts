@@ -158,12 +158,12 @@ test("apply, officer accepts, new member appears on the roster", async ({ page, 
   await chooseOption(page.getByLabel("Clase", { exact: true }), "paladin");
   await chooseOption(page.getByLabel("Especialización", { exact: true }), "Protection");
   await chooseOption(page.getByLabel("Rol en banda", { exact: true }), "tank");
-  await page.getByLabel("Raid experience").fill("Main tank through Naxxramas in Classic Era.");
-  await page.getByLabel("Availability").fill("Sundays 7-10 PM Eastern.");
-  await page.getByLabel("Why the Order of Saint Michael?").fill("A guild that raids well and keeps the faith.");
-  await page.getByLabel("Discord handle").fill(characterName.toLowerCase());
+  await page.getByLabel("Experiencia en bandas").fill("Main tank through Naxxramas in Classic Era.");
+  await page.getByLabel("Disponibilidad").fill("Sundays 7-10 PM Eastern.");
+  await page.getByLabel("¿Por qué Order of Saint Michael?").fill("A guild that raids well and keeps the faith.");
+  await page.getByLabel("Usuario de Discord").fill(characterName.toLowerCase());
   await page.getByRole("checkbox").check();
-  await page.getByRole("button", { name: "Submit application" }).click();
+  await page.getByRole("button", { name: "Enviar solicitud" }).click();
   await expect(page.getByRole("heading", { name: "Tu solicitud" })).toBeInViewport();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   await expect(charterLine).toHaveCount(0);

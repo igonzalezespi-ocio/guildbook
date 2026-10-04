@@ -6,10 +6,10 @@ import { chooseOption, randomCharacterName, signIn } from "./helpers";
 // the EU region while the seeded guilds are in the Americas, are filtered out).
 
 async function fillFreeText(page: Page | Locator, discord: string) {
-  await page.getByLabel("Raid experience").fill("Healed Molten Core and Blackwing Lair in Classic.");
-  await page.getByLabel("Availability").fill("Tuesdays and Thursdays, 8-11 PM Eastern.");
-  await page.getByLabel("Why the Order of Saint Michael?").fill("Faithful company and steady progression.");
-  await page.getByLabel("Discord handle").fill(discord);
+  await page.getByLabel("Experiencia en bandas").fill("Healed Molten Core and Blackwing Lair in Classic.");
+  await page.getByLabel("Disponibilidad").fill("Tuesdays and Thursdays, 8-11 PM Eastern.");
+  await page.getByLabel("¿Por qué Order of Saint Michael?").fill("Faithful company and steady progression.");
+  await page.getByLabel("Usuario de Discord").fill(discord);
   await page.getByRole("checkbox").check();
 }
 
@@ -25,7 +25,7 @@ test("an applicant links Battle.net, picks a character, and the officer sees it 
   await expect(page.getByTestId("battlenet-account")).toContainText(/Pilgrim#\d{4}/);
 
   // Once another test has verified the guild, Aldric (in the in-game guild) is also offered a one-click join above the form.
-  const application = page.getByRole("main").locator("section", { has: page.getByRole("button", { name: "Submit application" }) });
+  const application = page.getByRole("main").locator("section", { has: page.getByRole("button", { name: "Enviar solicitud" }) });
   await expect(application.getByRole("radio", { name: /Aldric/ })).toBeChecked();
   await expect(application.getByRole("radio", { name: /Grukk/ })).toHaveCount(0);
   await expect(application.getByRole("radio", { name: /Mortis/ })).toHaveCount(0);
@@ -43,7 +43,7 @@ test("an applicant links Battle.net, picks a character, and the officer sees it 
   await chooseOption(application.getByLabel("Especialización", { exact: true }), "Holy");
   await chooseOption(application.getByLabel("Rol en banda", { exact: true }), "healer");
   await fillFreeText(application, applicantId);
-  await application.getByRole("button", { name: "Submit application" }).click();
+  await application.getByRole("button", { name: "Enviar solicitud" }).click();
   await expect(page.getByRole("heading", { name: "Tu solicitud" })).toBeInViewport();
   await expect(page.getByText("before applying.")).toHaveCount(0);
   await expect(page.getByRole("main").getByRole("img", { name: "Verificado con Battle.net" })).toBeVisible();
@@ -80,7 +80,7 @@ test("without Battle.net, manual entry still works and the officer sees it unver
   await chooseOption(page.getByLabel("Especialización", { exact: true }), "Frost");
   await chooseOption(page.getByLabel("Rol en banda", { exact: true }), "ranged");
   await fillFreeText(page, applicantId);
-  await page.getByRole("button", { name: "Submit application" }).click();
+  await page.getByRole("button", { name: "Enviar solicitud" }).click();
   await expect(page.getByRole("heading", { name: "Tu solicitud" })).toBeInViewport();
   await expect(page.getByText("before applying.")).toHaveCount(0);
 
