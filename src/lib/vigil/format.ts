@@ -21,3 +21,7 @@ export function scoreTone(score: number): string {
   if (score >= 60) return "text-gold";
   return "text-crimson-bright";
 }
+
+/** Spanish names for the resource a report stores in English ("Rage"). Logic keeps comparing the stored value. */
+export const RESOURCE_LABELS: Record<string, string> = { Mana: "Maná", Rage: "Ira", Focus: "Concentración", Energy: "Energía", Power: "Poder" };
+export const resourceLabel = (name: string) => RESOURCE_LABELS[name] ?? name;

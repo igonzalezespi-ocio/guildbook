@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import type { ReactNode } from "react";
 import { Panel, Tag } from "@/components/ui";
-import { formatDuration, formatNumber, formatPct, formatSeconds, METRIC_LABELS, scoreTone } from "@/lib/vigil/format";
+import { formatDuration, formatNumber, formatPct, formatSeconds, METRIC_LABELS, resourceLabel, scoreTone } from "@/lib/vigil/format";
 import type { FightReport } from "@/lib/vigil/report";
 import { FightTimeline } from "./timeline";
 
@@ -22,7 +22,7 @@ function Bar({ value, target = 1, tone = "gold" }: { value: number; target?: num
         className={clsx("h-full rounded", tone === "gold" ? "bg-gold" : "bg-crimson-bright")}
         style={{ width: `${Math.round(Math.min(1, value) * 100)}%` }}
       />
-      {target < 1 && <div className="absolute top-0 h-full w-0.5 bg-bone/70" style={{ left: `${target * 100}%` }} title="Target" />}
+      {target < 1 && <div className="absolute top-0 h-full w-0.5 bg-bone/70" style={{ left: `${target * 100}%` }} title="Objetivo" />}
     </div>
   );
 }
@@ -31,7 +31,7 @@ export function ScoreRing({ score, size = 96 }: { score: number; size?: number }
   const r = 42;
   const c = 2 * Math.PI * r;
   return (
-    <svg viewBox="0 0 100 100" width={size} height={size} role="img" aria-label={`Score ${score} of 100`} className="shrink-0">
+    <svg viewBox="0 0 100 100" width={size} height={size} role="img" aria-label={`Puntuación ${score} de 100`} className="shrink-0">
       <circle cx={50} cy={50} r={r} fill="none" stroke="var(--color-line)" strokeWidth={8} />
       <circle
         cx={50}
@@ -65,10 +65,10 @@ export function FightReportView({ report }: { report: FightReport }) {
           <div className="min-w-0 flex-1 space-y-3">
             <div className="flex flex-wrap items-center gap-2">
               <h2 className={clsx("text-xl font-semibold", scoreTone(report.score.overall))}>
-                {report.score.overall >= 85 ? "Well kept" : report.score.overall >= 60 ? "Steady" : "Room to grow"}
+                {report.score.overall >= 85 ? "Muy bien llevado" : report.score.overall >= 60 ? "Constante" : "Margen de mejora"}
               </h2>
-              <Tag>{model?.label ?? "General review"}</Tag>
-              <Tag>{report.fight.kind === "boss" ? "Boss" : "Trash"}</Tag>
+              <Tag>{model?.label ?? "Análisis general"}</Tag>
+              <Tag>{report.fight.kind === "boss" ? "Jefe" : "Bichos"}</Tag>
             </div>
             <ul className="grid gap-2 sm:grid-cols-2">
               {report.score.parts.map((p) => (
@@ -84,15 +84,15 @@ export function FightReportView({ report }: { report: FightReport }) {
           </div>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-          <Stat label="Duration" value={formatDuration(report.fight.durationMs)} />
-          <Stat label={`${METRIC_LABELS[metric]} per second`} value={formatNumber(perSecond)} />
+          <Stat label="Duración" value={formatDuration(report.fight.durationMs)} />
+          <Stat label={`${METRIC_LABELS[metric]} por segundo`} value={formatNumber(perSecond)} />
           <Stat
-            label="GCD usage"
+            label="Uso del GCD"
             value={formatPct(activity.gcdUsage)}
-            hint={`${activity.gcdCasts} casts, ${formatSeconds(activity.gcdMs)} GCD`}
+            hint={`${activity.gcdCasts} lanzamientos, GCD de ${formatSeconds(activity.gcdMs)}`}
           />
           <Stat
-            label={activity.readyIdleMs !== null ? "Idle while ready" : "Idle gaps"}
+            label={activity.readyIdleMs !== null ? "Inactivo con algo listo" : "Huecos inactivos"}
             value={
               activity.readyIdleMs !== null
                 ? formatSeconds(activity.readyIdleMs)
@@ -102,30 +102,30 @@ export function FightReportView({ report }: { report: FightReport }) {
         </div>
       </Panel>
 
-      <Panel title="Timeline">
+      <Panel title="Cronología">
         <FightTimeline report={report} />
       </Panel>
 
       {estimate && (
-        <Panel title="Estimate versus actual">
+        <Panel title="Estimación frente a lo real">
           <p className="mb-3 text-sm text-muted">
-            A perfect-timing replay of this same fight. It is an estimate: read the assumptions below before taking the
-            number literally.
+            Una repetición de este mismo combate con una ejecución perfecta. Es una estimación: lee los supuestos de abajo
+            antes de tomarte la cifra al pie de la letra.
           </p>
           <div className="grid gap-2 sm:grid-cols-3">
-            <Stat label={`Your ${METRIC_LABELS[estimate.metric].toLowerCase()}`} value={formatNumber(estimate.actual)} hint={`${formatNumber(estimate.actual / seconds)} per second`} />
+            <Stat label={`Tu ${METRIC_LABELS[estimate.metric].toLowerCase()}`} value={formatNumber(estimate.actual)} hint={`${formatNumber(estimate.actual / seconds)} por segundo`} />
             <Stat
-              label="Estimated with perfect timing"
+              label="Estimado con ejecución perfecta"
               value={formatNumber(estimate.estimated)}
-              hint={`${formatNumber(estimate.estimated / seconds)} per second`}
+              hint={`${formatNumber(estimate.estimated / seconds)} por segundo`}
             />
-            <Stat label="Efficiency" value={formatPct(estimate.efficiency)} />
+            <Stat label="Eficiencia" value={formatPct(estimate.efficiency)} />
           </div>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <div>
-              <h3 className="mb-2 text-sm font-semibold text-gold">Where the difference comes from</h3>
+              <h3 className="mb-2 text-sm font-semibold text-gold">De dónde sale la diferencia</h3>
               {estimate.gains.length === 0 ? (
-                <p className="text-sm text-muted">Nothing measurable left on the table.</p>
+                <p className="text-sm text-muted">No queda nada medible por mejorar.</p>
               ) : (
                 <ul className="space-y-1 text-sm">
                   {estimate.gains.map((g) => (
@@ -143,9 +143,9 @@ export function FightReportView({ report }: { report: FightReport }) {
                 <table className="mt-3 w-full text-sm">
                   <thead className="text-left text-xs text-muted">
                     <tr>
-                      <th className="py-1 font-normal">Ability</th>
-                      <th className="py-1 text-right font-normal">You</th>
-                      <th className="py-1 text-right font-normal">Replay</th>
+                      <th className="py-1 font-normal">Habilidad</th>
+                      <th className="py-1 text-right font-normal">Tú</th>
+                      <th className="py-1 text-right font-normal">Repetición</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -161,7 +161,7 @@ export function FightReportView({ report }: { report: FightReport }) {
               )}
             </div>
             <div>
-              <h3 className="mb-2 text-sm font-semibold text-gold">Assumptions</h3>
+              <h3 className="mb-2 text-sm font-semibold text-gold">Supuestos</h3>
               <ul className="list-disc space-y-1 pl-5 text-xs text-muted">
                 {estimate.assumptions.map((a) => (
                   <li key={a}>{a}</li>
@@ -174,17 +174,17 @@ export function FightReportView({ report }: { report: FightReport }) {
 
       <div className="grid gap-4 md:grid-cols-2">
         {report.adherence && (
-          <Panel title="Priority adherence">
+          <Panel title="Seguimiento de prioridades">
             <p className="mb-3 text-sm text-muted">
-              {report.adherence.matched} of {report.adherence.decisions} global cooldowns went to the highest ability that
-              was ready.
+              {report.adherence.matched} de {report.adherence.decisions} tiempos de reutilización global fueron a la habilidad
+              más prioritaria que estaba lista.
             </p>
             <table className="w-full text-sm">
               <thead className="text-left text-xs text-muted">
                 <tr>
-                  <th className="py-1 font-normal">Step</th>
-                  <th className="py-1 text-right font-normal">Called for</th>
-                  <th className="py-1 text-right font-normal">Done</th>
+                  <th className="py-1 font-normal">Paso</th>
+                  <th className="py-1 text-right font-normal">Tocaba</th>
+                  <th className="py-1 text-right font-normal">Hecho</th>
                 </tr>
               </thead>
               <tbody>
@@ -199,11 +199,11 @@ export function FightReportView({ report }: { report: FightReport }) {
             </table>
             {report.adherence.misses.length > 0 && (
               <details className="mt-3 text-sm">
-                <summary className="cursor-pointer text-gold">Off-priority casts ({report.adherence.misses.length})</summary>
+                <summary className="cursor-pointer text-gold">Lanzamientos fuera de prioridad ({report.adherence.misses.length})</summary>
                 <ul className="mt-2 space-y-1 text-xs text-muted">
                   {report.adherence.misses.map((m, i) => (
                     <li key={i}>
-                      {formatSeconds(m.t)}: {m.actual} when the priority was {m.expected.toLowerCase()}
+                      {formatSeconds(m.t)}: {m.actual} cuando la prioridad era {m.expected.toLowerCase()}
                     </li>
                   ))}
                 </ul>
@@ -213,14 +213,14 @@ export function FightReportView({ report }: { report: FightReport }) {
         )}
 
         {(report.uptimes.length > 0 || report.procs.length > 0 || report.cooldowns.length > 0) && (
-          <Panel title="Uptimes and cooldowns">
+          <Panel title="Tiempos activos y reutilizaciones">
             <ul className="space-y-3 text-sm">
               {report.uptimes.map((u) => (
                 <li key={u.key}>
                   <div className="mb-1 flex justify-between gap-2">
                     <span>
                       {u.label}
-                      {u.scored && <span className="ml-1 text-xs text-muted">(target {formatPct(u.targetPct)})</span>}
+                      {u.scored && <span className="ml-1 text-xs text-muted">(objetivo {formatPct(u.targetPct)})</span>}
                     </span>
                     <span>{formatPct(u.pct)}</span>
                   </div>
@@ -232,7 +232,7 @@ export function FightReportView({ report }: { report: FightReport }) {
                   <div className="mb-1 flex justify-between gap-2">
                     <span>{p.label}</span>
                     <span>
-                      {p.used} of {p.usable} possible
+                      {p.used} de {p.usable} posibles
                     </span>
                   </div>
                   <Bar value={p.pct} tone={p.pct >= 0.7 ? "gold" : "crimson"} />
@@ -242,7 +242,7 @@ export function FightReportView({ report }: { report: FightReport }) {
                 <li key={c.key} className="flex justify-between gap-2 border-t border-line pt-2">
                   <span>{c.label}</span>
                   <span className="text-muted">
-                    {c.casts} of {c.possible} possible uses
+                    {c.casts} de {c.possible} usos posibles
                   </span>
                 </li>
               ))}
@@ -250,20 +250,20 @@ export function FightReportView({ report }: { report: FightReport }) {
           </Panel>
         )}
 
-        <Panel title="Checks">
+        <Panel title="Comprobaciones">
           <ul className="space-y-2 text-sm">
             {report.swings && (
               <li className="flex justify-between gap-2">
-                <span>Auto-attacks lost to gaps</span>
+                <span>Ataques automáticos perdidos por huecos</span>
                 <span className={report.swings.lostSwings > 0 ? "text-crimson-bright" : "text-gold"}>
-                  {report.swings.lostSwings} (swing every {formatSeconds(report.swings.medianIntervalMs)})
+                  {report.swings.lostSwings} (un golpe cada {formatSeconds(report.swings.medianIntervalMs)})
                 </span>
               </li>
             )}
             {report.extras.seal && (
               <>
                 <li className="flex justify-between gap-2">
-                  <span>Time without a seal</span>
+                  <span>Tiempo sin sello</span>
                   <span className={report.extras.seal.timeWithoutSealMs > 0 ? "text-crimson-bright" : "text-gold"}>
                     {formatSeconds(report.extras.seal.timeWithoutSealMs)}
                   </span>
@@ -273,73 +273,73 @@ export function FightReportView({ report }: { report: FightReport }) {
                   <span>
                     {report.extras.seal.judgements}
                     {report.extras.seal.medianJudgementIntervalMs !== null &&
-                      `, every ${formatSeconds(report.extras.seal.medianJudgementIntervalMs)}`}
+                      `, cada ${formatSeconds(report.extras.seal.medianJudgementIntervalMs)}`}
                   </span>
                 </li>
                 <li className="flex justify-between gap-2">
-                  <span>Judgement consumes the seal</span>
-                  <span className="text-muted">{report.extras.seal.consumesSeal ? "Yes (read from log)" : "No (read from log)"}</span>
+                  <span>Judgement consume el sello</span>
+                  <span className="text-muted">{report.extras.seal.consumesSeal ? "Sí (según el registro)" : "No (según el registro)"}</span>
                 </li>
               </>
             )}
             {report.extras.rageDump && (
               <li className="flex justify-between gap-2">
-                <span>Heroic Strike on swings at {report.extras.rageDump.threshold}+ rage</span>
+                <span>Heroic Strike en golpes con {report.extras.rageDump.threshold}+ de ira</span>
                 <span>
-                  {report.extras.rageDump.used} of {report.extras.rageDump.opportunities}
+                  {report.extras.rageDump.used} de {report.extras.rageDump.opportunities}
                 </span>
               </li>
             )}
             {report.resource && (
               <>
                 <li className="flex justify-between gap-2">
-                  <span>Time at {report.resource.name.toLowerCase()} cap</span>
+                  <span>Tiempo con {resourceLabel(report.resource.name).toLowerCase()} al máximo</span>
                   <span>{formatSeconds(report.resource.timeAtCapMs)}</span>
                 </li>
                 {report.resource.name === "Rage" && (
                   <li className="flex justify-between gap-2">
-                    <span>Rage wasted at cap (estimate)</span>
+                    <span>Ira desperdiciada al máximo (estimación)</span>
                     <span>{formatNumber(report.resource.wastedEstimate)}</span>
                   </li>
                 )}
               </>
             )}
             <li className="flex justify-between gap-2">
-              <span>Damage taken</span>
+              <span>Daño recibido</span>
               <span>{formatNumber(totals.damageTaken)}</span>
             </li>
           </ul>
         </Panel>
 
-        <Panel title="Targets">
+        <Panel title="Objetivos">
           <ul className="space-y-1 text-sm">
             {report.fight.targets.map((t, i) => (
               <li key={`${t.name}-${i}`} className="flex justify-between gap-2">
                 <span>
                   {t.name}
                   {t.npcId && <span className="ml-1 text-xs text-muted">NPC {t.npcId}</span>}
-                  {t.died && <span className="ml-1 text-xs text-gold-dim">slain</span>}
+                  {t.died && <span className="ml-1 text-xs text-gold-dim">abatido</span>}
                 </span>
-                <span className="text-muted">{formatNumber(t.damageTaken)} dealt</span>
+                <span className="text-muted">{formatNumber(t.damageTaken)} infligido</span>
               </li>
             ))}
           </ul>
         </Panel>
       </div>
 
-      <Panel title="Abilities">
+      <Panel title="Habilidades">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[32rem] text-sm">
             <thead className="text-left text-xs text-muted">
               <tr>
-                <th className="py-1 font-normal">Ability</th>
-                <th className="py-1 text-right font-normal">Casts</th>
-                <th className="py-1 text-right font-normal">Hits</th>
-                <th className="py-1 text-right font-normal">Crit</th>
-                <th className="py-1 text-right font-normal">Miss</th>
-                <th className="py-1 text-right font-normal">Damage</th>
-                {totals.healing > 0 && <th className="py-1 text-right font-normal">Healing</th>}
-                <th className="py-1 text-right font-normal">Threat</th>
+                <th className="py-1 font-normal">Habilidad</th>
+                <th className="py-1 text-right font-normal">Lanzamientos</th>
+                <th className="py-1 text-right font-normal">Impactos</th>
+                <th className="py-1 text-right font-normal">Crítico</th>
+                <th className="py-1 text-right font-normal">Fallos</th>
+                <th className="py-1 text-right font-normal">Daño</th>
+                {totals.healing > 0 && <th className="py-1 text-right font-normal">Sanación</th>}
+                <th className="py-1 text-right font-normal">Amenaza</th>
               </tr>
             </thead>
             <tbody>
@@ -358,16 +358,16 @@ export function FightReportView({ report }: { report: FightReport }) {
             </tbody>
           </table>
         </div>
-        <p className="mt-2 text-xs text-muted">Threat is an estimate from damage, ability bonuses and stance; the game does not log threat.</p>
+        <p className="mt-2 text-xs text-muted">La amenaza es una estimación a partir del daño, las bonificaciones de las habilidades y la actitud; el juego no registra la amenaza.</p>
       </Panel>
 
       {(report.notes.length > 0 || report.snapshot) && (
-        <Panel title="About this log">
+        <Panel title="Sobre este registro">
           {report.snapshot && (
             <p className="mb-2 text-sm">
-              Gear snapshot from Vigil: {report.snapshot.name}
-              {report.snapshot.level ? `, level ${report.snapshot.level}` : ""}, {report.snapshot.gear.length} items,{" "}
-              {report.snapshot.talents.length} talent entries.
+              Instantánea del equipo desde Vigil: {report.snapshot.name}
+              {report.snapshot.level ? `, nivel ${report.snapshot.level}` : ""}, {report.snapshot.gear.length} objetos,{" "}
+              {report.snapshot.talents.length} entradas de talentos.
             </p>
           )}
           <ul className="list-disc space-y-1 pl-5 text-xs text-muted">
@@ -378,9 +378,9 @@ export function FightReportView({ report }: { report: FightReport }) {
         </Panel>
       )}
       <p className="text-center text-xs text-muted">
-        Log format {report.log.version ?? "unknown"}
-        {report.log.build && `, build ${report.log.build}`}
-        {report.log.advanced ? ", advanced logging on" : ", advanced logging off"}.
+        Formato de registro {report.log.version ?? "desconocido"}
+        {report.log.build && `, compilación ${report.log.build}`}
+        {report.log.advanced ? ", registro avanzado activado" : ", registro avanzado desactivado"}.
       </p>
     </div>
   );

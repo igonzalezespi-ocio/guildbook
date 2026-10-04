@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { resourceLabel } from "@/lib/vigil/format";
 import type { FightReport } from "@/lib/vigil/report";
 
 const WIDTH = 1000;
@@ -16,10 +17,10 @@ export function FightTimeline({ report }: { report: FightReport }) {
   const x = (t: number) => LABEL + (Math.min(Math.max(t, 0), duration) / duration) * (WIDTH - LABEL - 8);
   const uptimes = report.uptimes.filter((u) => u.intervals.length > 0).slice(0, 5);
   const rows: Row[] = [
-    { label: "Casts", kind: "casts" },
-    { label: report.activity.readyIdleMs !== null ? "Idle, ability ready" : "Idle", kind: "idle" },
+    { label: "Lanzamientos", kind: "casts" },
+    { label: report.activity.readyIdleMs !== null ? "Inactivo con habilidad lista" : "Inactivo", kind: "idle" },
     ...uptimes.map((u): Row => ({ label: u.label, kind: "uptime" })),
-    ...(report.resource ? [{ label: report.resource.name, kind: "resource" } as Row] : []),
+    ...(report.resource ? [{ label: resourceLabel(report.resource.name), kind: "resource" } as Row] : []),
   ];
   const height = rows.length * (ROW + 8) + 22;
   const step = duration > 180_000 ? 30_000 : duration > 60_000 ? 15_000 : duration > 20_000 ? 5_000 : 2_000;
@@ -33,14 +34,14 @@ export function FightTimeline({ report }: { report: FightReport }) {
         viewBox={`0 0 ${WIDTH} ${height}`}
         className="w-full"
         role="img"
-        aria-label={`Timeline of ${report.fight.label}`}
+        aria-label={`Cronología de ${report.fight.label}`}
         data-testid="vigil-timeline"
       >
         {ticks.map((t) => (
           <g key={t}>
             <line x1={x(t)} x2={x(t)} y1={0} y2={height - 18} stroke="var(--color-line)" strokeWidth={0.6} />
             <text x={x(t)} y={height - 4} fontSize={11} textAnchor="middle" fill="var(--color-muted)">
-              {Math.round(t / 1000)}s
+              {Math.round(t / 1000)} s
             </text>
           </g>
         ))}
@@ -68,13 +69,13 @@ export function FightTimeline({ report }: { report: FightReport }) {
                           : "var(--color-muted)"
                     }
                   >
-                    <title>{`${(c.t / 1000).toFixed(1)}s ${c.name}${c.verdict === "miss" ? " (off priority)" : ""}`}</title>
+                    <title>{`${(c.t / 1000).toFixed(1).replace(".", ",")} s ${c.name}${c.verdict === "miss" ? " (fuera de prioridad)" : ""}`}</title>
                   </rect>
                 ))}
               {row.kind === "idle" &&
                 report.activity.idleGaps.map(([a, b], j) => (
                   <rect key={j} x={x(a)} y={y + 2} width={Math.max(1, x(b) - x(a))} height={ROW - 4} fill="var(--color-crimson)" rx={2}>
-                    <title>{`${(a / 1000).toFixed(1)}s to ${(b / 1000).toFixed(1)}s`}</title>
+                    <title>{`De ${(a / 1000).toFixed(1).replace(".", ",")} s a ${(b / 1000).toFixed(1).replace(".", ",")} s`}</title>
                   </rect>
                 ))}
               {row.kind === "uptime" &&
@@ -98,10 +99,10 @@ export function FightTimeline({ report }: { report: FightReport }) {
         })}
       </svg>
       <figcaption className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
-        <Legend color="var(--color-gold-bright)">On priority</Legend>
-        <Legend color="var(--color-crimson-bright)">Off priority</Legend>
-        <Legend color="var(--color-muted)">Other casts (short ticks are off the global cooldown)</Legend>
-        <Legend color="var(--color-crimson)">Idle</Legend>
+        <Legend color="var(--color-gold-bright)">Según prioridad</Legend>
+        <Legend color="var(--color-crimson-bright)">Fuera de prioridad</Legend>
+        <Legend color="var(--color-muted)">Otros lanzamientos (las marcas cortas no usan el tiempo de reutilización global)</Legend>
+        <Legend color="var(--color-crimson)">Inactivo</Legend>
       </figcaption>
     </figure>
   );

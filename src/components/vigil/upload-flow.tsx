@@ -40,7 +40,7 @@ function Progress({ label, pct }: { label: string; pct: number }) {
     <div role="status" aria-live="polite" className="space-y-2">
       <div className="flex justify-between text-sm">
         <span>{label}</span>
-        <span className="text-gold">{Math.round(pct * 100)}%</span>
+        <span className="text-gold">{Math.round(pct * 100)} %</span>
       </div>
       <div className="h-2 overflow-hidden rounded bg-ink" role="progressbar" aria-valuenow={Math.round(pct * 100)} aria-valuemin={0} aria-valuemax={100}>
         <div className="h-full bg-gold transition-[width]" style={{ width: `${Math.round(pct * 100)}%` }} />
@@ -89,7 +89,7 @@ export function VigilUploadFlow({
       }
     };
     worker.onerror = () => {
-      setError("The log could not be read in this browser.");
+      setError("No se ha podido leer el registro en este navegador.");
       setPhase({ step: "pick" });
     };
     worker.postMessage(req);
@@ -119,7 +119,7 @@ export function VigilUploadFlow({
       (res) => {
         if (res.type !== "scanned") return;
         if (res.scan.players.length === 0) {
-          setError("No player actions were found. Is this a WoWCombatLog file?");
+          setError("No se han encontrado acciones de jugadores. ¿Seguro que es un archivo WoWCombatLog?");
           setPhase({ step: "pick" });
           return;
         }
@@ -141,7 +141,7 @@ export function VigilUploadFlow({
       (res) => {
         if (res.type !== "analyzed") return;
         if (res.reports.length === 0) {
-          setError(`No fights were found for ${player.name}. Fights need at least two seconds of combat.`);
+          setError(`No se han encontrado combates de ${player.name}. Un combate necesita al menos dos segundos de lucha.`);
           setPhase({ step: "scanned", scan });
           return;
         }
@@ -182,12 +182,12 @@ export function VigilUploadFlow({
     if (!scan) return null;
     const minutes = scan.startedAt && scan.endedAt ? Math.round((scan.endedAt - scan.startedAt) / 60000) : null;
     return [
-      scan.header.version ? `Combat log version ${scan.header.version}` : "No version header",
-      scan.header.build ? `build ${scan.header.build}` : null,
-      scan.header.advanced ? "advanced logging on" : "advanced logging off",
-      `${scan.lines.toLocaleString("en-US")} lines`,
+      scan.header.version ? `Versión del registro de combate ${scan.header.version}` : "Sin cabecera de versión",
+      scan.header.build ? `compilación ${scan.header.build}` : null,
+      scan.header.advanced ? "registro avanzado activado" : "registro avanzado desactivado",
+      `${scan.lines.toLocaleString("es-ES")} líneas`,
       minutes !== null ? `${minutes} min` : null,
-      scan.encounters ? `${scan.encounters} boss encounters` : null,
+      scan.encounters ? `${scan.encounters} encuentros con jefes` : null,
     ]
       .filter(Boolean)
       .join(", ");
@@ -202,13 +202,13 @@ export function VigilUploadFlow({
       )}
 
       <section className="panel space-y-4 p-4 sm:p-6">
-        <h2 className="text-lg font-semibold text-gold">1. Choose your combat log</h2>
+        <h2 className="text-lg font-semibold text-gold">1. Elige tu registro de combate</h2>
         <p className="text-sm text-muted">
-          Your log never leaves this browser. Vigil reads it here and uploads only a short summary of each fight you pick.
+          Tu registro nunca sale de este navegador. Vigil lo lee aquí y solo sube un breve resumen de cada combate que elijas.
         </p>
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block">
-            <span className="field-label">Combat log (WoWCombatLog.txt)</span>
+            <span className="field-label">Registro de combate (WoWCombatLog.txt)</span>
             <input
               type="file"
               accept=".txt,.log,text/plain"
@@ -222,7 +222,7 @@ export function VigilUploadFlow({
             />
           </label>
           <label className="block">
-            <span className="field-label">Vigil snapshot (optional)</span>
+            <span className="field-label">Instantánea de Vigil (opcional)</span>
             <input
               type="file"
               accept=".lua,.json,.txt"
@@ -232,53 +232,53 @@ export function VigilUploadFlow({
                 setSnapshotsText(f ? await f.text() : undefined);
               }}
             />
-            <span className="mt-1 block text-xs text-muted">WTF/Account/NAME/SavedVariables/Vigil.lua attaches your gear and talents.</span>
+            <span className="mt-1 block text-xs text-muted">WTF/Account/NOMBRE/SavedVariables/Vigil.lua añade tu equipo y tus talentos.</span>
           </label>
         </div>
-        {phase.step === "scanning" && <Progress label="Reading the log" pct={phase.pct} />}
+        {phase.step === "scanning" && <Progress label="Leyendo el registro" pct={phase.pct} />}
         {logInfo && <p className="text-xs text-muted" data-testid="vigil-log-info">{logInfo}</p>}
       </section>
 
       {scan && phase.step !== "uploaded" && (
         <section className="panel space-y-4 p-4 sm:p-6">
-          <h2 className="text-lg font-semibold text-gold">2. Who and how to judge</h2>
+          <h2 className="text-lg font-semibold text-gold">2. A quién y cómo valorar</h2>
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
-              <span className="field-label">Player in the log</span>
+              <span className="field-label">Jugador del registro</span>
               <Listbox
-                aria-label="Player in the log"
+                aria-label="Jugador del registro"
                 value={playerGuid}
                 onChange={(guid) => choosePlayer(scan, guid)}
                 options={scan.players.map((p) => ({
                   value: p.guid,
-                  label: `${p.name}${p.isLogger ? " (you)" : ""}`,
-                  description: p.level ? `Level ${p.level}` : undefined,
+                  label: `${p.name}${p.isLogger ? " (tú)" : ""}`,
+                  description: p.level ? `Nivel ${p.level}` : undefined,
                 }))}
                 searchable={scan.players.length > 12}
-                searchPlaceholder="Search players"
+                searchPlaceholder="Buscar jugadores"
               />
             </div>
             <div>
-              <span className="field-label">Rotation model</span>
+              <span className="field-label">Modelo de rotación</span>
               <Listbox
-                aria-label="Rotation model"
+                aria-label="Modelo de rotación"
                 value={modelId}
                 onChange={setModelId}
-                options={[{ value: "", label: "General review (any class)" }, ...ROTATION_MODELS.map((m) => ({ value: m.id, label: m.label }))]}
+                options={[{ value: "", label: "Análisis general (cualquier clase)" }, ...ROTATION_MODELS.map((m) => ({ value: m.id, label: m.label }))]}
               />
             </div>
             <div>
-              <span className="field-label">Your character</span>
+              <span className="field-label">Tu personaje</span>
               <Listbox
-                aria-label="Your character"
+                aria-label="Tu personaje"
                 value={characterId}
                 onChange={setCharacterId}
                 options={[
-                  { value: "", label: "Not linked" },
+                  { value: "", label: "Sin vincular" },
                   ...characters.map((c) => ({
                     value: c.id,
                     label: `${c.name} ${c.surname}`,
-                    description: `Level ${c.level} ${CLASS_INFO[c.wowClass].label}`,
+                    description: `${CLASS_INFO[c.wowClass].label} de nivel ${c.level}`,
                     icon: <ClassIcon wowClass={c.wowClass} size={18} decorative />,
                     color: classColor(c.wowClass),
                   })),
@@ -288,23 +288,23 @@ export function VigilUploadFlow({
           </div>
           <p className="text-xs text-muted">
             {model
-              ? `${model.label}: judged on ${METRIC_LABELS[model.metric].toLowerCase()}, priority, uptimes and ${model.procs.length ? "procs" : "cooldowns"}.`
-              : "General review: damage, healing, GCD usage, idle time and abilities, for any class."}
-            {player && player.spells.length > 0 && ` ${player.name} cast ${player.spells.length} different spells.`}
+              ? `${model.label}: se valora por ${METRIC_LABELS[model.metric].toLowerCase()}, prioridad, tiempos activos y ${model.procs.length ? "procs" : "reutilizaciones"}.`
+              : "Análisis general: daño, sanación, uso del GCD, tiempo inactivo y habilidades, para cualquier clase."}
+            {player && player.spells.length > 0 && ` ${player.name} lanzó ${player.spells.length} hechizos distintos.`}
           </p>
           {phase.step === "scanned" && (
             <button type="button" className="btn btn-primary" onClick={() => startAnalyze(scan)}>
-              Find fights
+              Buscar combates
             </button>
           )}
-          {phase.step === "analyzing" && <Progress label="Splitting fights and scoring" pct={phase.pct} />}
+          {phase.step === "analyzing" && <Progress label="Separando combates y puntuando" pct={phase.pct} />}
         </section>
       )}
 
       {(phase.step === "review" || phase.step === "uploading") && (
         <section className="panel space-y-4 p-4 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-lg font-semibold text-gold">3. Pick fights to keep</h2>
+            <h2 className="text-lg font-semibold text-gold">3. Elige qué combates guardar</h2>
             <button
               type="button"
               className="btn btn-ghost btn-sm"
@@ -312,7 +312,7 @@ export function VigilUploadFlow({
                 setSelected(selected.size === phase.reports.length ? new Set() : new Set(phase.reports.map((_, i) => i)))
               }
             >
-              {selected.size === phase.reports.length ? "Select none" : "Select all"}
+              {selected.size === phase.reports.length ? "No seleccionar ninguno" : "Seleccionar todos"}
             </button>
           </div>
           <ul className="divide-y divide-line" data-testid="vigil-fights">
@@ -333,9 +333,9 @@ export function VigilUploadFlow({
                   <span className="min-w-0 flex-1">
                     <span className="block font-semibold text-bone">{r.fight.label}</span>
                     <span className="block text-xs text-muted">
-                      {r.fight.kind === "boss" ? "Boss" : "Trash"}, {formatDuration(r.fight.durationMs)},{" "}
-                      {new Date(r.fight.startedAt).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
-                      {r.estimate && `, ${formatPct(r.estimate.efficiency)} of estimate`}
+                      {r.fight.kind === "boss" ? "Jefe" : "Bichos"}, {formatDuration(r.fight.durationMs)},{" "}
+                      {new Date(r.fight.startedAt).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}
+                      {r.estimate && `, ${formatPct(r.estimate.efficiency)} de la estimación`}
                     </span>
                   </span>
                   <span
@@ -351,7 +351,7 @@ export function VigilUploadFlow({
             ))}
           </ul>
           <fieldset>
-            <legend className="field-label">Who can see these reports</legend>
+            <legend className="field-label">Quién puede ver estos informes</legend>
             <div className="flex flex-wrap gap-4 text-sm">
               {VISIBILITIES.map((v) => (
                 <label key={v} className="flex items-center gap-2">
@@ -363,17 +363,17 @@ export function VigilUploadFlow({
                     onChange={() => setVisibility(v)}
                     className="accent-[var(--color-gold)]"
                   />
-                  {v === "private" ? "Only me" : VISIBILITY_LABELS[v]}
+                  {v === "private" ? "Solo yo" : VISIBILITY_LABELS[v]}
                 </label>
               ))}
             </div>
-            <p className="mt-1 text-xs text-muted">Private reports are hidden from officers too. You can change this later.</p>
+            <p className="mt-1 text-xs text-muted">Los informes privados también se ocultan a los oficiales. Puedes cambiarlo más tarde.</p>
           </fieldset>
           {phase.step === "uploading" ? (
-            <Progress label={`Uploading ${phase.done} of ${phase.total}`} pct={phase.total ? phase.done / phase.total : 1} />
+            <Progress label={`Subiendo ${phase.done} de ${phase.total}`} pct={phase.total ? phase.done / phase.total : 1} />
           ) : (
             <button type="button" className="btn btn-primary" disabled={selected.size === 0} onClick={() => upload(phase.scan, phase.reports)}>
-              Upload {selected.size} {selected.size === 1 ? "report" : "reports"}
+              Subir {selected.size} {selected.size === 1 ? "informe" : "informes"}
             </button>
           )}
         </section>
@@ -381,7 +381,7 @@ export function VigilUploadFlow({
 
       {phase.step === "uploaded" && (
         <section className="panel space-y-3 p-4 sm:p-6" role="status">
-          <h2 className="text-lg font-semibold text-gold">Saved</h2>
+          <h2 className="text-lg font-semibold text-gold">Guardado</h2>
           <ul className="space-y-1 text-sm">
             {phase.ids.map((r) => (
               <li key={r.id}>
@@ -404,7 +404,7 @@ export function VigilUploadFlow({
             </ul>
           )}
           <Link href={guildHref(slug, "/vigil")} className="btn btn-ghost btn-sm">
-            My reports
+            Mis informes
           </Link>
         </section>
       )}
