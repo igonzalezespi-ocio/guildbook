@@ -23,7 +23,7 @@ export const readLegal = cache(async (doc: LegalDoc): Promise<LegalPage> => {
     String(applicationRetentionDays()),
   );
   const lines = raw.replace(/\r\n/g, "\n").split("\n");
-  let title = doc === "terms" ? "Terms of Service" : "Privacy Policy";
+  let title = doc === "terms" ? "Términos del servicio" : "Política de privacidad";
   let updated: string | null = null;
   while (lines.length && !lines[0]!.trim()) lines.shift();
   const heading = /^#\s+(.+)$/.exec(lines[0] ?? "");
@@ -32,7 +32,7 @@ export const readLegal = cache(async (doc: LegalDoc): Promise<LegalPage> => {
     lines.shift();
   }
   while (lines.length && !lines[0]!.trim()) lines.shift();
-  const stamp = /^Last updated:\s*(.+)$/i.exec(lines[0] ?? "");
+  const stamp = /^(?:Last updated|Última actualización):\s*(.+)$/i.exec(lines[0] ?? "");
   if (stamp) {
     updated = stamp[1]!.trim();
     lines.shift();

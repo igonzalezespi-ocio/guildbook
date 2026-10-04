@@ -67,7 +67,7 @@ export async function applyAction(slug: string, _prev: ActionResult | null, fd: 
     const application = await submitApplication(db, viewer.actor, formObject(fd));
     refresh();
     const name = fullName(application.characterName, application.characterSurname);
-    return `Application for ${name} submitted. An officer will review it soon.${guild.preset === "order" ? " Pax tecum." : ""}`;
+    return `Solicitud de ${name} enviada. Un oficial la revisará pronto.${guild.preset === "order" ? " Pax tecum." : ""}`;
   });
 }
 
@@ -86,7 +86,7 @@ export async function joinAsConfirmedMemberAction(
 ): Promise<ActionResult> {
   const result = await runAction(slug, async ({ guild, viewer }) => {
     const joined = await joinAsConfirmedMember(db, viewer.actor, formObject(fd), getBlizzardClient(), { invite });
-    return `Welcome to ${guild.name}. ${joined.characterName} joined as ${joined.rankName}.`;
+    return `Bienvenido a ${guild.name}. ${joined.characterName} entra como ${joined.rankName}.`;
   });
   if (!result.ok) return result;
   if (result.message) await setFlash(result.message);
@@ -101,7 +101,7 @@ export async function withdrawApplicationAction(
   return runAction(slug, async ({ viewer }) => {
     const application = await withdrawApplication(db, viewer.actor, applicationId);
     refresh();
-    return `Application for ${fullName(application.characterName, application.characterSurname)} withdrawn.`;
+    return `Solicitud de ${fullName(application.characterName, application.characterSurname)} retirada.`;
   });
 }
 
@@ -112,7 +112,7 @@ export async function createCharacterAction(
 ): Promise<ActionResult> {
   const result = await runAction(slug, async ({ viewer }) => {
     const created = await createCharacter(db, viewer.actor, characterFromForm(fd));
-    return created && `${fullName(created.name, created.surname)} added to your characters.`;
+    return created && `${fullName(created.name, created.surname)} añadido a tus personajes.`;
   });
   if (!result.ok) return result;
   if (result.message) await setFlash(result.message);
@@ -127,7 +127,7 @@ export async function updateCharacterAction(
 ): Promise<ActionResult> {
   const result = await runAction(slug, async ({ viewer }) => {
     const updated = await updateCharacter(db, viewer.actor, id, characterFromForm(fd));
-    return updated && `${fullName(updated.name, updated.surname)} saved.`;
+    return updated && `${fullName(updated.name, updated.surname)}: guardado.`;
   });
   if (!result.ok) return result;
   if (result.message) await setFlash(result.message);
@@ -138,7 +138,7 @@ export async function setMainCharacterAction(slug: string, id: string, _prev: Ac
   return runAction(slug, async ({ viewer }) => {
     const character = await setMainCharacter(db, viewer.actor, id);
     refresh();
-    return `${fullName(character.name, character.surname)} is now your main.`;
+    return `${fullName(character.name, character.surname)} ahora es tu personaje principal.`;
   });
 }
 
@@ -146,6 +146,6 @@ export async function archiveCharacterAction(slug: string, id: string, _prev: Ac
   return runAction(slug, async ({ viewer }) => {
     const character = await archiveCharacter(db, viewer.actor, id);
     refresh();
-    return `${fullName(character.name, character.surname)} archived.`;
+    return `${fullName(character.name, character.surname)} archivado.`;
   });
 }

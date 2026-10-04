@@ -20,10 +20,10 @@ export async function verifyGuildAction(slug: string, _prev: Prev): Promise<Acti
   return runAction(slug, async ({ viewer }) => {
     const { state, result } = await verifyGuild(db, viewer.actor, getBlizzardClient());
     refresh();
-    if (state === "verified" && result.verified) return "Your guild is verified.";
-    if (state === "verified") return `Still verified, but this check failed: ${result.message}`;
-    if (state === "failing") return `Verification check failed. The badge stays for now: ${result.message}`;
-    if (state === "lapsed") return `Verification removed: ${result.message}`;
+    if (state === "verified" && result.verified) return "Tu hermandad está verificada.";
+    if (state === "verified") return `Sigue verificada, pero esta comprobación ha fallado: ${result.message}`;
+    if (state === "failing") return `La comprobación de verificación ha fallado. De momento el sello se mantiene: ${result.message}`;
+    if (state === "lapsed") return `Verificación retirada: ${result.message}`;
     return result.message;
   });
 }
@@ -33,8 +33,8 @@ export async function claimGuildNameAction(slug: string, _prev: Prev): Promise<A
     const { name, renamedHolder } = await claimGuildName(db, viewer.actor, getBlizzardClient());
     refresh();
     return renamedHolder
-      ? `Your guild is now ${name} and verified. The unverified guild that held the name is now ${renamedHolder}.`
-      : `Your guild is now ${name} and verified.`;
+      ? `Tu hermandad ahora se llama ${name} y está verificada. La hermandad sin verificar que tenía el nombre ahora es ${renamedHolder}.`
+      : `Tu hermandad ahora se llama ${name} y está verificada.`;
   });
 }
 
@@ -58,6 +58,6 @@ export async function promoteGuildMasterAction(slug: string, _prev: Prev): Promi
   return runAction(slug, async ({ viewer }) => {
     const { characterName, rankName } = await promoteVerifiedGuildMaster(db, viewer.actor);
     refresh();
-    return `${characterName ?? "The Guild Master"} now holds the ${rankName} rank.`;
+    return `${characterName ?? "El maestro de la hermandad"} ahora tiene el rango ${rankName}.`;
   });
 }

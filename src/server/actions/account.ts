@@ -20,8 +20,8 @@ async function releaseDomains(domains: string[]) {
 
 export async function deleteAccountAction(_prev: ActionResult | null, fd: FormData): Promise<ActionResult> {
   const user = await getSessionUser();
-  if (!user) return { ok: false, error: "Sign in to delete your account." };
-  if (!deleteLimiter(user.id).ok) return { ok: false, error: "Too many attempts. Wait a few minutes and try again." };
+  if (!user) return { ok: false, error: "Inicia sesión para borrar tu cuenta." };
+  if (!deleteLimiter(user.id).ok) return { ok: false, error: "Demasiados intentos. Espera unos minutos y vuelve a intentarlo." };
   try {
     const result = await deleteUserAccount(db, user.id, String(fd.get("confirmName") ?? ""));
     await releaseDomains(result.releasedDomains);

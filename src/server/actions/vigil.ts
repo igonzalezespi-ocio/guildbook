@@ -39,7 +39,7 @@ export async function setVigilVisibilityAction(
     const report = await setVigilReportVisibility(db, viewer.actor, id, fd.get("visibility"));
     refresh();
     const label = VISIBILITY_LABELS[report.visibility];
-    return report.changed ? `${report.fightLabel} is now ${label.toLowerCase()}.` : `${report.fightLabel} is already ${label.toLowerCase()}.`;
+    return report.changed ? `${report.fightLabel} ahora es ${label.toLowerCase()}.` : `${report.fightLabel} ya era ${label.toLowerCase()}.`;
   });
 }
 
@@ -52,7 +52,7 @@ export async function setVigilDefaultVisibilityAction(
     const applyToExisting = fd.get("applyToExisting") === "on";
     await setVigilDefaultVisibility(db, viewer.actor, fd.get("visibility"), applyToExisting);
     refresh();
-    return applyToExisting ? "Default saved and applied to all your reports." : "Default saved for new reports.";
+    return applyToExisting ? "Valor predeterminado guardado y aplicado a todos tus informes." : "Valor predeterminado guardado para los informes nuevos.";
   });
 }
 
@@ -71,14 +71,14 @@ export async function revokeCompanionDeviceAction(slug: string, id: string, _pre
   return runAction(slug, async ({ viewer }) => {
     await revokeCompanionDevice(db, viewer.actor, id);
     refresh();
-    return "Companion revoked. It can no longer upload.";
+    return "App revocada. Ya no puede subir informes.";
   });
 }
 
 export async function deleteVigilReportAction(slug: string, id: string, _prev: ActionResult | null): Promise<ActionResult> {
   const result = await runAction(slug, async ({ viewer }) => {
     const report = await deleteVigilReport(db, viewer.actor, id);
-    return `Report for ${report.fightLabel} deleted.`;
+    return `Informe de ${report.fightLabel} borrado.`;
   });
   if (!result.ok) return result;
   if (result.message) await setFlash(result.message);

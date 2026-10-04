@@ -7,7 +7,7 @@ import { type ActionResult, runAction } from "@/server/action";
 import { addGuildDomain, type DomainDeps, removeGuildDomain, verifyGuildDomain } from "@/server/services/domains";
 import { DomainError } from "@/server/errors";
 import { getDomainProvider } from "@/server/vercel-domains";
-import { CLASS_INFO, DAYS_OF_WEEK, fullName, ROLE_LABELS } from "@/lib/game";
+import { CLASS_INFO, DAYS_OF_WEEK, fullName, RECRUITMENT_PRIORITY_LABELS, ROLE_LABELS } from "@/lib/game";
 import { reviewApplication } from "@/server/services/applications";
 import { updateConfirmedJoinSettings } from "@/server/services/confirmed-members";
 import {
@@ -42,10 +42,10 @@ export async function reviewApplicationAction(slug: string, _prev: Prev, fd: For
     const app = await reviewApplication(db, viewer.actor, obj(fd));
     refresh();
     const name = fullName(app.characterName, app.characterSurname);
-    const rank = app.rankName ? ` as ${app.rankName}` : "";
-    if (app.status === "accepted") return `${name} accepted${rank}.`;
-    if (app.status === "trial") return `${name} placed on trial${rank}.`;
-    return `Application from ${name} declined.`;
+    const rank = app.rankName ? ` como ${app.rankName}` : "";
+    if (app.status === "accepted") return `${name} aceptado${rank}.`;
+    if (app.status === "trial") return `${name} queda a prueba${rank}.`;
+    return `Solicitud de ${name} rechazada.`;
   });
 }
 
@@ -53,7 +53,7 @@ export async function assignRankAction(slug: string, _prev: Prev, fd: FormData):
   return runAction(slug, async ({ viewer }) => {
     const { characterName, rankName } = await assignRank(db, viewer.actor, obj(fd));
     refresh();
-    return characterName ? `${characterName} is now ${rankName}.` : `Rank changed to ${rankName}.`;
+    return characterName ? `${characterName} ahora es ${rankName}.` : `Rango cambiado a ${rankName}.`;
   });
 }
 
@@ -61,7 +61,7 @@ export async function removeMemberAction(slug: string, membershipId: string, _pr
   return runAction(slug, async ({ viewer }) => {
     const { characterName } = await removeMember(db, viewer.actor, membershipId);
     refresh();
-    return characterName ? `${characterName} removed from the guild.` : "Member removed from the guild.";
+    return characterName ? `${characterName} ya no está en la hermandad.` : "Miembro expulsado de la hermandad.";
   });
 }
 
@@ -69,7 +69,7 @@ export async function createRankAction(slug: string, _prev: Prev, fd: FormData):
   return runAction(slug, async ({ viewer }) => {
     await createRank(db, viewer.actor, obj(fd));
     refresh();
-    return "Rank created.";
+    return "Rango creado.";
   });
 }
 
@@ -77,7 +77,7 @@ export async function updateRankAction(slug: string, id: string, _prev: Prev, fd
   return runAction(slug, async ({ viewer }) => {
     await updateRank(db, viewer.actor, id, obj(fd));
     refresh();
-    return "Saved.";
+    return "Guardado.";
   });
 }
 
@@ -92,7 +92,7 @@ export async function deleteRankAction(slug: string, id: string, _prev: Prev): P
   return runAction(slug, async ({ viewer }) => {
     await deleteRank(db, viewer.actor, id);
     refresh();
-    return "Rank deleted.";
+    return "Rango borrado.";
   });
 }
 
@@ -100,7 +100,7 @@ export async function setRankDefaultsAction(slug: string, _prev: Prev, fd: FormD
   return runAction(slug, async ({ viewer }) => {
     await setRankDefaults(db, viewer.actor, obj(fd));
     refresh();
-    return "Saved.";
+    return "Guardado.";
   });
 }
 
@@ -108,7 +108,7 @@ export async function updateGuildSettingsAction(slug: string, _prev: Prev, fd: F
   return runAction(slug, async ({ viewer }) => {
     const { unverified } = await updateGuildSettings(db, viewer.actor, obj(fd));
     refresh();
-    return unverified ? "Guild settings saved. The guild's identity changed, so it is no longer verified." : "Guild settings saved.";
+    return unverified ? "Ajustes de la hermandad guardados. La identidad de la hermandad ha cambiado, así que ya no está verificada." : "Ajustes de la hermandad guardados.";
   });
 }
 
@@ -116,7 +116,7 @@ export async function updateConfirmedJoinSettingsAction(slug: string, _prev: Pre
   return runAction(slug, async ({ viewer }) => {
     const s = await updateConfirmedJoinSettings(db, viewer.actor, obj(fd));
     refresh();
-    return s.autoApproveInGuild ? "Members confirmed in game now join without review." : "Members confirmed in game now apply for review like everyone else.";
+    return s.autoApproveInGuild ? "Los miembros confirmados en el juego ahora entran sin revisión." : "Los miembros confirmados en el juego ahora envían solicitud para revisión, como todos.";
   });
 }
 
@@ -124,7 +124,7 @@ export async function updateContentAction(slug: string, _prev: Prev, fd: FormDat
   return runAction(slug, async ({ viewer }) => {
     const page = await updateContentPage(db, viewer.actor, obj(fd));
     refresh();
-    return `${page.title} saved.`;
+    return `${page.title}: guardado.`;
   });
 }
 
@@ -132,7 +132,7 @@ export async function saveScheduleSlotAction(slug: string, _prev: Prev, fd: Form
   return runAction(slug, async ({ viewer }) => {
     const slot = await saveScheduleSlot(db, viewer.actor, obj(fd));
     refresh();
-    return `${DAYS_OF_WEEK[slot.dayOfWeek]} ${slot.label} ${slot.created ? "added to" : "saved on"} the schedule.`;
+    return `${DAYS_OF_WEEK[slot.dayOfWeek]} ${slot.label}: ${slot.created ? "añadido al" : "guardado en el"} horario.`;
   });
 }
 
@@ -140,7 +140,7 @@ export async function deleteScheduleSlotAction(slug: string, id: string, _prev: 
   return runAction(slug, async ({ viewer }) => {
     await deleteScheduleSlot(db, viewer.actor, id);
     refresh();
-    return "Raid night deleted.";
+    return "Noche de banda borrada.";
   });
 }
 
@@ -148,7 +148,7 @@ export async function setRecruitmentNeedAction(slug: string, _prev: Prev, fd: Fo
   return runAction(slug, async ({ viewer }) => {
     const need = await setRecruitmentNeed(db, viewer.actor, obj(fd));
     refresh();
-    return `${CLASS_INFO[need.wowClass].label} ${ROLE_LABELS[need.role]} need set to ${need.priority}.`;
+    return `Necesidad de ${CLASS_INFO[need.wowClass].label} (${ROLE_LABELS[need.role]}): ${RECRUITMENT_PRIORITY_LABELS[need.priority]?.toLowerCase() ?? need.priority}.`;
   });
 }
 
@@ -156,7 +156,7 @@ export async function setRecruitmentOpenAction(slug: string, open: boolean, _pre
   return runAction(slug, async ({ viewer }) => {
     await setRecruitmentOpen(db, viewer.actor, open);
     refresh();
-    return open ? "Recruitment opened." : "Recruitment closed.";
+    return open ? "Reclutamiento abierto." : "Reclutamiento cerrado.";
   });
 }
 
@@ -164,7 +164,7 @@ export async function createInstanceAction(slug: string, _prev: Prev, fd: FormDa
   return runAction(slug, async ({ viewer }) => {
     await createInstance(db, viewer.actor, obj(fd));
     refresh();
-    return "Instance added.";
+    return "Instancia añadida.";
   });
 }
 
@@ -172,7 +172,7 @@ export async function createBossAction(slug: string, _prev: Prev, fd: FormData):
   return runAction(slug, async ({ viewer }) => {
     await createBoss(db, viewer.actor, obj(fd));
     refresh();
-    return "Boss added.";
+    return "Jefe añadido.";
   });
 }
 
@@ -180,7 +180,7 @@ export async function recordBossKillAction(slug: string, _prev: Prev, fd: FormDa
   return runAction(slug, async ({ guild, viewer }) => {
     const { bossName } = await recordBossKill(db, viewer.actor, obj(fd));
     refresh();
-    return `${bossName ?? "Boss"} kill recorded.${guild.preset === "order" ? " Deo gratias!" : ""}`;
+    return `Muerte de ${bossName ?? "jefe"} registrada.${guild.preset === "order" ? " Deo gratias!" : ""}`;
   });
 }
 
@@ -188,7 +188,7 @@ export async function deleteBossKillAction(slug: string, id: string, _prev: Prev
   return runAction(slug, async ({ viewer }) => {
     await deleteBossKill(db, viewer.actor, id);
     refresh();
-    return "Kill record deleted.";
+    return "Muerte de jefe borrada.";
   });
 }
 
@@ -196,7 +196,7 @@ export async function saveAddonAction(slug: string, _prev: Prev, fd: FormData): 
   return runAction(slug, async ({ viewer }) => {
     const addon = await saveAddon(db, viewer.actor, obj(fd));
     refresh();
-    return `${addon.name} ${addon.created ? "added" : "saved"}.`;
+    return `${addon.name}: ${addon.created ? "añadido" : "guardado"}.`;
   });
 }
 
@@ -204,7 +204,7 @@ export async function deleteAddonAction(slug: string, id: string, _prev: Prev): 
   return runAction(slug, async ({ viewer }) => {
     await deleteAddon(db, viewer.actor, id);
     refresh();
-    return "Addon deleted.";
+    return "Addon borrado.";
   });
 }
 
@@ -214,7 +214,7 @@ export async function addDomainAction(slug: string, _prev: Prev, fd: FormData): 
   return runAction(slug, async ({ viewer }) => {
     const domain = await addGuildDomain(db, viewer.actor, obj(fd), domainDeps());
     refresh();
-    return `${domain.domain} added. Add the DNS records below, then check verification.`;
+    return `${domain.domain} añadido. Añade los registros DNS de abajo y comprueba la verificación.`;
   });
 }
 
@@ -222,8 +222,8 @@ export async function verifyDomainAction(slug: string, id: string, _prev: Prev):
   return runAction(slug, async ({ viewer }) => {
     const domain = await verifyGuildDomain(db, viewer.actor, id, domainDeps());
     refresh();
-    if (domain.status !== "verified") throw new DomainError(`${domain.domain} is not verified yet. See the details above.`);
-    return `${domain.domain} is verified.`;
+    if (domain.status !== "verified") throw new DomainError(`${domain.domain} aún no está verificado. Mira los detalles de arriba.`);
+    return `${domain.domain} está verificado.`;
   });
 }
 
@@ -231,6 +231,6 @@ export async function removeDomainAction(slug: string, id: string, _prev: Prev):
   return runAction(slug, async ({ viewer }) => {
     await removeGuildDomain(db, viewer.actor, id, domainDeps());
     refresh();
-    return "Domain removed.";
+    return "Dominio quitado.";
   });
 }
