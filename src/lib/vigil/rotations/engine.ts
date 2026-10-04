@@ -5,6 +5,10 @@ import { DEFAULT_OFF_GCD, median, POWER, type FightMetrics } from "@/lib/combatl
 import type { CombatEvent } from "@/lib/combatlog/types";
 import type { AuraDef, Condition, LevelTable, PriorityRule, RotationModel, SpellDef } from "./types";
 
+/** Spanish wording for report text. Keys are the models' metric and aura group ids. */
+const METRIC_ES: Record<RotationModel["metric"], string> = { damage: "daño", threat: "amenaza", healing: "sanación" };
+const GROUP_LABELS: Record<string, string> = { seal: "sello", blessing: "bendición" };
+
 export function levelValue(table: LevelTable | undefined, level: number | null): number {
   if (!table || table.length === 0) return 0;
   if (level === null) return table[table.length - 1]![1];
@@ -480,7 +484,7 @@ export function uptimes(state: FightState): UptimeRow[] {
       if (def.scored && !state.facts.known.has(def.appliedBy ?? "") && covered === 0) continue;
       rows.push({
         key: def.key,
-        label: `${def.label} (targets)`,
+        label: `${def.label} (objetivos)`,
         on: "target",
         pct: total ? Math.min(1, covered / total) : 0,
         targetPct: def.targetUptime ?? 1,
@@ -495,7 +499,7 @@ export function uptimes(state: FightState): UptimeRow[] {
     const union = mergeIntervals(members.flatMap((d) => state.tracks.get(`${d.key}|${state.playerGuid}`)?.intervals ?? []));
     rows.push({
       key: group,
-      label: `Any ${group}`,
+      label: `Cualquier ${GROUP_LABELS[group] ?? group}`,
       on: "player",
       pct: Math.min(1, coverage(union, state.start, state.end) / duration),
       targetPct: 1,
@@ -747,9 +751,9 @@ export function replay(
     if (observed === 0 && sim === 0) continue;
     simCasts.push({ label: spell.label, actual: observed, simulated: sim });
     const per = perCast(key);
-    if (per === 0 && sim > 0) notes.push(`${spell.label} has no measured ${metric} per cast in this log, so it adds nothing.`);
+    if (per === 0 && sim > 0) notes.push(`${spell.label} no tiene ${METRIC_ES[metric]} medido por lanzamiento en este registro, así que no suma nada.`);
     const delta = (sim - observed) * per;
-    if (Math.round(delta) !== 0) gains.push({ label: `${spell.label} casts`, amount: Math.round(delta) });
+    if (Math.round(delta) !== 0) gains.push({ label: `Lanzamientos de ${spell.label}`, amount: Math.round(delta) });
     estimated += delta;
   }
 
@@ -758,7 +762,7 @@ export function replay(
   const perSwing = melee && swings ? value(melee) / swings : 0;
   if (extras.lostSwings > 0 && perSwing > 0) {
     const amount = extras.lostSwings * perSwing;
-    gains.push({ label: "Auto-attack continuity", amount: Math.round(amount) });
+    gains.push({ label: "Continuidad del ataque automático", amount: Math.round(amount) });
     estimated += amount;
   }
   if (extras.rageDump && facts.known.has("heroic-strike")) {
@@ -768,7 +772,7 @@ export function replay(
     const missed = extras.rageDump.opportunities - extras.rageDump.used;
     const amount = missed * Math.max(0, hsPer - perSwing);
     if (amount > 0) {
-      gains.push({ label: "Heroic Strike on high-rage swings", amount: Math.round(amount) });
+      gains.push({ label: "Heroic Strike en golpes con mucha ira", amount: Math.round(amount) });
       estimated += amount;
     }
   }
@@ -783,14 +787,14 @@ export function replay(
     gains: gains.slice(0, 20),
     simCasts,
     assumptions: [
-      "Estimate, not a simulation of your character: every global cooldown is used the moment it is free, following the priority list.",
-      `Global cooldown ${(gcdMs / 1000).toFixed(2)}s, taken from your fastest back-to-back casts.`,
-      `Average ${metric} per cast comes from this fight, or from the rest of the log for abilities you did not use here.`,
-      "Procs, mob movement, deaths and casts outside the priority list (taunts, heals, AoE) happen exactly as logged.",
+      "Es una estimación, no una simulación de tu personaje: cada tiempo de reutilización global se usa en cuanto queda libre, siguiendo la lista de prioridades.",
+      `Tiempo de reutilización global de ${(gcdMs / 1000).toFixed(2).replace(".", ",")} s, sacado de tus lanzamientos seguidos más rápidos.`,
+      `La media de ${METRIC_ES[metric]} por lanzamiento sale de este combate, o del resto del registro para las habilidades que no usaste aquí.`,
+      "Los procs, el movimiento de los enemigos, las muertes y los lanzamientos fuera de la lista de prioridades (provocaciones, sanaciones, AoE) ocurren tal cual se registraron.",
       resource
-        ? `${resource.powerType === POWER.rage ? "Rage" : "Resource"} arrives at your observed average rate for the fight.`
-        : "No resource data in the log (advanced logging off), so the replay never runs out of rage or mana.",
-      "The estimate is never lower than what you actually did.",
+        ? `${resource.powerType === POWER.rage ? "La ira" : "El recurso"} llega al ritmo medio que observamos en el combate.`
+        : "No hay datos de recursos en el registro (registro avanzado desactivado), así que la repetición nunca se queda sin ira ni maná.",
+      "La estimación nunca es menor que lo que hiciste de verdad.",
       ...model.assumptions,
       ...notes,
     ].slice(0, 20),

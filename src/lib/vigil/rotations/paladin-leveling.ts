@@ -29,7 +29,7 @@ const sealAuras: AuraDef[] = SEALS.map(([key, label]) => ({
  */
 export const paladinLeveling: RotationModel = {
   id: "paladin-leveling",
-  label: "Paladin (levelling)",
+  label: "Paladín (subiendo de nivel)",
   wowClass: "paladin",
   spec: null,
   role: "melee",
@@ -72,20 +72,20 @@ export const paladinLeveling: RotationModel = {
   priority: [
     {
       spell: "seal-of-righteousness",
-      label: "Seal up when no seal is active",
+      label: "Ponte un sello si no hay ninguno activo",
       when: [{ kind: "auraMissing", aura: "seal" }],
       accepts: SEALS.map(([key]) => key),
     },
-    { spell: "judgement", label: "Judgement on cooldown", when: [{ kind: "auraActive", aura: "seal" }] },
-    { spell: "holy-strike", label: "Holy Strike on cooldown" },
-    { spell: "crusader-strike", label: "Crusader Strike on cooldown" },
+    { spell: "judgement", label: "Judgement en cuanto se recargue", when: [{ kind: "auraActive", aura: "seal" }] },
+    { spell: "holy-strike", label: "Holy Strike en cuanto se recargue" },
+    { spell: "crusader-strike", label: "Crusader Strike en cuanto se recargue" },
   ],
   threat: { stanceMultiplier: 1, healingMultiplier: 0.5 },
   extras: ["swingContinuity", "sealCadence"],
   detect: ["seal-of-righteousness", "judgement", "holy-strike", "seal-of-the-crusader"],
   assumptions: [
-    "Any seal satisfies the seal step; Seal of Righteousness is the one whose uptime is scored.",
-    "Whether Judgement consumes the seal is read from the log (Forever keeps the seal; Classic removes it).",
-    "Lost auto-attacks are counted from gaps longer than one and a half median swing intervals.",
+    "Cualquier sello cumple el paso del sello; Seal of Righteousness es el que puntúa por tiempo activo.",
+    "Si Judgement consume el sello se lee del registro (Forever mantiene el sello; Classic lo quita).",
+    "Los ataques automáticos perdidos se cuentan a partir de huecos de más de una vez y media el intervalo medio entre golpes.",
   ],
 };

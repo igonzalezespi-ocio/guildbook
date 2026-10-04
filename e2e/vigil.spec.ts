@@ -15,7 +15,7 @@ test("upload a combat log, keep one fight, open the report and control who sees 
   await expect(main.getByTestId("vigil-log-info")).toContainText("Combat log version 22, build 12.1.5, advanced logging on");
   await expect(main.getByLabel("Player in the log")).toHaveAttribute("data-value", /^Player-/);
   await expect(main.getByLabel("Player in the log")).toHaveText("Tor (you)");
-  await expect(main.getByLabel("Rotation model")).toHaveText("Paladin (levelling)");
+  await expect(main.getByLabel("Rotation model")).toHaveText("Paladín (subiendo de nivel)");
   await expect(main.getByLabel("Your character")).toContainText("Tor Whitecross");
 
   await main.getByRole("button", { name: "Find fights" }).click();
@@ -32,9 +32,9 @@ test("upload a combat log, keep one fight, open the report and control who sees 
   const report = main.getByTestId("vigil-report");
   await expect(report.getByTestId("vigil-timeline")).toBeVisible();
   await expect(report.getByRole("heading", { name: "Estimate versus actual" })).toBeVisible();
-  await expect(report.getByText("Auto-attack continuity")).toBeVisible();
+  await expect(report.getByText("Continuidad del ataque automático")).toBeVisible();
   await expect(report.getByRole("heading", { name: "Priority adherence" })).toBeVisible();
-  await expect(report.getByText("Judgement on cooldown").first()).toBeVisible();
+  await expect(report.getByText("Judgement en cuanto se recargue").first()).toBeVisible();
   await expect(report.getByText("Seal of Righteousness").first()).toBeVisible();
   await expect(main.getByLabel("Who can see this report")).toHaveAttribute("data-value", "private");
 

@@ -110,7 +110,7 @@ export class LiveSession {
   get player(): LivePlayer | null {
     if (!this.playerGuid) return null;
     const p = this.scanner.player(this.playerGuid);
-    return { guid: this.playerGuid, name: p?.name ?? "Unknown", level: p?.level ?? null };
+    return { guid: this.playerGuid, name: p?.name ?? "Desconocido", level: p?.level ?? null };
   }
 
   /** The model in use: the override, or the best match for the spells the player has cast so far. */

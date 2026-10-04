@@ -43,7 +43,7 @@ describe("paladin levelling model", () => {
     expect(boar!.swings).toMatchObject({ medianIntervalMs: 2800, lostSwings: 3 });
     expect(boar!.activity.readyIdleMs).toBeGreaterThan(1000);
     expect(boar!.adherence).toMatchObject({ pct: 1, decisions: 5 });
-    expect(boar!.estimate!.gains.map((g) => g.label)).toContain("Auto-attack continuity");
+    expect(boar!.estimate!.gains.map((g) => g.label)).toContain("Continuidad del ataque automático");
     expect(boar!.estimate!.estimated).toBeGreaterThan(boar!.estimate!.actual);
   });
 
@@ -128,7 +128,7 @@ describe("generic report", () => {
     expect(r!.adherence).toBeNull();
     expect(r!.estimate).toBeNull();
     expect(r!.totals.damage).toBe(240);
-    expect(r!.score.parts.map((p) => p.label)).toEqual(["GCD usage"]);
+    expect(r!.score.parts.map((p) => p.label)).toEqual(["Uso del GCD"]);
     expect(() => fightReportSchema.parse(r)).not.toThrow();
   });
 });

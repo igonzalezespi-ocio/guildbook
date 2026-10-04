@@ -63,13 +63,13 @@ export function parseSigning(body: string | null): Record<"mac" | "windows", boo
 
 function classify(name: string): Pick<CompanionAsset, "platform" | "kind" | "primary"> {
   const lower = name.toLowerCase();
-  if (lower.endsWith(".blockmap")) return { platform: null, kind: "Update data", primary: false };
-  if (/^latest.*\.yml$/.test(lower)) return { platform: null, kind: "Update feed", primary: false };
-  if (lower.endsWith(".dmg")) return { platform: "mac", kind: "Disk image", primary: true };
-  if (lower.endsWith(".zip") && lower.includes("mac")) return { platform: "mac", kind: "Zip archive", primary: false };
-  if (lower.endsWith(".exe")) return { platform: "windows", kind: "Installer", primary: true };
+  if (lower.endsWith(".blockmap")) return { platform: null, kind: "Datos de actualización", primary: false };
+  if (/^latest.*\.yml$/.test(lower)) return { platform: null, kind: "Canal de actualizaciones", primary: false };
+  if (lower.endsWith(".dmg")) return { platform: "mac", kind: "Imagen de disco", primary: true };
+  if (lower.endsWith(".zip") && lower.includes("mac")) return { platform: "mac", kind: "Archivo zip", primary: false };
+  if (lower.endsWith(".exe")) return { platform: "windows", kind: "Instalador", primary: true };
   if (lower.endsWith(".appimage")) return { platform: "linux", kind: "AppImage", primary: true };
-  return { platform: null, kind: "File", primary: false };
+  return { platform: null, kind: "Archivo", primary: false };
 }
 
 const PLATFORM_ORDER: (CompanionPlatform | null)[] = ["mac", "windows", "linux", null];
