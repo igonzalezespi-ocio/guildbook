@@ -9,7 +9,7 @@ import { guildSocialMetadata } from "@/server/guild-metadata";
 import { getProgression } from "@/server/services/content";
 
 export async function generateMetadata({ params }: PageProps<"/[guild]/progression">): Promise<Metadata> {
-  return { title: "Progression", ...(await guildSocialMetadata((await params).guild, "progression")) };
+  return { title: "Progreso", ...(await guildSocialMetadata((await params).guild, "progression")) };
 }
 
 export default async function ProgressionPage({ params }: PageProps<"/[guild]/progression">) {
@@ -17,12 +17,12 @@ export default async function ProgressionPage({ params }: PageProps<"/[guild]/pr
   const guild = await getGuild(slug);
   const progression = await getProgression(db, guild.id);
   const factions = guild.faction ? [guild.faction] : FACTIONS;
-  const columnLabel = (f: Faction) => (guild.faction ? "First kill" : FACTION_LABELS[f]);
+  const columnLabel = (f: Faction) => (guild.faction ? "Primera muerte" : FACTION_LABELS[f]);
 
   return (
     <div>
-      <PageHeader title="Progression" eyebrow={guildWording(guild).progressionEyebrow} />
-      {progression.length === 0 && <EmptyState>No raids tracked yet.</EmptyState>}
+      <PageHeader title="Progreso" eyebrow={guildWording(guild).progressionEyebrow} />
+      {progression.length === 0 && <EmptyState>Aún no se sigue ninguna banda.</EmptyState>}
       <div className="grid gap-6 lg:grid-cols-2">
         {progression.map((instance) => {
           const firstKills = factions.map((f) => ({
@@ -49,7 +49,7 @@ export default async function ProgressionPage({ params }: PageProps<"/[guild]/pr
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-left text-xs tracking-wider text-gold-dim uppercase">
-                    <th className="pb-2 font-normal">Boss</th>
+                    <th className="pb-2 font-normal">Jefe</th>
                     {factions.map((f) => (
                       <th key={f} className="pb-2 text-right font-normal">
                         {columnLabel(f)}

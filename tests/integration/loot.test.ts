@@ -96,7 +96,7 @@ describe("permissions", () => {
 
     await expect(award(g, {})).resolves.toBeTruthy();
     await expect(awardLoot(db, g.knight, { item: "18203", characterId: g.cassian.id, response: "roll", awardedOn: "2026-12-10" })).rejects.toThrow(
-      /officer/,
+      /Oficial/,
     );
     const [entry] = await listLoot(db, g.marshal);
     await expect(reverseLoot(db, g.knight, { entryId: entry!.id, reason: "No" })).rejects.toBeInstanceOf(AuthorizationError);
@@ -137,13 +137,13 @@ describe("recording by hand", () => {
 
   it("requires a recipient unless the item was disenchanted or banked, and rejects unknown names and bad dates", async () => {
     const g = await setup();
-    await expect(award(g, { characterId: "" })).rejects.toThrow(/Choose who received the item/);
+    await expect(award(g, { characterId: "" })).rejects.toThrow(/Elige quién recibió el objeto/);
     await expect(award(g, { characterId: "", response: "disenchant" })).resolves.toMatchObject({ recipientName: null });
-    await expect(award(g, { item: "Sword of Nobody" })).rejects.toThrow(/No item called/);
-    await expect(award(g, { awardedOn: "2026-10-01" })).rejects.toThrow(/before World of Warcraft: Forever launched/);
-    await expect(award(g, { awardedOn: "2027-01-01" })).rejects.toThrow(/future/);
+    await expect(award(g, { item: "Sword of Nobody" })).rejects.toThrow(/ningún objeto llamado/);
+    await expect(award(g, { awardedOn: "2026-10-01" })).rejects.toThrow(/anterior al lanzamiento de World of Warcraft: Forever/);
+    await expect(award(g, { awardedOn: "2027-01-01" })).rejects.toThrow(/fecha futura/);
     const other = await setup();
-    await expect(award(g, { characterId: other.cassian.id })).rejects.toThrow(/Character not found/);
+    await expect(award(g, { characterId: other.cassian.id })).rejects.toThrow(/No se ha encontrado el personaje/);
   });
 
   it("names an ID-only item from Blizzard when configured, else as a placeholder", async () => {
@@ -167,8 +167,8 @@ describe("reversals", () => {
     expect(row!.reversal).toMatchObject({ reason: "Wrong rogue" });
     expect(await listRaidNights(db, g.squire)).toEqual([{ raidDate: "2026-12-10", items: 0, instances: [] }]);
 
-    await expect(reverseLoot(db, g.marshal, { entryId: id, reason: "Again" })).rejects.toThrow(/already been reversed/);
-    await expect(reverseLoot(db, g.marshal, { entryId: reversal.id, reason: "Undo" })).rejects.toThrow(/Only awards/);
+    await expect(reverseLoot(db, g.marshal, { entryId: id, reason: "Again" })).rejects.toThrow(/ya se anuló/);
+    await expect(reverseLoot(db, g.marshal, { entryId: reversal.id, reason: "Undo" })).rejects.toThrow(/Solo se pueden anular entregas/);
     await expect(reverseLoot(db, g.marshal, { entryId: id, reason: "" })).rejects.toThrow();
 
     const [copy] = await db.select().from(lootEntries).where(eq(lootEntries.id, reversal.id));
@@ -252,7 +252,7 @@ describe("imports", () => {
     const aliases = await db.select().from(lootNameAliases).where(eq(lootNameAliases.guildId, g.guild.guild.id));
     expect(aliases.map((a) => a.alias).sort()).toEqual(["cassian", "godfrey"]);
 
-    await expect(commitImport(db, g.marshal, { batchId })).rejects.toThrow(/already committed/);
+    await expect(commitImport(db, g.marshal, { batchId })).rejects.toThrow(/ya se confirmó/);
 
     // The same export again, and Gargul's TMB export of the same raid (same checksums), add nothing twice.
     const again = await previewImport(db, g.marshal, { raw: fixture("gargul.json") });
@@ -282,10 +282,10 @@ describe("imports", () => {
 
   it("rejects exports it can't read and discards drafts", async () => {
     const g = await setup();
-    await expect(previewImport(db, g.marshal, { raw: "hello" })).rejects.toThrow(/doesn't look like a Gargul or RCLootCouncil export/);
+    await expect(previewImport(db, g.marshal, { raw: "hello" })).rejects.toThrow(/no parece una exportación de Gargul ni de RCLootCouncil/);
     const { batchId } = await previewImport(db, g.marshal, { raw: fixture("rclc.json") });
     await discardImport(db, g.marshal, batchId);
-    await expect(getImportPreview(db, g.marshal, batchId)).rejects.toThrow(/discarded/);
+    await expect(getImportPreview(db, g.marshal, batchId)).rejects.toThrow(/se descartó/);
     vi.setSystemTime(new Date("2026-12-30T00:00:00Z"));
     expect(await purgeStaleLootDrafts(db)).toBeGreaterThanOrEqual(1);
   });
@@ -374,7 +374,7 @@ describe("item cache", () => {
 
   it("shows an Anniversary guild's loot with Anniversary item details and a TBC Wowhead link", async () => {
     const guild = await createGuild(db, { gameVersion: "anniversary", realmSlug: "dreamscythe", faction: "horde" });
-    const officer = await createMember(db, guild, "Officer");
+    const officer = await createMember(db, guild, "Oficial");
     await db.insert(wowItems).values([
       { gameVersion: "forever", itemId: 31002, name: "Era Name", nameSource: "import", icon: "era_icon", itemLevel: 60 },
       { gameVersion: "anniversary", itemId: 31002, name: "Anniversary Name", nameSource: "import", icon: "tbc_icon", itemLevel: 110 },

@@ -3,13 +3,13 @@ export type AddonIconName = (typeof ADDON_ICONS)[number];
 
 /** `field` is the tile's ground: crimson for the Order's own work, ink for common raiding addons. */
 export const ADDON_ICON_INFO: Record<AddonIconName, { label: string; field: "crimson" | "ink" }> = {
-  scroll: { label: "Scroll of assignments", field: "crimson" },
-  eye: { label: "Watchful eye", field: "crimson" },
-  bell: { label: "Compline bell", field: "crimson" },
-  meter: { label: "Damage meter", field: "ink" },
-  sigil: { label: "Warning sigil", field: "ink" },
-  scales: { label: "Scales of loot", field: "ink" },
-  quill: { label: "Quill and ink", field: "crimson" },
+  scroll: { label: "Pergamino de asignaciones", field: "crimson" },
+  eye: { label: "Ojo vigilante", field: "crimson" },
+  bell: { label: "Campana de completas", field: "crimson" },
+  meter: { label: "Medidor de daño", field: "ink" },
+  sigil: { label: "Sello de aviso", field: "ink" },
+  scales: { label: "Balanza del botín", field: "ink" },
+  quill: { label: "Pluma y tinta", field: "crimson" },
 };
 
 /** Used for addons with no mapping: every addon on the site is written by a member. */

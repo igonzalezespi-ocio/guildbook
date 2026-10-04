@@ -1,4 +1,4 @@
-import { type Tier, tierAtLeast, tierLevel } from "./tiers";
+import { type Tier, TIER_LABELS, tierAtLeast, tierLevel } from "./tiers";
 
 /**
  * Minimum tier for every protected action. This map is the single source of truth:
@@ -81,10 +81,10 @@ export function can(actor: Actor, action: Action): boolean {
 
 export function assertCan(actor: Actor, action: Action): asserts actor is Actor & { userId: string } {
   if (!actor.userId && (REQUIRES_USER.has(action) || POLICY[action] !== "public")) {
-    throw new AuthorizationError("You must sign in with Discord.", "unauthenticated");
+    throw new AuthorizationError("Tienes que iniciar sesión con Discord.", "unauthenticated");
   }
   if (!can(actor, action)) {
-    throw new AuthorizationError(`Requires ${POLICY[action]} permissions.`);
+    throw new AuthorizationError(`Necesitas permisos de ${TIER_LABELS[POLICY[action]]}.`);
   }
 }
 

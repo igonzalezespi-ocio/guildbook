@@ -11,7 +11,7 @@ import { guildHref } from "@/lib/paths";
 import { requireLootPage } from "@/server/loot-page";
 import { listLoot, listRaidNights } from "@/server/services/loot";
 
-export const metadata: Metadata = { title: "Loot" };
+export const metadata: Metadata = { title: "Botín" };
 
 function isResponse(v: unknown): v is LootResponse {
   return typeof v === "string" && (LOOT_RESPONSES as readonly string[]).includes(v);
@@ -27,21 +27,21 @@ export default async function LootPage({ params, searchParams }: PageProps<"/[gu
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Loot" eyebrow={guildWording(guild).lootEyebrow}>
-        Every item the raid has handed out, as recorded by the officers.
+      <PageHeader title="Botín" eyebrow={guildWording(guild).lootEyebrow}>
+        Cada objeto que ha repartido la banda, tal como lo han registrado los oficiales.
         {can(actor, "loot.award") && (
           <>
             {" "}
             <Link href={guildHref(slug, "/admin/loot")} className="text-gold hover:underline">
-              Record loot
+              Registrar botín
             </Link>
           </>
         )}
       </PageHeader>
 
-      <Panel title="Raid nights">
+      <Panel title="Noches de banda">
         {nights.length === 0 ? (
-          <EmptyState>No raid nights with loot yet.</EmptyState>
+          <EmptyState>Aún no hay noches de banda con botín.</EmptyState>
         ) : (
           <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {nights.map((n) => (
@@ -52,7 +52,7 @@ export default async function LootPage({ params, searchParams }: PageProps<"/[gu
                 >
                   <span className="font-semibold text-bone">{formatCalendarDate(n.raidDate)}</span>
                   <span className="block text-xs text-muted">
-                    {n.items} item{n.items === 1 ? "" : "s"}
+                    {n.items} objeto{n.items === 1 ? "" : "s"}
                     {n.instances.length > 0 && `, ${n.instances.join(", ")}`}
                   </span>
                 </Link>
@@ -63,11 +63,11 @@ export default async function LootPage({ params, searchParams }: PageProps<"/[gu
       </Panel>
 
       <Panel
-        title="All loot"
+        title="Todo el botín"
         actions={
-          <nav aria-label="Filter by reason" className="flex flex-wrap gap-1 text-xs">
+          <nav aria-label="Filtrar por motivo" className="flex flex-wrap gap-1 text-xs">
             <Link href={base} aria-current={response ? undefined : "page"} className="rounded border border-line px-2 py-1 text-muted hover:text-gold aria-[current=page]:border-gold aria-[current=page]:text-gold">
-              All
+              Todo
             </Link>
             {LOOT_RESPONSES.map((r) => (
               <Link
@@ -82,7 +82,7 @@ export default async function LootPage({ params, searchParams }: PageProps<"/[gu
           </nav>
         }
       >
-        <LootTable slug={slug} rows={rows} empty={response ? "No loot awarded for that reason yet." : undefined} />
+        <LootTable slug={slug} rows={rows} empty={response ? "Aún no se ha entregado botín por ese motivo." : undefined} />
       </Panel>
     </div>
   );

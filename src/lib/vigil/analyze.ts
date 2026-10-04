@@ -91,8 +91,8 @@ function analyzeFight(
   const guid = opts.playerGuid;
   const model = idx?.model ?? null;
   const notes: string[] = [];
-  if (!opts.header.version) notes.push("No COMBAT_LOG_VERSION header was found, so the retail line layout was assumed.");
-  if (!opts.header.advanced) notes.push("Advanced combat logging was off: rage, mana and positions are missing.");
+  if (!opts.header.version) notes.push("No se encontró la cabecera COMBAT_LOG_VERSION, así que se ha supuesto el formato de línea de retail.");
+  if (!opts.header.advanced) notes.push("El registro de combate avanzado estaba desactivado: faltan la ira, el maná y las posiciones.");
 
   const offGcd = new Set(DEFAULT_OFF_GCD);
   const nextSwing = new Set(["heroic strike", "cleave", "maul", "raptor strike"]);
@@ -135,16 +135,16 @@ function analyzeFight(
   const incomePerMs = resource && duration ? resource.gained / duration : 0;
 
   const parts: { label: string; value: number }[] = [];
-  if (estimate) parts.push({ label: "Output vs estimate", value: estimate.efficiency });
-  if (adh && adh.decisions >= 3) parts.push({ label: "Priority adherence", value: adh.pct });
-  if (idle) parts.push({ label: "Time on task", value: Math.max(0, 1 - idle.ms / duration) });
-  else parts.push({ label: "GCD usage", value: Math.min(1, metrics.activeMs / duration) });
+  if (estimate) parts.push({ label: "Rendimiento frente a la estimación", value: estimate.efficiency });
+  if (adh && adh.decisions >= 3) parts.push({ label: "Seguimiento de prioridades", value: adh.pct });
+  if (idle) parts.push({ label: "Tiempo en acción", value: Math.max(0, 1 - idle.ms / duration) });
+  else parts.push({ label: "Uso del GCD", value: Math.min(1, metrics.activeMs / duration) });
   const scored = ups.filter((u) => u.scored);
   if (scored.length) {
-    parts.push({ label: "Uptimes", value: scored.reduce((a, u) => a + Math.min(1, u.pct / (u.targetPct || 1)), 0) / scored.length });
+    parts.push({ label: "Tiempo activo de auras", value: scored.reduce((a, u) => a + Math.min(1, u.pct / (u.targetPct || 1)), 0) / scored.length });
   }
   const usableProcs = procs.filter((p) => p.usable > 0);
-  if (usableProcs.length) parts.push({ label: "Proc usage", value: usableProcs.reduce((a, p) => a + p.pct, 0) / usableProcs.length });
+  if (usableProcs.length) parts.push({ label: "Uso de procs", value: usableProcs.reduce((a, p) => a + p.pct, 0) / usableProcs.length });
   const overall = Math.round((parts.reduce((a, p) => a + p.value, 0) / Math.max(1, parts.length)) * 100);
 
   const report: FightReport = {

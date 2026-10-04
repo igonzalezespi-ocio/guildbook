@@ -26,8 +26,8 @@ export async function checkSlugAction(
   identity: { gameVersion?: string; realmSlug?: string; region?: string; faction?: string; ruleset?: string } = {},
 ): Promise<SlugAvailability> {
   const user = await getSessionUser();
-  if (!user) return { available: false, reason: "Sign in to check availability" };
-  if (!slugCheckLimiter(user.id).ok) return { available: false, reason: "Too many checks. Wait a moment." };
+  if (!user) return { available: false, reason: "Inicia sesión para comprobar la disponibilidad" };
+  if (!slugCheckLimiter(user.id).ok) return { available: false, reason: "Demasiadas comprobaciones. Espera un momento." };
   const gameVersion = oneOf(SUPPORTED_GUILD_VERSIONS, identity?.gameVersion);
   const realm = gameVersion ? findRealm(gameVersion, String(identity?.realmSlug ?? "")) : null;
   return checkSlugAvailability(db, String(slug ?? "").slice(0, 64), {
@@ -41,9 +41,9 @@ export async function checkSlugAction(
 
 export async function createGuildAction(_prev: ActionResult | null, fd: FormData): Promise<ActionResult> {
   const user = await getSessionUser();
-  if (!user) return { ok: false, error: "Sign in with Discord to create a guild." };
+  if (!user) return { ok: false, error: "Inicia sesión con Discord para crear una hermandad." };
   const limited = createLimiter(user.id);
-  if (!limited.ok) return { ok: false, error: `Too many attempts. Try again in ${limited.retryAfterS} seconds.` };
+  if (!limited.ok) return { ok: false, error: `Demasiados intentos. Vuelve a intentarlo en ${limited.retryAfterS} segundos.` };
 
   let slug: string;
   try {

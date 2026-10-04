@@ -12,7 +12,7 @@ const clip = (value: string | null | undefined, max: number) => (value ? value.s
 
 export async function submitSupportTicketAction(_prev: ActionResult | null, fd: FormData): Promise<ActionResult> {
   const user = await getSessionUser();
-  if (!user) return { ok: false, error: "Sign in with Discord to send a support request." };
+  if (!user) return { ok: false, error: "Inicia sesión con Discord para enviar una solicitud de soporte." };
 
   const h = await headers();
   const page = fd.get("page");

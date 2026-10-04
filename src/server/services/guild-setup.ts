@@ -120,7 +120,7 @@ async function saveSetupState(tx: Db, guild: GuildRow, next: GuildSetupState) {
 
 export async function setSetupStepSkipped(db: Db, actor: Actor, step: unknown, skipped: boolean) {
   assertCan(actor, "guild.settings");
-  if (!isSetupStepKey(step) || step === "publish") throw new DomainError("Unknown setup step.");
+  if (!isSetupStepKey(step) || step === "publish") throw new DomainError("Paso de configuración desconocido.");
   await db.transaction(async (tx) => {
     const guild = await loadGuild(tx, actor.guildId);
     const current = new Set(guild.setup.skipped ?? []);
@@ -158,7 +158,7 @@ export async function confirmRanks(db: Db, actor: Actor) {
   await db.transaction(async (tx) => {
     const guild = await loadGuild(tx, actor.guildId);
     if (guild.preset !== "order" && matchesOrderRanks(await listRanks(tx, guild.id))) {
-      throw new DomainError("These are the Order of Saint Michael's ranks. Use neutral defaults or edit them first.");
+      throw new DomainError("Estos son los rangos de la Order of Saint Michael. Usa los predeterminados neutros o edítalos primero.");
     }
     await saveSetupState(tx, guild, { ...guild.setup, ranksConfirmedAt: new Date().toISOString() });
     await recordAudit(tx, actor, { action: "rank.confirm", targetType: "guild", targetId: guild.id });
@@ -230,12 +230,12 @@ export async function replaceRankLadder(tx: Db, guildId: string, key: RankPreset
 }
 
 function assertNotOrder(guild: GuildRow) {
-  if (guild.preset === "order") throw new DomainError("The Order of Saint Michael keeps its own ranks and pages.");
+  if (guild.preset === "order") throw new DomainError("La Order of Saint Michael conserva sus propios rangos y páginas.");
 }
 
 export async function applyRankPreset(db: Db, actor: Actor, key: unknown) {
   assertCan(actor, "rank.manage");
-  if (!isRankPresetKey(key)) throw new DomainError("Choose a rank preset.");
+  if (!isRankPresetKey(key)) throw new DomainError("Elige una plantilla de rangos.");
   return db.transaction(async (tx) => {
     const guild = await loadGuild(tx, actor.guildId);
     assertNotOrder(guild);
@@ -291,7 +291,7 @@ export async function applyNeutralDefaults(db: Db, actor: Actor, key: unknown) {
   assertCan(actor, "guild.settings");
   assertCan(actor, "rank.manage");
   const presetKey = isRankPresetKey(key) ? key : null;
-  if (!presetKey) throw new DomainError("Choose a rank preset.");
+  if (!presetKey) throw new DomainError("Elige una plantilla de rangos.");
   return db.transaction(async (tx) => {
     const guild = await loadGuild(tx, actor.guildId);
     assertNotOrder(guild);
@@ -299,7 +299,7 @@ export async function applyNeutralDefaults(db: Db, actor: Actor, key: unknown) {
     const ranksResult = matchesOrderRanks(rankRows) ? await replaceRankLadder(tx, guild.id, presetKey) : null;
     const pagesResult = await replaceOrderPages(tx, actor, guild);
     if (!ranksResult && pagesResult.replaced.length === 0 && pagesResult.added.length === 0) {
-      throw new DomainError("This guild no longer has any of the Order's ranks or pages to replace.");
+      throw new DomainError("Esta hermandad ya no tiene rangos ni páginas de la Orden que sustituir.");
     }
     if (ranksResult) {
       await recordAudit(tx, actor, {
@@ -327,7 +327,7 @@ export async function publishGuild(db: Db, actor: Actor) {
     const guild = await loadGuild(tx, actor.guildId);
     if (guild.publishedAt) return { alreadyPublished: true };
     const summary = computeSetup(await loadSetupFacts(tx, guild), guild.setup);
-    if (!summary.canPublish) throw new DomainError(`Not ready to publish yet. ${summary.publishMissing.join(" ")}`);
+    if (!summary.canPublish) throw new DomainError(`Aún no se puede publicar. ${summary.publishMissing.join(" ")}`);
     await tx.update(guilds).set({ publishedAt: new Date() }).where(and(eq(guilds.id, guild.id), isNull(guilds.publishedAt)));
     await recordAudit(tx, actor, { action: "guild.publish", targetType: "guild", targetId: guild.id });
     return { alreadyPublished: false };

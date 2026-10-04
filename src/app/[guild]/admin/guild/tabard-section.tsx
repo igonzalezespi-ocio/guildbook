@@ -17,7 +17,7 @@ const ORDER_SIZES = [16, 32, 44, 80, 128, 176];
 function DiscordIconLink({ href }: { href: string }) {
   return (
     <a href={href} download className="btn btn-ghost btn-sm" data-testid="discord-icon-download">
-      Download Discord icon (512px PNG)
+      Descargar icono para Discord (PNG de 512 px)
     </a>
   );
 }
@@ -31,20 +31,20 @@ function ImportTabard({ slug, gameVersion }: { slug: string; gameVersion: GuildV
     <ActionForm action={importInGameTabardAction.bind(null, slug)} className="mb-6 rounded border border-line bg-ink/40 p-4" toast={false}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="max-w-prose">
-          <h3 className="font-display text-sm tracking-wide text-bone">Import your in-game tabard</h3>
+          <h3 className="font-display text-sm tracking-wide text-bone">Importa tu tabardo del juego</h3>
           <p className="mt-1 text-xs leading-relaxed text-muted" data-testid="tabard-import-note">
             {!supported
-              ? `Importing from ${VERSION_INFO[gameVersion].label} is coming soon. Design your tabard below for now.`
+              ? `La importación desde ${VERSION_INFO[gameVersion].label} llegará pronto. De momento, diseña tu tabardo abajo.`
               : !enabled
-              ? "Battle.net isn't connected on this site, so the tabard can't be read from the game. Design it below instead."
+              ? "Battle.net no está conectado en este sitio, así que no se puede leer el tabardo del juego. Diséñalo abajo."
               : preLaunch
-                ? "Importing opens once WoW: Forever characters exist. Until launch, design your tabard below; after it, one click copies the emblem and colours from your guild in game."
-                : "Copies the emblem and colours from your guild in game, using the Guild Master's linked Battle.net character. You can still adjust it afterwards."}
+                ? "La importación se abre cuando existan personajes de WoW: Forever. Hasta el lanzamiento, diseña tu tabardo abajo; después, con un clic se copian el emblema y los colores de tu hermandad del juego."
+                : "Copia el emblema y los colores de tu hermandad del juego usando el personaje de Battle.net vinculado del maestro de la hermandad. Después puedes seguir ajustándolo."}
           </p>
         </div>
         {enabled && (
-          <SubmitButton variant="ghost" size="sm" pendingLabel="Importing...">
-            Import from the game
+          <SubmitButton variant="ghost" size="sm" pendingLabel="Importando...">
+            Importar del juego
           </SubmitButton>
         )}
       </div>
@@ -63,11 +63,11 @@ export function TabardSection({ guild }: { guild: Guild }) {
 
   if (isOrderLook(guild)) {
     return (
-      <Panel title="Tabard and theme" actions={<Tag>Locked</Tag>}>
+      <Panel title="Tabardo y tema" actions={<Tag>Bloqueado</Tag>}>
         <div className="space-y-4 text-sm">
           <p className="leading-relaxed text-muted">
-            The Order of Saint Michael keeps its hand-drawn crest (a crimson banner, gold border and white cross pattee) and
-            its own crimson and gold theme. They are locked and exclusive to the Order, so there is nothing to change here.
+            La Order of Saint Michael conserva su escudo dibujado a mano (un estandarte carmesí, borde dorado y cruz patada blanca) y
+            su propio tema carmesí y dorado. Están bloqueados y son exclusivos de la Orden, así que aquí no hay nada que cambiar.
           </p>
           <div className="flex flex-wrap items-end gap-4 rounded border border-line bg-ink/40 p-3">
             {ORDER_SIZES.map((px) => (
@@ -84,11 +84,11 @@ export function TabardSection({ guild }: { guild: Guild }) {
 
   const look = guildLook(guild);
   return (
-    <Panel title="Tabard and theme" actions={<DiscordIconLink href={discordHref} />}>
+    <Panel title="Tabardo y tema" actions={<DiscordIconLink href={discordHref} />}>
       <p className="mb-5 text-sm leading-relaxed text-muted">
-        Recreate your in-game guild tabard with the same emblems and colours as the game, on a Guildbook banner. Its background colour becomes the site&apos;s primary accent, the border colour
-        its trim (headings, dividers, panel borders), and the emblem colour its highlights. Saving also regenerates the
-        favicon, app icons, link preview and Discord icon.
+        Recrea el tabardo de tu hermandad con los mismos emblemas y colores que en el juego, sobre un estandarte de Guildbook. Su color de fondo pasa a ser el acento principal del sitio, el color del borde
+        su ribete (títulos, separadores, bordes de paneles) y el color del emblema sus realces. Al guardar también se regeneran el
+        favicon, los iconos de la app, la vista previa de enlaces y el icono de Discord.
       </p>
       <ImportTabard slug={guild.slug} gameVersion={guild.gameVersion} />
       <TabardBuilder

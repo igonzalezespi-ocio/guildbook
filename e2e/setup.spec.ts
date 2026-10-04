@@ -12,9 +12,9 @@ async function signInOnApex(page: Page, discordId: string, name: string, callbac
   await page.context().clearCookies();
   await page.goto(`${APEX}/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   const form = page.getByTestId("test-login-other");
-  await form.getByPlaceholder("Discord ID").fill(discordId);
-  await form.getByPlaceholder("Name").fill(name);
-  await form.getByRole("button", { name: "Test sign in" }).click();
+  await form.getByPlaceholder("ID de Discord").fill(discordId);
+  await form.getByPlaceholder("Nombre").fill(name);
+  await form.getByRole("button", { name: "Entrar (prueba)" }).click();
   await page.waitForURL((url) => !url.pathname.startsWith("/login"));
 }
 
@@ -26,46 +26,46 @@ test.describe("Guild onboarding", () => {
     const site = guildOrigin(slug);
 
     await signInOnApex(page, `e2e-onboard-${suffix}`, `Founder ${suffix}`, "/create");
-    await page.getByLabel("Guild name").fill(name);
-    await page.getByLabel("Subdomain").fill(slug);
-    await expect(page.getByTestId("slug-status")).toHaveText("Available");
-    await page.getByLabel("Horde").check();
+    await page.getByLabel("Nombre de la hermandad").fill(name);
+    await page.getByLabel("Subdominio").fill(slug);
+    await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
+    await page.getByLabel("Horda").check();
     await page.getByLabel(/^Normal/).check();
-    await page.getByLabel(/public Guildbook directory/).check();
+    await page.getByLabel(/directorio público de Guildbook/).check();
     await page.getByRole("radio", { name: /^Social/ }).check();
-    await page.getByRole("button", { name: "Create guild" }).click();
+    await page.getByRole("button", { name: "Crear hermandad" }).click();
 
     await page.waitForURL(`${site}/admin/setup`);
-    await expect(page.getByRole("heading", { name: `Set up ${name}` })).toBeVisible();
-    await expect(page.getByTestId("setup-progress")).toHaveText("0 of 9 steps done");
+    await expect(page.getByRole("heading", { name: `Configura ${name}` })).toBeVisible();
+    await expect(page.getByTestId("setup-progress")).toHaveText("0 de 9 pasos hechos");
     await expect(page.getByTestId("neutral-defaults")).toHaveCount(0);
     await expect(page.getByTestId("publish-missing").getByRole("listitem")).toHaveCount(3);
-    await expect(page.getByRole("button", { name: "Publish guild" })).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Publicar hermandad" })).toBeDisabled();
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
 
     // Skipping a step can be undone.
     const lore = page.getByTestId("setup-step-lore");
-    await lore.getByRole("button", { name: "Skip for now" }).click();
+    await lore.getByRole("button", { name: "Omitir por ahora" }).click();
     await expect(lore).toHaveAttribute("data-status", "skipped");
-    await lore.getByRole("button", { name: "Undo skip" }).click();
+    await lore.getByRole("button", { name: "Deshacer omisión" }).click();
     await expect(lore).toHaveAttribute("data-status", "todo");
 
     // Ranks: keep the Social ladder chosen on the create form.
-    await expect(page.getByTestId("setup-step-ranks").getByText("Initiate", { exact: true }).first()).toBeVisible();
-    await page.getByRole("button", { name: "Keep these ranks" }).click();
+    await expect(page.getByTestId("setup-step-ranks").getByText("Iniciado", { exact: true }).first()).toBeVisible();
+    await page.getByRole("button", { name: "Mantener estos rangos" }).click();
     await expect(page.getByTestId("setup-step-ranks")).toHaveAttribute("data-status", "done");
 
     // Tabard: save the design as it is.
-    await page.getByTestId("setup-step-look").getByRole("link", { name: "Design tabard" }).click();
+    await page.getByTestId("setup-step-look").getByRole("link", { name: "Diseñar tabardo" }).click();
     await page.waitForURL(`${site}/admin/guild#tabard`);
-    await page.getByRole("button", { name: "Save tabard and theme" }).click();
-    await expect(page.getByText("Tabard and theme saved").first()).toBeVisible();
+    await page.getByRole("button", { name: "Guardar tabardo y tema" }).click();
+    await expect(page.getByText("Tabardo y tema guardados").first()).toBeVisible();
 
     // Charter: write our own.
     await page.goto(`${site}/admin/content/charter`);
-    await page.getByLabel("Body (Markdown)").fill("We raid on weekends and keep guild chat friendly.");
-    await page.getByRole("button", { name: "Save page" }).click();
-    await expect(page.getByText(/saved/i).first()).toBeVisible();
+    await page.getByLabel("Texto (Markdown)").fill("We raid on weekends and keep guild chat friendly.");
+    await page.getByRole("button", { name: "Guardar página" }).click();
+    await expect(page.getByText(/guardado/i).first()).toBeVisible();
 
     // A visitor can open the draft by link but can't apply yet, and the draft isn't in the directory.
     const visitor = await page.context().browser()!.newPage();
@@ -73,14 +73,14 @@ test.describe("Guild onboarding", () => {
     await expect(visitor.getByTestId("apply-draft")).toBeVisible();
     await visitor.goto(site);
     await expect(visitor.getByTestId("footer-opening-soon")).toBeVisible();
-    await expect(visitor.getByRole("link", { name: "Apply", exact: true })).toHaveCount(0);
+    await expect(visitor.getByRole("link", { name: "Únete", exact: true })).toHaveCount(0);
     await visitor.goto(`${APEX}/guilds`);
     await expect(visitor.getByTestId("directory").getByRole("link", { name })).toHaveCount(0);
 
     await page.goto(`${site}/admin/setup`);
     await expect(page.getByTestId("publish-missing")).toHaveCount(0);
-    await page.getByRole("button", { name: "Publish guild" }).click();
-    await expect(page.getByText("Your guild is published.").first()).toBeVisible();
+    await page.getByRole("button", { name: "Publicar hermandad" }).click();
+    await expect(page.getByText("Tu hermandad está publicada.").first()).toBeVisible();
     await expect(page.getByTestId("setup-step-publish")).toHaveAttribute("data-status", "done");
     await expect(page.getByTestId("draft-banner")).toHaveCount(0);
 
@@ -91,16 +91,16 @@ test.describe("Guild onboarding", () => {
     await visitor.goto(site);
     await expect(visitor.locator('meta[name="robots"]')).toHaveCount(0);
     await expect(visitor.getByTestId("footer-opening-soon")).toHaveCount(0);
-    await expect(visitor.getByRole("link", { name: "Apply", exact: true }).first()).toBeVisible();
+    await expect(visitor.getByRole("link", { name: "Únete", exact: true }).first()).toBeVisible();
     await visitor.close();
 
     // The checklist can be hidden from the admin home and reached again under Setup.
     await page.goto(`${site}/admin`);
-    await expect(page.getByRole("heading", { name: "Guild Admin" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Administración de la hermandad" })).toBeVisible();
     const card = page.getByTestId("setup-card");
-    await card.getByRole("button", { name: "Hide" }).click();
+    await card.getByRole("button", { name: "Ocultar" }).click();
     await expect(card).toHaveCount(0);
-    await page.getByRole("navigation", { name: "Admin" }).getByRole("link", { name: "Setup" }).click();
-    await expect(page.getByRole("heading", { name: `Set up ${name}` })).toBeVisible();
+    await page.getByRole("navigation", { name: "Administración" }).getByRole("link", { name: "Configuración" }).click();
+    await expect(page.getByRole("heading", { name: `Configura ${name}` })).toBeVisible();
   });
 });

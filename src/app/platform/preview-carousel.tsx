@@ -98,7 +98,7 @@ export function PreviewCarousel({ sites }: { sites: CarouselSite[] }) {
       </div>
 
       {sites.length > 1 && (
-        <div role="group" aria-label="Preview guild themes" className="mt-4 flex flex-wrap items-center justify-center gap-2">
+        <div role="group" aria-label="Ver temas de hermandad" className="mt-4 flex flex-wrap items-center justify-center gap-2">
           {sites.map((site, i) => (
             <button
               key={site.key}
@@ -121,14 +121,14 @@ export function PreviewCarousel({ sites }: { sites: CarouselSite[] }) {
                 <span className="h-1 w-1 rounded-full" style={{ backgroundColor: site.swatch.emblem }} />
               </span>
               <span className="sr-only sm:not-sr-only">{site.name}</span>
-              <span className="sr-only"> theme</span>
+              <span className="sr-only"> (tema)</span>
             </button>
           ))}
           {canRotate && (
             <button
               type="button"
               onClick={() => setStopped((s) => !s)}
-              aria-label={stopped ? "Play theme rotation" : "Pause theme rotation"}
+              aria-label={stopped ? "Reanudar la rotación de temas" : "Pausar la rotación de temas"}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-muted transition-colors hover:border-gold-dim hover:text-bone"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="h-3.5 w-3.5">

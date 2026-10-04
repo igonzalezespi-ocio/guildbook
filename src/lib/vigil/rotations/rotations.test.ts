@@ -43,7 +43,7 @@ describe("paladin levelling model", () => {
     expect(boar!.swings).toMatchObject({ medianIntervalMs: 2800, lostSwings: 3 });
     expect(boar!.activity.readyIdleMs).toBeGreaterThan(1000);
     expect(boar!.adherence).toMatchObject({ pct: 1, decisions: 5 });
-    expect(boar!.estimate!.gains.map((g) => g.label)).toContain("Auto-attack continuity");
+    expect(boar!.estimate!.gains.map((g) => g.label)).toContain("Continuidad del ataque automático");
     expect(boar!.estimate!.estimated).toBeGreaterThan(boar!.estimate!.actual);
   });
 
@@ -107,7 +107,7 @@ describe("protection warrior model", () => {
   it("labels the replay as an estimate and never goes below actual", () => {
     for (const r of [trash!, boss!]) {
       expect(r.estimate!.estimated).toBeGreaterThanOrEqual(r.estimate!.actual);
-      expect(r.estimate!.assumptions[0]).toMatch(/^Estimate/);
+      expect(r.estimate!.assumptions[0]).toMatch(/^Es una estimación/);
       expect(r.score.overall).toBeGreaterThan(0);
       expect(r.score.overall).toBeLessThanOrEqual(100);
     }
@@ -128,7 +128,7 @@ describe("generic report", () => {
     expect(r!.adherence).toBeNull();
     expect(r!.estimate).toBeNull();
     expect(r!.totals.damage).toBe(240);
-    expect(r!.score.parts.map((p) => p.label)).toEqual(["GCD usage"]);
+    expect(r!.score.parts.map((p) => p.label)).toEqual(["Uso del GCD"]);
     expect(() => fightReportSchema.parse(r)).not.toThrow();
   });
 });

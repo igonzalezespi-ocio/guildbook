@@ -22,9 +22,9 @@ export async function unlinkBattlenetAction(slug: string, _prev: Prev): Promise<
     const { battletag, charactersUnverified } = await unlinkBattlenet(db, viewer.actor);
     refresh();
     const lapsed = charactersUnverified
-      ? ` ${charactersUnverified} ${charactersUnverified === 1 ? "character is" : "characters are"} now unverified.`
+      ? ` ${charactersUnverified} ${charactersUnverified === 1 ? "personaje queda" : "personajes quedan"} sin verificar.`
       : "";
-    return `Battle.net account ${battletag} unlinked.${lapsed}`;
+    return `Cuenta de Battle.net ${battletag} desvinculada.${lapsed}`;
   });
 }
 
@@ -43,7 +43,7 @@ export async function importBattlenetCharacterAction(slug: string, _prev: Prev, 
     const { character, created } = await importBattlenetCharacter(db, viewer.actor, Object.fromEntries(fd.entries()), undefined, getBlizzardClient());
     await recheckAdminStanding(db, viewer.actor, getBlizzardClient());
     refresh();
-    return `${fullName(character.name, character.surname)} ${created ? "imported from Battle.net" : "verified via Battle.net"}.`;
+    return `${fullName(character.name, character.surname)} ${created ? "importado desde Battle.net" : "verificado con Battle.net"}.`;
   });
 }
 
@@ -51,9 +51,9 @@ export async function syncCharactersAction(slug: string, _prev: Prev): Promise<A
   return runAction(slug, async ({ viewer }) => {
     const s = await syncGuildCharacters(db, viewer.actor, getBlizzardClient());
     refresh();
-    if (s.checked === 0) return "No verified characters to sync.";
-    const parts = [`${s.updated} updated`, `${s.unchanged} unchanged`];
-    if (s.missing > 0) parts.push(`${s.missing} not found on Battle.net`);
-    return `Synced ${s.checked} verified ${s.checked === 1 ? "character" : "characters"}: ${parts.join(", ")}.`;
+    if (s.checked === 0) return "No hay personajes verificados que sincronizar.";
+    const parts = [`${s.updated} actualizados`, `${s.unchanged} sin cambios`];
+    if (s.missing > 0) parts.push(`${s.missing} no encontrados en Battle.net`);
+    return `${s.checked === 1 ? "Sincronizado 1 personaje verificado" : `Sincronizados ${s.checked} personajes verificados`}: ${parts.join(", ")}.`;
   });
 }

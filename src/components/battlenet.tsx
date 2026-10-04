@@ -16,7 +16,7 @@ export function battlenetLinkHref(slug: string, returnTo: string): string {
 export function LinkBattlenetButton({
   slug,
   returnTo,
-  children = "Link Battle.net",
+  children = "Vincular Battle.net",
   variant = "primary",
 }: {
   slug: string;
@@ -32,11 +32,11 @@ export function LinkBattlenetButton({
 }
 
 const NOTICES: Record<string, { tone: "ok" | "error"; text: string }> = {
-  linked: { tone: "ok", text: "Battle.net linked." },
-  denied: { tone: "error", text: "Battle.net authorization was cancelled." },
-  taken: { tone: "error", text: "That Battle.net account is already linked to another Discord account." },
-  error: { tone: "error", text: "We couldn't reach Battle.net. Please try again." },
-  unavailable: { tone: "error", text: "Battle.net linking isn't set up on this site yet." },
+  linked: { tone: "ok", text: "Battle.net vinculado." },
+  denied: { tone: "error", text: "Se canceló la autorización de Battle.net." },
+  taken: { tone: "error", text: "Esa cuenta de Battle.net ya está vinculada a otra cuenta de Discord." },
+  error: { tone: "error", text: "No hemos podido conectar con Battle.net. Inténtalo de nuevo." },
+  unavailable: { tone: "error", text: "La vinculación con Battle.net aún no está configurada en este sitio." },
 };
 
 /** Result of the OAuth round trip (`?bnet=`). */
@@ -74,24 +74,24 @@ export function BattlenetAccount({
         <p>
           Battle.net: <span className="font-semibold text-bone">{link.battletag}</span>
         </p>
-        <p className="text-xs text-muted">Characters read {formatDateTime(link.snapshotAt, timezone)}</p>
+        <p className="text-xs text-muted">Personajes leídos el {formatDateTime(link.snapshotAt, timezone)}</p>
       </div>
       <div className="flex flex-wrap items-start gap-2">
         {link.canRefresh ? (
           <ActionForm action={refreshBattlenetAction.bind(null, slug)}>
-            <SubmitButton variant="ghost" size="sm" pendingLabel="Refreshing…">
-              Refresh characters
+            <SubmitButton variant="ghost" size="sm" pendingLabel="Actualizando…">
+              Actualizar personajes
             </SubmitButton>
             <FormMessage className="mt-1" />
           </ActionForm>
         ) : (
           <LinkBattlenetButton slug={slug} returnTo={returnTo} variant="ghost">
-            Reconnect to refresh
+            Reconectar para actualizar
           </LinkBattlenetButton>
         )}
-        <ActionForm action={unlinkBattlenetAction.bind(null, slug)} confirm="Unlink your Battle.net account? Your characters stay, but they'll be unverified and stop syncing.">
-          <SubmitButton variant="ghost" size="sm" pendingLabel="Unlinking…">
-            Unlink
+        <ActionForm action={unlinkBattlenetAction.bind(null, slug)} confirm="¿Desvincular tu cuenta de Battle.net? Tus personajes se quedan, pero dejarán de estar verificados y de sincronizarse.">
+          <SubmitButton variant="ghost" size="sm" pendingLabel="Desvinculando…">
+            Desvincular
           </SubmitButton>
           <FormMessage className="mt-1" />
         </ActionForm>

@@ -9,16 +9,16 @@ test("roster names open the character page, which links main and alts", async ({
   await expect(page).toHaveURL(/\/roster\/[0-9a-f-]{36}$/);
   await expect(page).toHaveTitle("Tor Whitecross | Order of Saint Michael");
   await expect(main.getByRole("heading", { level: 1, name: "Tor Whitecross" })).toBeVisible();
-  await expect(main.getByText("Level 60 Holy Paladin", { exact: true })).toBeVisible();
-  await expect(main.getByText("Healer", { exact: true })).toBeVisible();
+  await expect(main.getByText("Paladín Sagrado de nivel 60", { exact: true })).toBeVisible();
+  await expect(main.getByText("Sanador", { exact: true })).toBeVisible();
   await expect(main.getByText("Grand Master", { exact: true })).toBeVisible();
-  await expect(main.getByText(/^Joined the Order/)).toBeVisible();
-  await expect(main.getByRole("heading", { name: "Professions" })).toBeVisible();
+  await expect(main.getByText(/^Se unió a la Orden/)).toBeVisible();
+  await expect(main.getByRole("heading", { name: "Profesiones" })).toBeVisible();
 
   await main.getByRole("link", { name: "Raphael Whitecross", exact: true }).click();
   await expect(main.getByRole("heading", { level: 1, name: "Raphael Whitecross" })).toBeVisible();
-  await expect(main.getByText("Level 42 Frost Mage", { exact: true })).toBeVisible();
-  await expect(main.getByText("Alt character", { exact: true })).toBeVisible();
+  await expect(main.getByText("Mago Escarcha de nivel 42", { exact: true })).toBeVisible();
+  await expect(main.getByText("Personaje alter", { exact: true })).toBeVisible();
   await expect(main.getByRole("link", { name: "Tor Whitecross", exact: true })).toBeVisible();
 });
 
@@ -31,7 +31,7 @@ test("alt names on the roster link to the alt's page", async ({ page }) => {
 
 test("rank insignia gradient IDs stay unique across client navigations", async ({ page }) => {
   await signIn(page, "seed-tor", "Tor", "/");
-  await page.getByRole("contentinfo").getByRole("link", { name: "Roster", exact: true }).click();
+  await page.getByRole("contentinfo").getByRole("link", { name: "Plantilla", exact: true }).click();
   await expect(page).toHaveURL(/\/roster$/);
   await page.getByRole("main").getByRole("link", { name: "Tor Whitecross", exact: true }).click();
   await expect(page.getByRole("main").getByText("Grand Master", { exact: true })).toBeVisible();

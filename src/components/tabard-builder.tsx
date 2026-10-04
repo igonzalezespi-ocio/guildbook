@@ -28,9 +28,9 @@ import type { ActionResult } from "@/server/action-types";
 
 const PREVIEW_SIZES = [16, 32, 44, 80, 128, 176];
 const ROLE_NAMES: Record<Role, { label: string; from: string }> = {
-  primary: { label: "Primary", from: "background" },
-  trim: { label: "Trim", from: "border" },
-  highlight: { label: "Highlight", from: "emblem" },
+  primary: { label: "Principal", from: "fondo" },
+  trim: { label: "Ribete", from: "borde" },
+  highlight: { label: "Realce", from: "emblema" },
 };
 
 function SwatchGrid({ label, swatches, value, onChange }: { label: string; swatches: readonly Swatch[]; value: number; onChange: (id: number) => void }) {
@@ -103,20 +103,20 @@ function EmblemPicker({ tabard, onChange }: { tabard: TabardConfig; onChange: (e
   return (
     <fieldset>
       <legend className="field-label">
-        Emblem <span className="font-normal tracking-normal text-muted normal-case">{crestEmblem(selected)?.name}</span>
+        Emblema <span className="font-normal tracking-normal text-muted normal-case">{crestEmblem(selected)?.name}</span>
       </legend>
       <TintFilter id={filter} hex={c.emblem} />
       <input
         type="search"
         className="field mb-2"
-        placeholder="Search emblems: lion, skull, wolf..."
-        aria-label="Search emblems"
+        placeholder="Busca emblemas: león, calavera, lobo..."
+        aria-label="Buscar emblemas"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
       <div
         role="radiogroup"
-        aria-label="Emblem"
+        aria-label="Emblema"
         onKeyDown={onRadioKeys}
         className="grid max-h-80 grid-cols-5 gap-1.5 overflow-y-auto pr-1 sm:grid-cols-7 @3xl:grid-cols-6 @5xl:grid-cols-8"
       >
@@ -141,10 +141,10 @@ function EmblemPicker({ tabard, onChange }: { tabard: TabardConfig; onChange: (e
             </button>
           );
         })}
-        {shown.length === 0 && <p className="col-span-full py-4 text-center text-sm text-muted italic">No emblem matches.</p>}
+        {shown.length === 0 && <p className="col-span-full py-4 text-center text-sm text-muted italic">Ningún emblema coincide.</p>}
       </div>
       <p className="mt-1.5 text-xs text-muted">
-        {CREST_EMBLEMS.length} emblems from the in-game tabard designer. Use the arrow keys to move through them.
+        {CREST_EMBLEMS.length} emblemas del diseñador de tabardos del juego. Usa las flechas para moverte por ellos.
       </p>
     </fieldset>
   );
@@ -155,13 +155,13 @@ function SamplePage({ tabard, name, motto }: { tabard: TabardConfig; name: strin
     <div className="tabard-preview overflow-hidden rounded border border-line" data-testid="theme-preview">
       <div className="flex items-center justify-between gap-3 border-b border-line bg-ink/90 px-3 py-2">
         <span className="flex min-w-0 items-center gap-2">
-          <TabardCrest tabard={tabard} label={`${name} tabard`} className="h-10 w-8 shrink-0" />
+          <TabardCrest tabard={tabard} label={`Tabardo de ${name}`} className="h-10 w-8 shrink-0" />
           <span className="truncate font-display text-sm font-bold tracking-widest text-gold uppercase">{name}</span>
         </span>
         <span className="hidden items-center gap-4 font-display text-xs tracking-wider sm:flex">
-          <span className="border-b border-gold py-1 text-gold">Charter</span>
-          <span className="py-1 text-bone">Roster</span>
-          <span className="btn btn-primary btn-sm">Apply</span>
+          <span className="border-b border-gold py-1 text-gold">Reglamento</span>
+          <span className="py-1 text-bone">Plantilla</span>
+          <span className="btn btn-primary btn-sm">Únete</span>
         </span>
       </div>
       <div className="space-y-4 p-4">
@@ -173,21 +173,21 @@ function SamplePage({ tabard, name, motto }: { tabard: TabardConfig; name: strin
           <hr className="rule-gold mx-auto mt-3 w-40" />
           <div className="mt-4 flex flex-wrap justify-center gap-2">
             <span className="btn btn-primary" data-testid="preview-primary-button">
-              Apply to join
+              Solicitar ingreso
             </span>
-            <span className="btn btn-ghost">Read the Charter</span>
+            <span className="btn btn-ghost">Leer el reglamento</span>
           </div>
         </div>
         <section className="panel p-4">
-          <h2 className="mb-2 text-lg font-semibold text-gold">Raid Schedule</h2>
+          <h2 className="mb-2 text-lg font-semibold text-gold">Horario de bandas</h2>
           <p className="text-sm text-bone/90">
-            Tuesday and Thursday, 8 to 11 pm. <strong className="text-highlight">Bring flasks.</strong> Officers post
-            assignments the night before.
+            Martes y jueves, de 20:00 a 23:00. <strong className="text-highlight">Trae frascos.</strong> Los oficiales
+            publican las asignaciones la noche anterior.
           </p>
           <p className="mt-2 flex items-center gap-2 text-sm text-muted">
-            <VerifiedMark decorative size={16} /> Verified via Battle.net
+            <VerifiedMark decorative size={16} /> Verificado con Battle.net
             <span className="text-highlight">★</span>
-            <span className="link">See the roster</span>
+            <span className="link">Ver la plantilla</span>
           </p>
         </section>
       </div>
@@ -199,16 +199,16 @@ function ContrastTable({ theme }: { theme: ReturnType<typeof computeTheme> }) {
   const page = BASE_STYLES[theme.base].surfaces.ink;
   const rows = [
     ...ROLES.map((r) => ({ label: ROLE_NAMES[r].label, value: theme.roles[r].value, against: page, source: theme.roles[r].source })),
-    { label: "Button text", value: theme.onPrimary, against: theme.primaryFill.value, source: theme.primaryFill.source },
+    { label: "Texto de botón", value: theme.onPrimary, against: theme.primaryFill.value, source: theme.primaryFill.source },
   ];
   return (
     <table className="w-full text-left text-xs">
       <thead className="text-gold-dim">
         <tr>
-          <th className="py-1 font-normal">Role</th>
-          <th className="py-1 font-normal">Tabard</th>
-          <th className="py-1 font-normal">On site</th>
-          <th className="py-1 text-right font-normal">Contrast</th>
+          <th className="py-1 font-normal">Uso</th>
+          <th className="py-1 font-normal">Tabardo</th>
+          <th className="py-1 font-normal">En el sitio</th>
+          <th className="py-1 text-right font-normal">Contraste</th>
         </tr>
       </thead>
       <tbody>
@@ -267,20 +267,20 @@ export function TabardBuilder({
 
       <div className="grid gap-6 @3xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div className="space-y-5">
-          <SwatchGrid label="Background colour" swatches={BACKGROUND_COLORS} value={tabard.background} onChange={(background) => set({ background })} />
+          <SwatchGrid label="Color de fondo" swatches={BACKGROUND_COLORS} value={tabard.background} onChange={(background) => set({ background })} />
           <EmblemPicker tabard={tabard} onChange={(emblemId) => set({ emblemId })} />
-          <SwatchGrid label="Emblem colour" swatches={EMBLEM_COLORS} value={tabard.emblemColor} onChange={(emblemColor) => set({ emblemColor })} />
-          <SwatchGrid label="Border colour" swatches={BORDER_COLORS} value={tabard.border} onChange={(border) => set({ border })} />
+          <SwatchGrid label="Color del emblema" swatches={EMBLEM_COLORS} value={tabard.emblemColor} onChange={(emblemColor) => set({ emblemColor })} />
+          <SwatchGrid label="Color del borde" swatches={BORDER_COLORS} value={tabard.border} onChange={(border) => set({ border })} />
         </div>
 
         <div className="space-y-5">
           <div>
-            <p className="field-label">Crest preview</p>
+            <p className="field-label">Vista previa del escudo</p>
             <div className="flex flex-wrap items-end gap-4 rounded border border-line bg-ink/40 p-3" data-testid="crest-preview">
               {PREVIEW_SIZES.map((px) => (
                 <figure key={px} className="flex flex-col items-center gap-1">
                   <span className="inline-flex" style={{ width: px, height: px * 1.2 }}>
-                    <TabardCrest tabard={tabard} label={`Tabard at ${px} pixels`} className="h-full w-full" />
+                    <TabardCrest tabard={tabard} label={`Tabardo a ${px} píxeles`} className="h-full w-full" />
                   </span>
                   <figcaption className="text-[0.65rem] text-muted">{px}px</figcaption>
                 </figure>
@@ -303,8 +303,8 @@ export function TabardBuilder({
       </div>
 
       <fieldset>
-        <legend className="field-label">Base style</legend>
-        <div role="radiogroup" aria-label="Base style" className="grid gap-2 @lg:grid-cols-3">
+        <legend className="field-label">Estilo base</legend>
+        <div role="radiogroup" aria-label="Estilo base" className="grid gap-2 @lg:grid-cols-3">
           {SELECTABLE_BASE_IDS.map((id) => {
             const b = BASE_STYLES[id];
             return (
@@ -331,20 +331,21 @@ export function TabardBuilder({
 
       <div className="grid gap-6 @3xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div className="space-y-2">
-          <p className="field-label">Sample page</p>
+          <p className="field-label">Página de ejemplo</p>
           <SamplePage tabard={tabard} name={guild.name} motto={guild.motto} />
         </div>
         <div className="space-y-4">
           <div>
-            <p className="field-label">Site colours</p>
+            <p className="field-label">Colores del sitio</p>
             <p className="mb-2 text-xs text-muted">
-              Tabard colours are adjusted in lightness (hue kept) until text meets WCAG AA ({AA_TEXT}:1) on the page.
+              Los colores del tabardo se ajustan en luminosidad (manteniendo el tono) hasta que el texto cumple WCAG AA
+              ({AA_TEXT}:1) en la página.
             </p>
             <ContrastTable theme={theme} />
           </div>
           <fieldset className="space-y-2">
-            <legend className="field-label">Site colour overrides</legend>
-            <p className="text-xs text-muted">Optional. They change the website only; the crest keeps the tabard colours.</p>
+            <legend className="field-label">Colores del sitio a mano</legend>
+            <p className="text-xs text-muted">Opcional. Solo cambian la web; el escudo conserva los colores del tabardo.</p>
             {ROLES.map((r) => {
               const on = overrides[r] !== undefined;
               return (
@@ -363,12 +364,12 @@ export function TabardBuilder({
                         })
                       }
                     />
-                    {ROLE_NAMES[r].label} <span className="text-xs text-muted">(from {ROLE_NAMES[r].from})</span>
+                    {ROLE_NAMES[r].label} <span className="text-xs text-muted">(del {ROLE_NAMES[r].from})</span>
                   </label>
                   {on && (
                     <input
                       type="color"
-                      aria-label={`${ROLE_NAMES[r].label} override`}
+                      aria-label={`${ROLE_NAMES[r].label}: color a mano`}
                       className="h-8 w-12 cursor-pointer rounded border border-line bg-transparent"
                       value={overrides[r]}
                       onChange={(e) => setOverrides((o) => ({ ...o, [r]: e.target.value }))}
@@ -382,7 +383,7 @@ export function TabardBuilder({
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <SubmitButton>Save tabard and theme</SubmitButton>
+        <SubmitButton>Guardar tabardo y tema</SubmitButton>
         <FormMessage />
       </div>
     </ActionForm>

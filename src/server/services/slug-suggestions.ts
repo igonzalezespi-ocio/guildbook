@@ -51,6 +51,6 @@ export async function relocationSlug(db: Db, base: string, moved: SlugIdentity, 
   const candidates = distinguishingSlugs(base, moved, claimer);
   const taken = await takenSlugs(db, candidates);
   const free = candidates.find((s) => !taken.has(s)) ?? (await firstFreeNumbered(db, base));
-  if (!free) throw new DomainError("Couldn't find a free subdomain for the unverified guild. Please contact the Guildbook team.");
+  if (!free) throw new DomainError("No se ha encontrado un subdominio libre para la hermandad sin verificar. Contacta con el equipo de Guildbook.");
   return free;
 }

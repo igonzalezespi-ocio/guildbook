@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActionForm, Field, FieldError, FormMessage, SubmitButton, useActionResult } from "@/components/action-form";
 import { ClassSpecFields } from "@/components/class-spec-fields";
 import type { BattlenetCharacterSnapshot } from "@/db/schema";
-import { CLASS_INFO } from "@/lib/game";
+import { CLASS_INFO, raceLabel } from "@/lib/game";
 import { type GuildVersion, hasSurnames, maxLevelFor } from "@/lib/game-versions";
 import { scrollIntoViewGently, scrollToTop } from "@/lib/scroll";
 import type { ActionResult } from "@/server/action-types";
@@ -69,7 +69,7 @@ export function ApplicationForm({
       {selected ? (
         <>
           <fieldset>
-            <legend className="field-label">Choose your character</legend>
+            <legend className="field-label">Elige tu personaje</legend>
             <div className="grid gap-2 sm:grid-cols-2" role="radiogroup">
               {characters.map((c) => (
                 <label
@@ -92,7 +92,7 @@ export function ApplicationForm({
                       {c.name}
                     </span>
                     <span className="block text-xs text-muted">
-                      Level {c.level} {c.race} {CLASS_INFO[c.wowClass].label}
+                      {CLASS_INFO[c.wowClass].label} {raceLabel(c.race)} de nivel {c.level}
                     </span>
                     {c.guildName && <span className="block truncate text-xs text-gold-dim">&lt;{c.guildName}&gt;</span>}
                   </span>
@@ -103,14 +103,14 @@ export function ApplicationForm({
           </fieldset>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="First name" name="characterName">
+            <Field label="Nombre" name="characterName">
               <input id="characterName" className="field cursor-default opacity-90" value={selected.name} readOnly />
             </Field>
             {surnames && (
               <Field
-                label="Surname"
+                label="Apellido"
                 name="characterSurname"
-                hint={selected.surname ? undefined : "Battle.net doesn't provide surnames yet, so enter yours."}
+                hint={selected.surname ? undefined : "Battle.net aún no facilita apellidos, así que escribe el tuyo."}
               >
                 <input
                   key={selected.id}
@@ -125,15 +125,15 @@ export function ApplicationForm({
                 />
               </Field>
             )}
-            <Field label="Level" name="level">
+            <Field label="Nivel" name="level">
               <input id="level" className="field cursor-default opacity-90" value={selected.level} readOnly />
             </Field>
           </div>
           <ClassSpecFields key={selected.id} lockedClass={selected.wowClass} showFaction={false} />
           <p className="text-xs text-muted">
-            Name, level and class come from Battle.net.{" "}
+            El nombre, el nivel y la clase vienen de Battle.net.{" "}
             <button type="button" className="link" onClick={() => setManual(true)}>
-              My character isn&apos;t listed
+              Mi personaje no aparece
             </button>
           </p>
         </>
@@ -141,39 +141,39 @@ export function ApplicationForm({
         <>
           {characters.length > 0 && (
             <p className="text-xs text-muted">
-              Manually entered characters are marked Unverified for officers.{" "}
+              Los personajes añadidos a mano aparecen como «Sin verificar» para los oficiales.{" "}
               <button type="button" className="link" onClick={() => setManual(false)}>
-                Choose a Battle.net character instead
+                Elegir un personaje de Battle.net
               </button>
             </p>
           )}
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label={surnames ? "First name" : "Name"} name="characterName">
+            <Field label="Nombre" name="characterName">
               <input id="characterName" name="characterName" className="field" required maxLength={12} autoComplete="off" />
             </Field>
             {surnames && (
-              <Field label="Surname" name="characterSurname">
+              <Field label="Apellido" name="characterSurname">
                 <input id="characterSurname" name="characterSurname" className="field" required maxLength={12} autoComplete="off" />
               </Field>
             )}
           </div>
           <ClassSpecFields showFaction={showFaction} />
-          <Field label="Level" name="level">
+          <Field label="Nivel" name="level">
             <input id="level" name="level" type="number" min={1} max={maxLevel} defaultValue={maxLevel} className="field" required />
           </Field>
         </>
       )}
 
-      <Field label="Raid experience" name="raidExperience" hint="Which raids have you cleared, in which era, and in what role?">
+      <Field label="Experiencia en bandas" name="raidExperience" hint="¿Qué bandas has completado, en qué época y con qué rol?">
         <textarea id="raidExperience" name="raidExperience" className="field" required />
       </Field>
-      <Field label="Availability" name="availability" hint="Which nights and hours can you raid? Include your timezone.">
+      <Field label="Disponibilidad" name="availability" hint="¿Qué noches y horas puedes ir de banda? Indica tu zona horaria.">
         <textarea id="availability" name="availability" className="field" required />
       </Field>
-      <Field label={faithPledge ? `Why the ${guildName}?` : `Why ${guildName}?`} name="whyThisGuild">
+      <Field label={`¿Por qué ${guildName}?`} name="whyThisGuild">
         <textarea id="whyThisGuild" name="whyThisGuild" className="field" required />
       </Field>
-      <Field label="Discord handle" name="discordHandle">
+      <Field label="Usuario de Discord" name="discordHandle">
         <input id="discordHandle" name="discordHandle" className="field" required defaultValue={defaultDiscord} />
       </Field>
       <div>
@@ -181,13 +181,13 @@ export function ApplicationForm({
           <input type="checkbox" name="respectsFaith" className="mt-1 h-5 w-5 accent-crimson" required />
           <span>
             {faithPledge
-              ? "I have read the Charter. I will respect the Catholic faith of the Order and keep to its clean chat standard."
-              : "I have read the Charter and will keep to it."}
+              ? "He leído el Reglamento. Respetaré la fe católica de la Orden y cumpliré su norma de chat limpio."
+              : "He leído el Reglamento y lo cumpliré."}
           </span>
         </label>
       </div>
       <FormMessage />
-      <SubmitButton pendingLabel="Submitting…">Submit application</SubmitButton>
+      <SubmitButton pendingLabel="Enviando…">Enviar solicitud</SubmitButton>
     </ActionForm>
   );
 }

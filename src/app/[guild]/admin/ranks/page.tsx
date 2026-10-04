@@ -18,11 +18,11 @@ import {
 import { requirePage } from "@/server/context";
 import { listRanks } from "@/server/services/ranks";
 
-export const metadata: Metadata = { title: "Ranks" };
+export const metadata: Metadata = { title: "Rangos" };
 
 function InsigniaPicker({ value, tier, preset }: { value: string | null; tier: RankTier; preset: string }) {
   const options = [
-    { key: "", label: `Tier default (${INSIGNIA_INFO[DEFAULT_INSIGNIA_BY_TIER[tier]].label})`, insignia: DEFAULT_INSIGNIA_BY_TIER[tier] },
+    { key: "", label: `Por defecto del nivel (${INSIGNIA_INFO[DEFAULT_INSIGNIA_BY_TIER[tier]].label})`, insignia: DEFAULT_INSIGNIA_BY_TIER[tier] },
     ...INSIGNIA.map((key) => ({ key, label: INSIGNIA_INFO[key].label, insignia: key })),
   ];
   return (
@@ -55,13 +55,13 @@ function RankFields({
   return (
     <div className="space-y-3">
       <div className="grid gap-3 sm:grid-cols-[1fr_2fr_auto_auto] sm:items-end">
-        <Field label="Name" name="name">
+        <Field label="Nombre" name="name">
           <input id="name" name="name" className="field" defaultValue={defaults?.name} required />
         </Field>
-        <Field label="Description" name="description">
+        <Field label="Descripción" name="description">
           <input id="description" name="description" className="field" defaultValue={defaults?.description} />
         </Field>
-        <Field label="Tier" name="tier">
+        <Field label="Nivel de permisos" name="tier">
           <Listbox
             id="tier"
             name="tier"
@@ -71,7 +71,7 @@ function RankFields({
         </Field>
         <label className="flex min-h-11 items-center gap-2 text-sm">
           <input type="checkbox" name="inGame" defaultChecked={defaults?.inGame ?? true} className="h-5 w-5 accent-crimson" />
-          In-game
+          En el juego
         </label>
       </div>
       <InsigniaPicker value={defaults?.insignia ?? null} tier={defaults?.tier ?? "member"} preset={preset} />
@@ -87,10 +87,10 @@ export default async function RanksPage({ params }: PageProps<"/[guild]/admin/ra
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Ranks" eyebrow={`${inGameCount} of ${MAX_IN_GAME_RANKS} in-game ranks used`}>
-        The permission tier decides what a rank can do. Renaming or reordering a rank does not change its permissions.
-        List ranks from highest to lowest, as in game, where a guild has up to {MAX_IN_GAME_RANKS} ranks of up to 15
-        characters each.
+      <PageHeader title="Rangos" eyebrow={`${inGameCount} de ${MAX_IN_GAME_RANKS} rangos del juego usados`}>
+        El nivel de permisos decide qué puede hacer un rango. Cambiar el nombre o el orden de un rango no cambia sus permisos.
+        Ordena los rangos de mayor a menor, como en el juego, donde una hermandad tiene hasta {MAX_IN_GAME_RANKS} rangos de
+        hasta 15 caracteres cada uno.
       </PageHeader>
 
       <ol className="space-y-3">
@@ -103,18 +103,18 @@ export default async function RanksPage({ params }: PageProps<"/[guild]/admin/ra
               </span>
               <div className="flex gap-1">
                 <ActionForm action={moveRankAction.bind(null, slug, r.id, "up")}>
-                  <button type="submit" className="btn btn-ghost btn-sm" disabled={i === 0} aria-label={`Move ${r.name} up`}>
+                  <button type="submit" className="btn btn-ghost btn-sm" disabled={i === 0} aria-label={`Subir ${r.name}`}>
                     ↑
                   </button>
                 </ActionForm>
                 <ActionForm action={moveRankAction.bind(null, slug, r.id, "down")}>
-                  <button type="submit" className="btn btn-ghost btn-sm" disabled={i === ranks.length - 1} aria-label={`Move ${r.name} down`}>
+                  <button type="submit" className="btn btn-ghost btn-sm" disabled={i === ranks.length - 1} aria-label={`Bajar ${r.name}`}>
                     ↓
                   </button>
                 </ActionForm>
-                <ActionForm action={deleteRankAction.bind(null, slug, r.id)} confirm={`Delete the rank ${r.name}?`}>
+                <ActionForm action={deleteRankAction.bind(null, slug, r.id)} confirm={`¿Borrar el rango ${r.name}?`}>
                   <SubmitButton variant="danger" size="sm">
-                    Delete
+                    Borrar
                   </SubmitButton>
                   <FormMessage />
                 </ActionForm>
@@ -124,7 +124,7 @@ export default async function RanksPage({ params }: PageProps<"/[guild]/admin/ra
               <RankFields preset={guild.preset} defaults={r} />
               <div className="flex items-center gap-3">
                 <SubmitButton variant="ghost" size="sm">
-                  Save
+                  Guardar
                 </SubmitButton>
                 <FormMessage />
               </div>
@@ -133,21 +133,21 @@ export default async function RanksPage({ params }: PageProps<"/[guild]/admin/ra
         ))}
       </ol>
 
-      <Panel title="Add rank">
+      <Panel title="Añadir rango">
         <ActionForm action={createRankAction.bind(null, slug)} className="space-y-3">
           <RankFields preset={guild.preset} />
           <FormMessage />
-          <SubmitButton>Add rank</SubmitButton>
+          <SubmitButton>Añadir rango</SubmitButton>
         </ActionForm>
       </Panel>
 
-      <Panel title="Application ranks">
+      <Panel title="Rangos de solicitud">
         <ActionForm action={setRankDefaultsAction.bind(null, slug)} className="grid gap-3 sm:grid-cols-3 sm:items-end">
           {(
             [
-              ["applicantRankId", "Applicants (website)", guild.applicantRankId],
-              ["acceptRankId", "Accepted applicants", guild.acceptRankId],
-              ["trialRankId", "Trial members", guild.trialRankId],
+              ["applicantRankId", "Aspirantes (web)", guild.applicantRankId],
+              ["acceptRankId", "Aspirantes aceptados", guild.acceptRankId],
+              ["trialRankId", "Miembros a prueba", guild.trialRankId],
             ] as const
           ).map(([name, label, value]) => (
             <Field key={name} label={label} name={name}>
@@ -161,7 +161,7 @@ export default async function RanksPage({ params }: PageProps<"/[guild]/admin/ra
           ))}
           <div className="sm:col-span-3">
             <FormMessage />
-            <SubmitButton variant="ghost">Save</SubmitButton>
+            <SubmitButton variant="ghost">Guardar</SubmitButton>
           </div>
         </ActionForm>
       </Panel>

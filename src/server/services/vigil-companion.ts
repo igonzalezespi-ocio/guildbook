@@ -39,7 +39,7 @@ function newPairingCode(): string {
 const newDeviceToken = () => `${TOKEN_PREFIX}${randomBytes(32).toString("base64url")}`;
 
 function requireMembership(actor: Actor): string {
-  if (!actor.membershipId) throw new DomainError("You need an active membership to use Vigil.");
+  if (!actor.membershipId) throw new DomainError("Necesitas ser miembro activo para usar Vigil.");
   return actor.membershipId;
 }
 
@@ -75,7 +75,7 @@ const exchangeInput = z.object({
   deviceName: z.string().trim().min(1).max(80).default("Vigil companion"),
 });
 
-const INVALID_CODE = "That pairing code is not valid or has expired. Create a new one on the site.";
+const INVALID_CODE = "Ese código de emparejamiento no es válido o ha caducado. Crea uno nuevo en el sitio.";
 
 /** Trades a pairing code for a device token. Each code works once, within its lifetime, for an active member. */
 export async function exchangePairingCode(db: Db, raw: unknown) {
@@ -105,7 +105,7 @@ export async function exchangePairingCode(db: Db, raw: unknown) {
       .from(vigilCompanionDevices)
       .where(and(eq(vigilCompanionDevices.membershipId, pairing.membershipId), isNull(vigilCompanionDevices.revokedAt)));
     if (active >= MAX_DEVICES) {
-      throw new DomainError(`You already have ${MAX_DEVICES} companions paired. Revoke one on the site first.`);
+      throw new DomainError(`Ya tienes ${MAX_DEVICES} apps emparejadas. Revoca una en el sitio primero.`);
     }
 
     const token = newDeviceToken();
@@ -150,7 +150,7 @@ export interface DeviceAuth {
  */
 export async function authenticateDevice(db: Db, token: string | null | undefined): Promise<DeviceAuth> {
   if (!token || !token.startsWith(TOKEN_PREFIX) || token.length > 200) {
-    throw new AuthorizationError("Pair this companion with the site first.", "unauthenticated");
+    throw new AuthorizationError("Primero empareja esta app con el sitio.", "unauthenticated");
   }
   const [row] = await db
     .select({
@@ -166,10 +166,10 @@ export async function authenticateDevice(db: Db, token: string | null | undefine
     .from(vigilCompanionDevices)
     .innerJoin(guilds, eq(guilds.id, vigilCompanionDevices.guildId))
     .where(and(eq(vigilCompanionDevices.tokenHash, hashSecret(token)), isNull(vigilCompanionDevices.revokedAt)));
-  if (!row) throw new AuthorizationError("This companion is not paired, or it was revoked. Pair it again.", "unauthenticated");
+  if (!row) throw new AuthorizationError("Esta app no está emparejada o se revocó. Vuelve a emparejarla.", "unauthenticated");
 
   const actor = await loadActor(db, row.guildId, row.membershipId, row.userId);
-  if (!can(actor, "vigil.use")) throw new AuthorizationError("Your membership no longer includes Vigil.");
+  if (!can(actor, "vigil.use")) throw new AuthorizationError("Tu pertenencia ya no incluye Vigil.");
 
   if (!row.lastUsedAt || Date.now() - row.lastUsedAt.getTime() > 60_000) {
     await db.update(vigilCompanionDevices).set({ lastUsedAt: new Date() }).where(eq(vigilCompanionDevices.id, row.id));
@@ -208,7 +208,7 @@ const uploadInput = z.object({
 export async function uploadCompanionReport(db: Db, auth: DeviceAuth, raw: unknown, now: Date = new Date()) {
   const input = uploadInput.parse(raw);
   if (input.guild && input.guild !== auth.guild.slug) {
-    throw new AuthorizationError("This companion is paired with a different guild.");
+    throw new AuthorizationError("Esta app está emparejada con otra hermandad.");
   }
   const parsed = fightReportSchema.safeParse(input.report);
   const playerName = parsed.success ? parsed.data.player.name : null;

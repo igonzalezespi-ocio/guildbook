@@ -47,7 +47,7 @@ describe("vigil reports", () => {
     expect(mine).toMatchObject({ isOwner: true, visibility: "private", fightLabel: "Rockhide Boar", playerName: "Tor" });
     expect(mine.report.model?.id).toBe("paladin-leveling");
     for (const other of [member, officer, admin]) {
-      await expect(getVigilReport(db, other, id)).rejects.toThrow("Report not found");
+      await expect(getVigilReport(db, other, id)).rejects.toThrow("No se ha encontrado el informe");
       expect(await listSharedVigilReports(db, other)).toHaveLength(0);
     }
     expect(await listOwnVigilReports(db, owner)).toHaveLength(1);
@@ -60,7 +60,7 @@ describe("vigil reports", () => {
     const { id } = await createVigilReport(db, owner, { report, visibility: "officers" });
     expect((await getVigilReport(db, officer, id)).isOwner).toBe(false);
     expect((await getVigilReport(db, admin, id)).id).toBe(id);
-    await expect(getVigilReport(db, member, id)).rejects.toThrow("Report not found");
+    await expect(getVigilReport(db, member, id)).rejects.toThrow("No se ha encontrado el informe");
     expect((await listSharedVigilReports(db, officer)).map((r) => r.id)).toEqual([id]);
     expect(await listSharedVigilReports(db, member)).toHaveLength(0);
   });
@@ -72,29 +72,29 @@ describe("vigil reports", () => {
     expect((await listSharedVigilReports(db, member))[0]).toMatchObject({ id, ownerName: expect.any(String) });
     const applicant = await createMember(db, guild, "Postulant", "applicant");
     const visitor = await createVisitor(db, guild.guild.id);
-    await expect(getVigilReport(db, applicant, id)).rejects.toThrow("Requires member");
-    await expect(getVigilReport(db, visitor, id)).rejects.toThrow("Requires member");
+    await expect(getVigilReport(db, applicant, id)).rejects.toThrow("Necesitas permisos de Miembro");
+    await expect(getVigilReport(db, visitor, id)).rejects.toThrow("Necesitas permisos de Miembro");
   });
 
   it("stop being shared when the owner leaves the guild", async () => {
     const { owner, member, officer } = await setup();
     const { id } = await createVigilReport(db, owner, { report, visibility: "guild" });
     await db.update(memberships).set({ status: "former" }).where(eq(memberships.id, owner.membershipId!));
-    await expect(getVigilReport(db, member, id)).rejects.toThrow("Report not found");
-    await expect(getVigilReport(db, officer, id)).rejects.toThrow("Report not found");
+    await expect(getVigilReport(db, member, id)).rejects.toThrow("No se ha encontrado el informe");
+    await expect(getVigilReport(db, officer, id)).rejects.toThrow("No se ha encontrado el informe");
     expect(await listSharedVigilReports(db, officer)).toHaveLength(0);
     const former = await reloadActor(db, owner);
-    await expect(listOwnVigilReports(db, former)).rejects.toThrow("Requires member");
+    await expect(listOwnVigilReports(db, former)).rejects.toThrow("Necesitas permisos de Miembro");
   });
 
   it("are isolated per guild", async () => {
     const a = await setup();
     const b = await setup();
     const { id } = await createVigilReport(db, a.owner, { report, visibility: "guild" });
-    await expect(getVigilReport(db, b.admin, id)).rejects.toThrow("Report not found");
+    await expect(getVigilReport(db, b.admin, id)).rejects.toThrow("No se ha encontrado el informe");
     expect(await listSharedVigilReports(db, b.member)).toHaveLength(0);
-    await expect(setVigilReportVisibility(db, b.owner, id, "private")).rejects.toThrow("Report not found");
-    await expect(deleteVigilReport(db, b.admin, id)).rejects.toThrow("Report not found");
+    await expect(setVigilReportVisibility(db, b.owner, id, "private")).rejects.toThrow("No se ha encontrado el informe");
+    await expect(deleteVigilReport(db, b.admin, id)).rejects.toThrow("No se ha encontrado el informe");
     // A character from another guild cannot be attached.
     const otherChar = await createCharacter(db, b.owner, {
       name: "Rhune",
@@ -106,20 +106,20 @@ describe("vigil reports", () => {
       level: "30",
       professions: [],
     });
-    await expect(createVigilReport(db, a.owner, { report, characterId: otherChar!.id })).rejects.toThrow("Character not found");
+    await expect(createVigilReport(db, a.owner, { report, characterId: otherChar!.id })).rejects.toThrow("No se ha encontrado el personaje");
   });
 
   it("let only the owner change visibility or delete, and audit those changes", async () => {
     const { owner, officer } = await setup();
     const { id } = await createVigilReport(db, owner, { report });
-    await expect(setVigilReportVisibility(db, officer, id, "guild")).rejects.toThrow("Report not found");
+    await expect(setVigilReportVisibility(db, officer, id, "guild")).rejects.toThrow("No se ha encontrado el informe");
     await setVigilReportVisibility(db, owner, id, "officers");
     expect((await getVigilReport(db, officer, id)).visibility).toBe("officers");
     const [entry] = await audits(id);
     expect(entry).toMatchObject({ action: "vigil.visibility", before: { visibility: "private" }, after: { visibility: "officers" } });
-    await expect(deleteVigilReport(db, officer, id)).rejects.toThrow("Report not found");
+    await expect(deleteVigilReport(db, officer, id)).rejects.toThrow("No se ha encontrado el informe");
     await deleteVigilReport(db, owner, id);
-    await expect(getVigilReport(db, owner, id)).rejects.toThrow("Report not found");
+    await expect(getVigilReport(db, owner, id)).rejects.toThrow("No se ha encontrado el informe");
     expect((await audits(id)).map((a) => a.action).sort()).toEqual(["vigil.delete", "vigil.visibility"]);
   });
 
@@ -130,7 +130,7 @@ describe("vigil reports", () => {
     expect(await getVigilPreferences(db, owner)).toEqual({ defaultVisibility: "guild" });
     const second = await createVigilReport(db, owner, { report });
     expect((await getVigilReport(db, member, second.id)).visibility).toBe("guild");
-    await expect(getVigilReport(db, member, first.id)).rejects.toThrow("Report not found");
+    await expect(getVigilReport(db, member, first.id)).rejects.toThrow("No se ha encontrado el informe");
     await setVigilDefaultVisibility(db, owner, "guild", true);
     expect((await getVigilReport(db, member, first.id)).visibility).toBe("guild");
   });
@@ -151,8 +151,8 @@ describe("vigil reports", () => {
     expect(await getVigilReport(db, owner, id)).toMatchObject({ characterName: "Tor", characterClass: "paladin" });
     await expect(createVigilReport(db, owner, { report: { ...report, version: 99 } })).rejects.toThrow("format");
     const huge = { ...report, notes: ["x".repeat(1_000_000)] };
-    await expect(createVigilReport(db, owner, { report: huge })).rejects.toThrow("too large");
-    await expect(getVigilReport(db, owner, "not-a-uuid")).rejects.toThrow("Report not found");
+    await expect(createVigilReport(db, owner, { report: huge })).rejects.toThrow("demasiado grande");
+    await expect(getVigilReport(db, owner, "not-a-uuid")).rejects.toThrow("No se ha encontrado el informe");
   });
 });
 
@@ -164,7 +164,7 @@ describe("vigil report game versions", () => {
 
   it("derives the version from the log when an older Vigil did not send it", async () => {
     const guild = await createGuild(db, { gameVersion: "anniversary", realmSlug: "thunderstrike", region: "eu" });
-    const owner = await createMember(db, guild, "Member");
+    const owner = await createMember(db, guild, "Miembro");
     const saved = await createVigilReport(db, owner, { report: { ...report!, log: tbcLog } }, AFTER_LAUNCH);
     expect(saved).toMatchObject({ gameVersion: "anniversary", versionMismatch: false, warning: null });
     expect(await stored(saved.id)).toMatchObject({ gameVersion: "anniversary", versionMismatch: false });
@@ -184,13 +184,13 @@ describe("vigil report game versions", () => {
 
     const saved = await createVigilReport(db, owner, { report: era }, BEFORE_LAUNCH);
     expect(saved).toMatchObject({ gameVersion: "era", versionMismatch: true });
-    expect(saved.warning).toContain("From Nov 4, Vigil refuses logs from another game");
+    expect(saved.warning).toContain("A partir del 4 nov, Vigil rechaza registros de otro juego");
     expect(await getVigilReport(db, owner, saved.id)).toMatchObject({ gameVersion: "era", versionMismatch: true });
 
     const refused = createVigilReport(db, owner, { report: { ...report!, log: tbcLog } }, AFTER_LAUNCH);
     await expect(refused).rejects.toBeInstanceOf(VersionMismatchError);
     await expect(createVigilReport(db, owner, { report: { ...report!, log: tbcLog } }, AFTER_LAUNCH)).rejects.toThrow(
-      "This log is from TBC Anniversary; Forever Guild is a WoW: Forever guild. Pair Vigil with your TBC Anniversary guild.",
+      "Este registro es de TBC Anniversary; Forever Guild es una hermandad de WoW: Forever. Empareja Vigil con tu hermandad de TBC Anniversary.",
     );
   });
 });

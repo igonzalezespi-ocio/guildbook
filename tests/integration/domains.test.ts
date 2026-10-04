@@ -106,7 +106,7 @@ describe("custom domains", () => {
     dns.records["_guildbook.guild.example.org"] = [`guildbook-site-verification=${row.verificationToken}`];
     const misconfigured = await verifyGuildDomain(db, admin, row.id, deps);
     expect(misconfigured.status).toBe("failed");
-    expect(misconfigured.lastError).toContain("DNS does not point at Guildbook");
+    expect(misconfigured.lastError).toContain("El DNS aún no apunta a Guildbook");
 
     state.misconfigured = false;
     expect((await verifyGuildDomain(db, admin, row.id, deps)).status).toBe("verified");
@@ -128,10 +128,10 @@ describe("custom domains", () => {
     await addGuildDomain(db, admin, { domain: "claimed.gg" }, deps);
     const other = await createGuild(db);
     const otherAdmin = await createMember(db, other, "Grand Master");
-    await expect(addGuildDomain(db, otherAdmin, { domain: "claimed.gg" }, deps)).rejects.toThrow("already connected");
+    await expect(addGuildDomain(db, otherAdmin, { domain: "claimed.gg" }, deps)).rejects.toThrow("ya está conectado");
 
     for (let i = 1; i < MAX_DOMAINS_PER_GUILD; i++) await addGuildDomain(db, admin, { domain: `extra${i}.gg` }, deps);
-    await expect(addGuildDomain(db, admin, { domain: "one-too-many.gg" }, deps)).rejects.toThrow(/up to/);
+    await expect(addGuildDomain(db, admin, { domain: "one-too-many.gg" }, deps)).rejects.toThrow(/hasta/);
   });
 
   it("is limited to admins and to the guild's own domains", async () => {

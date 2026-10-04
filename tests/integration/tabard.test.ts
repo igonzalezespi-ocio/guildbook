@@ -67,7 +67,7 @@ describe("guild tabard defaults", () => {
 describe("saving the tabard", () => {
   it("lets an admin save the tabard, base style and overrides, and audits it", async () => {
     const g = await standardGuild();
-    const admin = await createMember(db, g, "Guild Master");
+    const admin = await createMember(db, g, "Líder");
     await updateGuildTabard(db, admin, form);
     const saved = await readGuild(g.guild.id);
     expect(saved).toMatchObject({
@@ -86,7 +86,7 @@ describe("saving the tabard", () => {
 
   it("requires a Blizzard emblem, and leaves the imported border id alone", async () => {
     const g = await standardGuild();
-    const admin = await createMember(db, g, "Guild Master");
+    const admin = await createMember(db, g, "Líder");
     await db.execute(sql`update guilds set tabard_border_id = 5 where id = ${g.guild.id}`);
     await updateGuildTabard(db, admin, { ...form, emblemId: "21", borderId: "2" });
     expect(await readGuild(g.guild.id)).toMatchObject({ tabardEmblemId: 21, tabardBorderId: 5 });
@@ -108,7 +108,7 @@ describe("saving the tabard", () => {
 
   it("clears overrides left blank", async () => {
     const g = await standardGuild();
-    const admin = await createMember(db, g, "Guild Master");
+    const admin = await createMember(db, g, "Líder");
     await updateGuildTabard(db, admin, form);
     await updateGuildTabard(db, admin, { ...form, overrideTrim: "" });
     expect((await readGuild(g.guild.id)).themeOverrides).toEqual({});
@@ -116,7 +116,7 @@ describe("saving the tabard", () => {
 
   it("refuses officers, members and visitors", async () => {
     const g = await standardGuild();
-    for (const rank of ["Officer", "Raider", "Member"]) {
+    for (const rank of ["Oficial", "Raider", "Miembro"]) {
       const actor = await createMember(db, g, rank);
       await expect(updateGuildTabard(db, actor, form)).rejects.toBeInstanceOf(AuthorizationError);
     }
@@ -129,12 +129,12 @@ describe("saving the tabard", () => {
   it("only changes the admin's own guild", async () => {
     const mine = await standardGuild();
     const theirs = await standardGuild();
-    const admin = await createMember(db, mine, "Guild Master");
+    const admin = await createMember(db, mine, "Líder");
     await updateGuildTabard(db, admin, form);
     expect((await readGuild(mine.guild.id)).tabardEmblemId).toBe(193);
     expect(await readGuild(theirs.guild.id)).toMatchObject({ tabardEmblemId: DEFAULT_TABARD.emblemId, themeBase: "tome" });
     // An admin of another guild has no tier here: the app resolves the actor per guild from the database.
-    const otherAdmin = await createMember(db, theirs, "Guild Master");
+    const otherAdmin = await createMember(db, theirs, "Líder");
     const here = await reloadActor(db, { ...otherAdmin, guildId: mine.guild.id });
     expect(here.tier).toBe("public");
     await expect(updateGuildTabard(db, here, { ...form, emblemId: "24" })).rejects.toBeInstanceOf(AuthorizationError);
@@ -143,7 +143,7 @@ describe("saving the tabard", () => {
 
   it("rejects unknown emblems, out-of-range colours and malformed overrides", async () => {
     const g = await standardGuild();
-    const admin = await createMember(db, g, "Guild Master");
+    const admin = await createMember(db, g, "Líder");
     await expect(updateGuildTabard(db, admin, { ...form, emblemId: "rubber-duck" })).rejects.toBeInstanceOf(ZodError);
     await expect(updateGuildTabard(db, admin, { ...form, background: "51" })).rejects.toBeInstanceOf(ZodError);
     await expect(updateGuildTabard(db, admin, { ...form, borderStyle: "lace" })).rejects.toBeInstanceOf(ZodError);
@@ -154,7 +154,7 @@ describe("saving the tabard", () => {
 describe("the Order's theme is exclusive", () => {
   it("can't be chosen by another guild through the form", async () => {
     const g = await standardGuild();
-    const admin = await createMember(db, g, "Guild Master");
+    const admin = await createMember(db, g, "Líder");
     await expect(updateGuildTabard(db, admin, { ...form, themeBase: "order" })).rejects.toBeInstanceOf(ZodError);
     expect((await readGuild(g.guild.id)).themeBase).toBe("tome");
   });
@@ -184,7 +184,7 @@ describe("the Order's theme is exclusive", () => {
 
   it("still lets other guilds use crimson and gold tabard colours on a generic base", async () => {
     const g = await standardGuild();
-    const admin = await createMember(db, g, "Guild Master");
+    const admin = await createMember(db, g, "Líder");
     await updateGuildTabard(db, admin, { ...form, background: "2", border: "3", emblemId: "97", emblemColor: "14", themeBase: "tome", overrideTrim: "" });
     expect(await readGuild(g.guild.id)).toMatchObject({ tabardBackground: 2, tabardBorder: 3, themeBase: "tome" });
   });
@@ -254,7 +254,7 @@ async function linkBattlenet(userId: string, characters: { name: string; region?
 describe("importing the in-game tabard", () => {
   it("copies the guild's emblem and colours from Blizzard, stores the border shape, keeps the theme and audits it", async () => {
     const g = await standardGuild();
-    const admin = await createMember(db, g, "Guild Master");
+    const admin = await createMember(db, g, "Líder");
     await updateGuildTabard(db, admin, form);
     await linkBattlenet(admin.userId, [{ name: "Leader", guildName: g.guild.name }]);
     const bnet = fakeBattlenet({ guildName: g.guild.name, crest: CREST });
@@ -277,7 +277,7 @@ describe("importing the in-game tabard", () => {
 
   it("imports any border shape, since it is never drawn", async () => {
     const g = await standardGuild();
-    const admin = await createMember(db, g, "Guild Master");
+    const admin = await createMember(db, g, "Líder");
     await linkBattlenet(admin.userId, [{ name: "Leader", guildName: g.guild.name }]);
     const crest = { ...CREST, border: { ...CREST.border, id: 12 } };
     const { look } = await importInGameTabard(db, admin, fakeBattlenet({ guildName: g.guild.name, crest }).client, AFTER_LAUNCH);
@@ -287,7 +287,7 @@ describe("importing the in-game tabard", () => {
 
   it("reads Europe guilds from the EU API", async () => {
     const g = await standardGuild("eu");
-    const admin = await createMember(db, g, "Guild Master");
+    const admin = await createMember(db, g, "Líder");
     await linkBattlenet(admin.userId, [{ name: "Leader", region: "eu", guildName: g.guild.name }]);
     const bnet = fakeBattlenet({ region: "eu", guildName: g.guild.name, crest: CREST });
     await importInGameTabard(db, admin, bnet.client, AFTER_LAUNCH);
@@ -297,46 +297,46 @@ describe("importing the in-game tabard", () => {
 
   it("explains before launch that there are no Forever characters to read yet", async () => {
     const g = await standardGuild();
-    const admin = await createMember(db, g, "Guild Master");
+    const admin = await createMember(db, g, "Líder");
     await linkBattlenet(admin.userId, []);
     const { client } = fakeBattlenet({ guildName: g.guild.name, crest: CREST });
-    await expect(importInGameTabard(db, admin, client, PRE_LAUNCH)).rejects.toThrow(/Importing opens once WoW: Forever characters exist/);
-    await expect(importInGameTabard(db, admin, client, AFTER_LAUNCH)).rejects.toThrow(/No WoW: Forever characters in the Americas region/);
+    await expect(importInGameTabard(db, admin, client, PRE_LAUNCH)).rejects.toThrow(/La importación se abre cuando existan personajes de WoW: Forever/);
+    await expect(importInGameTabard(db, admin, client, AFTER_LAUNCH)).rejects.toThrow(/No se han encontrado personajes de WoW: Forever en la región de América/);
   });
 
   it("explains a missing link, a region mismatch, a guild with no tabard and an outage", async () => {
     const g = await standardGuild();
-    const admin = await createMember(db, g, "Guild Master");
+    const admin = await createMember(db, g, "Líder");
     const { client } = fakeBattlenet({ guildName: g.guild.name, crest: CREST });
-    await expect(importInGameTabard(db, admin, client, AFTER_LAUNCH)).rejects.toThrow(/No admin of this guild has linked Battle.net/);
+    await expect(importInGameTabard(db, admin, client, AFTER_LAUNCH)).rejects.toThrow(/Ningún administrador de esta hermandad ha vinculado Battle.net/);
 
     await linkBattlenet(admin.userId, [{ name: "Leader", region: "eu", guildName: g.guild.name }]);
-    await expect(importInGameTabard(db, admin, client, AFTER_LAUNCH)).rejects.toThrow(/in another region/);
+    await expect(importInGameTabard(db, admin, client, AFTER_LAUNCH)).rejects.toThrow(/en otra región/);
 
     const g2 = await standardGuild();
-    const admin2 = await createMember(db, g2, "Guild Master");
+    const admin2 = await createMember(db, g2, "Líder");
     await linkBattlenet(admin2.userId, [{ name: "Leader", guildName: g2.guild.name }]);
-    await expect(importInGameTabard(db, admin2, fakeBattlenet({ guildName: g2.guild.name }).client, AFTER_LAUNCH)).rejects.toThrow(/hasn't designed one in game/);
-    await expect(importInGameTabard(db, admin2, fakeBattlenet({ guildName: g2.guild.name, guildStatus: 503 }).client, AFTER_LAUNCH)).rejects.toThrow(/didn't respond/);
+    await expect(importInGameTabard(db, admin2, fakeBattlenet({ guildName: g2.guild.name }).client, AFTER_LAUNCH)).rejects.toThrow(/no ha diseñado uno en el juego/);
+    await expect(importInGameTabard(db, admin2, fakeBattlenet({ guildName: g2.guild.name, guildStatus: 503 }).client, AFTER_LAUNCH)).rejects.toThrow(/no ha respondido/);
     await expect(
       importInGameTabard(db, admin2, fakeBattlenet({ guildName: g2.guild.name, crest: { ...CREST, emblem: { ...CREST.emblem, id: 400 } } }).client, AFTER_LAUNCH),
-    ).rejects.toThrow(/emblem \(number 400\) isn't in Guildbook's set/);
+    ).rejects.toThrow(/\(número 400\) aún no está en el catálogo de Guildbook/);
     await expect(importInGameTabard(db, admin2, fakeBattlenet({ guildName: "Someone Else", crest: CREST }).client, AFTER_LAUNCH)).rejects.toThrow(
-      /None of the admins' WoW: Forever characters is in an in-game guild named/,
+      /Ninguno de los personajes de WoW: Forever de los administradores está en una hermandad del juego llamada/,
     );
     expect((await readGuild(g2.guild.id)).tabardEmblemId).toBe(128);
   });
 
   it("is for admins only, and never touches the Order", async () => {
     const g = await standardGuild();
-    const officer = await createMember(db, g, "Officer");
+    const officer = await createMember(db, g, "Oficial");
     const { client } = fakeBattlenet({ guildName: g.guild.name, crest: CREST });
     await expect(importInGameTabard(db, officer, client, AFTER_LAUNCH)).rejects.toBeInstanceOf(AuthorizationError);
 
     const order = await createGuild(db, { name: "Order of Saint Michael" });
     const gm = await createMember(db, order, "Grand Master");
     await linkBattlenet(gm.userId, [{ name: "Leader", guildName: "Order of Saint Michael" }]);
-    await expect(importInGameTabard(db, gm, fakeBattlenet({ guildName: "Order of Saint Michael", crest: CREST }).client, AFTER_LAUNCH)).rejects.toThrow(/locked/);
+    await expect(importInGameTabard(db, gm, fakeBattlenet({ guildName: "Order of Saint Michael", crest: CREST }).client, AFTER_LAUNCH)).rejects.toThrow(/bloqueados/);
     expect(await readGuild(order.guild.id)).toMatchObject({ tabardEmblem: "cross-pattee", tabardEmblemId: null, tabardBorderId: null });
   });
 });

@@ -41,8 +41,8 @@ export const VERSION_INFO: Record<GuildVersion, VersionInfo> = {
   forever: { label: "WoW: Forever", short: "Forever", expansion: "classic", realms: false, surnames: true, launchDate: WOWF_LAUNCH_DATE, slugSuffix: "forever" },
   anniversary: { label: "TBC Anniversary", short: "TBC", expansion: "tbc", realms: true, surnames: false, launchDate: null, slugSuffix: "tbc" },
   era: { label: "Classic Era", short: "Era", expansion: "classic", realms: true, surnames: false, launchDate: null, slugSuffix: "era" },
-  seasonal: { label: "Season of Discovery", short: "SoD", expansion: "classic", realms: true, surnames: false, launchDate: null, slugSuffix: "sod" },
-  progression: { label: "Classic progression", short: "Progression", expansion: "tbc", realms: true, surnames: false, launchDate: null, slugSuffix: "prog" },
+  seasonal: { label: "Temporada de descubrimiento", short: "SoD", expansion: "classic", realms: true, surnames: false, launchDate: null, slugSuffix: "sod" },
+  progression: { label: "Classic con progresión", short: "Progresión", expansion: "tbc", realms: true, surnames: false, launchDate: null, slugSuffix: "prog" },
 };
 
 export function isSupportedVersion(value: unknown): value is SupportedGuildVersion {
@@ -60,11 +60,11 @@ export function versionHasLaunched(version: GuildVersion, now: Date): boolean {
   return !date || now >= new Date(`${date}T00:00:00Z`);
 }
 
-/** The version's launch day as "Nov 4", or null when it has no launch date. */
+/** The version's launch day as "4 nov", or null when it has no launch date. */
 export function versionLaunchLabel(version: GuildVersion): string | null {
   const date = VERSION_INFO[version].launchDate;
   if (!date) return null;
-  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" }).format(new Date(`${date}T12:00:00Z`));
+  return new Intl.DateTimeFormat("es-ES", { month: "short", day: "numeric", timeZone: "UTC" }).format(new Date(`${date}T12:00:00Z`));
 }
 
 /** A realm a guild can live on, for versions with realms. */

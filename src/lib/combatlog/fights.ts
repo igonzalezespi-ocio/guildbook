@@ -237,7 +237,7 @@ function sortTargets(targets: Map<string, FightTarget>): FightTarget[] {
 
 /** "Kobold Vermin", or "Kobold Vermin +2" when more mobs were involved. */
 export function fightLabel(targets: FightTarget[]): string {
-  if (targets.length === 0) return "Unknown";
+  if (targets.length === 0) return "Desconocido";
   const main = targets[0]!.name;
   return targets.length > 1 ? `${main} +${targets.length - 1}` : main;
 }

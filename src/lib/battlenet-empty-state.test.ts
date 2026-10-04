@@ -4,9 +4,9 @@ import { emptySnapshotMessage, type EmptySnapshotInput, refreshSummary } from ".
 
 describe("refreshSummary", () => {
   it("counts only the characters this guild accepts, in its game version", () => {
-    expect(refreshSummary(0)).toBe("Characters refreshed: no WoW: Forever characters can join this guild.");
-    expect(refreshSummary(1)).toBe("Found 1 WoW: Forever character for this guild.");
-    expect(refreshSummary(5, "anniversary")).toBe("Found 5 TBC Anniversary characters for this guild.");
+    expect(refreshSummary(0)).toBe("Personajes actualizados: ningún personaje de WoW: Forever puede unirse a esta hermandad.");
+    expect(refreshSummary(1)).toBe("Hemos encontrado 1 personaje de WoW: Forever para esta hermandad.");
+    expect(refreshSummary(5, "anniversary")).toBe("Hemos encontrado 5 personajes de TBC Anniversary para esta hermandad.");
   });
 });
 
@@ -49,18 +49,18 @@ const base: EmptySnapshotInput = {
 describe("emptySnapshotMessage", () => {
   it("says what was found per game and faction, and why it was left out", () => {
     expect(emptySnapshotMessage(base)).toBe(
-      "We found no WoW: Forever characters on Pilgrim#1234. We did find 2 Alliance characters in TBC Anniversary " +
-        "(Elowen on Dreamscythe, Tamsin on Dreamscythe) and 1 Horde character in TBC Anniversary (Gorza on Nightslayer), " +
-        "but only WoW: Forever characters can join this guild. World of Warcraft: Forever launches on Nov 4, 2026. " +
-        "Once you've made your character there, refresh your characters or reconnect.",
+      "No hemos encontrado personajes de WoW: Forever en Pilgrim#1234. Sí hemos encontrado 2 personajes de la Alianza en TBC Anniversary " +
+        "(Elowen en Dreamscythe, Tamsin en Dreamscythe) y 1 personaje de la Horda en TBC Anniversary (Gorza en Nightslayer), " +
+        "pero solo pueden unirse a esta hermandad personajes de WoW: Forever. World of Warcraft: Forever sale el 4 de noviembre de 2026. " +
+        "Cuando hayas creado allí tu personaje, actualiza tus personajes o vuelve a conectar.",
     );
   });
 
   it("asks a link read before Anniversary imports to refresh, on an Anniversary guild", () => {
     const text = emptySnapshotMessage({ ...base, version: "anniversary", guildRegion: "us" });
-    expect(text).toContain("were read before Guildbook could import TBC Anniversary characters");
-    expect(text).toContain("refresh your characters (or reconnect Battle.net) to import them");
-    expect(text).not.toContain("Nov 4");
+    expect(text).toContain("se leyeron antes de que Guildbook pudiera importar personajes de TBC Anniversary");
+    expect(text).toContain("actualiza tus personajes (o vuelve a conectar Battle.net) para importarlos");
+    expect(text).not.toContain("4 de noviembre");
   });
 
   it("names the guild's version when its characters are elsewhere", () => {
@@ -71,7 +71,7 @@ describe("emptySnapshotMessage", () => {
       foreverCharacters: [{ faction: "horde", region: "us" }],
     });
     expect(text).toBe(
-      "Your TBC Anniversary characters on Pilgrim#1234 are in the Americas, but this guild is in the Europe region. Regions are separate worlds, so only Europe characters can join it.",
+      "Tus personajes de TBC Anniversary en Pilgrim#1234 están en América, pero esta hermandad está en la región de Europa. Las regiones son mundos separados, así que solo pueden unirse personajes de Europa.",
     );
   });
 
@@ -80,53 +80,53 @@ describe("emptySnapshotMessage", () => {
       ...anniversaryScan,
       excluded: [{ version: "era", faction: "alliance", count: 7, examples: [{ name: "A", realmName: "Whitemane" }] }],
     };
-    expect(emptySnapshotMessage({ ...base, scan })).toContain("7 Alliance characters in Classic Era (A on Whitemane, and 6 more)");
+    expect(emptySnapshotMessage({ ...base, scan })).toContain("7 personajes de la Alianza en Classic Era (A en Whitemane y 6 más)");
   });
 
   it("says nothing was listed when every game was empty, and flags incomplete reads", () => {
     const empty: BattlenetScan = { ...anniversaryScan, excluded: [] };
-    expect(emptySnapshotMessage({ ...base, scan: empty })).toMatch(/^Battle.net listed no World of Warcraft characters on Pilgrim#1234\. World/);
+    expect(emptySnapshotMessage({ ...base, scan: empty })).toMatch(/^Battle.net no muestra ningún personaje de World of Warcraft en Pilgrim#1234\. World/);
     const partial: BattlenetScan = {
       ...empty,
       namespaces: [...namespaces.slice(0, 3), { namespace: "profile-us", status: "error", httpStatus: 503, characters: 0 }],
     };
-    expect(emptySnapshotMessage({ ...base, scan: partial })).toContain("didn't answer for every game");
+    expect(emptySnapshotMessage({ ...base, scan: partial })).toContain("no ha respondido para todos los juegos");
   });
 
   it("explains a faction mismatch among Forever characters", () => {
     expect(emptySnapshotMessage({ ...base, foreverCharacters: [{ faction: "horde" }] })).toBe(
-      "Your WoW: Forever characters on Pilgrim#1234 are Horde; this guild only accepts Alliance characters.",
+      "Tus personajes de WoW: Forever en Pilgrim#1234 son de la Horda; esta hermandad solo acepta personajes de la Alianza.",
     );
-    expect(emptySnapshotMessage({ ...base, foreverCharacters: [{ faction: "alliance" }] })).toMatch(/realms/);
+    expect(emptySnapshotMessage({ ...base, foreverCharacters: [{ faction: "alliance" }] })).toMatch(/los reinos/);
   });
 
   it("mentions the guild's region, and explains Forever characters in the other region", () => {
-    expect(emptySnapshotMessage({ ...base, guildRegion: "us" })).toMatch(/^We found no WoW: Forever characters in the Americas region on Pilgrim#1234\./);
+    expect(emptySnapshotMessage({ ...base, guildRegion: "us" })).toMatch(/^No hemos encontrado personajes de WoW: Forever en la región de América en Pilgrim#1234\./);
     expect(emptySnapshotMessage({ ...base, guildRegion: "us", foreverCharacters: [{ faction: "alliance", region: "eu" }] })).toBe(
-      "Your WoW: Forever characters on Pilgrim#1234 are in Europe, but this guild is in the Americas region. " +
-        "Regions are separate worlds, so only Americas characters can join it.",
+      "Tus personajes de WoW: Forever en Pilgrim#1234 están en Europa, pero esta hermandad está en la región de América. " +
+        "Las regiones son mundos separados, así que solo pueden unirse personajes de América.",
     );
     // Characters from snapshots taken before regions are US.
-    expect(emptySnapshotMessage({ ...base, guildRegion: "eu", foreverCharacters: [{ faction: "alliance" }] })).toMatch(/are in the Americas, but this guild is in the Europe region/);
+    expect(emptySnapshotMessage({ ...base, guildRegion: "eu", foreverCharacters: [{ faction: "alliance" }] })).toMatch(/están en América, pero esta hermandad está en la región de Europa/);
     const euDown: BattlenetScan = {
       ...anniversaryScan,
       namespaces: [...namespaces.map((n) => ({ ...n, region: "us" as const })), { namespace: "profile-classic1x-eu", region: "eu", status: "error", httpStatus: 503, characters: 0 }],
     };
-    expect(emptySnapshotMessage({ ...base, guildRegion: "eu", scan: euDown })).toContain("didn't answer for every game in Europe");
+    expect(emptySnapshotMessage({ ...base, guildRegion: "eu", scan: euDown })).toContain("no ha respondido para todos los juegos en Europa");
   });
 
   it("asks older links, which have no scan, to refresh", () => {
-    expect(emptySnapshotMessage({ ...base, scan: null })).toMatch(/Refresh your characters or reconnect/);
+    expect(emptySnapshotMessage({ ...base, scan: null })).toMatch(/Actualiza tus personajes o vuelve a conectar/);
   });
 
   it("keeps the refused and failed messages", () => {
-    expect(emptySnapshotMessage({ ...base, status: "forbidden" })).toMatch(/didn't share your character list/);
-    expect(emptySnapshotMessage({ ...base, status: "error" })).toMatch(/didn't respond/);
+    expect(emptySnapshotMessage({ ...base, status: "forbidden" })).toMatch(/no ha compartido tu lista de personajes/);
+    expect(emptySnapshotMessage({ ...base, status: "error" })).toMatch(/no ha respondido al leer/);
   });
 
   it("drops the launch-date note after launch", () => {
     const text = emptySnapshotMessage({ ...base, now: afterLaunch });
-    expect(text).not.toContain("launches on");
-    expect(text).toContain("can take a while to list it");
+    expect(text).not.toContain("sale el");
+    expect(text).toContain("puede tardar un rato en mostrarlo");
   });
 });

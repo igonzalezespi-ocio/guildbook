@@ -20,7 +20,7 @@ const createInput = z.object({
 });
 
 function requireMembership(actor: Actor): string {
-  if (!actor.membershipId) throw new DomainError("You need an active membership to use Vigil.");
+  if (!actor.membershipId) throw new DomainError("Necesitas ser miembro activo para usar Vigil.");
   return actor.membershipId;
 }
 
@@ -59,12 +59,12 @@ export function checkReportVersion(
   const gameVersion = reportGameVersion(report);
   if (!gameVersion || gameVersion === guild.gameVersion) return { gameVersion, versionMismatch: false, warning: null };
   const log = VERSION_INFO[gameVersion].label;
-  const mismatch = `This log is from ${log}; ${guild.name} is a ${VERSION_INFO[guild.gameVersion].label} guild.`;
-  if (versionHasLaunched("forever", now)) throw new VersionMismatchError(`${mismatch} Pair Vigil with your ${log} guild.`);
+  const mismatch = `Este registro es de ${log}; ${guild.name} es una hermandad de ${VERSION_INFO[guild.gameVersion].label}.`;
+  if (versionHasLaunched("forever", now)) throw new VersionMismatchError(`${mismatch} Empareja Vigil con tu hermandad de ${log}.`);
   return {
     gameVersion,
     versionMismatch: true,
-    warning: `${mismatch} The report was saved with a warning. From ${versionLaunchLabel("forever")}, Vigil refuses logs from another game, so pair Vigil with your ${log} guild.`,
+    warning: `${mismatch} El informe se ha guardado con un aviso. A partir del ${versionLaunchLabel("forever")}, Vigil rechaza registros de otro juego, así que empareja Vigil con tu hermandad de ${log}.`,
   };
 }
 
@@ -77,10 +77,10 @@ export async function createVigilReport(db: Db, actor: Actor, raw: unknown, now:
   const membershipId = requireMembership(actor);
   const input = createInput.parse(raw);
   if (JSON.stringify(input.report ?? null).length > MAX_REPORT_BYTES) {
-    throw new DomainError("This fight's report is too large to upload. Try a shorter fight.");
+    throw new DomainError("El informe de este combate es demasiado grande para subirlo. Prueba con un combate más corto.");
   }
   const parsed = fightReportSchema.safeParse(input.report);
-  if (!parsed.success) throw new DomainError("The report was not in a format Vigil understands. Reload and try again.");
+  if (!parsed.success) throw new DomainError("El informe no tiene un formato que Vigil entienda. Recarga e inténtalo de nuevo.");
   const report = parsed.data;
 
   return db.transaction(async (tx) => {

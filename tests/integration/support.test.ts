@@ -102,7 +102,7 @@ describe("submitSupportTicket", () => {
     expect(email).toMatchObject({ status: "sent", transport: "mock" });
     expect(outbox).toHaveLength(1);
     expect(outbox[0]).toMatchObject({ to: ["ops@example.test"], replyTo: "seeker@example.com" });
-    expect(outbox[0]!.subject).toBe(`[Guildbook support] ${ticketReference(ticket.id)} Bug report: ${valid.subject}`);
+    expect(outbox[0]!.subject).toBe(`[Guildbook support] ${ticketReference(ticket.id)} Informar de un error: ${valid.subject}`);
     expect(outbox[0]!.text).toContain("Silver Dawn");
     expect(outbox[0]!.text).toContain(member.userId);
     expect(await getOwnSupportTicket(db, member.userId, ticket.id)).not.toBeNull();
@@ -125,7 +125,7 @@ describe("submitSupportTicket", () => {
     const user = await newUser();
     const guild = await createGuild(db);
     expect(await fieldErrorsFor(() => submitSupportTicket(db, user.id, { ...valid, guildId: guild.guild.id }))).toEqual({
-      guildId: ["Choose one of your guilds"],
+      guildId: ["Elige una de tus hermandades"],
     });
   });
 
@@ -143,7 +143,7 @@ describe("submitSupportTicket", () => {
       await submitSupportTicket(db, user.id, valid, { now: new Date(start.getTime() + i * 60_000) });
     }
     const later = new Date(start.getTime() + 10 * 60_000);
-    await expect(submitSupportTicket(db, user.id, valid, { now: later })).rejects.toThrow(/last hour/);
+    await expect(submitSupportTicket(db, user.id, valid, { now: later })).rejects.toThrow(/última hora/);
     await expect(submitSupportTicket(db, other.id, valid, { now: later })).resolves.toBeDefined();
     const nextHour = new Date(start.getTime() + SUPPORT_RATE_WINDOW_MS + 60_000);
     await expect(submitSupportTicket(db, user.id, valid, { now: nextHour })).resolves.toBeDefined();
@@ -191,7 +191,7 @@ describe("support email", () => {
       { ticket, user: { id: "u1", name: "Joan", discordId: "123", discordUsername: "joan" }, guild: null },
       { from: "f@x.test", to: ["t@x.test"] },
     );
-    expect(email.subject).toBe("[Guildbook support] GB-0A1B2C3D Other: Hello Bcc: victim@example.com");
+    expect(email.subject).toBe("[Guildbook support] GB-0A1B2C3D Otro: Hello Bcc: victim@example.com");
     expect(email.subject).not.toMatch(/[\r\n]/);
     expect(email.html).toContain("&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; more");
     expect(email.html).not.toContain("<script>");

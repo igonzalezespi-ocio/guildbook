@@ -50,11 +50,11 @@ describe("boss kill date", () => {
   });
 
   it.each(["2026-11-03", "2004-11-23"])("rejects %s as before launch", (killedOn) => {
-    expect(message(killedOn)).toBe("Kills can't be dated before World of Warcraft: Forever launched on Nov 4, 2026");
+    expect(message(killedOn)).toBe("Una muerte de jefe no puede tener fecha anterior al lanzamiento de World of Warcraft: Forever, el 4 de noviembre de 2026");
   });
 
   it("rejects a date in the future", () => {
-    expect(message("2027-01-16")).toBe("Kills can't be dated in the future");
+    expect(message("2027-01-16")).toBe("Una muerte de jefe no puede tener fecha futura");
   });
 });
 

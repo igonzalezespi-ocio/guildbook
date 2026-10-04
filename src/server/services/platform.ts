@@ -56,9 +56,9 @@ export function creationLimitsFromEnv(env: Record<string, string | undefined> = 
 }
 
 function guildLimitMessage(limit: number, owned: string[]): string {
-  const count = limit === 1 ? "1 guild" : `${limit} guilds`;
-  const list = owned.length > 0 ? ` You own ${owned.join(", ")}.` : "";
-  return `Each account can own up to ${count}.${list} Delete a guild you no longer need from its Guild Settings, or email ${CONTACT_EMAIL} with your Discord username to ask for a higher limit.`;
+  const count = limit === 1 ? "1 hermandad" : `${limit} hermandades`;
+  const list = owned.length > 0 ? ` Eres dueño de ${owned.join(", ")}.` : "";
+  return `Cada cuenta puede ser dueña de hasta ${count}.${list} Borra una hermandad que ya no necesites desde sus Ajustes de la hermandad, o escribe a ${CONTACT_EMAIL} con tu usuario de Discord para pedir un límite mayor.`;
 }
 
 /** Enforces the per-account guild cap and daily founding limit; platform admins are exempt. */
@@ -73,7 +73,7 @@ async function assertCanFoundGuild(db: Db, userId: string, limits: CreationLimit
     .select({ recent: count() })
     .from(guilds)
     .where(and(eq(guilds.createdByUserId, userId), gte(guilds.createdAt, new Date(now.getTime() - DAY_MS))));
-  if (recent >= limits.perDay) throw new DomainError("You have founded several guilds today. Please try again tomorrow.");
+  if (recent >= limits.perDay) throw new DomainError("Hoy ya has fundado varias hermandades. Inténtalo de nuevo mañana.");
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -88,7 +88,7 @@ export async function checkSlugAvailability(db: Db, raw: string, identity: SlugI
   if (problem) return { available: false, reason: SLUG_MESSAGES[problem] };
   const [taken] = await db.select({ id: guilds.id }).from(guilds).where(eq(guilds.slug, slug));
   if (!taken) return { available: true };
-  return { available: false, reason: "That subdomain is taken", suggestions: await suggestSlugs(db, slug, identity) };
+  return { available: false, reason: "Ese subdominio está ocupado", suggestions: await suggestSlugs(db, slug, identity) };
 }
 
 /** The guild holding this identity, compared case-insensitively like `guilds_identity_key`. */
@@ -101,7 +101,7 @@ export async function findGuildByIdentity(db: Db, identity: GuildIdentity, excep
 }
 
 export function identityTakenMessage(identity: GuildIdentity): string {
-  return `A guild called ${identity.name} (${describeIdentity(identity)}) is already on Guildbook. Choose another name, or, if you are that guild's Guild Master in game, create yours under a temporary name and verify it to claim the name.`;
+  return `Ya hay en Guildbook una hermandad llamada ${identity.name} (${describeIdentity(identity)}). Elige otro nombre o, si eres el maestro de esa hermandad en el juego, crea la tuya con un nombre provisional y verifícala para reclamar el nombre.`;
 }
 
 export const IDENTITY_CONSTRAINT = "guilds_identity_key";
@@ -174,7 +174,7 @@ export async function createGuildForUser(
   } catch (err) {
     if (isUniqueViolation(err, IDENTITY_CONSTRAINT)) throw new DomainError(identityTakenMessage(input), { field: "name" });
     if (isUniqueViolation(err)) {
-      throw new DomainError("That subdomain is taken", { field: "slug", suggestions: await suggestSlugs(db, input.slug, input) });
+      throw new DomainError("Ese subdominio está ocupado", { field: "slug", suggestions: await suggestSlugs(db, input.slug, input) });
     }
     throw err;
   }

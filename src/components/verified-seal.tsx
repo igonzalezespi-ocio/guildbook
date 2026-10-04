@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-const TITLE = "Verified guild: its Guild Master proved their in-game rank through Battle.net";
+const TITLE = "Hermandad verificada: su maestro de la hermandad demostró su rango en el juego con Battle.net";
 
 /** A small wax-seal rosette with a check, for guilds whose in-game Guild Master is verified. */
 export function VerifiedSeal({
@@ -31,7 +31,7 @@ export function VerifiedSeal({
       data-testid="verified-seal"
     >
       {seal}
-      Verified
+      Verificada
     </span>
   );
 }

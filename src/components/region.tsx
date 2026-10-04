@@ -29,7 +29,7 @@ export function RegionBadge({ region }: { region: Region }) {
 export function RegionTag({ region, className }: { region: Region; className?: string }) {
   return (
     <span
-      title={`${REGION_LABELS[region]} region`}
+      title={`Región de ${REGION_LABELS[region]}`}
       className={clsx("rounded px-1 text-[0.6rem] font-semibold tracking-wider text-muted ring-1 ring-line", className)}
       data-testid="region-tag"
     >

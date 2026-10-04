@@ -50,8 +50,8 @@ const SANS = "var(--font-inter), ui-sans-serif, system-ui, sans-serif";
 export const BASE_STYLES: Record<SelectableBase, BaseStyle> = {
   tome: {
     id: "tome",
-    name: "Dark tome",
-    description: "Near-black leather and ink, Cinzel headings. The classic guild-hall look.",
+    name: "Tomo oscuro",
+    description: "Cuero casi negro y tinta, títulos en Cinzel. El aspecto clásico de sala de hermandad.",
     dark: true,
     surfaces: {
       ink: "#0b0908",
@@ -68,8 +68,8 @@ export const BASE_STYLES: Record<SelectableBase, BaseStyle> = {
   },
   parchment: {
     id: "parchment",
-    name: "Parchment",
-    description: "Warm cream pages with dark ink, Cinzel headings. Light and bookish.",
+    name: "Pergamino",
+    description: "Páginas color crema con tinta oscura, títulos en Cinzel. Claro y libresco.",
     dark: false,
     surfaces: {
       ink: "#f4ecda",
@@ -86,8 +86,8 @@ export const BASE_STYLES: Record<SelectableBase, BaseStyle> = {
   },
   modern: {
     id: "modern",
-    name: "Plain modern",
-    description: "Neutral slate surfaces and clean sans-serif headings.",
+    name: "Moderno sencillo",
+    description: "Superficies de pizarra neutras y títulos limpios sin serifa.",
     dark: true,
     surfaces: {
       ink: "#0f1115",
@@ -266,18 +266,18 @@ export function tabardWarnings(t: TabardConfig): ThemeWarning[] {
   const c = tabardSources(t);
   const out: ThemeWarning[] = [];
   if (deltaE(c.primary, c.trim) < 0.1) {
-    out.push({ level: "warn", message: "The border colour is nearly the same as the background, so the banner's edge will disappear." });
+    out.push({ level: "warn", message: "El color del borde es casi igual que el del fondo, así que el contorno del estandarte desaparecerá." });
   }
   if (deltaE(c.primary, c.highlight) < 0.12) {
-    out.push({ level: "warn", message: "The emblem colour is nearly the same as the background, so the emblem will be hard to see." });
+    out.push({ level: "warn", message: "El color del emblema es casi igual que el del fondo, así que el emblema se verá mal." });
   }
   if (deltaE(c.trim, c.highlight) < 0.05 && deltaE(c.primary, c.trim) >= 0.1) {
-    out.push({ level: "info", message: "The border and emblem share a colour, so the site's trim and highlight will match." });
+    out.push({ level: "info", message: "El borde y el emblema comparten color, así que el ribete y el realce del sitio coincidirán." });
   }
   return out;
 }
 
-const ROLE_LABELS: Record<Role, string> = { primary: "Primary (buttons and accents)", trim: "Trim (headings and borders)", highlight: "Highlight (icons and emphasis)" };
+const ROLE_LABELS: Record<Role, string> = { primary: "Principal (botones y acentos)", trim: "Ribete (títulos y bordes)", highlight: "Realce (iconos y énfasis)" };
 
 /** Readability notes for the site colours: large contrast corrections and colours that blur together. */
 export function themeWarnings(theme: GuildTheme): ThemeWarning[] {
@@ -286,19 +286,19 @@ export function themeWarnings(theme: GuildTheme): ThemeWarning[] {
   const s = BASE_STYLES[theme.base].surfaces;
   for (const r of ROLES) {
     const color = theme.roles[r];
-    if (!color.ok) out.push({ level: "warn", message: `${ROLE_LABELS[r]} can't reach AA contrast on ${baseName}.` });
+    if (!color.ok) out.push({ level: "warn", message: `${ROLE_LABELS[r]} no llega al contraste AA sobre ${baseName}.` });
     else if (Math.abs(color.shift) >= 0.15) {
       out.push({
         level: "info",
-        message: `${ROLE_LABELS[r]} is ${color.shift > 0 ? "lightened" : "darkened"} noticeably to stay readable on ${baseName}.`,
+        message: `${ROLE_LABELS[r]} se ${color.shift > 0 ? "aclara" : "oscurece"} bastante para que se lea bien sobre ${baseName}.`,
       });
     }
   }
   if (contrast(theme.primaryFill.value, s.ink) < 1.35) {
-    out.push({ level: "warn", message: "Primary buttons will barely stand out from the page background." });
+    out.push({ level: "warn", message: "Los botones principales apenas destacarán sobre el fondo de la página." });
   }
   if (deltaE(theme.roles.primary.value, theme.roles.trim.value) < 0.08) {
-    out.push({ level: "warn", message: "Primary and trim come out nearly identical on the site; consider an override." });
+    out.push({ level: "warn", message: "El principal y el ribete salen casi idénticos en el sitio; plantéate ajustarlos a mano." });
   }
   return out;
 }

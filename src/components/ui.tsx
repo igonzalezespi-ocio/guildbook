@@ -2,7 +2,17 @@ import clsx from "clsx";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { FactionIcon } from "@/components/faction-icon";
-import { CLASS_INFO, FACTION_LABELS, type Faction, fullName, ROLE_LABELS, type RaidRole, type WowClass } from "@/lib/game";
+import {
+  ADDON_STATUS_LABELS,
+  APPLICATION_STATUS_LABELS,
+  CLASS_INFO,
+  FACTION_LABELS,
+  type Faction,
+  fullName,
+  ROLE_LABELS,
+  type RaidRole,
+  type WowClass,
+} from "@/lib/game";
 import { characterHref } from "@/lib/paths";
 
 export function PageHeader({ title, eyebrow, children }: { title: string; eyebrow?: string; children?: ReactNode }) {
@@ -109,10 +119,10 @@ export function VerifiedMark({
       viewBox="0 0 16 16"
       width={size}
       height={size}
-      {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-label": "Verified via Battle.net" })}
+      {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-label": "Verificado con Battle.net" })}
       className={clsx("inline-block shrink-0 align-[-0.125em] text-highlight", className)}
     >
-      {!decorative && <title>Verified via Battle.net</title>}
+      {!decorative && <title>Verificado con Battle.net</title>}
       <path
         fill="currentColor"
         d="M8 .8l1.7 1.3 2.1-.2.8 2 2 .9-.2 2.1L15.7 8l-1.3 1.7.2 2.1-2 .8-.8 2-2.1-.2L8 15.7l-1.7-1.3-2.1.2-.8-2-2-.8.2-2.1L.3 8l1.3-1.7-.2-2.1 2-.9.8-2 2.1.2z"
@@ -127,11 +137,11 @@ export function GuildMemberTag({ guildName, className }: { guildName: string; cl
   return (
     <span
       className={clsx("inline-flex items-center gap-1 rounded border border-gold-dim/70 px-1.5 py-0.5 text-[0.65rem] tracking-wider text-gold uppercase", className)}
-      title={`Battle.net shows this character in ${guildName} in game`}
+      title={`Battle.net muestra a este personaje en ${guildName} dentro del juego`}
       data-testid="guild-member-tag"
     >
       <VerifiedMark size={10} decorative />
-      Verified member
+      Miembro verificado
     </span>
   );
 }
@@ -141,10 +151,10 @@ export function VerificationBadge({ verified }: { verified: boolean }) {
   return verified ? (
     <span className="inline-flex items-center gap-1 rounded border border-gold-dim px-2 py-0.5 text-xs text-gold">
       <VerifiedMark size={12} decorative />
-      Verified via Battle.net
+      Verificado con Battle.net
     </span>
   ) : (
-    <span className="inline-flex items-center rounded border border-line px-2 py-0.5 text-xs text-muted">Unverified</span>
+    <span className="inline-flex items-center rounded border border-line px-2 py-0.5 text-xs text-muted">Sin verificar</span>
   );
 }
 
@@ -166,7 +176,7 @@ export function StatusPill({ status }: { status: string }) {
   };
   return (
     <span className={clsx("rounded border px-2 py-0.5 text-xs capitalize", tone[status] ?? "border-line text-muted")}>
-      {status.replace("_", " ")}
+      {APPLICATION_STATUS_LABELS[status] ?? ADDON_STATUS_LABELS[status] ?? status.replace("_", " ")}
     </span>
   );
 }

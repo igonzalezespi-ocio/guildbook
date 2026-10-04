@@ -127,12 +127,12 @@ describe("tabard to theme mapping", () => {
 describe("low-distinction warnings", () => {
   it("warns when the border nearly matches the background", () => {
     const w = tabardWarnings(t({ background: 49, border: 14 }));
-    expect(w.some((x) => x.level === "warn" && /border colour is nearly the same/.test(x.message))).toBe(true);
+    expect(w.some((x) => x.level === "warn" && /color del borde es casi igual/.test(x.message))).toBe(true);
   });
 
   it("warns when the emblem nearly matches the background", () => {
     const w = tabardWarnings(t({ background: 49, border: 3, emblemColor: 14 }));
-    expect(w.some((x) => /emblem colour is nearly the same/.test(x.message))).toBe(true);
+    expect(w.some((x) => /color del emblema es casi igual/.test(x.message))).toBe(true);
   });
 
   it("stays quiet for a well-separated tabard", () => {
@@ -143,8 +143,8 @@ describe("low-distinction warnings", () => {
   it("flags buttons that vanish into the page and large lightness corrections", () => {
     const theme = computeTheme(t({ background: 45 }), "tome");
     const w = themeWarnings(theme);
-    expect(w.some((x) => /barely stand out/.test(x.message))).toBe(true);
+    expect(w.some((x) => /apenas destacarán/.test(x.message))).toBe(true);
     const navyTrim = computeTheme(t({ border: 10 }), "tome");
-    expect(themeWarnings(navyTrim).some((x) => /lightened noticeably/.test(x.message))).toBe(true);
+    expect(themeWarnings(navyTrim).some((x) => /se aclara bastante/.test(x.message))).toBe(true);
   });
 });

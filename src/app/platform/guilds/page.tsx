@@ -26,8 +26,8 @@ import { DirectoryFilters } from "./directory-filters";
 import { directoryHref } from "./filters";
 
 export const metadata: Metadata = {
-  title: "Guild directory",
-  description: "World of Warcraft: Forever guilds on Guildbook that welcome new members.",
+  title: "Directorio de hermandades",
+  description: "Hermandades de World of Warcraft: Forever en Guildbook que buscan miembros nuevos.",
 };
 
 function pick<T extends string>(options: readonly T[], value: string | string[] | undefined): T | undefined {
@@ -62,16 +62,16 @@ export default async function DirectoryPage({ searchParams }: PageProps<"/platfo
 
   return (
     <div>
-      <PageHeader title="Guild directory" eyebrow="Guildbook">
-        Guilds that chose to be listed. Verified guilds, whose Guild Master proved their in-game rank through Battle.net, come
-        first. Officers can list theirs under Admin, then Guild.
+      <PageHeader title="Directorio de hermandades" eyebrow="Guildbook">
+        Hermandades que han elegido aparecer aquí. Las verificadas, cuyo maestro de la hermandad demostró su rango en el juego
+        con Battle.net, salen primero. Los oficiales pueden añadir la suya en Administración &gt; Hermandad.
       </PageHeader>
-      <nav aria-label="Filter guilds" className="mb-6" data-testid="directory-filters">
+      <nav aria-label="Filtrar hermandades" className="mb-6" data-testid="directory-filters">
         <DirectoryFilters version={version} realm={realm} region={region} faction={faction} ruleset={ruleset} />
         <noscript>
           <div className="mt-4 space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="w-16 text-xs tracking-wider text-gold-dim uppercase">Game</span>
+              <span className="w-16 text-xs tracking-wider text-gold-dim uppercase">Juego</span>
               {SUPPORTED_GUILD_VERSIONS.map((v) => (
                 <FilterChip key={v} href={directoryHref({ version: v, region, faction, ruleset })} active={version === v}>
                   {VERSION_INFO[v].label}
@@ -79,9 +79,9 @@ export default async function DirectoryPage({ searchParams }: PageProps<"/platfo
               ))}
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="w-16 text-xs tracking-wider text-gold-dim uppercase">Region</span>
+              <span className="w-16 text-xs tracking-wider text-gold-dim uppercase">Región</span>
               <FilterChip href={directoryHref({ ...base, faction, ruleset })} active={!region}>
-                All
+                Cualquiera
               </FilterChip>
               {REGIONS.map((r) => (
                 <FilterChip key={r} href={directoryHref({ ...base, region: r, faction, ruleset })} active={region === r}>
@@ -91,9 +91,9 @@ export default async function DirectoryPage({ searchParams }: PageProps<"/platfo
               ))}
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="w-16 text-xs tracking-wider text-gold-dim uppercase">Faction</span>
+              <span className="w-16 text-xs tracking-wider text-gold-dim uppercase">Facción</span>
               <FilterChip href={directoryHref({ ...base, region, ruleset })} active={!faction}>
-                All
+                Cualquiera
               </FilterChip>
               {FACTIONS.map((f) => (
                 <FilterChip key={f} href={directoryHref({ ...base, region, faction: f, ruleset })} active={faction === f}>
@@ -103,9 +103,9 @@ export default async function DirectoryPage({ searchParams }: PageProps<"/platfo
               ))}
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="w-16 text-xs tracking-wider text-gold-dim uppercase">Ruleset</span>
+              <span className="w-16 text-xs tracking-wider text-gold-dim uppercase">Tipo</span>
               <FilterChip href={directoryHref({ ...base, region, faction })} active={!ruleset}>
-                All
+                Cualquiera
               </FilterChip>
               {RULESETS.map((r) => (
                 <FilterChip key={r} href={directoryHref({ ...base, region, faction, ruleset: r })} active={ruleset === r}>
@@ -121,13 +121,13 @@ export default async function DirectoryPage({ searchParams }: PageProps<"/platfo
         <p className="text-center text-muted">
           {filtered ? (
             <>
-              No listed guilds match those filters. <Link href={directoryHref({ version })} className="link">Show all guilds</Link>.
+              Ninguna hermandad del directorio coincide con esos filtros. <Link href={directoryHref({ version })} className="link">Ver todas las hermandades</Link>.
             </>
           ) : (
             <>
-              No {version === DEFAULT_GUILD_VERSION ? "" : `${VERSION_INFO[version].label} `}guilds are listed yet.{" "}
+              Aún no hay hermandades{version === DEFAULT_GUILD_VERSION ? "" : ` de ${VERSION_INFO[version].label}`} en el directorio.{" "}
               <Link href={version === DEFAULT_GUILD_VERSION ? "/create" : `/create?version=${version}`} className="link">
-                Create the first one
+                Crea la primera
               </Link>
               .
             </>
@@ -137,8 +137,8 @@ export default async function DirectoryPage({ searchParams }: PageProps<"/platfo
         <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-testid="directory">
           {guilds.map((g) => (
             <GuildCard key={g.slug} guild={g} href={guildOrigin(g.slug, current, g.customDomain)}>
-              <span>{g.members === 1 ? "1 member" : `${g.members} members`}</span>
-              <span className={g.recruitmentOpen ? "text-gold" : undefined}>{g.recruitmentOpen ? "Recruiting" : "Not recruiting"}</span>
+              <span>{g.members === 1 ? "1 miembro" : `${g.members} miembros`}</span>
+              <span className={g.recruitmentOpen ? "text-gold" : undefined}>{g.recruitmentOpen ? "Reclutando" : "No recluta"}</span>
             </GuildCard>
           ))}
         </ul>

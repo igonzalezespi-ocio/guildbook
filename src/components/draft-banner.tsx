@@ -12,25 +12,25 @@ export async function DraftBanner({ guild, viewer }: { guild: Guild; viewer: Vie
   if (guild.publishedAt || !can(viewer.actor, "guild.settings")) return null;
   const { summary } = await getGuildSetup(db, viewer.actor);
   return (
-    <aside className="border-b border-gold-dim/50 bg-gold/5" data-testid="draft-banner" aria-label="Draft guild">
+    <aside className="border-b border-gold-dim/50 bg-gold/5" data-testid="draft-banner" aria-label="Hermandad en borrador">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2.5 text-sm">
         <p className="flex-1 text-bone">
-          <strong className="font-display tracking-wider text-gold uppercase">Draft: not yet public.</strong>{" "}
+          <strong className="font-display tracking-wider text-gold uppercase">Borrador: aún no es pública.</strong>{" "}
           <span className="text-muted">
-            Anyone with the link can visit. The guild is hidden from the directory and search engines, and applications open
-            once you publish.
+            Cualquiera con el enlace puede visitarla. La hermandad no aparece en el directorio ni en los buscadores, y las
+            solicitudes se abren cuando la publiques.
           </span>
         </p>
         {summary.canPublish ? (
           <ActionForm action={publishGuildAction.bind(null, guild.slug)} className="flex items-center gap-2">
-            <SubmitButton variant="gold" size="sm" pendingLabel="Publishing…">
-              Publish
+            <SubmitButton variant="gold" size="sm" pendingLabel="Publicando…">
+              Publicar
             </SubmitButton>
             <FormMessage />
           </ActionForm>
         ) : (
           <Link href={guildHref(guild.slug, "/admin/setup#publish")} className="btn btn-ghost btn-sm">
-            {summary.publishMissing.length === 1 ? "1 step left to publish" : `${summary.publishMissing.length} steps left to publish`}
+            {summary.publishMissing.length === 1 ? "Falta 1 paso para publicar" : `Faltan ${summary.publishMissing.length} pasos para publicar`}
           </Link>
         )}
       </div>

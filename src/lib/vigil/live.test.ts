@@ -73,7 +73,7 @@ describe("LiveSession", () => {
   it("calls out a wasted Revenge window and rotation misses as they settle", () => {
     const { callouts, completed } = stream(warriorLog());
     const revenge = callouts.filter((c) => c.kind === "proc");
-    expect(revenge.some((c) => /^Revenge was available for \d+\.\d s and went unused$/.test(c.text))).toBe(true);
+    expect(revenge.some((c) => /^Revenge estuvo disponible durante \d+,\d s y no se usó$/.test(c.text))).toBe(true);
     expect(new Set(callouts.map((c) => `${c.fightStartT}:${c.id}`)).size).toBe(callouts.length);
     expect(completed[0]!.callouts.length).toBeGreaterThan(0);
   });
@@ -81,8 +81,8 @@ describe("LiveSession", () => {
   it("calls out time without a seal and idle time while Judgement was ready", () => {
     const { callouts, session } = stream(paladinLog());
     expect(session.model?.id).toBe("paladin-leveling");
-    expect(callouts.map((c) => c.text)).toContain("No seal for 5 s");
-    expect(callouts.some((c) => /^Idle for \d+\.\d s while Judgement was ready$/.test(c.text))).toBe(true);
+    expect(callouts.map((c) => c.text)).toContain("Sin sello durante 5 s");
+    expect(callouts.some((c) => /^Inactivo durante \d+,\d s con Judgement listo$/.test(c.text))).toBe(true);
   });
 
   it("honours an explicit player and model and starts over on a new file", () => {

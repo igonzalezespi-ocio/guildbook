@@ -2,13 +2,13 @@ import { z } from "zod";
 
 /** What a support request is about, in the order the form lists them. */
 export const SUPPORT_CATEGORIES = {
-  account: { label: "Account and sign-in", description: "Discord sign-in, your profile, exporting or deleting your data" },
-  guild_setup: { label: "Guild setup", description: "Creating a guild, subdomains, custom domains, ranks and pages" },
-  battlenet: { label: "Battle.net verification", description: "Linking Battle.net, verifying characters or your guild" },
-  vigil: { label: "Vigil desktop app", description: "The companion app, pairing and fight uploads" },
-  billing: { label: "Billing", description: "Paid plans aren't live yet; ask about them here" },
-  bug: { label: "Bug report", description: "Something is broken or looks wrong" },
-  other: { label: "Other", description: "Anything else" },
+  account: { label: "Cuenta e inicio de sesión", description: "Inicio de sesión con Discord, tu perfil, exportar o borrar tus datos" },
+  guild_setup: { label: "Configurar la hermandad", description: "Crear una hermandad, subdominios, dominios propios, rangos y páginas" },
+  battlenet: { label: "Verificación de Battle.net", description: "Vincular Battle.net, verificar personajes o tu hermandad" },
+  vigil: { label: "App de escritorio Vigil", description: "La app complementaria, el emparejamiento y la subida de combates" },
+  billing: { label: "Facturación", description: "Los planes de pago aún no están activos; pregunta por ellos aquí" },
+  bug: { label: "Informar de un error", description: "Algo no funciona o se ve mal" },
+  other: { label: "Otro", description: "Cualquier otra cosa" },
 } as const;
 
 export type SupportCategory = keyof typeof SUPPORT_CATEGORIES;
@@ -38,28 +38,28 @@ const optionalId = z
   .trim()
   .optional()
   .transform((v) => (v ? v : null))
-  .pipe(z.uuid("Choose one of your guilds").nullable());
+  .pipe(z.uuid("Elige una de tus hermandades").nullable());
 
 export const supportTicketInput = z.object({
-  category: z.enum(SUPPORT_CATEGORY_KEYS, "Choose a category"),
+  category: z.enum(SUPPORT_CATEGORY_KEYS, "Elige una categoría"),
   guildId: optionalId,
   subject: z
     .string()
     .trim()
-    .min(1, "Subject is required")
-    .max(SUPPORT_SUBJECT_MAX, `Subject must be at most ${SUPPORT_SUBJECT_MAX} characters`),
+    .min(1, "El asunto es obligatorio")
+    .max(SUPPORT_SUBJECT_MAX, `El asunto debe tener como máximo ${SUPPORT_SUBJECT_MAX} caracteres`),
   message: z
     .string()
     .trim()
-    .min(SUPPORT_MESSAGE_MIN, `Tell us a little more: at least ${SUPPORT_MESSAGE_MIN} characters`)
-    .max(SUPPORT_MESSAGE_MAX, `Message must be at most ${SUPPORT_MESSAGE_MAX} characters`),
+    .min(SUPPORT_MESSAGE_MIN, `Cuéntanos un poco más: al menos ${SUPPORT_MESSAGE_MIN} caracteres`)
+    .max(SUPPORT_MESSAGE_MAX, `El mensaje debe tener como máximo ${SUPPORT_MESSAGE_MAX} caracteres`),
   replyTo: z
     .string()
     .trim()
-    .max(254, "Email is too long")
+    .max(254, "El correo es demasiado largo")
     .optional()
     .transform((v) => (v ? v : null))
-    .pipe(z.email("Enter an email address like you@example.com").nullable()),
+    .pipe(z.email("Escribe un correo como tu@ejemplo.com").nullable()),
 });
 
 export type SupportTicketInput = z.infer<typeof supportTicketInput>;

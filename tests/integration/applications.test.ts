@@ -95,18 +95,18 @@ describe("application lifecycle", () => {
   it("validates class and spec together", async () => {
     const guild = await createGuild(db);
     const visitor = await createVisitor(db, guild.guild.id);
-    await expect(submitApplication(db, visitor, { ...validApplication, spec: "Holy" })).rejects.toThrow(/Spec/);
+    await expect(submitApplication(db, visitor, { ...validApplication, spec: "Holy" })).rejects.toThrow(/especialización/);
   });
 
   it("asks only the Order's applicants to respect the faith", async () => {
     const unpledged = { ...validApplication, respectsFaith: undefined };
     const order = await createGuild(db);
     await expect(submitApplication(db, await createVisitor(db, order.guild.id), unpledged)).rejects.toThrow(
-      "You must agree to respect the faith and the charter",
+      "Tienes que aceptar respetar la fe y el reglamento",
     );
     const standard = await createGuildWithDefaults(db, { slug: "pledge-standard", name: "Silver Dawn", faction: "alliance", ruleset: "normal" });
     const rejected = submitApplication(db, await createVisitor(db, standard.guild.id), unpledged);
-    await expect(rejected).rejects.toThrow("You must agree to keep the charter");
+    await expect(rejected).rejects.toThrow("Tienes que aceptar cumplir el reglamento");
     await expect(rejected).rejects.not.toThrow(/faith/);
   });
 });
@@ -142,7 +142,7 @@ describe("characters", () => {
   it("requires a surname", async () => {
     const guild = await createGuild(db, { faction: "horde" });
     const knight = await createMember(db, guild, "Knight");
-    await expect(createCharacter(db, knight, { ...base, surname: "", name: "Lonely" })).rejects.toThrow(/Surname/);
+    await expect(createCharacter(db, knight, { ...base, surname: "", name: "Lonely" })).rejects.toThrow(/apellido/);
   });
 
   it("treats the full first + last name as unique", async () => {
@@ -151,7 +151,7 @@ describe("characters", () => {
     const b = await createMember(db, guild, "Knight");
     await createCharacter(db, a, { ...base, name: "Longinus" });
     await expect(createCharacter(db, b, { ...base, name: "longinus", surname: "spearwright" })).rejects.toThrow(
-      /Longinus Spearwright is already registered/i,
+      /Ya hay registrado un personaje llamado Longinus Spearwright/i,
     );
     await expect(createCharacter(db, b, { ...base, name: "Longinus", surname: "Lancebearer" })).resolves.toBeTruthy();
     await expect(createCharacter(db, b, { ...base, name: "Cassius" })).resolves.toBeTruthy();
@@ -162,7 +162,7 @@ describe("characters", () => {
     const a = await createMember(db, guild, "Knight");
     const b = await createMember(db, guild, "Knight");
     const char = await createCharacter(db, a, { ...base, name: "Sebastian" });
-    await expect(setMainCharacter(db, b, char.id)).rejects.toThrow(/not found/);
+    await expect(setMainCharacter(db, b, char.id)).rejects.toThrow(/No se ha encontrado/);
   });
 
   it("uses the guild's faction when none is given", async () => {
@@ -182,7 +182,7 @@ describe("single-faction guilds", () => {
     const knight = await createMember(db, guild, "Knight");
     await expect(createCharacter(db, knight, { ...base, name: "Uriel" })).resolves.toMatchObject({ faction: "alliance" });
     await expect(createCharacter(db, knight, { ...base, faction: "horde", name: "Azrael" })).rejects.toThrow(
-      /Alliance only/,
+      /solo de la Alianza/,
     );
   });
 

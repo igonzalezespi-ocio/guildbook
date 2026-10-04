@@ -7,7 +7,7 @@ import { guildHref } from "@/lib/paths";
 import { requirePage } from "@/server/context";
 import { listContentPages } from "@/server/services/content";
 
-export const metadata: Metadata = { title: "Charter and Lore" };
+export const metadata: Metadata = { title: "Reglamento e historia" };
 
 export default async function ContentListPage({ params }: PageProps<"/[guild]/admin/content">) {
   const { guild: slug } = await params;
@@ -16,7 +16,7 @@ export default async function ContentListPage({ params }: PageProps<"/[guild]/ad
 
   return (
     <div className="mx-auto max-w-2xl">
-      <PageHeader title="Charter and Lore" />
+      <PageHeader title="Reglamento e historia" />
       <ul className="space-y-2">
         {pages.map((p) => (
           <li key={p.id}>
@@ -25,7 +25,7 @@ export default async function ContentListPage({ params }: PageProps<"/[guild]/ad
               className="panel flex items-center justify-between p-4 hover:border-gold-dim"
             >
               <span className="font-display text-gold">{p.title}</span>
-              <span className="text-xs text-muted">Updated {formatDateTime(p.updatedAt, guild.timezone)}</span>
+              <span className="text-xs text-muted">Actualizado {formatDateTime(p.updatedAt, guild.timezone)}</span>
             </Link>
           </li>
         ))}

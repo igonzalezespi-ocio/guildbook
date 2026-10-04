@@ -27,7 +27,7 @@ const json = (body: unknown, status = 200, headers: Record<string, string> = {})
   Response.json(body, { status, headers: { "Cache-Control": "no-store", ...headers } });
 
 function errorResponse(err: unknown): Response {
-  if (err instanceof z.ZodError) return json({ error: "The request was not in the expected format." }, 400);
+  if (err instanceof z.ZodError) return json({ error: "La petición no tiene el formato esperado." }, 400);
   if (err instanceof AuthorizationError) return json({ error: err.message }, err.code === "unauthenticated" ? 401 : 403);
   if (err instanceof NotFoundError) return json({ error: err.message }, 404);
   if (err instanceof VersionMismatchError) return json({ error: err.message, code: err.code }, 409);
@@ -48,7 +48,7 @@ async function readJson(request: Request, maxBytes: number): Promise<unknown> {
   try {
     return JSON.parse(text);
   } catch {
-    throw new DomainError("The request body was not valid JSON.");
+    throw new DomainError("El cuerpo de la petición no es un JSON válido.");
   }
 }
 
@@ -66,12 +66,12 @@ async function companionSiteUrl(db: Db, guild: { id: string; slug: string }, req
 
 export async function handlePair(db: Db, request: Request): Promise<Response> {
   const limit = pairLimiter(clientIp(request));
-  if (!limit.ok) return json({ error: "Too many pairing attempts. Wait a minute." }, 429, { "Retry-After": String(limit.retryAfterS) });
+  if (!limit.ok) return json({ error: "Demasiados intentos de emparejamiento. Espera un minuto." }, 429, { "Retry-After": String(limit.retryAfterS) });
   try {
     const { guildId, ...result } = await exchangePairingCode(db, await readJson(request, 4096));
     return json({ ...result, siteUrl: await companionSiteUrl(db, { id: guildId, slug: result.guild.slug }, request) }, 201);
   } catch (err) {
-    if (err instanceof PayloadTooLarge) return json({ error: "Request too large." }, 413);
+    if (err instanceof PayloadTooLarge) return json({ error: "Petición demasiado grande." }, 413);
     return errorResponse(err);
   }
 }
@@ -91,13 +91,13 @@ export async function handleUpload(db: Db, request: Request): Promise<Response> 
     const body = await readJson(request, MAX_REPORT_BYTES + 4096);
     const quota = await takeUploadQuota(db, auth.device.id);
     if (!quota.ok) {
-      return json({ error: "Uploading too fast. The companion will retry." }, 429, { "Retry-After": String(quota.retryAfterS) });
+      return json({ error: "Subidas demasiado rápidas. La app lo volverá a intentar." }, 429, { "Retry-After": String(quota.retryAfterS) });
     }
     const { id, gameVersion, versionMismatch, warning } = await uploadCompanionReport(db, auth, body);
     const url = new URL(guildHref(auth.guild.slug, `/vigil/reports/${id}`), await companionSiteUrl(db, auth.guild, request)).toString();
     return json({ id, url, gameVersion, versionMismatch, warning }, 201);
   } catch (err) {
-    if (err instanceof PayloadTooLarge) return json({ error: "This fight's report is too large to upload." }, 413);
+    if (err instanceof PayloadTooLarge) return json({ error: "El informe de este combate es demasiado grande para subirlo." }, 413);
     return errorResponse(err);
   }
 }

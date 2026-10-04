@@ -16,17 +16,17 @@ async function createGuild(page: Page, slug: string, name: string) {
   await page.context().clearCookies();
   await page.goto(`${APEX}/login?callbackUrl=${encodeURIComponent("/create")}`);
   const form = page.getByTestId("test-login-other");
-  await form.getByPlaceholder("Discord ID").fill(`e2e-tabard-${slug}`);
-  await form.getByPlaceholder("Name").fill("Founder");
-  await form.getByRole("button", { name: "Test sign in" }).click();
+  await form.getByPlaceholder("ID de Discord").fill(`e2e-tabard-${slug}`);
+  await form.getByPlaceholder("Nombre").fill("Founder");
+  await form.getByRole("button", { name: "Entrar (prueba)" }).click();
   await page.waitForURL(`${APEX}/create`);
-  await page.getByLabel("Guild name").fill(name);
-  await page.getByLabel("Subdomain").fill(slug);
-  await expect(page.getByTestId("slug-status")).toHaveText("Available");
-  await page.getByLabel("Alliance").check();
+  await page.getByLabel("Nombre de la hermandad").fill(name);
+  await page.getByLabel("Subdominio").fill(slug);
+  await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
+  await page.getByLabel("Alianza").check();
   await page.getByLabel(/^Normal/).check();
-  await page.getByLabel("Motto").fill("Hold the line");
-  await page.getByRole("button", { name: "Create guild" }).click();
+  await page.getByLabel("Lema").fill("Hold the line");
+  await page.getByRole("button", { name: "Crear hermandad" }).click();
   await page.waitForURL(`${guildOrigin(slug)}/admin/setup`);
 }
 
@@ -47,22 +47,22 @@ test.describe("Guild tabard and theme", () => {
     const buttonBefore = await button.evaluate((el) => getComputedStyle(el).backgroundImage);
     const headingBefore = await heading.evaluate((el) => getComputedStyle(el).color);
 
-    await page.getByRole("radiogroup", { name: "Background colour" }).getByRole("radio", { name: "Jade" }).click();
-    await page.getByRole("radiogroup", { name: "Border colour" }).getByRole("radio", { name: "Silver" }).click();
+    await page.getByRole("radiogroup", { name: "Color de fondo" }).getByRole("radio", { name: "Jade" }).click();
+    await page.getByRole("radiogroup", { name: "Color del borde" }).getByRole("radio", { name: "Plata" }).click();
     // Before launch there's nothing to import yet, and the page says so.
-    await expect(page.getByTestId("tabard-import-note")).toContainText("Importing opens once WoW: Forever characters exist");
+    await expect(page.getByTestId("tabard-import-note")).toContainText("La importación se abre cuando existan personajes de WoW: Forever");
 
     // New guilds start on a real in-game emblem (the lion). Only Blizzard's emblems are offered: no drawn emblem, no
     // suggestion to replace one, and no border shape picker.
-    const emblems = page.getByRole("radiogroup", { name: "Emblem", exact: true });
-    await expect(emblems.getByRole("radio", { name: "Lion", exact: true })).toHaveAttribute("aria-checked", "true");
+    const emblems = page.getByRole("radiogroup", { name: "Emblema", exact: true });
+    await expect(emblems.getByRole("radio", { name: "León", exact: true })).toHaveAttribute("aria-checked", "true");
     await expect(emblems.getByRole("radio")).toHaveCount(196);
     await expect(emblems.getByText("Drawn")).toHaveCount(0);
     await expect(page.getByTestId("emblem-suggestion")).toHaveCount(0);
     await expect(page.getByRole("radiogroup", { name: "Border", exact: true })).toHaveCount(0);
-    await page.getByLabel("Search emblems").fill("pack");
+    await page.getByLabel("Buscar emblemas").fill("pack");
     await expect(emblems.getByRole("radio")).toHaveCount(1);
-    const wolf = emblems.getByRole("radio", { name: "Wolf", exact: true });
+    const wolf = emblems.getByRole("radio", { name: "Lobo", exact: true });
     await wolf.click();
     await expect(wolf).toHaveAttribute("aria-checked", "true");
     // The thumbnail is Blizzard's emblem, tinted by an SVG filter that exists on the page.
@@ -71,10 +71,10 @@ test.describe("Guild tabard and theme", () => {
     const filterId = await thumb.evaluate((img) => /url\("?#([^")]+)"?\)/.exec(img.style.filter)?.[1]);
     expect(filterId).toBeTruthy();
     await expect(page.locator(`filter[id="${filterId}"]`)).toHaveCount(1);
-    await page.getByRole("radiogroup", { name: "Emblem colour" }).getByRole("radio", { name: "Black" }).click();
-    await page.getByRole("radiogroup", { name: "Base style" }).getByRole("radio", { name: /^Parchment/ }).click();
+    await page.getByRole("radiogroup", { name: "Color del emblema" }).getByRole("radio", { name: "Negro" }).click();
+    await page.getByRole("radiogroup", { name: "Estilo base" }).getByRole("radio", { name: /^Pergamino/ }).click();
 
-    await expect(page.getByRole("radiogroup", { name: "Background colour" }).getByRole("radio", { name: "Jade" })).toHaveAttribute("aria-checked", "true");
+    await expect(page.getByRole("radiogroup", { name: "Color de fondo" }).getByRole("radio", { name: "Jade" })).toHaveAttribute("aria-checked", "true");
     await expect.poll(() => button.evaluate((el) => getComputedStyle(el).backgroundImage)).not.toBe(buttonBefore);
     await expect.poll(() => heading.evaluate((el) => getComputedStyle(el).color)).not.toBe(headingBefore);
     // Parchment is a light base: the sample page surface turns light.
@@ -86,8 +86,8 @@ test.describe("Guild tabard and theme", () => {
     await expect(page.getByTestId("crest-preview").locator('image[href*="/tabard/borders/"]')).toHaveCount(0);
     await expect(page.getByTestId("crest-preview").locator("image")).toHaveCount(18);
 
-    await page.getByRole("button", { name: "Save tabard and theme" }).click();
-    await expect(page.getByText("Tabard and theme saved").first()).toBeVisible();
+    await page.getByRole("button", { name: "Guardar tabardo y tema" }).click();
+    await expect(page.getByText("Tabardo y tema guardados").first()).toBeVisible();
     await expect(page.getByTestId("discord-icon-download")).toHaveAttribute("href", /v=25-14-plain-15-e193-t3/);
 
     await page.goto(`${guildOrigin(slug)}/`);
@@ -118,14 +118,14 @@ test.describe("Guild tabard and theme", () => {
     await expect(page.locator("style[data-guild-theme]")).toHaveCount(0);
     expect(await rootVar(page, "--color-crimson")).toBe("#7a1020");
     expect(await rootVar(page, "--color-gold")).toBe("#c9a44c");
-    await expect(page.getByRole("img", { name: "Order of Saint Michael crest" }).first()).toBeAttached();
+    await expect(page.getByRole("img", { name: "Escudo de la Order of Saint Michael" }).first()).toBeAttached();
     const icons = await page.locator('link[rel="icon"], link[rel="apple-touch-icon"]').evaluateAll((els) => els.map((e) => e.getAttribute("href") ?? ""));
     expect(icons.length).toBeGreaterThan(0);
     for (const href of icons) expect(href).toMatch(/^\/brand\/osm\//);
 
     await signIn(page, "seed-tor", "Tor", "/admin/guild");
-    const section = page.locator("section", { has: page.getByRole("heading", { name: "Tabard and theme" }) });
-    await expect(section.getByText("Locked", { exact: true })).toBeVisible();
-    await expect(section.getByRole("button", { name: "Save tabard and theme" })).toHaveCount(0);
+    const section = page.locator("section", { has: page.getByRole("heading", { name: "Tabardo y tema" }) });
+    await expect(section.getByText("Bloqueado", { exact: true })).toBeVisible();
+    await expect(section.getByRole("button", { name: "Guardar tabardo y tema" })).toHaveCount(0);
   });
 });

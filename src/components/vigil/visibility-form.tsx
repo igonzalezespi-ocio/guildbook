@@ -11,7 +11,7 @@ function VisibilitySelect({ value, label }: { value: Visibility; label: string }
       aria-label={label}
       size="sm"
       className="min-w-44"
-      options={VISIBILITIES.map((v) => ({ value: v, label: v === "private" ? "Private (only me)" : VISIBILITY_LABELS[v] }))}
+      options={VISIBILITIES.map((v) => ({ value: v, label: v === "private" ? "Privado (solo yo)" : VISIBILITY_LABELS[v] }))}
     />
   );
 }
@@ -19,9 +19,9 @@ function VisibilitySelect({ value, label }: { value: Visibility; label: string }
 export function ReportVisibilityForm({ slug, id, value }: { slug: string; id: string; value: Visibility }) {
   return (
     <ActionForm action={setVigilVisibilityAction.bind(null, slug, id)} className="flex flex-wrap items-center gap-2">
-      <VisibilitySelect value={value} label="Who can see this report" />
+      <VisibilitySelect value={value} label="Quién puede ver este informe" />
       <SubmitButton size="sm" variant="ghost">
-        Save sharing
+        Guardar
       </SubmitButton>
       <FormMessage className="w-full" />
     </ActionForm>
@@ -31,13 +31,13 @@ export function ReportVisibilityForm({ slug, id, value }: { slug: string; id: st
 export function DefaultVisibilityForm({ slug, value }: { slug: string; value: Visibility }) {
   return (
     <ActionForm action={setVigilDefaultVisibilityAction.bind(null, slug)} className="flex flex-wrap items-center gap-3">
-      <VisibilitySelect value={value} label="Default sharing for new reports" />
+      <VisibilitySelect value={value} label="Compartir por defecto en los informes nuevos" />
       <label className="flex items-center gap-2 text-sm text-muted">
         <input type="checkbox" name="applyToExisting" className="accent-[var(--color-gold)]" />
-        Apply to all my reports
+        Aplicar a todos mis informes
       </label>
       <SubmitButton size="sm" variant="ghost">
-        Save
+        Guardar
       </SubmitButton>
       <FormMessage className="w-full" />
     </ActionForm>

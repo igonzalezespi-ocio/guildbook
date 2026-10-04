@@ -3,7 +3,7 @@ import type { Db } from "@/db/types";
 import { applications, type BattlenetCharacterSnapshot, characters, guilds, memberships, ranks } from "@/db/schema";
 import { type Actor, assertCan } from "@/lib/authz/policy";
 import { type RankTier, TIER_LABELS, tierAtLeast } from "@/lib/authz/tiers";
-import { CLASS_INFO, fullName, isValidSpec } from "@/lib/game";
+import { CLASS_INFO, fullName, isValidSpec, specLabel } from "@/lib/game";
 import { hasSurnames, isSupportedVersion } from "@/lib/game-versions";
 import { sameGuildName } from "@/lib/guild-identity";
 import { confirmedJoinInputFor, confirmedJoinSettingsInput } from "@/lib/validation";
@@ -145,19 +145,19 @@ export async function joinAsConfirmedMember(
   opts: { eligibility?: Eligibility; invite?: string | null; now?: Date } = {},
 ) {
   assertCan(actor, "application.submit");
-  if (tierAtLeast(actor.tier, "member")) throw new DomainError("You are already a member of the guild.");
+  if (tierAtLeast(actor.tier, "member")) throw new DomainError("Ya eres miembro de la hermandad.");
   const guild = await loadGuild(db, actor.guildId);
   if (!guild.publishedAt && !validDraftInvite(guild, opts.invite)) throw new DomainError(DRAFT_APPLICATIONS_CLOSED);
   const input = confirmedJoinInputFor(guild).parse(raw);
 
   const check = await findConfirmedJoin(db, actor, client, { eligibility: opts.eligibility, now: opts.now });
   if (!check.ok || check.offer.character.id !== input.bnetCharacterId) {
-    throw new DomainError("Battle.net no longer shows that character in the guild in game. Send an application instead.");
+    throw new DomainError("Battle.net ya no muestra a ese personaje en la hermandad del juego. Envía una solicitud.");
   }
   const { character: bnet, rank, inGameGuildName, rosterRank } = check.offer;
   const surname = hasSurnames(guild.gameVersion) ? (bnet.surname ?? input.surname ?? "") : "";
-  if (hasSurnames(guild.gameVersion) && !surname) throw new DomainError("Enter your character's surname.", { field: "surname" });
-  if (!isValidSpec(bnet.wowClass, input.spec)) throw new DomainError(`${input.spec} is not a ${CLASS_INFO[bnet.wowClass].label} spec.`, { field: "spec" });
+  if (hasSurnames(guild.gameVersion) && !surname) throw new DomainError("Escribe el apellido de tu personaje.", { field: "surname" });
+  if (!isValidSpec(bnet.wowClass, input.spec)) throw new DomainError(`${specLabel(input.spec)} no es una especialización de ${CLASS_INFO[bnet.wowClass].label}.`, { field: "spec" });
   const now = opts.now ?? new Date();
   const name = fullName(bnet.name, surname);
 
@@ -168,7 +168,7 @@ export async function joinAsConfirmedMember(
         .from(memberships)
         .where(and(eq(memberships.guildId, guild.id), eq(memberships.userId, actor.userId!)))
         .for("update");
-      if (current?.status === "active") throw new DomainError("You are already a member of the guild.");
+      if (current?.status === "active") throw new DomainError("Ya eres miembro de la hermandad.");
       const [membership] = await tx
         .insert(memberships)
         .values({ guildId: guild.id, userId: actor.userId!, rankId: rank.id, status: "active", joinedAt: now })
@@ -181,7 +181,7 @@ export async function joinAsConfirmedMember(
 
       const closed = await tx
         .update(applications)
-        .set({ status: "accepted", reviewedAt: now, decisionNote: "Joined without review: Battle.net confirmed the character in the in-game guild." })
+        .set({ status: "accepted", reviewedAt: now, decisionNote: "Entró sin revisión: Battle.net confirmó al personaje en la hermandad del juego." })
         .where(and(eq(applications.guildId, guild.id), eq(applications.userId, actor.userId!), eq(applications.status, "pending")))
         .returning({ id: applications.id });
 
@@ -205,7 +205,7 @@ export async function joinAsConfirmedMember(
         )
         .orderBy(sql`${characters.bnetCharacterId} is null`)
         .limit(1);
-      if (existing && existing.membershipId !== membership.id) throw new DomainError(`${name} is already registered by another member.`);
+      if (existing && existing.membershipId !== membership.id) throw new DomainError(`Otro miembro ya ha registrado a ${name}.`);
       const [main] = await tx
         .select({ id: characters.id })
         .from(characters)
@@ -253,7 +253,7 @@ export async function joinAsConfirmedMember(
       return { characterName: name, rankName: rank.name };
     });
   } catch (err) {
-    if (isUniqueViolation(err)) throw new DomainError(`A character named ${name} is already registered.`);
+    if (isUniqueViolation(err)) throw new DomainError(`Ya hay registrado un personaje llamado ${name}.`);
     throw err;
   }
 }
@@ -271,7 +271,7 @@ export async function updateConfirmedJoinSettings(db: Db, actor: Actor, raw: unk
         .where(and(eq(ranks.guildId, guild.id), eq(ranks.id, input.autoApproveRankId)));
       if (!rank) throw new NotFoundError("Rank");
       if (!CONFIRMED_JOIN_TIERS.includes(rank.tier)) {
-        throw new DomainError(`Confirmed members can't join on a rank with the ${TIER_LABELS[rank.tier]} tier.`, { field: "autoApproveRankId" });
+        throw new DomainError(`Los miembros confirmados no pueden entrar en un rango de nivel ${TIER_LABELS[rank.tier]}.`, { field: "autoApproveRankId" });
       }
     }
     await tx.update(guilds).set(input).where(eq(guilds.id, guild.id));

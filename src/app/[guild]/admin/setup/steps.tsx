@@ -12,62 +12,62 @@ export interface StepCopy {
 
 export const STEP_COPY: Record<SetupStepKey, StepCopy> = {
   look: {
-    title: "Tabard and colours",
-    body: "Design your in-game tabard, or import it from the game once WoW: Forever launches. It becomes your crest, icons and link previews, and sets your site's colours.",
+    title: "Tabardo y colores",
+    body: "Diseña tu tabardo del juego, o impórtalo del juego cuando salga WoW: Forever. Será tu escudo, tus iconos y tus vistas previas de enlaces, y marca los colores de tu sitio.",
     href: "/admin/guild#tabard",
-    cta: "Design tabard",
+    cta: "Diseñar tabardo",
   },
   ranks: {
-    title: "Ranks",
-    body: "Name your ranks and choose what each one can do. Start from a preset below or build your own ladder.",
+    title: "Rangos",
+    body: "Pon nombre a tus rangos y elige qué puede hacer cada uno. Empieza con una plantilla de abajo o monta tu propia escala.",
     href: "/admin/ranks",
-    cta: "Edit ranks",
+    cta: "Editar rangos",
   },
   charter: {
-    title: "Charter",
-    body: "Replace the starter charter with your guild's rules, so applicants know what you expect.",
+    title: "Reglamento",
+    body: "Sustituye el reglamento de ejemplo por las normas de tu hermandad, para que los aspirantes sepan qué esperas.",
     href: "/admin/content/charter",
-    cta: "Edit charter",
+    cta: "Editar reglamento",
   },
   lore: {
-    title: "Your story",
-    body: "Tell visitors who you are: how the guild started, what you value and what a night with you feels like.",
+    title: "Vuestra historia",
+    body: "Cuenta a los visitantes quiénes sois: cómo empezó la hermandad, qué valoráis y cómo es una noche con vosotros.",
     href: `/admin/content/${LORE_SLUG}`,
-    cta: "Write your story",
+    cta: "Escribir vuestra historia",
   },
   recruiting: {
-    title: "Recruiting",
-    body: "List the classes and roles you are looking for, or close recruitment if you are full.",
+    title: "Reclutamiento",
+    body: "Indica las clases y roles que buscas, o cierra el reclutamiento si estáis completos.",
     href: "/admin/recruitment",
-    cta: "Set recruiting",
+    cta: "Configurar reclutamiento",
   },
   invite: {
-    title: "Invite members",
-    body: "Share your site with your guild and add your Discord invite. Members sign in with Discord and apply through the site.",
+    title: "Invitar miembros",
+    body: "Comparte tu sitio con tu hermandad y añade tu invitación de Discord. Los miembros inician sesión con Discord y envían su solicitud desde el sitio.",
     href: "/admin/guild",
-    cta: "Add Discord invite",
+    cta: "Añadir invitación de Discord",
   },
   verify: {
-    title: "Verify with Battle.net",
-    body: "Verified guilds get a seal and come first in the directory. The in-game Guild Master links Battle.net and Guildbook checks their character.",
+    title: "Verificar con Battle.net",
+    body: "Las hermandades verificadas tienen un sello y salen primero en el directorio. El maestro de la hermandad del juego vincula Battle.net y Guildbook comprueba su personaje.",
     href: "/admin/guild#verify",
-    cta: "Open verification",
+    cta: "Abrir verificación",
   },
   vigil: {
-    title: "Vigil companion",
-    body: "Vigil reviews each pull from your combat log: rotation, uptimes and cooldowns. The desktop companion uploads logs as you play.",
+    title: "App de Vigil",
+    body: "Vigil analiza cada pull de tu registro de combate: rotación, tiempo activo de auras y reutilizaciones. La app de escritorio sube los registros mientras juegas.",
     href: "/vigil",
-    cta: "Set up Vigil",
+    cta: "Configurar Vigil",
   },
   publish: {
-    title: "Publish",
-    body: "Drafts are unlisted: anyone with the link can visit, but the guild stays out of the directory and search engines, and applications stay closed.",
+    title: "Publicar",
+    body: "Los borradores no aparecen en listados: cualquiera con el enlace puede entrar, pero la hermandad queda fuera del directorio y de los buscadores, y las solicitudes siguen cerradas.",
     href: "/admin/setup#publish",
-    cta: "Publish",
+    cta: "Publicar",
   },
 };
 
-const STATUS_LABEL: Record<SetupStatus, string> = { done: "Done", skipped: "Skipped", todo: "To do" };
+const STATUS_LABEL: Record<SetupStatus, string> = { done: "Hecho", skipped: "Omitido", todo: "Pendiente" };
 
 /** A step's status as a small seal: a gold check when done, a dash when skipped, an open ring when still to do. */
 export function StepStatusIcon({ status, className }: { status: SetupStatus; className?: string }) {
@@ -97,7 +97,7 @@ export function SetupProgress({ done, total }: { done: number; total: number }) 
       aria-valuemin={0}
       aria-valuemax={total}
       aria-valuenow={done}
-      aria-label="Setup progress"
+      aria-label="Progreso de la configuración"
     >
       <div className="h-full rounded-full bg-gold transition-[width]" style={{ width: `${Math.round((done / total) * 100)}%` }} />
     </div>

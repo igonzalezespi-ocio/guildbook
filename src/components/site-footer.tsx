@@ -56,31 +56,31 @@ export async function SiteFooter({ guild, viewer }: { guild: Guild; viewer: View
           <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-muted">{guild.description}</p>
         </section>
 
-        <nav aria-label="Footer" className="text-center sm:text-left">
-          <FooterHeading>{order ? "The Order" : "The Guild"}</FooterHeading>
+        <nav aria-label="Pie de página" className="text-center sm:text-left">
+          <FooterHeading>{order ? "La Orden" : "La hermandad"}</FooterHeading>
           <ul className="space-y-2">
-            <FooterLink href={h("/charter")}>Charter</FooterLink>
-            <FooterLink href={h("/lore")}>{order ? "Lore of the Order" : "Our story"}</FooterLink>
-            {order && <FooterLink href={`${h("/charter")}#prayer`}>Prayer to Saint Michael</FooterLink>}
-            <FooterLink href={h("/roster")}>Roster</FooterLink>
-            <FooterLink href={h("/progression")}>Progression</FooterLink>
-            <FooterLink href={h("/addons")}>Custom addons</FooterLink>
-            {isMember && <FooterLink href={h("/members/characters")}>My characters</FooterLink>}
-            {isOfficer && <FooterLink href={h("/admin")}>Officer admin</FooterLink>}
+            <FooterLink href={h("/charter")}>Reglamento</FooterLink>
+            <FooterLink href={h("/lore")}>{order ? "Historia de la Orden" : "Nuestra historia"}</FooterLink>
+            {order && <FooterLink href={`${h("/charter")}#prayer`}>Oración a san Miguel</FooterLink>}
+            <FooterLink href={h("/roster")}>Plantilla</FooterLink>
+            <FooterLink href={h("/progression")}>Progreso</FooterLink>
+            <FooterLink href={h("/addons")}>Addons propios</FooterLink>
+            {isMember && <FooterLink href={h("/members/characters")}>Mis personajes</FooterLink>}
+            {isOfficer && <FooterLink href={h("/admin")}>Administración</FooterLink>}
           </ul>
         </nav>
 
         <section className="text-center sm:text-left">
-          <FooterHeading>Raid Nights</FooterHeading>
+          <FooterHeading>Noches de banda</FooterHeading>
           {slots.length === 0 ? (
-            <p className="text-sm text-muted italic">Schedule to be announced.</p>
+            <p className="text-sm text-muted italic">Horario por anunciar.</p>
           ) : (
             <ul className="space-y-2">
               {slots.map((s) => (
                 <li key={s.id} className="text-sm">
                   <span className="block font-semibold text-bone">{DAYS_OF_WEEK[s.dayOfWeek]}</span>
                   <span className="text-muted">
-                    {formatClock(s.startTime)} to {formatClock(s.endTime)} {tz}
+                    De {formatClock(s.startTime)} a {formatClock(s.endTime)} {tz}
                   </span>
                 </li>
               ))}
@@ -89,7 +89,7 @@ export async function SiteFooter({ guild, viewer }: { guild: Guild; viewer: View
           <dl className="mt-4 space-y-1 text-xs text-muted">
             {guild.gameVersion !== "forever" && (
               <div>
-                <dt className="inline text-gold-dim">Game </dt>
+                <dt className="inline text-gold-dim">Juego </dt>
                 <dd className="inline-flex items-center gap-1 align-middle" data-testid="footer-game-version">
                   <GameVersionIcon version={guild.gameVersion} size={13} className="text-gold-dim" />
                   {VERSION_INFO[guild.gameVersion].label}
@@ -98,28 +98,28 @@ export async function SiteFooter({ guild, viewer }: { guild: Guild; viewer: View
             )}
             {guild.realmSlug && (
               <div>
-                <dt className="inline text-gold-dim">Realm </dt>
+                <dt className="inline text-gold-dim">Reino </dt>
                 <dd className="inline align-middle" data-testid="footer-realm">
                   {realmLabel(guild.gameVersion, guild.realmSlug, guild.region)}
                 </dd>
               </div>
             )}
             <div>
-              <dt className="inline text-gold-dim">Region </dt>
+              <dt className="inline text-gold-dim">Región </dt>
               <dd className="inline-flex items-center gap-1 align-middle" data-testid="footer-region">
                 <RegionIcon size={13} className="text-gold-dim" />
                 {REGION_LABELS[guild.region]}
               </dd>
             </div>
             <div>
-              <dt className="inline text-gold-dim">Faction </dt>
+              <dt className="inline text-gold-dim">Facción </dt>
               <dd className="inline-flex items-center gap-1 align-middle">
                 <FactionIcon faction={guild.faction} size={14} decorative />
                 {FACTION_LABELS[guild.faction]}
               </dd>
             </div>
             <div>
-              <dt className="inline text-gold-dim">Ruleset </dt>
+              <dt className="inline text-gold-dim">Tipo de reino </dt>
               <dd className="inline-flex items-center gap-1 align-middle" data-testid="footer-ruleset">
                 <RulesetIcon ruleset={guild.ruleset} size={13} className="text-gold-dim" />
                 {RULESET_INFO[guild.ruleset].label}
@@ -129,34 +129,34 @@ export async function SiteFooter({ guild, viewer }: { guild: Guild; viewer: View
         </section>
 
         <section className="flex flex-col items-center text-center sm:items-start sm:text-left">
-          <FooterHeading>{order ? "Join the Order" : "Join us"}</FooterHeading>
+          <FooterHeading>{order ? "Únete a la Orden" : "Únete"}</FooterHeading>
           {guild.publishedAt ? (
             <p className="text-sm text-muted">
-              Recruitment is{" "}
+              El reclutamiento está{" "}
               <strong className={guild.recruitmentOpen ? "text-gold" : "text-bone"}>
-                {guild.recruitmentOpen ? "open" : "closed"}
+                {guild.recruitmentOpen ? "abierto" : "cerrado"}
               </strong>
               .{" "}
               {guild.recruitmentOpen
                 ? order
-                  ? "Every player who respects the faith is welcome to apply."
-                  : "Read the charter and apply on this site."
-                : "Social members are always welcome to reach out."}
+                  ? "Cualquier jugador que respete la fe puede enviar su solicitud."
+                  : "Lee el reglamento y envía tu solicitud en este sitio."
+                : "Los miembros sociales siempre pueden ponerse en contacto."}
             </p>
           ) : (
             <p className="text-sm text-muted" data-testid="footer-opening-soon">
-              <strong className="text-bone">Opening soon.</strong> Applications open once the guild is published.
+              <strong className="text-bone">Abre pronto.</strong> Las solicitudes se abren cuando la hermandad se publique.
             </p>
           )}
           <div className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start">
             {offersApply(viewer, guild) && guild.recruitmentOpen && (
               <Link href={h("/apply")} className="btn btn-primary btn-sm">
-                Apply
+                Únete
               </Link>
             )}
             {guild.discordInviteUrl && (
               <a href={guild.discordInviteUrl} className="btn btn-ghost btn-sm" target="_blank" rel="noopener noreferrer">
-                Join our Discord
+                Únete a nuestro Discord
               </a>
             )}
           </div>
@@ -170,33 +170,33 @@ export async function SiteFooter({ guild, viewer }: { guild: Guild; viewer: View
             <p className="mb-4 font-display text-sm text-gold-dim italic">Sancte Michael Archangele, defende nos in proelio.</p>
           )}
           <p className="text-xs text-muted">
-            &copy; {year} {guild.name}. A fan-run guild site on Guildbook, not affiliated with Blizzard Entertainment.
+            &copy; {year} {guild.name}. Web de hermandad hecha por fans en Guildbook, sin relación con Blizzard Entertainment.
           </p>
           <p className="mt-1 text-xs text-muted">
-            World of Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard
-            Entertainment, Inc. Game artwork, including class icons, is &copy; Blizzard Entertainment, Inc.
+            World of Warcraft y Blizzard Entertainment son marcas comerciales o marcas registradas de Blizzard
+            Entertainment, Inc. El arte del juego, incluidos los iconos de clase, es &copy; Blizzard Entertainment, Inc.
           </p>
           <nav aria-label="Legal" className="mt-3 flex justify-center gap-4 text-xs">
             <a href={`${current.apexOrigin}/terms`} className="text-bone/70 hover:text-gold">
-              Terms
+              Términos
             </a>
             <a href={`${current.apexOrigin}/privacy`} className="text-bone/70 hover:text-gold">
-              Privacy
+              Privacidad
             </a>
             <a href={`${current.apexOrigin}/support`} className="text-bone/70 hover:text-gold">
-              Support
+              Soporte
             </a>
           </nav>
           <p className="mt-3 inline-flex items-center gap-2 text-[11px] text-muted">
             <span>
-              Powered by{" "}
+              Funciona con{" "}
               <a href={current.apexOrigin} className="text-bone/70 hover:text-gold">
                 Guildbook
               </a>
             </span>
             <a
               href={SOURCE_URL}
-              aria-label="Guildbook source on GitHub"
+              aria-label="Código fuente de Guildbook en GitHub"
               className="text-muted hover:text-gold"
               target="_blank"
               rel="noopener noreferrer"
@@ -205,7 +205,7 @@ export async function SiteFooter({ guild, viewer }: { guild: Guild; viewer: View
             </a>
             <a
               href={X_URL}
-              aria-label="Guildbook on X"
+              aria-label="Guildbook en X"
               className="text-muted hover:text-gold"
               target="_blank"
               rel="noopener noreferrer"

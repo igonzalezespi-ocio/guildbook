@@ -33,10 +33,10 @@ export function TimezoneSelect({
       defaultValue={defaultValue}
       onChange={onChange}
       required={required}
-      requiredMessage="Choose a timezone"
+      requiredMessage="Elige una zona horaria"
       searchable
-      searchPlaceholder="Search by city, region or offset"
-      emptyText="No timezone matches"
+      searchPlaceholder="Busca por ciudad, región o desfase"
+      emptyText="Ninguna zona horaria coincide"
       data-testid="timezone-select"
     />
   );

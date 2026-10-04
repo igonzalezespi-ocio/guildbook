@@ -78,7 +78,9 @@ export interface LiveSessionOptions {
   bufferLimit?: number;
 }
 
-const s1 = (ms: number) => `${(ms / 1000).toFixed(1)} s`;
+const s1 = (ms: number) => `${(ms / 1000).toFixed(1).replace(".", ",")} s`;
+/** Spanish names of the aura groups the models use. */
+const GROUP_ES: Record<string, string> = { seal: "sello", blessing: "bendición" };
 const s0 = (ms: number) => `${Math.round(ms / 1000)} s`;
 
 export class LiveSession {
@@ -110,7 +112,7 @@ export class LiveSession {
   get player(): LivePlayer | null {
     if (!this.playerGuid) return null;
     const p = this.scanner.player(this.playerGuid);
-    return { guid: this.playerGuid, name: p?.name ?? "Unknown", level: p?.level ?? null };
+    return { guid: this.playerGuid, name: p?.name ?? "Desconocido", level: p?.level ?? null };
   }
 
   /** The model in use: the override, or the best match for the spells the player has cast so far. */
@@ -325,8 +327,8 @@ export function calloutsFor(fight: Fight, a: FightAnalysis, settledBefore: numbe
         if (close >= settledBefore || (!wasUsed && expiry > state.end && settledBefore !== Infinity)) continue;
         let available = 0;
         for (let t = open; t < close; t += 100) if (state.readyAt(proc.spell, t)) available += 100;
-        if (wasUsed && available >= 2000) push("proc", open, `${label} was available for ${s1(available)}`);
-        else if (!wasUsed && available >= 1500) push("proc", open, `${label} was available for ${s1(available)} and went unused`);
+        if (wasUsed && available >= 2000) push("proc", open, `${label} estuvo disponible durante ${s1(available)}`);
+        else if (!wasUsed && available >= 1500) push("proc", open, `${label} estuvo disponible durante ${s1(available)} y no se usó`);
       }
     }
 
@@ -336,7 +338,7 @@ export function calloutsFor(fight: Fight, a: FightAnalysis, settledBefore: numbe
       const at = start + a0;
       const rule = state.expectedAt(at + 400, state.targetAt(at));
       const spell = rule ? idx.spellByKey.get(rule.spell)?.label : null;
-      push("idle", at, spell ? `Idle for ${s1(b0 - a0)} while ${spell} was ready` : `Idle for ${s1(b0 - a0)}`);
+      push("idle", at, spell ? `Inactivo durante ${s1(b0 - a0)} con ${spell} listo` : `Inactivo durante ${s1(b0 - a0)}`);
     }
 
     // Grouped player auras (seals): time with none of them up, once the player has shown they use one.
@@ -358,16 +360,16 @@ export function calloutsFor(fight: Fight, a: FightAnalysis, settledBefore: numbe
         cursor = Math.max(cursor, y);
       }
       if (state.end - cursor >= 3000) gaps.push([cursor, settledBefore === Infinity ? state.end : Infinity]);
-      for (const [x, y] of gaps) if (y < settledBefore) push("aura", x, `No ${group} for ${s0(y - x)}`);
+      for (const [x, y] of gaps) if (y < settledBefore) push("aura", x, `Sin ${GROUP_ES[group] ?? group} durante ${s0(y - x)}`);
     }
 
     for (const m of report.adherence?.misses ?? []) {
-      push("priority", start + m.t, `${m.expected}, but you cast ${m.actual}`);
+      push("priority", start + m.t, `${m.expected}, pero lanzaste ${m.actual}`);
     }
   } else {
     for (const [a0, b0] of report.activity.idleGaps) {
       if (start + b0 >= settledBefore || b0 - a0 < 2500) continue;
-      push("idle", start + a0, `No global cooldown used for ${s1(b0 - a0)}`);
+      push("idle", start + a0, `Sin usar el tiempo de reutilización global durante ${s1(b0 - a0)}`);
     }
   }
 
@@ -379,13 +381,13 @@ export function calloutsFor(fight: Fight, a: FightAnalysis, settledBefore: numbe
     for (const [t, v] of res.samples) {
       if (capped(v)) runStart ??= t;
       else if (runStart !== null) {
-        if (t - runStart >= 1500 && start + t < settledBefore) push("resource", start + runStart, `Rage capped for ${s1(t - runStart)}`);
+        if (t - runStart >= 1500 && start + t < settledBefore) push("resource", start + runStart, `Ira al máximo durante ${s1(t - runStart)}`);
         runStart = null;
       }
     }
     if (runStart !== null && settledBefore === Infinity) {
       const end = report.fight.durationMs;
-      if (end - runStart >= 1500) push("resource", start + runStart, `Rage capped for ${s1(end - runStart)}`);
+      if (end - runStart >= 1500) push("resource", start + runStart, `Ira al máximo durante ${s1(end - runStart)}`);
     }
   }
 

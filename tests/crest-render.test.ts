@@ -117,18 +117,18 @@ describe("the crest tone curve", () => {
   });
 
   it("keeps white white, gold gold and black dark with visible relief", () => {
-    const white = crestTone(hex("White"), 0.5);
+    const white = crestTone(hex("Blanco"), 0.5);
     expect(Math.min(...white)).toBeGreaterThan(0.85);
-    const gold = crestTone(hex("Gold"), 0.5);
+    const gold = crestTone(hex("Oro"), 0.5);
     expect(gold[0]).toBeGreaterThan(gold[2]! + 0.4);
-    const black = [0, 1].map((v) => luma(crestTone(hex("Black"), v)));
+    const black = [0, 1].map((v) => luma(crestTone(hex("Negro"), v)));
     expect(black[0]).toBeLessThan(0.15);
     expect(black[1]! - black[0]!).toBeGreaterThan(0.1);
   });
 
   it("gives the browser filter tables the same curve as the server's lookup tables", () => {
-    const lut = crestToneLut(hex("Tan"));
-    const tables = crestToneTables(hex("Tan")).map((t) => t.split(" ").map(Number));
+    const lut = crestToneLut(hex("Canela"));
+    const tables = crestToneTables(hex("Canela")).map((t) => t.split(" ").map(Number));
     for (let c = 0; c < 3; c++) {
       tables[c]!.forEach((v, i) => expect(Math.abs(v * 255 - lut[c]![Math.round((i / (tables[c]!.length - 1)) * 255)]!)).toBeLessThan(1.5));
     }

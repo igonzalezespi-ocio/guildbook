@@ -35,7 +35,7 @@ export function ItemLink({
       rel="noopener noreferrer"
       className={`inline-flex items-center gap-2 font-medium hover:underline ${tone} ${className}`}
       style={style}
-      title={quality !== null ? `${ITEM_QUALITY_INFO[quality].label} item, opens Wowhead` : "Opens Wowhead"}
+      title={quality !== null ? `Objeto ${ITEM_QUALITY_INFO[quality].label.toLowerCase()}, abre Wowhead` : "Abre Wowhead"}
     >
       {icon ? (
         <Image
@@ -56,8 +56,8 @@ export function ItemLink({
 export function BlizzardItemAttribution() {
   return (
     <p className="mt-4 text-xs text-muted">
-      Some item names and icons are provided by Blizzard Entertainment. World of Warcraft and Blizzard Entertainment are
-      trademarks or registered trademarks of Blizzard Entertainment, Inc.
+      Algunos nombres e iconos de objetos los proporciona Blizzard Entertainment. World of Warcraft y Blizzard
+      Entertainment son marcas comerciales o marcas registradas de Blizzard Entertainment, Inc.
     </p>
   );
 }

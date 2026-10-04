@@ -22,7 +22,7 @@ export function ConfirmDeleteForm({
     <ActionForm action={action} className="space-y-3">
       <div>
         <label htmlFor="confirmName" className="field-label">
-          Type <span className="font-semibold text-bone">{expected}</span> to confirm
+          Escribe <span className="font-semibold text-bone">{expected}</span> para confirmar
         </label>
         <input
           id="confirmName"

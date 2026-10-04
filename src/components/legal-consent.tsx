@@ -2,15 +2,15 @@
 export function LegalConsent({ apexOrigin = "" }: { apexOrigin?: string }) {
   return (
     <p className="mt-4 text-xs leading-relaxed text-muted" data-testid="legal-consent">
-      By signing in you agree to the Guildbook{" "}
+      Al iniciar sesión aceptas los{" "}
       <a href={`${apexOrigin}/terms`} className="link">
-        Terms of Service
+        Términos del servicio
       </a>{" "}
-      and{" "}
+      y la{" "}
       <a href={`${apexOrigin}/privacy`} className="link">
-        Privacy Policy
-      </a>
-      .
+        Política de privacidad
+      </a>{" "}
+      de Guildbook.
     </p>
   );
 }

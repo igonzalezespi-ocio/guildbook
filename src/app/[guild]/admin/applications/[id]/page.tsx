@@ -5,14 +5,14 @@ import { ActionForm, Field, FormMessage } from "@/components/action-form";
 import { ClassName, FactionBadge, PageHeader, Panel, RoleBadge, StatusPill, VerificationBadge } from "@/components/ui";
 import { db } from "@/db";
 import { formatDateTime } from "@/lib/format";
-import { CLASS_INFO, fullName } from "@/lib/game";
+import { APPLICATION_STATUS_LABELS, CLASS_INFO, fullName, specLabel } from "@/lib/game";
 import { guildHref } from "@/lib/paths";
 import { reviewApplicationAction } from "@/server/actions/admin";
 import { requirePage } from "@/server/context";
 import { getApplication } from "@/server/services/applications";
 import { listRanks } from "@/server/services/ranks";
 
-export const metadata: Metadata = { title: "Review Application" };
+export const metadata: Metadata = { title: "Revisar solicitud" };
 
 export default async function ApplicationDetailPage({ params }: PageProps<"/[guild]/admin/applications/[id]">) {
   const { guild: slug, id } = await params;
@@ -24,21 +24,21 @@ export default async function ApplicationDetailPage({ params }: PageProps<"/[gui
   const applicantRank = (await listRanks(db, guild.id)).find((r) => r.id === guild.applicantRankId);
 
   const answers = [
-    { label: "Raid experience", value: a.raidExperience },
-    { label: "Availability", value: a.availability },
-    { label: "Why this guild", value: a.whyThisGuild },
+    { label: "Experiencia en bandas", value: a.raidExperience },
+    { label: "Disponibilidad", value: a.availability },
+    { label: "¿Por qué esta hermandad?", value: a.whyThisGuild },
   ];
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <PageHeader title={fullName(a.characterName, a.characterSurname)} eyebrow={applicantRank?.name ?? "Applicant"} />
-      <Panel actions={<StatusPill status={a.status} />} title="Application">
+      <PageHeader title={fullName(a.characterName, a.characterSurname)} eyebrow={applicantRank?.name ?? "Aspirante"} />
+      <Panel actions={<StatusPill status={a.status} />} title="Solicitud">
         <div className="mb-4 flex flex-wrap items-center gap-2">
           <span>
-            <span className="text-muted">Level {a.level}</span>{" "}
             <ClassName wowClass={a.wowClass}>
-              {a.spec} {CLASS_INFO[a.wowClass].label}
-            </ClassName>
+              {CLASS_INFO[a.wowClass].label} {specLabel(a.spec)}
+            </ClassName>{" "}
+            <span className="text-muted">de nivel {a.level}</span>
           </span>
           {!guild.faction && <FactionBadge faction={a.faction} />}
           <RoleBadge role={a.role} />
@@ -50,19 +50,19 @@ export default async function ApplicationDetailPage({ params }: PageProps<"/[gui
             <dd>
               {a.verified ? (
                 <>
-                  Name, class and level were read from {a.battletag ?? "the applicant's Battle.net account"}
+                  Nombre, clase y nivel leídos de {a.battletag ?? "la cuenta de Battle.net del aspirante"}
                   {a.bnetSnapshotAt && <span className="text-muted"> ({formatDateTime(a.bnetSnapshotAt, guild.timezone)})</span>}
-                  . Surname, spec and role are the applicant&apos;s own.
+                  . El apellido, la especialización y el rol los indica el aspirante.
                 </>
               ) : (
-                <span className="text-muted">Entered by hand; not checked against Battle.net.</span>
+                <span className="text-muted">Introducido a mano; no se ha comprobado con Battle.net.</span>
               )}
             </dd>
           </div>
           <div>
             <dt className="field-label">Discord</dt>
             <dd>
-              {a.discordHandle} <span className="text-muted">(signed in as {applicant.discordUsername ?? applicant.name})</span>
+              {a.discordHandle} <span className="text-muted">(sesión iniciada como {applicant.discordUsername ?? applicant.name})</span>
             </dd>
           </div>
           {answers.map((q) => (
@@ -72,14 +72,14 @@ export default async function ApplicationDetailPage({ params }: PageProps<"/[gui
             </div>
           ))}
           <div>
-            <dt className="field-label">Submitted</dt>
+            <dt className="field-label">Enviada</dt>
             <dd>{formatDateTime(a.createdAt, guild.timezone)}</dd>
           </div>
           {a.reviewedAt && (
             <div>
-              <dt className="field-label">Decision</dt>
+              <dt className="field-label">Decisión</dt>
               <dd>
-                {a.status} on {formatDateTime(a.reviewedAt, guild.timezone)}
+                {APPLICATION_STATUS_LABELS[a.status] ?? a.status} el {formatDateTime(a.reviewedAt, guild.timezone)}
                 {a.decisionNote && <p className="mt-1 text-muted italic">{a.decisionNote}</p>}
               </dd>
             </div>
@@ -88,28 +88,28 @@ export default async function ApplicationDetailPage({ params }: PageProps<"/[gui
       </Panel>
 
       {a.status === "pending" && (
-        <Panel title="Decision">
+        <Panel title="Decisión">
           <ActionForm action={reviewApplicationAction.bind(null, slug)} className="space-y-4">
             <input type="hidden" name="applicationId" value={a.id} />
-            <Field label="Note (optional, visible to officers)" name="note">
+            <Field label="Nota (opcional, visible para los oficiales)" name="note">
               <textarea id="note" name="note" className="field" />
             </Field>
             <FormMessage />
             <div className="flex flex-wrap gap-2">
               <button type="submit" name="decision" value="accepted" className="btn btn-primary">
-                Accept as member
+                Aceptar como miembro
               </button>
               <button type="submit" name="decision" value="trial" className="btn btn-ghost">
-                Offer trial
+                Ofrecer prueba
               </button>
               <button type="submit" name="decision" value="declined" className="btn btn-danger">
-                Decline
+                Rechazar
               </button>
             </div>
           </ActionForm>
           <p className="mt-4 text-xs text-muted">
-            Accepting assigns the guild&apos;s configured member rank; a trial assigns the trial rank. Both add the
-            applied character to the roster, verified if the application was.
+            Aceptar asigna el rango de miembro configurado en la hermandad; la prueba asigna el rango de prueba. En ambos casos el
+            personaje de la solicitud se añade a la plantilla, verificado si la solicitud lo estaba.
           </p>
         </Panel>
       )}

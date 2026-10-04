@@ -5,7 +5,7 @@ import { DropdownMenu } from "@/components/dropdown-menu";
 import { GuildEmblem } from "@/components/guild-emblem";
 import { RankInsignia } from "@/components/rank-insignia";
 import { VerifiedSeal } from "@/components/verified-seal";
-import { CLASS_INFO, fullName } from "@/lib/game";
+import { CLASS_INFO, fullName, specLabel } from "@/lib/game";
 import { insigniaFor } from "@/lib/insignia";
 import type { listUserGuilds } from "@/server/services/platform";
 
@@ -81,7 +81,7 @@ function GuildRow({ guild, href }: { guild: UserGuild; href: (path?: string) => 
           {guild.verifiedAt && <VerifiedSeal size={12} />}
         </a>
         {pending ? (
-          <p className="mt-1 text-xs text-muted italic">Application pending</p>
+          <p className="mt-1 text-xs text-muted italic">Solicitud pendiente</p>
         ) : (
           <>
             <p className="mt-1 flex min-w-0 items-center gap-1.5 text-xs">
@@ -90,19 +90,19 @@ function GuildRow({ guild, href }: { guild: UserGuild; href: (path?: string) => 
                 <span className="truncate">
                   <span className="text-bone">{fullName(main.name, main.surname)}</span>
                   <span className="ml-1.5" style={{ color: CLASS_INFO[main.wowClass].color }}>
-                    {main.spec} {CLASS_INFO[main.wowClass].label}
+                    {CLASS_INFO[main.wowClass].label} {specLabel(main.spec)}
                   </span>
                 </span>
               ) : (
                 <a
                   href={href("/members/characters")}
                   className="relative z-10 inline-flex min-w-0 items-center gap-1 text-gold underline-offset-2 hover:text-gold-bright hover:underline focus-visible:underline focus-visible:outline-none"
-                  aria-label={`Add your main character in ${guild.name}`}
+                  aria-label={`Añade tu personaje principal en ${guild.name}`}
                 >
                   <svg viewBox="0 0 16 16" width={10} height={10} aria-hidden className="shrink-0">
                     <path d={ICONS.create} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
                   </svg>
-                  <span className="truncate">Add your main character</span>
+                  <span className="truncate">Añade tu personaje principal</span>
                 </a>
               )}
             </p>
@@ -112,9 +112,9 @@ function GuildRow({ guild, href }: { guild: UserGuild; href: (path?: string) => 
                 <a
                   href={href("/admin")}
                   className="relative z-10 shrink-0 rounded border border-line px-1.5 py-0.5 font-display text-[0.6rem] tracking-widest text-gold uppercase transition-colors hover:border-gold-dim hover:text-gold-bright focus-visible:border-gold focus-visible:outline-none"
-                  aria-label={`${guild.name} admin`}
+                  aria-label={`Administración de ${guild.name}`}
                 >
-                  Admin
+                  Administrar
                 </a>
               )}
             </div>
@@ -136,12 +136,12 @@ export function PlatformAccountMenu({
   /** Absolute URL on a guild's own host. Guild sites live on other hosts, so their links are plain anchors. */
   guildHref: (guild: UserGuild, path?: string) => string;
 }) {
-  const name = user.name ?? "Signed in";
+  const name = user.name ?? "Sesión iniciada";
   const shown = guilds.slice(0, MENU_GUILD_LIMIT);
 
   return (
     <DropdownMenu
-      label={`Account menu for ${name}`}
+      label={`Menú de la cuenta de ${name}`}
       className="group relative"
       summaryClassName="flex items-center gap-2 rounded border border-transparent px-1.5 py-1 text-sm hover:border-line focus-visible:border-gold-dim focus-visible:outline-none group-open:border-line sm:px-2"
       summary={
@@ -162,18 +162,18 @@ export function PlatformAccountMenu({
           <UserAvatar name={name} image={user.image} size={44} />
           <div className="min-w-0 leading-tight">
             <p className="truncate font-display text-base tracking-wide text-bone">{name}</p>
-            <p className="mt-0.5 text-xs text-muted">Signed in with Discord</p>
+            <p className="mt-0.5 text-xs text-muted">Sesión iniciada con Discord</p>
           </div>
         </div>
 
         <hr className="rule-gold" />
 
-        <section aria-label="Your guilds" className="flex flex-col gap-1">
+        <section aria-label="Tus hermandades" className="flex flex-col gap-1">
           <div className="flex items-baseline justify-between gap-2">
-            <SectionLabel>Your guilds</SectionLabel>
+            <SectionLabel>Tus hermandades</SectionLabel>
             {guilds.length > MENU_GUILD_LIMIT && (
               <Link href="/account" className="px-2 text-xs text-gold underline-offset-2 hover:underline">
-                View all {guilds.length}
+                Ver las {guilds.length}
               </Link>
             )}
           </div>
@@ -185,13 +185,13 @@ export function PlatformAccountMenu({
             </ul>
           ) : (
             <div className="rounded border border-dashed border-line px-3 py-4 text-center">
-              <p className="text-sm text-muted">You haven&apos;t joined a guild yet.</p>
+              <p className="text-sm text-muted">Aún no te has unido a ninguna hermandad.</p>
               <div className="mt-3 flex justify-center gap-2">
                 <Link href="/create" className="btn btn-gold btn-sm">
-                  Create a guild
+                  Crea una hermandad
                 </Link>
                 <Link href="/guilds" className="btn btn-ghost btn-sm">
-                  Browse guilds
+                  Ver hermandades
                 </Link>
               </div>
             </div>
@@ -204,20 +204,20 @@ export function PlatformAccountMenu({
           {shown.length > 0 && (
             <Link href="/create" className={`${MENU_ITEM} sm:hidden`}>
               <Icon name="create" />
-              Create a guild
+              Crea una hermandad
             </Link>
           )}
           <AccountSettingsLink className={MENU_ITEM}>
             <Icon name="settings" />
-            Account and privacy
+            Cuenta y privacidad
           </AccountSettingsLink>
           <Link href="/support" className={MENU_ITEM}>
             <Icon name="support" />
-            Help and support
+            Ayuda y soporte
           </Link>
           <SignOutButton className={MENU_ITEM}>
             <Icon name="signOut" />
-            Sign out
+            Cerrar sesión
           </SignOutButton>
         </div>
       </div>

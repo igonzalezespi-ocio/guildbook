@@ -5,9 +5,9 @@ export const VISIBILITIES = ["private", "officers", "guild"] as const;
 export type Visibility = (typeof VISIBILITIES)[number];
 
 export const VISIBILITY_LABELS: Record<Visibility, string> = {
-  private: "Private",
-  officers: "Shared with officers",
-  guild: "Shared with the guild",
+  private: "Privado",
+  officers: "Compartido con los oficiales",
+  guild: "Compartido con la hermandad",
 };
 
 /**

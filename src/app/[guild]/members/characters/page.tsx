@@ -5,7 +5,7 @@ import { AddonIcon } from "@/components/addon-icon";
 import { BattlenetAccount, BattlenetNotice, EmptySnapshotNote, LinkBattlenetButton } from "@/components/battlenet";
 import { RegionTag } from "@/components/region";
 import { Listbox } from "@/components/listbox";
-import { plainOptions, ROLE_OPTIONS } from "@/components/select-options";
+import { ROLE_OPTIONS } from "@/components/select-options";
 import {
   CharacterLink,
   ClassName,
@@ -21,7 +21,7 @@ import {
 import { db } from "@/db";
 import type { BattlenetCharacterSnapshot } from "@/db/schema";
 import { formatDateTime } from "@/lib/format";
-import { CLASS_INFO, fullName, PROFESSION_LABELS } from "@/lib/game";
+import { CLASS_INFO, fullName, PROFESSION_LABELS, raceLabel, specLabel } from "@/lib/game";
 import { hasSurnames, realmLabel, SUPPORTED_GUILD_VERSIONS, VERSION_INFO } from "@/lib/game-versions";
 import { guildHref } from "@/lib/paths";
 import { importBattlenetCharacterAction } from "@/server/actions/battlenet";
@@ -32,7 +32,7 @@ import { requirePage } from "@/server/context";
 import { getEligibleCharacters } from "@/server/services/battlenet";
 import { type CharacterWithProfessions, listOwnCharacters } from "@/server/services/characters";
 
-export const metadata: Metadata = { title: "My Characters" };
+export const metadata: Metadata = { title: "Mis personajes" };
 
 function ImportRow({
   slug,
@@ -52,7 +52,7 @@ function ImportRow({
         {bnet.name}
       </p>
       <p className="flex flex-wrap items-center gap-1.5 text-xs text-muted">
-        Level {bnet.level} {bnet.race} {info.label}, {bnet.realmName}
+        {info.label} {raceLabel(bnet.race)} de nivel {bnet.level}, {bnet.realmName}
         <RegionTag region={snapshotRegion(bnet)} />
       </p>
       {bnet.guildName && <p className="text-xs text-gold-dim">&lt;{bnet.guildName}&gt;</p>}
@@ -65,7 +65,7 @@ function ImportRow({
         {summary}
         <span className="flex items-center gap-1.5 text-xs text-gold">
           <VerifiedMark size={12} decorative />
-          Imported as {fullName(existing.name, existing.surname)}
+          Importado como {fullName(existing.name, existing.surname)}
         </span>
       </li>
     );
@@ -80,42 +80,42 @@ function ImportRow({
           <input type="hidden" name="surname" value={bnet.surname} />
         ) : (
           <label className="flex flex-col text-xs text-muted">
-            Surname
+            Apellido
             <input
               name="surname"
               required
               maxLength={12}
               autoComplete="off"
               defaultValue={existing?.surname}
-              aria-label={`${bnet.name} surname`}
+              aria-label={`Apellido de ${bnet.name}`}
               className="field mt-1 min-h-9 w-32 py-1 text-sm"
             />
           </label>
         )}
         <div className="flex flex-col text-xs text-muted">
-          <span aria-hidden>Spec</span>
+          <span aria-hidden>Especialización</span>
           <Listbox
             name="spec"
-            options={plainOptions(info.specs)}
+            options={info.specs.map((s) => ({ value: s, label: specLabel(s) }))}
             defaultValue={existing?.spec}
-            aria-label={`${bnet.name} spec`}
+            aria-label={`Especialización de ${bnet.name}`}
             size="sm"
             className="mt-1 w-36"
           />
         </div>
         <div className="flex flex-col text-xs text-muted">
-          <span aria-hidden>Role</span>
+          <span aria-hidden>Rol</span>
           <Listbox
             name="role"
             options={ROLE_OPTIONS}
             defaultValue={existing?.role}
-            aria-label={`${bnet.name} role`}
+            aria-label={`Rol de ${bnet.name}`}
             size="sm"
             className="mt-1 w-32"
           />
         </div>
-        <SubmitButton size="sm" pendingLabel="Importing…">
-          {existing ? "Verify" : "Import"}
+        <SubmitButton size="sm" pendingLabel="Importando…">
+          {existing ? "Verificar" : "Importar"}
         </SubmitButton>
         <FormMessage className="w-full" />
       </ActionForm>
@@ -142,13 +142,13 @@ export default async function CharactersPage({ params, searchParams }: PageProps
   const otherVersions = bnet.link
     ? SUPPORTED_GUILD_VERSIONS.filter((v) => v !== guild.gameVersion).flatMap((v) => {
         const count = bnet.link!.characters.filter((c) => snapshotVersion(c) === v).length;
-        return count > 0 ? [`${count} ${VERSION_INFO[v].label} ${count === 1 ? "character" : "characters"}`] : [];
+        return count > 0 ? [`${count} ${count === 1 ? "personaje" : "personajes"} de ${VERSION_INFO[v].label}`] : [];
       })
     : [];
 
   return (
     <div className="mx-auto max-w-3xl space-y-4">
-      <PageHeader title="My Characters" />
+      <PageHeader title="Mis personajes" />
       <BattlenetNotice status={sp.bnet} />
 
       {bnetEnabled && (
@@ -161,16 +161,16 @@ export default async function CharactersPage({ params, searchParams }: PageProps
               ) : (
                 <details className="group" open={sp.bnet === "linked" || undefined}>
                   <summary className="btn btn-primary btn-sm cursor-pointer list-none">
-                    Import characters{toImport > 0 ? ` (${toImport})` : ""}
+                    Importar personajes{toImport > 0 ? ` (${toImport})` : ""}
                   </summary>
                   <p className="mt-3 text-xs text-muted">
-                    Name, class and level come from Battle.net and are kept in sync. Pick your spec and role
-                    {surnames ? ", and enter your surname if Battle.net doesn't provide it" : ""}.
-                    {guild.realmSlug ? ` Characters in ${guild.name} in game show as verified members.` : ""}
+                    El nombre, la clase y el nivel vienen de Battle.net y se mantienen sincronizados. Elige tu especialización y tu rol
+                    {surnames ? ", y escribe tu apellido si Battle.net no lo da" : ""}.
+                    {guild.realmSlug ? ` Los personajes que están en ${guild.name} en el juego aparecen como miembros verificados.` : ""}
                   </p>
                   <h3 className="mt-3 font-display text-sm tracking-wide text-gold" data-testid="import-version-heading">
-                    {versionLabel} characters
-                    {guild.realmSlug ? ` on ${realmLabel(guild.gameVersion, guild.realmSlug, guild.region)}` : ""}
+                    Personajes de {versionLabel}
+                    {guild.realmSlug ? ` en ${realmLabel(guild.gameVersion, guild.realmSlug, guild.region)}` : ""}
                   </h3>
                   <ul className="divide-y divide-line">
                     {bnet.characters.map((b) => (
@@ -181,14 +181,14 @@ export default async function CharactersPage({ params, searchParams }: PageProps
               )}
               {otherVersions.length > 0 && (
                 <p className="text-xs text-muted" data-testid="other-version-characters">
-                  Also on this account: {otherVersions.join(", ")}. They join guilds of their own game.
+                  También en esta cuenta: {otherVersions.join(", ")}. Se unen a hermandades de su propio juego.
                 </p>
               )}
             </div>
           ) : (
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="min-w-0 flex-1 text-sm text-muted">
-                Link Battle.net to import your characters as verified and keep their levels in sync.
+                Vincula Battle.net para importar tus personajes como verificados y mantener sus niveles sincronizados.
               </p>
               <LinkBattlenetButton slug={slug} returnTo={returnTo} />
             </div>
@@ -199,13 +199,13 @@ export default async function CharactersPage({ params, searchParams }: PageProps
       <div className="flex flex-wrap items-center justify-end gap-3">
         <Link href={guildHref(slug, "/vigil")} className="inline-flex items-center gap-2 text-sm text-gold hover:underline">
           <AddonIcon icon="eye" size={24} />
-          Review your fights in Vigil
+          Revisa tus combates en Vigil
         </Link>
         <Link href={guildHref(slug, "/members/characters/new")} className={`btn ${bnetEnabled ? "btn-ghost" : "btn-primary"}`}>
-          Register character
+          Registrar personaje
         </Link>
       </div>
-      {characters.length === 0 && <EmptyState>Register your first character to appear on the roster.</EmptyState>}
+      {characters.length === 0 && <EmptyState>Registra tu primer personaje para aparecer en la plantilla.</EmptyState>}
       <ul className="space-y-3">
         {characters.map((c) => (
           <li key={c.id} className="panel p-4">
@@ -214,20 +214,20 @@ export default async function CharactersPage({ params, searchParams }: PageProps
                 <p className="flex flex-wrap items-center gap-x-1.5 text-lg">
                   <CharacterLink guildSlug={slug} character={c} />
                   {c.verified && <VerifiedMark />}
-                  {c.isMain && <span className="ml-1 text-xs tracking-widest text-gold uppercase">Main</span>}
+                  {c.isMain && <span className="ml-1 text-xs tracking-widest text-gold uppercase">Principal</span>}
                 </p>
                 <p className="text-sm text-muted">
-                  Level {c.level} {c.spec} <ClassName wowClass={c.wowClass} />
+                  <ClassName wowClass={c.wowClass} /> {specLabel(c.spec)} de nivel {c.level}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {!guild.faction && <FactionBadge faction={c.faction} />}
                   <RoleBadge role={c.role} />
-                  {!c.verified && <Tag>Unverified</Tag>}
+                  {!c.verified && <Tag>Sin verificar</Tag>}
                   {guild.verifiedAt && c.verified && c.inGuildConfirmedAt && <GuildMemberTag guildName={guild.name} />}
                   {c.verified && c.region && <RegionTag region={c.region} className="self-center" />}
                 </div>
                 {c.verified && c.syncedAt && (
-                  <p className="mt-1 text-xs text-muted">Synced from Battle.net {formatDateTime(c.syncedAt, guild.timezone)}</p>
+                  <p className="mt-1 text-xs text-muted">Sincronizado desde Battle.net el {formatDateTime(c.syncedAt, guild.timezone)}</p>
                 )}
                 {c.professions.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1.5">
@@ -242,18 +242,18 @@ export default async function CharactersPage({ params, searchParams }: PageProps
               </div>
               <div className="flex flex-wrap gap-2">
                 <Link href={guildHref(slug, `/members/characters/${c.id}`)} className="btn btn-ghost btn-sm">
-                  Edit
+                  Editar
                 </Link>
                 {!c.isMain && (
                   <ActionForm action={setMainCharacterAction.bind(null, slug, c.id)}>
                     <SubmitButton variant="ghost" size="sm">
-                      Make main
+                      Hacer principal
                     </SubmitButton>
                   </ActionForm>
                 )}
-                <ActionForm action={archiveCharacterAction.bind(null, slug, c.id)} confirm={`Remove ${fullName(c.name, c.surname)} from your characters?`}>
+                <ActionForm action={archiveCharacterAction.bind(null, slug, c.id)} confirm={`¿Quitar a ${fullName(c.name, c.surname)} de tus personajes?`}>
                   <SubmitButton variant="danger" size="sm">
-                    Remove
+                    Quitar
                   </SubmitButton>
                   <FormMessage />
                 </ActionForm>

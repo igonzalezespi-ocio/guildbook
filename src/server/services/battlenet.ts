@@ -3,7 +3,7 @@ import { z } from "zod";
 import type { Db } from "@/db/types";
 import { type BattlenetCharacterSnapshot, type BattlenetScan, battlenetLinks, characters, guilds, memberships } from "@/db/schema";
 import { type Actor, assertCan } from "@/lib/authz/policy";
-import { CLASS_INFO, fullName, isValidSpec } from "@/lib/game";
+import { CLASS_INFO, fullName, isValidSpec, specLabel } from "@/lib/game";
 import { importCharacterInput } from "@/lib/validation";
 import { recordAudit } from "@/server/audit";
 import { type BlizzardClient, describeScanForLog, type RosterMember } from "@/server/blizzard/client";
@@ -73,7 +73,7 @@ export async function linkBattlenetAccount(db: Db, actor: Actor, raw: unknown, d
         .select({ userId: battlenetLinks.userId })
         .from(battlenetLinks)
         .where(and(eq(battlenetLinks.battlenetId, account.id), ne(battlenetLinks.userId, actor.userId)));
-      if (other) throw new DomainError("That Battle.net account is already linked to another Discord account.");
+      if (other) throw new DomainError("Esa cuenta de Battle.net ya está vinculada a otra cuenta de Discord.");
 
       const now = new Date();
       const values = {
@@ -103,7 +103,7 @@ export async function linkBattlenetAccount(db: Db, actor: Actor, raw: unknown, d
     });
   } catch (err) {
     if (isUniqueViolation(err)) {
-      throw new DomainError("That Battle.net account is already linked to another Discord account.");
+      throw new DomainError("Esa cuenta de Battle.net ya está vinculada a otra cuenta de Discord.");
     }
     throw err;
   }
@@ -113,18 +113,18 @@ export async function linkBattlenetAccount(db: Db, actor: Actor, raw: unknown, d
 export async function refreshBattlenetSnapshot(db: Db, actor: Actor, deps: BattlenetDeps) {
   assertCan(actor, "battlenet.link");
   const [row] = await db.select().from(battlenetLinks).where(eq(battlenetLinks.userId, actor.userId));
-  if (!row) throw new DomainError("Link your Battle.net account first.");
+  if (!row) throw new DomainError("Primero vincula tu cuenta de Battle.net.");
   const expired = !row.accessTokenEnc || !row.tokenExpiresAt || row.tokenExpiresAt.getTime() <= Date.now() + TOKEN_MARGIN_MS;
   if (expired) {
-    throw new DomainError("Your Battle.net authorization has expired. Reconnect Battle.net to refresh your characters.");
+    throw new DomainError("Tu autorización de Battle.net ha caducado. Vuelve a conectar Battle.net para actualizar tus personajes.");
   }
   const snapshot = await deps.client.getAccountCharacters(decryptToken(row.accessTokenEnc!, deps.tokenKey));
   console.info(`[battlenet] refresh scan: ${describeScanForLog(snapshot.scan, snapshot.characters)}`);
   if (snapshot.status === "forbidden") {
     await db.update(battlenetLinks).set({ accessTokenEnc: null, tokenExpiresAt: null }).where(eq(battlenetLinks.userId, actor.userId));
-    throw new DomainError("Battle.net refused the request. Reconnect Battle.net to refresh your characters.");
+    throw new DomainError("Battle.net ha rechazado la petición. Vuelve a conectar Battle.net para actualizar tus personajes.");
   }
-  if (snapshot.status === "error") throw new DomainError("Battle.net didn't respond. Please try again later.");
+  if (snapshot.status === "error") throw new DomainError("Battle.net no ha respondido. Inténtalo de nuevo más tarde.");
 
   await db.transaction(async (tx) => {
     await tx
@@ -197,7 +197,7 @@ export async function resolveVerifiedCharacter(db: Db, actor: Actor, id: string,
   const character = eligible.find((c) => c.id === id);
   if (!link || !character) {
     throw new DomainError(
-      "That character isn't on your linked Battle.net account. Pick one of your listed characters or enter it manually.",
+      "Ese personaje no está en tu cuenta de Battle.net vinculada. Elige uno de los personajes de la lista o añádelo a mano.",
     );
   }
   return { link, character };
@@ -215,15 +215,15 @@ export async function importBattlenetCharacter(
   client: BlizzardClient | null = null,
 ) {
   assertCan(actor, "character.manageOwn");
-  if (!actor.membershipId) throw new DomainError("You need an active membership to manage characters.");
+  if (!actor.membershipId) throw new DomainError("Necesitas ser miembro activo para gestionar personajes.");
   const membershipId = actor.membershipId;
   const input = importCharacterInput.parse(raw);
   const { link, character: bnet } = await resolveVerifiedCharacter(db, actor, input.bnetCharacterId, eligibility);
   const surnames = hasSurnames(snapshotVersion(bnet));
   const surname = surnames ? (bnet.surname ?? input.surname ?? "") : "";
-  if (surnames && !surname) throw new DomainError("Enter your character's surname.");
+  if (surnames && !surname) throw new DomainError("Escribe el apellido de tu personaje.");
   if (!isValidSpec(bnet.wowClass, input.spec)) {
-    throw new DomainError(`${input.spec} is not a ${CLASS_INFO[bnet.wowClass].label} spec.`);
+    throw new DomainError(`${specLabel(input.spec)} no es una especialización de ${CLASS_INFO[bnet.wowClass].label}.`);
   }
   const inGuildConfirmedAt = client ? await confirmInGuild(db, actor.guildId, bnet, client) : undefined;
 
@@ -250,7 +250,7 @@ export async function importBattlenetCharacter(
         .orderBy(sql`${characters.bnetCharacterId} is null`)
         .limit(1);
       if (existing && existing.membershipId !== membershipId) {
-        throw new DomainError(`${fullName(existing.name, existing.surname)} is already registered by another member.`);
+        throw new DomainError(`Otro miembro ya ha registrado a ${fullName(existing.name, existing.surname)}.`);
       }
 
       const [main] = await tx
@@ -310,7 +310,7 @@ export async function importBattlenetCharacter(
       return { character: saved, created: !existing };
     });
   } catch (err) {
-    if (isUniqueViolation(err)) throw new DomainError(`A character named ${fullName(bnet.name, surname)} is already registered.`);
+    if (isUniqueViolation(err)) throw new DomainError(`Ya hay registrado un personaje llamado ${fullName(bnet.name, surname)}.`);
     throw err;
   }
 }
@@ -444,8 +444,8 @@ export async function runGuildCharacterSync(
 
   summary.leftGuild = left.length;
   if (left.length > 0 && guild) {
-    const names = left.length > 5 ? `${left.slice(0, 5).join(", ")} and ${left.length - 5} more` : left.join(", ");
-    const notice = `Battle.net no longer shows ${names} in ${guild.name} in game. Their memberships are unchanged; review them under Members.`;
+    const names = left.length > 5 ? `${left.slice(0, 5).join(", ")} y ${left.length - 5} más` : left.join(", ");
+    const notice = `Battle.net ya no muestra a ${names} en ${guild.name} dentro del juego. Su pertenencia no cambia; revísala en Miembros.`;
     await db
       .update(guilds)
       .set({ adminNotice: guild.adminNotice ? `${notice}\n\n${guild.adminNotice}` : notice })
@@ -464,13 +464,13 @@ export async function runGuildCharacterSync(
 /** Officer "Sync now". */
 export async function syncGuildCharacters(db: Db, actor: Actor, client: BlizzardClient) {
   assertCan(actor, "battlenet.sync");
-  if (!battlenetEnabled(client.config)) throw new DomainError("Battle.net isn't configured on this site yet.");
+  if (!battlenetEnabled(client.config)) throw new DomainError("Battle.net aún no está configurado en este sitio.");
   return runGuildCharacterSync(db, actor.guildId, actor.userId, client);
 }
 
 /** Cron: every guild, one after another. */
 export async function syncAllGuilds(db: Db, client: BlizzardClient) {
-  if (!battlenetEnabled(client.config)) throw new DomainError("Battle.net isn't configured on this site yet.");
+  if (!battlenetEnabled(client.config)) throw new DomainError("Battle.net aún no está configurado en este sitio.");
   const all = await db.select({ id: guilds.id, slug: guilds.slug }).from(guilds).orderBy(asc(guilds.slug));
   const results: ({ slug: string } & SyncSummary)[] = [];
   for (const g of all) results.push({ slug: g.slug, ...(await runGuildCharacterSync(db, g.id, null, client)) });

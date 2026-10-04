@@ -1,129 +1,129 @@
-# Guildbook Terms of Service
+# Términos del servicio
 
-Last updated: September 28, 2026
+Última actualización: 28 de septiembre de 2026
 
-These terms govern your use of Guildbook, the website at guildbook.io, every guild site on a guildbook.io subdomain (for example osm.guildbook.io), any custom domain a guild connects to Guildbook, and the Vigil companion app (together, "Guildbook" or "the service"). Guildbook is run by Matthew Rosendin ("we", "us").
+Estos términos regulan tu uso de Guildbook, el sitio web guildbook.io, cada sitio de hermandad en un subdominio de guildbook.io (por ejemplo osm.guildbook.io), cualquier dominio propio que una hermandad conecte a Guildbook y la app complementaria Vigil (en conjunto, "Guildbook" o "el servicio"). Guildbook lo gestiona Matthew Rosendin ("nosotros").
 
-By signing in or using Guildbook you agree to these terms and to our [Privacy Policy](/privacy). If you don't agree, please don't use the service.
+Al iniciar sesión o usar Guildbook aceptas estos términos y nuestra [Política de privacidad](/privacy). Si no estás de acuerdo, no uses el servicio.
 
-## What Guildbook is
+## Qué es Guildbook
 
-Guildbook is a free, non-commercial platform for World of Warcraft: Forever guilds. Each guild gets its own site with a roster, character pages, applications, ranks, progression, guild pages and Vigil, a personal combat performance review tool. We don't charge for Guildbook and we don't show ads.
+Guildbook es una plataforma gratuita y sin ánimo de lucro para hermandades de World of Warcraft: Forever. Cada hermandad tiene su propio sitio con plantilla, páginas de personajes, solicitudes, rangos, progreso, páginas de la hermandad y Vigil, una herramienta personal de análisis del rendimiento en combate. No cobramos por Guildbook y no mostramos anuncios.
 
-## Not affiliated with Blizzard
+## Sin relación con Blizzard
 
-Guildbook is a fan project. It is not affiliated with, endorsed, sponsored or approved by Blizzard Entertainment, Inc. World of Warcraft, Warcraft and Battle.net are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and other countries. Game artwork, icons and other game content are © Blizzard Entertainment, Inc. and are used for identification and community purposes only.
+Guildbook es un proyecto de fans. No está afiliado a Blizzard Entertainment, Inc., ni cuenta con su respaldo, patrocinio o aprobación. World of Warcraft, Warcraft y Battle.net son marcas comerciales o marcas registradas de Blizzard Entertainment, Inc. en EE. UU. y otros países. Las ilustraciones, los iconos y demás contenido del juego son © Blizzard Entertainment, Inc. y se usan solo con fines de identificación y de comunidad.
 
-## Who can use Guildbook
+## Quién puede usar Guildbook
 
-You must be at least 13 years old, or older if the law where you live sets a higher minimum age for using online services like this without parental consent. Because you sign in with Discord, you must also meet Discord's own age requirements. If you're under the age of majority where you live, you confirm that a parent or guardian has agreed to these terms.
+Debes tener al menos 13 años, o más si la ley de donde vives fija una edad mínima superior para usar servicios en línea como este sin consentimiento de los padres. Como inicias sesión con Discord, también debes cumplir los requisitos de edad de Discord. Si eres menor de edad donde vives, confirmas que un padre, madre o tutor ha aceptado estos términos.
 
-## Your account
+## Tu cuenta
 
-- You sign in with your Discord account. We don't offer passwords of our own.
-- You're responsible for activity under your account and for keeping your Discord account secure.
-- You can optionally link a Battle.net account to verify your characters. Linking is never required to sign in, and you can unlink at any time.
-- Don't create accounts to evade a ban, and don't share or sell your account.
+- Inicias sesión con tu cuenta de Discord. No ofrecemos contraseñas propias.
+- Eres responsable de la actividad de tu cuenta y de mantener segura tu cuenta de Discord.
+- Si quieres, puedes vincular una cuenta de Battle.net para verificar tus personajes. Vincularla nunca es obligatorio para iniciar sesión, y puedes desvincularla en cualquier momento.
+- No crees cuentas para eludir una expulsión, y no compartas ni vendas tu cuenta.
 
-## Guilds, owners and officers
+## Hermandades, propietarios y oficiales
 
-Anyone signed in can create a guild, within the limits we set to prevent abuse. The person who creates a guild and the members they give officer or higher ranks ("guild leaders") run that guild's site.
+Cualquiera que haya iniciado sesión puede crear una hermandad, dentro de los límites que fijamos para evitar abusos. La persona que crea una hermandad y los miembros a los que da rango de oficial o superior ("líderes de la hermandad") gestionan el sitio de esa hermandad.
 
-Guild leaders are responsible for:
+Los líderes de la hermandad son responsables de:
 
-- the content they publish on their guild's site, such as guild pages, the charter, schedules, recruitment notes, progression and addon listings;
-- how they handle applications and member data they can see, including applicants' answers and Discord handles, and the guild's audit log;
-- setting and enforcing their guild's own rules, and treating members and applicants fairly;
-- making sure any custom domain they connect is one they control.
+- el contenido que publican en el sitio de su hermandad, como páginas de la hermandad, el reglamento, horarios, notas de reclutamiento, progreso y listados de addons;
+- cómo gestionan las solicitudes y los datos de miembros que pueden ver, incluidas las respuestas de los aspirantes y sus usuarios de Discord, y el registro de auditoría de la hermandad;
+- fijar y hacer cumplir las normas propias de su hermandad, y tratar con justicia a miembros y aspirantes;
+- asegurarse de que cualquier dominio propio que conecten esté bajo su control.
 
-Guild leaders must only use member and applicant information to run the guild. They must not copy it elsewhere, publish it or use it for anything unrelated to the guild.
+Los líderes de la hermandad solo deben usar la información de miembros y aspirantes para gestionar la hermandad. No deben copiarla en otro sitio, publicarla ni usarla para nada ajeno a la hermandad.
 
-Each guild's own rules apply inside that guild in addition to these terms. If they conflict, these terms win.
+Las normas propias de cada hermandad se aplican dentro de esa hermandad además de estos términos. Si entran en conflicto, prevalecen estos términos.
 
-## Guild names
+## Nombres de hermandad
 
-A guild on Guildbook is identified by its name, its Battle.net region (Americas or Europe), its faction and its WoW: Forever ruleset, and only one guild can hold each combination: guild names are unique per region, faction and ruleset, as regions are separate worlds in game. Names and subdomains of unverified guilds are first come, first served.
+Una hermandad en Guildbook se identifica por su nombre, su región de Battle.net (América o Europa), su facción y su tipo de reino de WoW: Forever, y solo una hermandad puede tener cada combinación: los nombres de hermandad son únicos por región, facción y tipo de reino, ya que las regiones son mundos separados en el juego. Los nombres y subdominios de las hermandades sin verificar se asignan por orden de llegada.
 
-A guild becomes verified when its in-game Guild Master proves, through a linked Battle.net account, that they lead the in-game guild with that name, faction and ruleset in the guild's region. A verified Guild Master may claim a name, or the subdomain matching their guild's name, that is held by an unverified guild. When that happens, the unverified guild is renamed (for example "Name (unverified)") or moved to a numbered subdomain, its admins are told why, and the change is recorded in its audit log. Nothing else changes: its members, content and custom domains stay with it, and the old subdomain doesn't redirect. A verified guild's name or subdomain can't be claimed. Guildbook re-checks verification daily and removes it after a week of failed checks.
+Una hermandad pasa a estar verificada cuando su maestro de la hermandad en el juego demuestra, mediante una cuenta de Battle.net vinculada, que dirige la hermandad del juego con ese nombre, facción y tipo de reino en la región de la hermandad. Un maestro de la hermandad verificado puede reclamar un nombre, o el subdominio que corresponde al nombre de su hermandad, que tenga una hermandad sin verificar. Cuando eso ocurre, la hermandad sin verificar cambia de nombre (por ejemplo, "Nombre (sin verificar)") o pasa a un subdominio numerado, se explica el motivo a sus administradores y el cambio queda registrado en su registro de auditoría. Nada más cambia: sus miembros, su contenido y sus dominios propios se quedan con ella, y el subdominio anterior no redirige. El nombre o el subdominio de una hermandad verificada no se pueden reclamar. Guildbook vuelve a comprobar la verificación cada día y la retira tras una semana de comprobaciones fallidas.
 
-We may also reserve, reassign or remove names and subdomains that impersonate Blizzard, other guilds or people, or that are held only to keep them from others.
+También podemos reservar, reasignar o retirar nombres y subdominios que suplanten a Blizzard, a otras hermandades o a personas, o que se mantengan solo para impedir que otros los usen.
 
-## Acceptable use
+## Uso aceptable
 
-When using Guildbook you must not:
+Al usar Guildbook no debes:
 
-- harass, threaten, bully or dox anyone;
-- post hate speech, or content that promotes violence or discrimination based on race, ethnicity, national origin, religion, sex, gender identity, sexual orientation, disability or similar characteristics;
-- post illegal content, sexual content involving minors, or content that infringes someone else's rights;
-- impersonate another person, guild or Blizzard, or misrepresent your characters, rank or affiliation;
-- scrape, crawl or bulk-download the service, or collect other users' information, except through features we provide for that purpose;
-- attack, overload, probe or bypass the security of the service, including its rate limits and access controls;
-- upload malware, or use Guildbook to send spam;
-- use Guildbook in a way that breaks Discord's, Blizzard's or any other applicable terms.
+- acosar, amenazar, intimidar ni publicar datos personales de nadie (doxing);
+- publicar discursos de odio, o contenido que promueva la violencia o la discriminación por raza, etnia, origen nacional, religión, sexo, identidad de género, orientación sexual, discapacidad o características similares;
+- publicar contenido ilegal, contenido sexual que implique a menores o contenido que infrinja derechos de otras personas;
+- suplantar a otra persona, hermandad o a Blizzard, ni falsear tus personajes, tu rango o tu afiliación;
+- extraer datos, rastrear o descargar en masa el servicio, ni recopilar información de otros usuarios, salvo mediante las funciones que ofrecemos para ese fin;
+- atacar, sobrecargar, sondear o eludir la seguridad del servicio, incluidos sus límites de uso y sus controles de acceso;
+- subir malware, ni usar Guildbook para enviar spam;
+- usar Guildbook de un modo que incumpla los términos de Discord, de Blizzard o cualquier otro que sea aplicable.
 
-## Your content
+## Tu contenido
 
-"Your content" means anything you submit, such as applications, character details, guild pages, notes and Vigil fight summaries.
+"Tu contenido" es todo lo que envías, como solicitudes, datos de personajes, páginas de la hermandad, notas y resúmenes de combates de Vigil.
 
-- You keep ownership of your content.
-- You give us a limited, worldwide, non-exclusive, royalty-free licence to store, copy, display and process your content only as needed to run, secure and improve Guildbook, and to show it to the people you or your guild choose. This licence ends when your content is deleted from the service, except for copies kept as described in our Privacy Policy (for example, in the guild's audit log or backups).
-- You confirm you have the right to submit your content.
+- Conservas la propiedad de tu contenido.
+- Nos concedes una licencia limitada, mundial, no exclusiva y gratuita para almacenar, copiar, mostrar y procesar tu contenido solo en la medida necesaria para gestionar, proteger y mejorar Guildbook, y para mostrarlo a las personas que tú o tu hermandad elijáis. Esta licencia termina cuando tu contenido se borra del servicio, salvo las copias que se conservan según se describe en nuestra Política de privacidad (por ejemplo, en el registro de auditoría de la hermandad o en copias de seguridad).
+- Confirmas que tienes derecho a enviar tu contenido.
 
-## Guild content
+## Contenido de la hermandad
 
-Content that belongs to a guild as a whole, such as its pages, charter, ranks, schedule, recruitment needs, progression records and addon listings, is controlled by that guild's leaders. When you edit guild content as an officer, you give the guild the right to keep and change it, and you give us the licence above for it. Guild content can stay on the guild's site after you leave the guild.
+El contenido que pertenece a una hermandad en su conjunto, como sus páginas, su reglamento, sus rangos, su horario, sus necesidades de reclutamiento, sus registros de progreso y sus listados de addons, lo controlan los líderes de esa hermandad. Cuando editas contenido de la hermandad como oficial, das a la hermandad el derecho a conservarlo y modificarlo, y nos concedes para él la licencia anterior. El contenido de la hermandad puede seguir en el sitio de la hermandad después de que la dejes.
 
-## Moderation and termination
+## Moderación y cancelación
 
-- Guild leaders can decline applications, change ranks and remove members from their guild.
-- We may remove content, restrict features, or suspend or delete accounts or guilds that break these terms or the law, or that put the service or other users at risk. Where reasonable we'll tell you why, but we don't have to give notice in urgent cases.
-- You can stop using Guildbook at any time and delete your account yourself from your account page on guildbook.io (see our Privacy Policy).
-- We may change, pause or shut down all or part of Guildbook at any time. If we plan to shut the service down, we'll try to give reasonable notice so guilds can save what they need.
+- Los líderes de la hermandad pueden rechazar solicitudes, cambiar rangos y expulsar miembros de su hermandad.
+- Podemos retirar contenido, restringir funciones, o suspender o borrar cuentas o hermandades que incumplan estos términos o la ley, o que pongan en riesgo el servicio u otros usuarios. Cuando sea razonable te diremos por qué, pero en casos urgentes no estamos obligados a avisar.
+- Puedes dejar de usar Guildbook en cualquier momento y borrar tu cuenta tú mismo desde tu página de cuenta en guildbook.io (consulta nuestra Política de privacidad).
+- Podemos cambiar, pausar o cerrar Guildbook, en todo o en parte, en cualquier momento. Si planeamos cerrar el servicio, intentaremos avisar con una antelación razonable para que las hermandades puedan guardar lo que necesiten.
 
-## Third-party services
+## Servicios de terceros
 
-Guildbook relies on services we don't control:
+Guildbook depende de servicios que no controlamos:
 
-- **Discord** for sign-in. Discord's Terms of Service and Privacy Policy apply to your Discord account.
-- **Blizzard Battle.net** for optional account linking and character data. Blizzard's terms, including the Blizzard End User License Agreement, apply to your Battle.net account and to the game.
-- **Warcraft Logs** or other sites that a guild links to. We aren't responsible for their content or practices.
+- **Discord** para iniciar sesión. Los Términos del servicio y la Política de privacidad de Discord se aplican a tu cuenta de Discord.
+- **Blizzard Battle.net** para la vinculación opcional de cuentas y los datos de personajes. Los términos de Blizzard, incluido el Acuerdo de licencia de usuario final de Blizzard, se aplican a tu cuenta de Battle.net y al juego.
+- **Warcraft Logs** u otros sitios a los que enlace una hermandad. No somos responsables de su contenido ni de sus prácticas.
 
-If one of these services changes or stops working, parts of Guildbook may stop working too.
+Si uno de estos servicios cambia o deja de funcionar, partes de Guildbook también pueden dejar de funcionar.
 
-## The Vigil addon and companion app
+## El addon Vigil y la app complementaria
 
-Vigil helps you review your own performance from the combat log file that World of Warcraft writes on your computer.
+Vigil te ayuda a revisar tu propio rendimiento a partir del archivo de registro de combate que World of Warcraft escribe en tu ordenador.
 
-- The **Vigil companion app** is a desktop program. It reads the combat log file in your World of Warcraft Logs folder, analyses it on your computer and, if you pair it with your guild site, uploads per-fight summaries to your account. If you ask it to, it can also copy the Vigil addon into your game's AddOns folder. It never reads or changes the game's memory, never injects code into the game client, never sends input to the game and never automates gameplay.
-- The **Vigil addon** is a standard in-game addon that runs through Blizzard's own addon interface. It can turn on the game's combat logging and save snapshots of your gear, talents and stats in the game's saved variables file.
-- You install and use the companion app and the addon at your own risk. You're responsible for making sure your use of them follows Blizzard's terms and policies.
+- La **app complementaria Vigil** es un programa de escritorio. Lee el archivo de registro de combate de tu carpeta Logs de World of Warcraft, lo analiza en tu ordenador y, si la emparejas con el sitio de tu hermandad, sube resúmenes por combate a tu cuenta. Si se lo pides, también puede copiar el addon Vigil en la carpeta AddOns del juego. Nunca lee ni modifica la memoria del juego, nunca inyecta código en el cliente del juego, nunca envía órdenes al juego y nunca automatiza la forma de jugar.
+- El **addon Vigil** es un addon estándar del juego que funciona a través de la propia interfaz de addons de Blizzard. Puede activar el registro de combate del juego y guardar instantáneas de tu equipo, tus talentos y tus estadísticas en el archivo de variables guardadas del juego.
+- Instalas y usas la app complementaria y el addon bajo tu propia responsabilidad. Eres responsable de asegurarte de que su uso cumple los términos y las políticas de Blizzard.
 
-## The service is provided "as is"
+## El servicio se ofrece "tal cual"
 
-Guildbook is free and provided **"as is" and "as available"**, without warranties of any kind, express or implied, including warranties of merchantability, fitness for a particular purpose, accuracy and non-infringement. We don't promise that the service will be uninterrupted, error-free or secure, that data will never be lost, or that Vigil's analysis, scores or character data from Blizzard are accurate. Keep your own copies of anything important.
+Guildbook es gratuito y se ofrece **"tal cual" y "según disponibilidad"**, sin garantías de ningún tipo, expresas o implícitas, incluidas las garantías de comerciabilidad, idoneidad para un fin concreto, exactitud y no infracción. No prometemos que el servicio vaya a funcionar sin interrupciones, sin errores o de forma segura, que nunca se vayan a perder datos, ni que el análisis de Vigil, sus puntuaciones o los datos de personajes de Blizzard sean exactos. Guarda tus propias copias de todo lo importante.
 
-## Limitation of liability
+## Limitación de responsabilidad
 
-To the fullest extent allowed by law, we won't be liable for any indirect, incidental, special, consequential or punitive damages, or for any loss of data, game items, accounts, profits or goodwill, arising from your use of or inability to use Guildbook, the Vigil addon or the companion app, even if we were told such damages were possible. Because Guildbook is free, our total liability for any claim relating to the service is limited to US $0 or, where the law doesn't allow that, the smallest amount the law permits.
+En la máxima medida que permita la ley, no seremos responsables de ningún daño indirecto, incidental, especial, consecuente o punitivo, ni de ninguna pérdida de datos, objetos del juego, cuentas, beneficios o fondo de comercio, derivados de tu uso o de la imposibilidad de usar Guildbook, el addon Vigil o la app complementaria, aunque se nos hubiera advertido de que esos daños eran posibles. Como Guildbook es gratuito, nuestra responsabilidad total por cualquier reclamación relacionada con el servicio se limita a 0 US$ o, cuando la ley no lo permita, a la cantidad más pequeña que la ley admita.
 
-Some places don't allow these exclusions or limits, so some of them may not apply to you. Nothing in these terms limits rights you have under consumer protection laws that can't be waived.
+En algunos lugares no se permiten estas exclusiones o límites, así que puede que algunos no se te apliquen. Nada de lo dispuesto en estos términos limita los derechos que te reconozcan las leyes de protección de los consumidores y a los que no se pueda renunciar.
 
-## Indemnity
+## Indemnización
 
-To the extent allowed by law, you agree to cover our reasonable costs from claims by others arising from your content or your breach of these terms.
+En la medida que permita la ley, aceptas cubrir nuestros costes razonables derivados de reclamaciones de terceros a causa de tu contenido o de tu incumplimiento de estos términos.
 
-## Changes to these terms
+## Cambios en estos términos
 
-We may update these terms from time to time. When we do, we'll change the "Last updated" date above, and for significant changes we'll try to give notice on the site. If you keep using Guildbook after changes take effect, you accept the updated terms.
+Podemos actualizar estos términos de vez en cuando. Cuando lo hagamos, cambiaremos la fecha de "Última actualización" de arriba y, en los cambios importantes, intentaremos avisar en el sitio. Si sigues usando Guildbook después de que los cambios entren en vigor, aceptas los términos actualizados.
 
-## Governing law
+## Ley aplicable
 
-These terms are governed by the laws of the State of California, United States, without regard to its conflict of law rules. Any dispute will be handled in the state or federal courts located in California, unless the law where you live gives you the right to bring a claim in your local courts.
+Estos términos se rigen por las leyes del Estado de California, Estados Unidos, sin tener en cuenta sus normas sobre conflicto de leyes. Cualquier disputa se resolverá en los tribunales estatales o federales situados en California, salvo que la ley de donde vives te dé derecho a presentar una reclamación ante los tribunales de tu localidad.
 
-## General
+## Disposiciones generales
 
-If any part of these terms can't be enforced, the rest stays in effect. If we don't enforce a term right away, we haven't given up the right to enforce it later. These terms and our Privacy Policy are the whole agreement between you and us about Guildbook.
+Si alguna parte de estos términos no se puede hacer cumplir, el resto sigue vigente. Si no hacemos cumplir un término de inmediato, no renunciamos al derecho de hacerlo más adelante. Estos términos y nuestra Política de privacidad constituyen el acuerdo completo entre tú y nosotros sobre Guildbook.
 
-## Contact
+## Contacto
 
-Questions about these terms, or reports of content or conduct that breaks them: [matt.rosendin@gmail.com](mailto:matt.rosendin@gmail.com).
+Preguntas sobre estos términos, o avisos de contenido o conductas que los incumplan: [matt.rosendin@gmail.com](mailto:matt.rosendin@gmail.com).

@@ -12,32 +12,32 @@ import { deleteScheduleSlotAction, saveScheduleSlotAction } from "@/server/actio
 import { requirePage } from "@/server/context";
 import { listScheduleSlots } from "@/server/services/content";
 
-export const metadata: Metadata = { title: "Raid Schedule" };
+export const metadata: Metadata = { title: "Horario de bandas" };
 
 function SlotFields({ slot, showFaction }: { slot?: typeof raidScheduleSlots.$inferSelect; showFaction: boolean }) {
   return (
     <div className={`grid gap-3 sm:items-end ${showFaction ? "sm:grid-cols-5" : "sm:grid-cols-4"}`}>
       {slot && <input type="hidden" name="id" value={slot.id} />}
-      <Field label="Day" name="dayOfWeek">
+      <Field label="Día" name="dayOfWeek">
         <Listbox
           name="dayOfWeek"
-          aria-label="Day"
+          aria-label="Día"
           options={DAYS_OF_WEEK.map((d, i) => ({ value: String(i), label: d }))}
           defaultValue={String(slot?.dayOfWeek ?? 2)}
         />
       </Field>
-      <Field label="Start" name="startTime">
+      <Field label="Inicio" name="startTime">
         <input name="startTime" type="time" className="field" defaultValue={slot?.startTime ?? "20:00"} required />
       </Field>
-      <Field label="End" name="endTime">
+      <Field label="Fin" name="endTime">
         <input name="endTime" type="time" className="field" defaultValue={slot?.endTime ?? "23:00"} required />
       </Field>
-      <Field label="Label" name="label">
-        <input name="label" className="field" defaultValue={slot?.label ?? "Main raid"} required />
+      <Field label="Etiqueta" name="label">
+        <input name="label" className="field" defaultValue={slot?.label ?? "Banda principal"} required />
       </Field>
       {showFaction && (
-        <Field label="Faction" name="faction">
-          <Listbox name="faction" aria-label="Faction" options={[{ value: "", label: "Both" }, ...FACTION_OPTIONS]} defaultValue={slot?.faction ?? ""} />
+        <Field label="Facción" name="faction">
+          <Listbox name="faction" aria-label="Facción" options={[{ value: "", label: "Ambas" }, ...FACTION_OPTIONS]} defaultValue={slot?.faction ?? ""} />
         </Field>
       )}
     </div>
@@ -51,30 +51,30 @@ export default async function SchedulePage({ params }: PageProps<"/[guild]/admin
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Raid Schedule" eyebrow={`Times in server time (${timezoneAbbrev(guild.timezone)})`} />
+      <PageHeader title="Horario de bandas" eyebrow={`Horas en hora del servidor (${timezoneAbbrev(guild.timezone)})`} />
       {slots.map((slot) => (
         <Panel key={slot.id}>
           <ActionForm action={saveScheduleSlotAction.bind(null, slug)} className="space-y-3">
             <SlotFields slot={slot} showFaction={!guild.faction} />
             <div className="flex items-center gap-3">
               <SubmitButton variant="ghost" size="sm">
-                Save
+                Guardar
               </SubmitButton>
               <FormMessage />
             </div>
           </ActionForm>
-          <ActionForm action={deleteScheduleSlotAction.bind(null, slug, slot.id)} className="mt-2" confirm="Delete this raid night?">
+          <ActionForm action={deleteScheduleSlotAction.bind(null, slug, slot.id)} className="mt-2" confirm="¿Borrar esta noche de banda?">
             <SubmitButton variant="danger" size="sm">
-              Delete
+              Borrar
             </SubmitButton>
           </ActionForm>
         </Panel>
       ))}
-      <Panel title="Add raid night">
+      <Panel title="Añadir noche de banda">
         <ActionForm action={saveScheduleSlotAction.bind(null, slug)} className="space-y-3">
           <SlotFields showFaction={!guild.faction} />
           <FormMessage />
-          <SubmitButton>Add</SubmitButton>
+          <SubmitButton>Añadir</SubmitButton>
         </ActionForm>
       </Panel>
     </div>

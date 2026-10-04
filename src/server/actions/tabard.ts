@@ -11,7 +11,7 @@ export async function updateGuildTabardAction(slug: string, _prev: ActionResult 
   return runAction(slug, async ({ viewer }) => {
     await updateGuildTabard(db, viewer.actor, Object.fromEntries(fd.entries()));
     refresh();
-    return "Tabard and theme saved. Icons regenerated.";
+    return "Tabardo y tema guardados. Iconos regenerados.";
   });
 }
 
@@ -19,6 +19,6 @@ export async function importInGameTabardAction(slug: string, _prev: ActionResult
   return runAction(slug, async ({ viewer }) => {
     const { inGameName } = await importInGameTabard(db, viewer.actor, getBlizzardClient());
     refresh();
-    return `Imported ${inGameName}'s in-game tabard. Icons regenerated.`;
+    return `Importado el tabardo del juego de ${inGameName}. Iconos regenerados.`;
   });
 }

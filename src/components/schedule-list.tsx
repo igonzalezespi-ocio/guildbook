@@ -12,7 +12,7 @@ export function ScheduleList({
   timezone: string;
   showFaction: boolean;
 }) {
-  if (slots.length === 0) return <p className="text-sm text-muted italic">Schedule to be announced.</p>;
+  if (slots.length === 0) return <p className="text-sm text-muted italic">Horario por anunciar.</p>;
   const tz = timezoneAbbrev(timezone);
   return (
     <ul className="divide-y divide-line">

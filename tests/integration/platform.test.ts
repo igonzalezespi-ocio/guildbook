@@ -48,7 +48,7 @@ describe("createGuildForUser", () => {
       .from(memberships)
       .innerJoin(ranks, eq(ranks.id, memberships.rankId))
       .where(and(eq(memberships.guildId, guild.id), eq(memberships.userId, user.id)));
-    expect(membership).toEqual({ status: "active", rankName: "Guild Master", rankTier: "admin" });
+    expect(membership).toEqual({ status: "active", rankName: "Líder", rankTier: "admin" });
     expect(resolveTier({ status: membership!.status, rankTier: membership!.rankTier })).toBe("admin");
 
     const [audit] = await db.select().from(auditLog).where(and(eq(auditLog.guildId, guild.id), eq(auditLog.action, "guild.create")));
@@ -59,7 +59,7 @@ describe("createGuildForUser", () => {
     const user = await newUser();
     const { guild } = await createGuildForUser(db, user.id, form("neutral-test"), limits);
     const rankNames = (await db.select({ name: ranks.name }).from(ranks).where(eq(ranks.guildId, guild.id))).map((r) => r.name);
-    expect(rankNames).toEqual(expect.arrayContaining(["Guild Master", "Officer", "Raider", "Member", "Trial", "Applicant"]));
+    expect(rankNames).toEqual(expect.arrayContaining(["Líder", "Oficial", "Raider", "Miembro", "A prueba", "Aspirante"]));
     expect(rankNames).not.toContain("Chaplain");
 
     const pages = await db.select({ slug: contentPages.slug, title: contentPages.title, body: contentPages.bodyMd }).from(contentPages).where(eq(contentPages.guildId, guild.id));
@@ -82,9 +82,9 @@ describe("createGuildForUser", () => {
     await createGuildForUser(db, user.id, form("taken-slug"), limits);
     const other = await newUser();
     await expect(createGuildForUser(db, other.id, form("taken-slug"), limits)).rejects.toThrow(DomainError);
-    await expect(createGuildForUser(db, other.id, form("taken-slug"), limits)).rejects.toThrow("That subdomain is taken");
+    await expect(createGuildForUser(db, other.id, form("taken-slug"), limits)).rejects.toThrow("Ese subdominio está ocupado");
 
-    expect(await checkSlugAvailability(db, "taken-slug")).toEqual({ available: false, reason: "That subdomain is taken", suggestions: ["taken-slug-2"] });
+    expect(await checkSlugAvailability(db, "taken-slug")).toEqual({ available: false, reason: "Ese subdominio está ocupado", suggestions: ["taken-slug-2"] });
     expect(await checkSlugAvailability(db, "www")).toMatchObject({ available: false });
     expect(await checkSlugAvailability(db, "free-slug")).toEqual({ available: true });
   });
@@ -94,12 +94,12 @@ describe("createGuildForUser", () => {
     const day1 = new Date("2026-09-01T12:00:00Z");
     await createGuildForUser(db, user.id, form("limit-a"), limits, day1);
     await createGuildForUser(db, user.id, form("limit-b"), limits, day1);
-    await expect(createGuildForUser(db, user.id, form("limit-c"), limits, day1)).rejects.toThrow(/today/);
+    await expect(createGuildForUser(db, user.id, form("limit-c"), limits, day1)).rejects.toThrow(/Hoy ya has fundado/);
 
     // createdAt is set by the database, so the rolling-day check uses the real clock; move past it.
     const later = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000);
     await createGuildForUser(db, user.id, form("limit-c"), limits, later);
-    await expect(createGuildForUser(db, user.id, form("limit-d"), limits, new Date(later.getTime() + 2 * 24 * 60 * 60 * 1000))).rejects.toThrow(/up to 3 guilds/);
+    await expect(createGuildForUser(db, user.id, form("limit-d"), limits, new Date(later.getTime() + 2 * 24 * 60 * 60 * 1000))).rejects.toThrow(/hasta 3 hermandades/);
     expect(await db.select().from(guilds).where(eq(guilds.slug, "limit-d"))).toHaveLength(0);
   });
 
@@ -110,8 +110,8 @@ describe("createGuildForUser", () => {
     await createGuildForUser(db, user.id, form("cap-b", { name: "Cap Beta" }), cap);
     const err = await createGuildForUser(db, user.id, form("cap-c"), cap).catch((e: unknown) => e);
     expect(err).toBeInstanceOf(DomainError);
-    expect((err as Error).message).toMatch(/Each account can own up to 2 guilds\. You own Cap Alpha, Cap Beta\./);
-    expect((err as Error).message).toMatch(/Delete a guild you no longer need.*email .+@.+ with your Discord username/);
+    expect((err as Error).message).toMatch(/Cada cuenta puede ser dueña de hasta 2 hermandades\. Eres dueño de Cap Alpha, Cap Beta\./);
+    expect((err as Error).message).toMatch(/Borra una hermandad que ya no necesites.*escribe a .+@.+ con tu usuario de Discord/);
 
     // Deleting a guild removes it, so the slot is free again.
     const [m] = await db.select({ id: memberships.id }).from(memberships).where(eq(memberships.guildId, alpha.id));
@@ -126,7 +126,7 @@ describe("createGuildForUser", () => {
     for (const slug of ["admin-a", "admin-b", "admin-c"]) await createGuildForUser(db, admin.id, form(slug), cap);
     await createGuildForUser(db, raised.id, form("raised-a"), cap);
     await createGuildForUser(db, raised.id, form("raised-b"), cap);
-    await expect(createGuildForUser(db, raised.id, form("raised-c"), cap)).rejects.toThrow(/up to 2 guilds/);
+    await expect(createGuildForUser(db, raised.id, form("raised-c"), cap)).rejects.toThrow(/hasta 2 hermandades/);
   });
 
   it("reads limits from the environment", () => {
@@ -148,7 +148,7 @@ describe("createGuildForUser", () => {
 
     const mine = await listUserGuilds(db, user.id);
     expect(mine.map((g) => g.slug).sort()).toEqual(["hidden-one", "listed-one"]);
-    expect(mine[0]).toMatchObject({ rankName: "Guild Master", rankTier: "admin", status: "active", customDomain: null, main: null });
+    expect(mine[0]).toMatchObject({ rankName: "Líder", rankTier: "admin", status: "active", customDomain: null, main: null });
 
     // New guilds are drafts: out of the directory until published, even when listed.
     expect((await listDirectoryGuilds(db)).map((g) => g.slug)).not.toContain("listed-one");
@@ -184,7 +184,7 @@ describe("guild identity uniqueness", () => {
 
     const other = await newUser();
     await expect(createGuildForUser(db, other.id, form("iron-oath-2", { name: "iron  OATH " }), limits)).rejects.toThrow(
-      "A guild called Iron Oath (Americas, Alliance, Normal) is already on Guildbook",
+      "Ya hay en Guildbook una hermandad llamada Iron Oath (América, Alianza, Normal)",
     );
     expect(await db.select().from(guilds).where(eq(guilds.slug, "iron-oath-2"))).toHaveLength(0);
 
@@ -196,7 +196,7 @@ describe("guild identity uniqueness", () => {
     const eu = await createGuildForUser(db, third.id, form("iron-oath-eu", { name: "Iron Oath", region: "eu" }), limits);
     expect(eu.guild).toMatchObject({ name: "Iron Oath", region: "eu" });
     await expect(createGuildForUser(db, user.id, form("iron-oath-eu-2", { name: "IRON OATH", region: "eu" }), limits)).rejects.toThrow(
-      "A guild called Iron Oath (Europe, Alliance, Normal) is already on Guildbook",
+      "Ya hay en Guildbook una hermandad llamada Iron Oath (Europa, Alianza, Normal)",
     );
   });
 
@@ -211,7 +211,7 @@ describe("guild identity uniqueness", () => {
     const mover = await createGuild(db, { name: "Crimson Vow", faction: "alliance", ruleset: "rp" });
     const gm = await createMember(db, mover, "Grand Master");
     const settings = { name: "Crimson Vow", timezone: "America/New_York", region: "us", faction: "horde", ruleset: "rp" };
-    await expect(updateGuildSettings(db, gm, settings)).rejects.toThrow(/Crimson Vow \(Americas, Horde, Roleplaying\) is already on Guildbook/);
+    await expect(updateGuildSettings(db, gm, settings)).rejects.toThrow(/una hermandad llamada Crimson Vow \(América, Horda, Rol\)/);
     const [row] = await db.select().from(guilds).where(eq(guilds.id, mover.guild.id));
     expect(row).toMatchObject({ faction: "alliance", ruleset: "rp" });
 
@@ -253,7 +253,7 @@ describe("subdomain suggestions", () => {
 
     expect(await checkSlugAvailability(db, "oathbound", { region: "eu", faction: "horde", ruleset: "pvp" })).toEqual({
       available: false,
-      reason: "That subdomain is taken",
+      reason: "Ese subdominio está ocupado",
       suggestions: ["oathbound-pvp", "oathbound-horde", "oathbound-eu"],
     });
     expect((await checkSlugAvailability(db, "oathbound", { region: "us", faction: "alliance", ruleset: "hardcore" })).available).toBe(false);
@@ -280,8 +280,8 @@ describe("subdomain suggestions", () => {
     const err = await createGuildForUser(db, other.id, form("dawnguard", { name: "Dawnguard", faction: "horde" }), limits).catch((e: unknown) => e);
     expect(actionError(err)).toEqual({
       ok: false,
-      error: "Please fix these fields:",
-      fieldErrors: { slug: ["That subdomain is taken"] },
+      error: "Corrige estos campos:",
+      fieldErrors: { slug: ["Ese subdominio está ocupado"] },
       suggestions: { slug: ["dawnguard-horde"] },
     });
   });
@@ -289,7 +289,7 @@ describe("subdomain suggestions", () => {
   it("reports validation failures per field, including fields a form might not render", async () => {
     const user = await newUser();
     const err = await createGuildForUser(db, user.id, form("no-region-field", { region: "" }), limits).catch((e: unknown) => e);
-    expect(actionError(err)).toMatchObject({ ok: false, error: "Please fix these fields:", fieldErrors: { region: ["Choose your guild's region"] } });
+    expect(actionError(err)).toMatchObject({ ok: false, error: "Corrige estos campos:", fieldErrors: { region: ["Elige la región de tu hermandad"] } });
   });
 });
 
@@ -318,7 +318,7 @@ describe("game versions", () => {
     const other = await newUser();
     await expect(createGuildForUser(db, other.id, anniversary("elderwood-nightslayer", { name: "Elderwood", realmSlug: "nightslayer" }), limits)).resolves.toBeTruthy();
     await expect(createGuildForUser(db, other.id, anniversary("elderwood-again", { name: "ELDERWOOD" }), limits)).rejects.toThrow(
-      /Elderwood \(TBC Anniversary, Dreamscythe \(US\), Horde\) is already on Guildbook/,
+      /una hermandad llamada Elderwood \(TBC Anniversary, Dreamscythe \(US\), Horda\)/,
     );
   });
 
@@ -340,7 +340,7 @@ describe("game versions", () => {
     expect(moved).toMatchObject({ gameVersion: "anniversary", realmSlug: "spineshatter", region: "eu", ruleset: "pvp" });
 
     await db.update(guilds).set({ verifiedAt: new Date(), verifiedVia: "battlenet" }).where(eq(guilds.id, guild.id));
-    await expect(updateGuildSettings(db, gm, { ...settings, region: "eu", realmSlug: "thunderstrike" })).rejects.toThrow(/can't move realm/);
+    await expect(updateGuildSettings(db, gm, { ...settings, region: "eu", realmSlug: "thunderstrike" })).rejects.toThrow(/no puede cambiar de reino/);
     await expect(updateGuildSettings(db, gm, { ...settings, region: "eu", motto: "Still here" })).resolves.toMatchObject({ unverified: false });
     expect((await db.select().from(guilds).where(eq(guilds.id, guild.id)))[0]).toMatchObject({ realmSlug: "spineshatter", motto: "Still here" });
   });

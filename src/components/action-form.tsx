@@ -22,7 +22,61 @@ const errorSlotId = (formId: string, name: string) => `${formId}-${name}-error`;
 const summaryId = (formId: string) => `${formId}-summary`;
 
 /** `discordInviteUrl` to "Discord invite url", for fields a form didn't label. */
+/** Spanish names for form fields, used when a form has no label for a failing field. */
+const FIELD_NAMES: Record<string, string> = {
+  acceptRankId: "Rango de aceptados",
+  applicantRankId: "Rango de aspirantes",
+  autoApproveRankId: "Rango al entrar",
+  availability: "Disponibilidad",
+  awardedOn: "Fecha de entrega",
+  bodyMd: "Contenido",
+  bossId: "Jefe",
+  category: "Categoría",
+  characterId: "Personaje",
+  characterName: "Nombre",
+  characterSurname: "Apellido",
+  code: "Código",
+  dayOfWeek: "Día",
+  description: "Descripción",
+  discordHandle: "Usuario de Discord",
+  discordInviteUrl: "Invitación de Discord",
+  domain: "Dominio",
+  endTime: "Hora de fin",
+  faction: "Facción",
+  guildId: "Hermandad",
+  item: "Objeto",
+  killedOn: "Fecha de la muerte",
+  label: "Etiqueta",
+  level: "Nivel",
+  message: "Mensaje",
+  motto: "Lema",
+  name: "Nombre",
+  note: "Nota",
+  professions: "Profesiones",
+  raidExperience: "Experiencia en bandas",
+  realmSlug: "Reino",
+  reason: "Motivo",
+  region: "Región",
+  replyTo: "Correo de respuesta",
+  respectsFaith: "Compromiso",
+  response: "Motivo",
+  role: "Rol",
+  ruleset: "Tipo de reino",
+  slug: "Subdominio",
+  spec: "Especialización",
+  startTime: "Hora de inicio",
+  subject: "Asunto",
+  summary: "Resumen",
+  surname: "Apellido",
+  timezone: "Zona horaria",
+  title: "Título",
+  trialRankId: "Rango de prueba",
+  whyThisGuild: "¿Por qué esta hermandad?",
+  wowClass: "Clase",
+};
+
 export function humanizeField(name: string): string {
+  if (FIELD_NAMES[name]) return FIELD_NAMES[name];
   const words = name.replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/[_-]+/g, " ").toLowerCase();
   return words.charAt(0).toUpperCase() + words.slice(1);
 }
@@ -224,7 +278,7 @@ export function SubmitButton({
       disabled={pending}
       className={clsx("btn", `btn-${variant}`, size === "sm" && "btn-sm")}
     >
-      {pending ? (pendingLabel ?? "Saving…") : children}
+      {pending ? (pendingLabel ?? "Guardando…") : children}
     </button>
   );
 }

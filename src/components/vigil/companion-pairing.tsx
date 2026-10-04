@@ -37,12 +37,12 @@ export function CompanionPairing({ slug }: { slug: string }) {
     <div className="space-y-4">
       {code && !expired ? (
         <div className="rounded border border-gold-dim bg-ink/40 p-4 text-center" data-testid="companion-pairing-code">
-          <p className="text-xs tracking-widest text-muted uppercase">Pairing code</p>
-          <p className="my-2 font-display text-4xl font-bold tracking-[0.2em] text-gold-bright select-all" aria-label="Pairing code">
+          <p className="text-xs tracking-widest text-muted uppercase">Código de emparejamiento</p>
+          <p className="my-2 font-display text-4xl font-bold tracking-[0.2em] text-gold-bright select-all" aria-label="Código de emparejamiento">
             {code}
           </p>
           <p className="text-sm text-muted" role="timer">
-            Works once. Expires in {Math.floor(secondsLeft / 60)}:{String(secondsLeft % 60).padStart(2, "0")}.
+            Sirve una vez. Caduca en {Math.floor(secondsLeft / 60)}:{String(secondsLeft % 60).padStart(2, "0")}.
           </p>
           <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
             <button
@@ -53,17 +53,17 @@ export function CompanionPairing({ slug }: { slug: string }) {
                 setCopied(true);
               }}
             >
-              {copied ? "Copied" : "Copy code"}
+              {copied ? "Copiado" : "Copiar código"}
             </button>
             {link && (
               <a href={link} className="btn btn-primary btn-sm">
-                Open in the companion
+                Abrir en la app
               </a>
             )}
           </div>
         </div>
       ) : (
-        expired && <p className="text-sm text-muted">That code expired. Create a new one.</p>
+        expired && <p className="text-sm text-muted">Ese código ha caducado. Crea uno nuevo.</p>
       )}
       {result && !result.ok && (
         <p role="alert" className="text-sm text-red-300">
@@ -71,7 +71,7 @@ export function CompanionPairing({ slug }: { slug: string }) {
         </p>
       )}
       <button type="button" className="btn btn-primary" onClick={create} disabled={pending}>
-        {pending ? "Creating…" : code && !expired ? "Create a new code" : "Create pairing code"}
+        {pending ? "Creando…" : code && !expired ? "Crear un código nuevo" : "Crear código de emparejamiento"}
       </button>
     </div>
   );

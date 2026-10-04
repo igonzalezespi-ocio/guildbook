@@ -90,7 +90,8 @@ describe("server-validated fields have somewhere to show their errors", () => {
   });
 
   it("humanizes fields a form didn't label", () => {
-    expect(humanizeField("discordInviteUrl")).toBe("Discord invite url");
-    expect(humanizeField("region")).toBe("Region");
+    expect(humanizeField("discordInviteUrl")).toBe("Invitación de Discord");
+    expect(humanizeField("region")).toBe("Región");
+    expect(humanizeField("someOtherField")).toBe("Some other field");
   });
 });

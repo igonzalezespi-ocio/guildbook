@@ -52,9 +52,9 @@ export interface SetupStep {
 
 /** Steps an admin must finish before a draft can be published, with what to tell them when one is missing. */
 export const PUBLISH_REQUIREMENTS: { key: SetupStepKey; missing: string }[] = [
-  { key: "look", missing: "Set your tabard and site colours." },
-  { key: "ranks", missing: "Review your ranks: edit them, pick a preset or confirm them as they are." },
-  { key: "charter", missing: "Edit the charter so it describes your guild, not the starter text." },
+  { key: "look", missing: "Elige tu tabardo y los colores del sitio." },
+  { key: "ranks", missing: "Revisa tus rangos: edítalos, elige una plantilla o confírmalos tal cual." },
+  { key: "charter", missing: "Edita el reglamento para que describa tu hermandad y no el texto de ejemplo." },
 ];
 
 const REQUIRED = new Set(PUBLISH_REQUIREMENTS.map((r) => r.key));

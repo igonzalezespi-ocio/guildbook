@@ -3,18 +3,18 @@ import { headerMenu, openMenu, signIn } from "./helpers";
 
 /** The header nav that is visible at this viewport: the Menu dropdown on mobile, the Main nav on desktop. */
 async function headerNav(page: Page, isMobile: boolean) {
-  if (!isMobile) return page.getByRole("banner").getByRole("navigation", { name: "Main" });
-  const menu = headerMenu(page, "Menu");
+  if (!isMobile) return page.getByRole("banner").getByRole("navigation", { name: "Principal" });
+  const menu = headerMenu(page, "Menú");
   await openMenu(menu);
   return menu;
 }
 
 test("the navbar marks the current section, including child pages", async ({ page, isMobile }) => {
   for (const [path, label] of [
-    ["/charter", "Charter"],
-    ["/lore", "Lore"],
-    ["/roster", "Roster"],
-    ["/progression", "Progression"],
+    ["/charter", "Reglamento"],
+    ["/lore", "Historia"],
+    ["/roster", "Plantilla"],
+    ["/progression", "Progreso"],
     ["/addons", "Addons"],
   ] as const) {
     await page.goto(path);
@@ -28,7 +28,7 @@ test("the navbar marks the current section, including child pages", async ({ pag
   await page.getByRole("main").getByRole("link", { name: "Tor Whitecross", exact: true }).click();
   await expect(page).toHaveURL(/\/roster\/[^/]+$/);
   const nav = await headerNav(page, isMobile);
-  await expect(nav.getByRole("link", { name: "Roster", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(nav.getByRole("link", { name: "Plantilla", exact: true })).toHaveAttribute("aria-current", "page");
 
   await page.goto("/");
   const home = await headerNav(page, isMobile);
@@ -37,12 +37,12 @@ test("the navbar marks the current section, including child pages", async ({ pag
 
 test("the admin nav marks only the current section", async ({ page, isMobile }) => {
   await signIn(page, "seed-tor", "Tor", "/admin");
-  const admin = page.getByRole("navigation", { name: "Admin" });
+  const admin = page.getByRole("navigation", { name: "Administración" });
 
-  await expect(admin.getByRole("link", { name: "Overview" })).toHaveAttribute("aria-current", "page");
+  await expect(admin.getByRole("link", { name: "Resumen" })).toHaveAttribute("aria-current", "page");
   await expect(admin.locator('a[aria-current="page"]')).toHaveCount(1);
 
-  for (const label of ["Applications", "Members", "Ranks", "Schedule", "Recruitment", "Progression", "Guild"]) {
+  for (const label of ["Solicitudes", "Miembros", "Rangos", "Horario", "Reclutamiento", "Progreso", "Hermandad"]) {
     await admin.getByRole("link", { name: label, exact: true }).click();
     await expect(admin.getByRole("link", { name: label, exact: true })).toHaveAttribute("aria-current", "page");
     await expect(admin.locator('a[aria-current="page"]')).toHaveCount(1);
@@ -51,8 +51,8 @@ test("the admin nav marks only the current section", async ({ page, isMobile }) 
   }
 
   // Rarely used sections sit in the More menu, which shows as current while one of them is open.
-  const more = admin.getByRole("button", { name: "More" });
-  for (const label of ["Addons", "Audit log"]) {
+  const more = admin.getByRole("button", { name: "Más" });
+  for (const label of ["Addons", "Registro de auditoría"]) {
     await more.click();
     await admin.getByRole("menuitem", { name: label }).click();
     await expect(page).toHaveURL(label === "Addons" ? /\/admin\/addons$/ : /\/admin\/audit$/);
@@ -63,12 +63,12 @@ test("the admin nav marks only the current section", async ({ page, isMobile }) 
   await page.keyboard.press("ArrowDown");
   await expect(admin.getByRole("menuitem", { name: "Addons" })).toBeFocused();
   await page.keyboard.press("ArrowDown");
-  await expect(admin.getByRole("menuitem", { name: "Audit log" })).toBeFocused();
+  await expect(admin.getByRole("menuitem", { name: "Registro de auditoría" })).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(admin.getByRole("menu")).toBeHidden();
   await expect(more).toBeFocused();
 
   const nav = await headerNav(page, isMobile);
-  await expect(nav.getByRole("link", { name: "Admin", exact: true })).toHaveAttribute("aria-current", "page");
-  await expect(nav.getByRole("link", { name: "Progression", exact: true })).not.toHaveAttribute("aria-current", "page");
+  await expect(nav.getByRole("link", { name: "Administración", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(nav.getByRole("link", { name: "Progreso", exact: true })).not.toHaveAttribute("aria-current", "page");
 });

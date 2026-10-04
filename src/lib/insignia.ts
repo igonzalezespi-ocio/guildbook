@@ -15,28 +15,28 @@ export const INSIGNIA = [
 export type Insignia = (typeof INSIGNIA)[number];
 
 export const INSIGNIA_INFO: Record<Insignia, { label: string; meaning: string }> = {
-  archangel: { label: "Archangel", meaning: "Crowned sword of Saint Michael between his wings" },
-  keys: { label: "Crossed keys", meaning: "The steward who holds the keys of the house, under the cross" },
-  banner: { label: "Sword and banner", meaning: "Carries the Order's banner and leads the host in the field" },
-  laurel: { label: "Sword and laurel", meaning: "Commands a company" },
-  chalice: { label: "Chalice and host", meaning: "Keeper of the Order's prayer life" },
-  "cross-pattee": { label: "Cross pattée", meaning: "The cross of the knightly orders" },
-  chevron: { label: "Chevron", meaning: "The mark of a sergeant-at-arms" },
-  helm: { label: "Helm", meaning: "Bears the helm and arms of a knight" },
-  cross: { label: "Cross", meaning: "Beginning formation in the Order" },
-  candle: { label: "Candle", meaning: "Seeking entry, a light in the window" },
+  archangel: { label: "Arcángel", meaning: "La espada coronada de san Miguel entre sus alas" },
+  keys: { label: "Llaves cruzadas", meaning: "El mayordomo que guarda las llaves de la casa, bajo la cruz" },
+  banner: { label: "Espada y estandarte", meaning: "Porta el estandarte de la Orden y guía a la hueste en el campo" },
+  laurel: { label: "Espada y laurel", meaning: "Manda una compañía" },
+  chalice: { label: "Cáliz y hostia", meaning: "Custodio de la vida de oración de la Orden" },
+  "cross-pattee": { label: "Cruz patada", meaning: "La cruz de las órdenes de caballería" },
+  chevron: { label: "Galón", meaning: "La marca de un sargento de armas" },
+  helm: { label: "Yelmo", meaning: "Lleva el yelmo y las armas de un caballero" },
+  cross: { label: "Cruz", meaning: "Empieza su formación en la Orden" },
+  candle: { label: "Vela", meaning: "Pide entrar: una luz en la ventana" },
 };
 
 /** The meanings above are the Order's; other guilds read these where the Order's mention it. */
 const GENERIC_MEANINGS: Partial<Record<Insignia, string>> = {
-  archangel: "A crowned sword between two wings",
-  keys: "The steward who holds the keys of the house",
-  banner: "Carries the guild's banner and leads the host in the field",
-  chalice: "Keeper of the guild's fellowship and traditions",
-  "cross-pattee": "The mark of the raiding core",
-  chevron: "A mark of steady service",
-  helm: "Bears the helm and arms of a raider",
-  cross: "Taking the first steps in the guild",
+  archangel: "Una espada coronada entre dos alas",
+  keys: "El mayordomo que guarda las llaves de la casa",
+  banner: "Porta el estandarte de la hermandad y guía a la hueste en el campo",
+  chalice: "Custodio de la camaradería y las tradiciones de la hermandad",
+  "cross-pattee": "La marca del núcleo de bandas",
+  chevron: "Una marca de servicio constante",
+  helm: "Lleva el yelmo y las armas de un raider",
+  cross: "Da sus primeros pasos en la hermandad",
 };
 
 export function insigniaMeaning(insignia: Insignia, guild: { preset: string }) {

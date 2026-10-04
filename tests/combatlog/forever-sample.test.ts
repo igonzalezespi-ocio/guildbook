@@ -42,7 +42,7 @@ describe("WoW: Forever beta combat log", () => {
       expect(r.player.level).toBeNull();
       expect(r.totals.dps).toBeGreaterThan(5);
       expect(r.totals.dps).toBeLessThan(40);
-      expect(r.notes.join(" ")).not.toMatch(/Advanced combat logging was off/);
+      expect(r.notes.join(" ")).not.toMatch(/El registro de combate avanzado estaba desactivado/);
       expect(() => fightReportSchema.parse(r)).not.toThrow();
     }
   });

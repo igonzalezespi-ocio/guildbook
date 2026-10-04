@@ -2,7 +2,7 @@ import "server-only";
 import { and, desc, eq, isNull, like } from "drizzle-orm";
 import { applications, characters, memberships, ranks, users } from "@/db/schema";
 import type { Db } from "@/db/types";
-import { fullName } from "@/lib/game";
+import { APPLICATION_STATUS_LABELS, fullName } from "@/lib/game";
 
 export type TestAccount = {
   discordId: string;
@@ -66,13 +66,13 @@ export async function listTestAccounts(db: Db, guildId: string): Promise<TestAcc
       standing = r.rankName!;
       group = "member";
     } else if (r.status === "applicant") {
-      standing = "Applicant";
+      standing = "Aspirante";
       group = "applicant";
     } else if (app) {
-      standing = `Application ${app.status}`;
+      standing = `Solicitud ${APPLICATION_STATUS_LABELS[app.status] ?? app.status}`;
       group = "applicant";
     } else {
-      standing = r.status === "former" ? "Former member" : "Not in this guild";
+      standing = r.status === "former" ? "Antiguo miembro" : "No está en esta hermandad";
       group = "other";
     }
     return { discordId, name, displayName, standing, group, rankOrder: r.rankOrder ?? Number.MAX_SAFE_INTEGER };

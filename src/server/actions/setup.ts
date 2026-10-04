@@ -28,7 +28,7 @@ export async function dismissSetupAction(slug: string, dismissed: boolean, _prev
   return runAction(slug, async ({ viewer }) => {
     await setSetupDismissed(db, viewer.actor, dismissed);
     refresh();
-    return dismissed ? "Setup checklist hidden. Find it again under Admin, then Setup." : undefined;
+    return dismissed ? "Lista de configuración oculta. La tienes en Administración > Configuración." : undefined;
   });
 }
 
@@ -36,7 +36,7 @@ export async function confirmRanksAction(slug: string, _prev: Prev): Promise<Act
   return runAction(slug, async ({ viewer }) => {
     await confirmRanks(db, viewer.actor);
     refresh();
-    return "Ranks confirmed.";
+    return "Rangos confirmados.";
   });
 }
 
@@ -44,7 +44,7 @@ export async function applyRankPresetAction(slug: string, _prev: Prev, fd: FormD
   return runAction(slug, async ({ viewer }) => {
     const { preset, movedMembers } = await applyRankPreset(db, viewer.actor, fd.get("preset"));
     refresh();
-    return movedMembers > 0 ? `${preset} ranks applied. ${movedMembers} members moved to a matching rank.` : `${preset} ranks applied.`;
+    return movedMembers > 0 ? `Rangos de ${preset} aplicados. ${movedMembers} miembros pasan a un rango equivalente.` : `Rangos de ${preset} aplicados.`;
   });
 }
 
@@ -54,10 +54,10 @@ export async function neutralDefaultsAction(slug: string, _prev: Prev, fd: FormD
     const result = await applyNeutralDefaults(db, viewer.actor, key);
     refresh();
     const parts = [
-      result.ranksReplaced && isRankPresetKey(key) ? `${RANK_PRESETS[key].label} ranks applied` : null,
-      result.pagesReplaced > 0 ? "starter pages restored" : null,
+      result.ranksReplaced && isRankPresetKey(key) ? `rangos de ${RANK_PRESETS[key].label} aplicados` : null,
+      result.pagesReplaced > 0 ? "páginas de ejemplo restauradas" : null,
     ].filter(Boolean);
-    return `Neutral defaults in place: ${parts.join(", ") || "done"}.`;
+    return `Predeterminados neutros aplicados: ${parts.join(", ") || "hecho"}.`;
   });
 }
 
@@ -65,7 +65,7 @@ export async function publishGuildAction(slug: string, _prev: Prev): Promise<Act
   return runAction(slug, async ({ viewer }) => {
     await publishGuild(db, viewer.actor);
     refresh();
-    return "Your guild is published.";
+    return "Tu hermandad está publicada.";
   });
 }
 
@@ -73,7 +73,7 @@ export async function unpublishGuildAction(slug: string, _prev: Prev): Promise<A
   return runAction(slug, async ({ viewer }) => {
     await unpublishGuild(db, viewer.actor);
     refresh();
-    return "Your guild is a draft again.";
+    return "Tu hermandad vuelve a ser un borrador.";
   });
 }
 
@@ -81,6 +81,6 @@ export async function createDraftInviteAction(slug: string, _prev: Prev): Promis
   return runAction(slug, async ({ viewer }) => {
     await ensureDraftInvite(db, viewer.actor);
     refresh();
-    return "Invite link ready.";
+    return "Enlace de invitación listo.";
   });
 }

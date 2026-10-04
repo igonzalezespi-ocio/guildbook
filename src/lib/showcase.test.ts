@@ -53,6 +53,6 @@ describe("launch", () => {
   it("knows when WoW: Forever opens", () => {
     expect(hasLaunched(new Date("2026-09-28T00:00:00Z"))).toBe(false);
     expect(hasLaunched(new Date("2026-11-04T12:00:00Z"))).toBe(true);
-    expect(launchLabel()).toBe("Nov 4");
+    expect(launchLabel()).toBe("4 nov");
   });
 });

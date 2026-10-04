@@ -14,23 +14,23 @@ import { exampleSites, loadShowcase, SitePreview } from "./site-preview";
 const SHOWCASE_SLUG = "osm";
 
 const features = (domain: string): { icon: FeatureIcon; title: string; body: string; link?: { href: string; label: string } }[] => [
-  { icon: "address", title: "Your own address", body: `Every guild gets a subdomain like yourguild.${domain}, and can bring its own domain later.` },
-  { icon: "applications", title: "Applications", body: "Applicants sign in with Discord and can verify their character through Battle.net." },
-  { icon: "roster", title: "Roster and ranks", body: "Your rank ladder, mains and alts, professions and who can do what in the admin." },
-  { icon: "raids", title: "Raid nights", body: "Schedule, recruitment needs and progression, shown in your guild's timezone." },
-  { icon: "charter", title: "Charter and lore", body: "Markdown pages for your rules, loot policy and story, with a full revision history." },
+  { icon: "address", title: "Tu propia dirección", body: `Cada hermandad tiene un subdominio como tuhermandad.${domain} y más adelante puede usar su propio dominio.` },
+  { icon: "applications", title: "Solicitudes", body: "Los aspirantes inician sesión con Discord y pueden verificar su personaje con Battle.net." },
+  { icon: "roster", title: "Plantilla y rangos", body: "Tu escala de rangos, principales y alters, profesiones y quién puede hacer qué en la administración." },
+  { icon: "raids", title: "Noches de banda", body: "Horario, necesidades de reclutamiento y progreso, en la zona horaria de tu hermandad." },
+  { icon: "charter", title: "Reglamento e historia", body: "Páginas en Markdown para tus normas, tu política de botín y tu historia, con historial completo de cambios." },
   {
     icon: "vigil",
     title: "Vigil",
-    body: "Members upload combat logs for a private review of each pull: rotation, uptimes and cooldowns.",
-    link: { href: "/vigil", label: "Get the desktop companion" },
+    body: "Los miembros suben sus registros de combate para un análisis privado de cada pull: rotación, tiempo activo de auras y reutilizaciones.",
+    link: { href: "/vigil", label: "Descarga la app de escritorio" },
   },
 ];
 
 const steps = [
-  { title: "Sign in with Discord", body: "One Guildbook account works for every guild. There are no passwords to remember." },
-  { title: "Name your guild", body: "Pick a subdomain, region, faction and timezone. Your site starts as a private draft, and you publish it when it's ready." },
-  { title: "Open your doors", body: "Share the link. Recruits apply, officers review and members sign in with the same account." },
+  { title: "Inicia sesión con Discord", body: "Una sola cuenta de Guildbook sirve para todas las hermandades. No hay contraseñas que recordar." },
+  { title: "Ponle nombre a tu hermandad", body: "Elige subdominio, región, facción y zona horaria. Tu web empieza como un borrador privado y la publicas cuando esté lista." },
+  { title: "Abre las puertas", body: "Comparte el enlace. Los reclutas envían su solicitud, los oficiales la revisan y los miembros entran con la misma cuenta." },
 ];
 
 export default async function PlatformHome() {
@@ -49,39 +49,39 @@ export default async function PlatformHome() {
     <div className="space-y-16 sm:space-y-20">
       <section className="flex flex-col items-center pt-4 text-center">
         <GuildbookMark className="h-24 w-24 drop-shadow-[0_0_28px_rgba(201,164,76,0.35)] sm:h-28 sm:w-28" />
-        <p className="mt-6 font-display text-xs tracking-[0.3em] text-gold/80 uppercase">Guild sites for World of Warcraft: Forever</p>
-        <h1 className="mt-3 max-w-3xl font-title text-3xl text-gold sm:text-5xl">A home for your guild</h1>
+        <p className="mt-6 font-display text-xs tracking-[0.3em] text-gold/80 uppercase">Webs de hermandad para World of Warcraft: Forever</p>
+        <h1 className="mt-3 max-w-3xl font-title text-3xl text-gold sm:text-5xl">Un hogar para tu hermandad</h1>
         <hr className="rule-gold mt-5 w-56" />
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-bone/90">
-          Guildbook gives your guild a site of its own: applications, roster, raid schedule, progression and combat log
-          reviews, run by your officers.
+          Guildbook le da a tu hermandad una web propia: solicitudes, plantilla, horario de bandas, progreso y análisis de
+          registros de combate, gestionados por tus oficiales.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link href="/create" className="btn btn-gold px-7">
-            Create your guild
+            Crea tu hermandad
           </Link>
           <Link href="/guilds" className="btn btn-ghost">
-            Browse guilds
+            Ver hermandades
           </Link>
         </div>
-        <p className="mt-4 text-xs text-muted">Sign in with Discord and your site is ready in a couple of minutes.</p>
+        <p className="mt-4 text-xs text-muted">Inicia sesión con Discord y tu web estará lista en un par de minutos.</p>
       </section>
 
       {user && (
-        <Panel title="Your guilds">
+        <Panel title="Tus hermandades">
           {mine.length === 0 ? (
             <p className="text-sm text-muted">
-              You are not in a guild on Guildbook yet. <Link href="/guilds" className="link">Find one</Link> or{" "}
-              <Link href="/create" className="link">create your own</Link>.
+              Aún no estás en ninguna hermandad de Guildbook. <Link href="/guilds" className="link">Busca una</Link> o{" "}
+              <Link href="/create" className="link">crea la tuya</Link>.
             </p>
           ) : (
             <ul className="grid gap-3 sm:grid-cols-2" data-testid="your-guilds">
               {mine.map((g) => (
                 <GuildCard key={g.slug} guild={g} href={hrefFor(g)}>
-                  <span className="text-gold">{g.status === "applicant" ? "Application pending" : g.rankName}</span>
+                  <span className="text-gold">{g.status === "applicant" ? "Solicitud pendiente" : g.rankName}</span>
                   {g.status === "active" && (g.rankTier === "admin" || g.rankTier === "officer") && (
                     <a href={hrefFor(g, "/admin")} className="link">
-                      Admin
+                      Administrar
                     </a>
                   )}
                 </GuildCard>
@@ -93,15 +93,15 @@ export default async function PlatformHome() {
 
       <section aria-labelledby="preview-heading">
         <h2 id="preview-heading" className="sr-only">
-          What a guild site looks like
+          Así es una web de hermandad
         </h2>
         <SitePreview sites={previewSites} now={now} />
       </section>
 
       <section>
         <div className="mb-8 text-center">
-          <h2 className="text-2xl font-semibold text-gold">Everything a guild needs</h2>
-          <p className="mt-2 text-sm text-muted">Built for how guilds actually run, from the first application to the last boss.</p>
+          <h2 className="text-2xl font-semibold text-gold">Todo lo que necesita una hermandad</h2>
+          <p className="mt-2 text-sm text-muted">Pensado para cómo funcionan de verdad las hermandades, de la primera solicitud al último jefe.</p>
         </div>
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {features(domain).map((f) => (
@@ -124,7 +124,7 @@ export default async function PlatformHome() {
       </section>
 
       <section>
-        <h2 className="mb-8 text-center text-2xl font-semibold text-gold">Up and running tonight</h2>
+        <h2 className="mb-8 text-center text-2xl font-semibold text-gold">En marcha esta misma noche</h2>
         <ol className="grid gap-6 sm:grid-cols-3">
           {steps.map((s, i) => (
             <li key={s.title} className="flex flex-col items-center text-center">
@@ -141,15 +141,15 @@ export default async function PlatformHome() {
       {directory.length > 0 && (
         <section>
           <div className="mb-5 flex items-baseline justify-between gap-4">
-            <h2 className="text-xl font-semibold text-gold">Guilds on Guildbook</h2>
+            <h2 className="text-xl font-semibold text-gold">Hermandades en Guildbook</h2>
             <Link href="/guilds" className="link text-sm">
-              See the directory
+              Ver el directorio
             </Link>
           </div>
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {directory.slice(0, 6).map((g) => (
               <GuildCard key={g.slug} guild={g} href={hrefFor(g)}>
-                <span>{g.members === 1 ? "1 member" : `${g.members} members`}</span>
+                <span>{g.members === 1 ? "1 miembro" : `${g.members} miembros`}</span>
               </GuildCard>
             ))}
           </ul>
@@ -157,16 +157,17 @@ export default async function PlatformHome() {
       )}
 
       <section className="panel flex flex-col items-center px-6 py-10 text-center">
-        <h2 className="font-title text-2xl text-gold sm:text-3xl">Raise your banner</h2>
+        <h2 className="font-title text-2xl text-gold sm:text-3xl">Alza tu estandarte</h2>
         <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">
-          Give your guild an address, a front door for recruits and one place for everything your officers keep track of.
+          Dale a tu hermandad una dirección, una puerta de entrada para los reclutas y un único sitio para todo lo que llevan tus
+          oficiales.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link href="/create" className="btn btn-gold px-7">
-            Create your guild
+            Crea tu hermandad
           </Link>
           <Link href="/guilds" className="btn btn-ghost">
-            Browse guilds
+            Ver hermandades
           </Link>
         </div>
       </section>

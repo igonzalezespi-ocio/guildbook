@@ -85,7 +85,7 @@ describe("detection", () => {
   it("recognises nothing in unrelated text", () => {
     expect(detectLootParser("hello world")).toBeNull();
     expect(() => parseLootExport("hello world", ctx)).toThrow(LootParseError);
-    expect(() => parseLootExport("   ", ctx)).toThrow("Paste an export first.");
+    expect(() => parseLootExport("   ", ctx)).toThrow("Pega primero una exportación.");
   });
 });
 
@@ -116,7 +116,7 @@ describe("Gargul JSON", () => {
   it("derives an external ID when the checksum is missing and skips broken entries", () => {
     expect(rows[4]).toMatchObject({ itemId: 16863, itemName: "Gauntlets of Might" });
     expect(rows[4]!.externalId).toMatch(/^h:/);
-    expect(warnings).toEqual([{ line: 6, message: "Skipped an award without an item, player or time." }]);
+    expect(warnings).toEqual([{ line: 6, message: "Se ha omitido una entrega sin objeto, jugador u hora." }]);
   });
 });
 
@@ -155,7 +155,7 @@ describe("Gargul custom", () => {
     expect(compileTemplate("@DATE @TIME")).toBeNull();
     const { rows, warnings } = getLootParser("gargul-custom")!.parse("x", { ...ctx, template: "@DATE" });
     expect(rows).toEqual([]);
-    expect(warnings[0]!.message).toMatch(/template needs/);
+    expect(warnings[0]!.message).toMatch(/plantilla necesita/);
   });
 });
 

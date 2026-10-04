@@ -13,7 +13,7 @@ export async function getGuildFaction(tx: Db, guildId: string): Promise<Faction>
 /** Every guild has one faction: characters, applications and kills always take it, and another faction is refused. */
 export async function resolveFaction(tx: Db, guildId: string, requested: Faction | null | undefined): Promise<Faction> {
   const locked = await getGuildFaction(tx, guildId);
-  if (requested && requested !== locked) throw new DomainError(`This guild is ${FACTION_LABELS[locked]} only.`);
+  if (requested && requested !== locked) throw new DomainError(`Esta hermandad es solo de la ${FACTION_LABELS[locked]}.`);
   return locked;
 }
 

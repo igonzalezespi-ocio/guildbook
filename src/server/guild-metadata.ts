@@ -21,19 +21,19 @@ type SeoGuild = { name: string; gameVersion?: GuildVersion; realmSlug?: string |
 /** "a TBC Anniversary guild on Dreamscythe (US)"; "a World of Warcraft: Forever guild" for Forever. */
 function guildKind(guild: SeoGuild): string {
   const version = guild.gameVersion ?? "forever";
-  if (version === "forever") return "a World of Warcraft: Forever guild";
-  const realm = guild.realmSlug ? ` on ${realmLabel(version, guild.realmSlug, guild.region)}` : "";
-  return `a ${VERSION_INFO[version].label} guild${realm}`;
+  if (version === "forever") return "una hermandad de World of Warcraft: Forever";
+  const realm = guild.realmSlug ? ` en ${realmLabel(version, guild.realmSlug, guild.region)}` : "";
+  return `una hermandad de ${VERSION_INFO[version].label}${realm}`;
 }
 
 export const guildDescription = (guild: SeoGuild & { description: string }) =>
-  guild.description || `${guild.name}, ${guildKind(guild)} on Guildbook.`;
+  guild.description || `${guild.name}, ${guildKind(guild)} en Guildbook.`;
 
 /** The guild home page's title: the name, plus the game and realm for versions other than WoW: Forever. */
 export function guildTitle(guild: SeoGuild): string {
   const version = guild.gameVersion ?? "forever";
   if (version === "forever") return guild.name;
-  return `${guild.name}, ${guildKind(guild).replace(/^a /, "")}`;
+  return `${guild.name}, ${guildKind(guild).replace(/^una /, "")}`;
 }
 
 /**

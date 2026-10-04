@@ -23,7 +23,7 @@ export async function awardLootAction(slug: string, _prev: Prev, fd: FormData): 
   return runAction(slug, async ({ viewer }) => {
     const award = await awardLoot(db, viewer.actor, obj(fd), { client: itemClient() });
     refresh();
-    return award.recipientName ? `${award.itemName} awarded to ${award.recipientName}.` : `${award.itemName} recorded.`;
+    return award.recipientName ? `${award.itemName} entregado a ${award.recipientName}.` : `${award.itemName} registrado.`;
   });
 }
 
@@ -31,7 +31,7 @@ export async function reverseLootAction(slug: string, entryId: string, _prev: Pr
   return runAction(slug, async ({ viewer }) => {
     const r = await reverseLoot(db, viewer.actor, { entryId, reason: fd.get("reason") });
     refresh();
-    return `${r.itemName} reversed.`;
+    return `${r.itemName}: entrega anulada.`;
   });
 }
 
@@ -40,8 +40,8 @@ export async function previewLootImportAction(slug: string, _prev: Prev, fd: For
   const result = await runAction(slug, async ({ viewer }) => {
     const preview = await previewImport(db, viewer.actor, obj(fd), { client: itemClient() });
     batchId = preview.batchId;
-    const skipped = preview.warnings ? ` ${preview.warnings} line${preview.warnings === 1 ? "" : "s"} couldn't be read.` : "";
-    return `Read ${preview.rows} award${preview.rows === 1 ? "" : "s"} from the ${preview.parser} export.${skipped}`;
+    const skipped = preview.warnings ? ` No se ${preview.warnings === 1 ? "ha" : "han"} podido leer ${preview.warnings} línea${preview.warnings === 1 ? "" : "s"}.` : "";
+    return `Leída${preview.rows === 1 ? "" : "s"} ${preview.rows} entrega${preview.rows === 1 ? "" : "s"} de la exportación de ${preview.parser}.${skipped}`;
   });
   if (!result.ok || !batchId) return result;
   if (result.message) await setFlash(result.message);
@@ -55,9 +55,9 @@ export async function commitLootImportAction(slug: string, batchId: string, _pre
   }
   const result = await runAction(slug, async ({ viewer }) => {
     const r = await commitImport(db, viewer.actor, { batchId, decisions, remember: fd.get("remember") });
-    const parts = [`${r.inserted} award${r.inserted === 1 ? "" : "s"} added to the ledger.`];
-    if (r.duplicates) parts.push(`${r.duplicates} already recorded.`);
-    if (r.skipped) parts.push(`${r.skipped} left out.`);
+    const parts = [`${r.inserted} entrega${r.inserted === 1 ? "" : "s"} añadida${r.inserted === 1 ? "" : "s"} al registro.`];
+    if (r.duplicates) parts.push(`${r.duplicates} ya registrada${r.duplicates === 1 ? "" : "s"}.`);
+    if (r.skipped) parts.push(`${r.skipped} descartada${r.skipped === 1 ? "" : "s"}.`);
     return parts.join(" ");
   });
   if (!result.ok) return result;
@@ -68,7 +68,7 @@ export async function commitLootImportAction(slug: string, batchId: string, _pre
 export async function discardLootImportAction(slug: string, batchId: string, _prev: Prev): Promise<ActionResult> {
   const result = await runAction(slug, async ({ viewer }) => {
     await discardImport(db, viewer.actor, batchId);
-    return "Import discarded.";
+    return "Importación descartada.";
   });
   if (!result.ok) return result;
   if (result.message) await setFlash(result.message);

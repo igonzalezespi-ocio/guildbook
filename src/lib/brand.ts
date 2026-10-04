@@ -19,9 +19,9 @@ export interface BrandAssets {
 }
 
 const OG_ALT: Record<Brand, string> = {
-  osm: "The Order of Saint Michael tabard, a crimson banner with a gold border and white cross, beside the words Order of Saint Michael, Quis ut Deus.",
+  osm: "El tabardo de la Order of Saint Michael, un estandarte carmesí con borde dorado y cruz blanca, junto a las palabras Order of Saint Michael, Quis ut Deus.",
   guildbook:
-    "The Guildbook mark, an open gold book with a crimson ribbon, beside the words Guildbook, guild sites for World of Warcraft: Forever, above three guild banners and guildbook.io.",
+    "La marca de Guildbook, un libro dorado abierto con una cinta carmesí, junto a las palabras Guildbook, guild sites for World of Warcraft: Forever, sobre tres estandartes de hermandad y guildbook.io.",
 };
 
 export function staticBrand(brand: Brand): BrandAssets {
@@ -34,7 +34,7 @@ export function guildBrand(guild: { slug: string; name: string } & LookColumns):
   return {
     dir: `/api/brand/${guild.slug}`,
     version: tabardKey(guildLook(guild).tabard),
-    ogAlt: `The ${guild.name} tabard beside the guild's name.`,
+    ogAlt: `El tabardo de ${guild.name} junto al nombre de la hermandad.`,
   };
 }
 
@@ -60,7 +60,7 @@ type StaticPreview = keyof typeof STATIC_PREVIEW_VERSIONS;
 
 const PREVIEW_ALT: Record<StaticPreview, string> = {
   guildbook: OG_ALT.guildbook,
-  vigil: "The Vigil icon, a gold eye on a crimson tile, beside the words Vigil, the combat log companion, every pull reviewed on your guild's Guildbook.",
+  vigil: "El icono de Vigil, un ojo dorado sobre fondo carmesí, junto a las palabras Vigil, the combat log companion, every pull reviewed on your guild's Guildbook.",
 };
 
 /** A static link preview on the apex, versioned by its content hash (written by `pnpm brand:assets`). */
@@ -69,7 +69,7 @@ export function brandPreviewImage(preview: StaticPreview) {
 }
 
 /** Guild pages whose link previews carry the page title above the guild's name. */
-export const PREVIEW_PAGES = { charter: "Charter", lore: "Lore", roster: "Roster", progression: "Progression", apply: "Apply" } as const;
+export const PREVIEW_PAGES = { charter: "Reglamento", lore: "Historia", roster: "Plantilla", progression: "Progreso", apply: "Únete" } as const;
 export type PreviewPage = keyof typeof PREVIEW_PAGES;
 export const isPreviewPage = (p: string | null): p is PreviewPage => p !== null && Object.hasOwn(PREVIEW_PAGES, p);
 
@@ -125,8 +125,8 @@ export function guildPreviewImage(guild: PreviewGuild, host: string, page?: Prev
   const query = new URLSearchParams({ v: previewVersion(guild, host) });
   if (page) query.set("page", page);
   const alt = isOrderLook(guild)
-    ? "The Order of Saint Michael tabard, a crimson banner with a gold border and white cross, beside the words Order of Saint Michael, Quis ut Deus."
-    : `The ${guild.name} tabard beside the guild's name${guild.motto ? ` and motto, ${guild.motto}` : ""}.`;
+    ? "El tabardo de la Order of Saint Michael, un estandarte carmesí con borde dorado y cruz blanca, junto a las palabras Order of Saint Michael, Quis ut Deus."
+    : `El tabardo de ${guild.name} junto al nombre de la hermandad${guild.motto ? ` y su lema, ${guild.motto}` : ""}.`;
   return { url: `/api/brand/${guild.slug}/og.png?${query}`, width: 1200, height: 630, alt };
 }
 
@@ -147,4 +147,4 @@ export const X_URL = "https://x.com/GuildbookIO";
 export const CONTACT_EMAIL = "matt.rosendin@gmail.com";
 
 export const GUILDBOOK_DESCRIPTION =
-  "Guild sites for World of Warcraft: Forever. Rosters, applications, raid schedules, progression and combat log reviews, on your own subdomain.";
+  "Webs de hermandad para World of Warcraft: Forever. Plantillas, solicitudes, horarios de banda, progreso y análisis de registros de combate, en tu propio subdominio.";

@@ -50,13 +50,13 @@ function ReportRow({
             )}
             {owner && <span> ({owner})</span>}
             {", "}
-            {getModel(r.modelId)?.label ?? "General review"}, {formatDuration(r.durationMs)},{" "}
+            {getModel(r.modelId)?.label ?? "Análisis general"}, {formatDuration(r.durationMs)},{" "}
             {formatDateTime(r.fightStartedAt, timezone)}
           </span>
         </span>
         <span className="hidden gap-1 sm:flex">
-          {r.fightKind === "boss" && <Tag>Boss</Tag>}
-          {!owner && <Tag>{r.visibility === "private" ? "Private" : VISIBILITY_LABELS[r.visibility]}</Tag>}
+          {r.fightKind === "boss" && <Tag>Jefe</Tag>}
+          {!owner && <Tag>{VISIBILITY_LABELS[r.visibility]}</Tag>}
         </span>
       </Link>
     </li>
@@ -74,35 +74,35 @@ export default async function VigilPage({ params }: PageProps<"/[guild]/vigil">)
 
   return (
     <div className="mx-auto max-w-4xl space-y-4">
-      <PageHeader title="Vigil" eyebrow="Keep watch over every pull">
+      <PageHeader title="Vigil" eyebrow="Vigila cada pull">
         <span className="inline-flex flex-col items-center gap-3">
           <AddonIcon addon={{ slug: "vigil", name: "Vigil" }} size={56} />
-          Upload a combat log to see your rotation, uptimes, idle time and an estimate of what perfect timing would
-          have done, fight by fight.
+          Sube un registro de combate para ver tu rotación, tiempos activos, tiempo inactivo y una estimación de lo que
+          habría logrado una ejecución perfecta, combate a combate.
         </span>
       </PageHeader>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Link href={guildHref(slug, "/vigil/upload")} className="btn btn-primary">
-          Upload a combat log
+          Subir un registro de combate
         </Link>
         <span className="flex flex-wrap items-center gap-4 text-sm">
           <Link href={guildHref(slug, "/vigil/companion")} className="link">
-            Connect Vigil companion
+            Conectar la app de Vigil
           </Link>
           <Link href={guildHref(slug, "/addons")} className="link">
-            Get the Vigil addon
+            Consigue el addon de Vigil
           </Link>
         </span>
       </div>
 
-      <Panel title="My reports" actions={<span className="text-xs text-muted">{mine.length} saved</span>}>
+      <Panel title="Mis informes" actions={<span className="text-xs text-muted">{mine.length} guardados</span>}>
         <div className="mb-4 rounded border border-line bg-ink/30 p-3">
-          <p className="mb-2 text-xs tracking-widest text-muted uppercase">Default sharing</p>
+          <p className="mb-2 text-xs tracking-widest text-muted uppercase">Compartir por defecto</p>
           <DefaultVisibilityForm slug={slug} value={prefs.defaultVisibility} />
         </div>
         {mine.length === 0 ? (
-          <EmptyState>No reports yet. Your first log is one upload away.</EmptyState>
+          <EmptyState>Aún no hay informes. Tu primer registro está a una subida de distancia.</EmptyState>
         ) : (
           <ul className="divide-y divide-line" data-testid="vigil-my-reports">
             {mine.map((r) => (
@@ -112,9 +112,9 @@ export default async function VigilPage({ params }: PageProps<"/[guild]/vigil">)
         )}
       </Panel>
 
-      <Panel title="Shared with you">
+      <Panel title="Compartidos contigo">
         {shared.length === 0 ? (
-          <EmptyState>When members share reports with {actor.tier === "officer" || actor.tier === "admin" ? "officers or " : ""}the guild, they appear here.</EmptyState>
+          <EmptyState>Cuando los miembros compartan informes con {actor.tier === "officer" || actor.tier === "admin" ? "los oficiales o con " : ""}la hermandad, aparecerán aquí.</EmptyState>
         ) : (
           <ul className="divide-y divide-line">
             {shared.map((r) => (
