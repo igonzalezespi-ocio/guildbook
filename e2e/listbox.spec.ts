@@ -46,11 +46,11 @@ test("a listbox follows the keyboard: arrows, Home, End, type-ahead and Escape",
   const active = () => page.locator('[role="option"][data-active]');
   await expect(active()).toHaveAttribute("aria-selected", "true");
   await page.keyboard.press("Home");
-  await expect(active()).toHaveText("Sunday");
+  await expect(active()).toHaveText("Domingo");
   await page.keyboard.press("End");
-  await expect(active()).toHaveText("Saturday");
-  await page.keyboard.press("t");
-  await expect(active()).toHaveText(/^T/);
+  await expect(active()).toHaveText("Sábado");
+  await page.keyboard.press("m");
+  await expect(active()).toHaveText(/^M/);
   await expect(trigger).toHaveAttribute("aria-activedescendant", (await active().getAttribute("id"))!);
   await page.keyboard.press("Escape");
   await expect(page.getByRole("listbox")).toHaveCount(0);
@@ -59,5 +59,5 @@ test("a listbox follows the keyboard: arrows, Home, End, type-ahead and Escape",
   await page.keyboard.press("End");
   await page.keyboard.press("Enter");
   await expect(trigger).toHaveAttribute("data-value", "6");
-  await expect(trigger).toHaveText("Saturday");
+  await expect(trigger).toHaveText("Sábado");
 });
