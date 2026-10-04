@@ -6,7 +6,7 @@ import { getSessionUser } from "@/server/context";
 import { getRequestHost, guildOrigin } from "@/server/hosts";
 import { CreateGuildForm } from "./create-guild-form";
 
-export const metadata: Metadata = { title: "Create your guild" };
+export const metadata: Metadata = { title: "Crea tu hermandad" };
 
 const SLUG_TOKEN = "slug-token";
 
@@ -19,8 +19,8 @@ export default async function CreateGuildPage({ searchParams }: PageProps<"/plat
 
   return (
     <div className="mx-auto max-w-2xl">
-      <PageHeader title="Create your guild" eyebrow="Guildbook">
-        Your guild gets its own site and subdomain. You become its Guild Master and can change everything later.
+      <PageHeader title="Crea tu hermandad" eyebrow="Guildbook">
+        Tu hermandad tendrá su propia web y su subdominio. Tú serás su maestro de la hermandad y podrás cambiarlo todo más adelante.
       </PageHeader>
       <Panel>
         <CreateGuildForm hostPrefix={hostPrefix} hostSuffix={hostSuffix} initialVersion={isSupportedVersion(version) ? version : DEFAULT_GUILD_VERSION} />

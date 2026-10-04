@@ -18,7 +18,7 @@ import {
 } from "@/lib/game-versions";
 import { directoryHref, type DirectoryFilter } from "./filters";
 
-const ALL: ListboxOption = { value: "", label: "All" };
+const ALL: ListboxOption = { value: "", label: "Cualquiera" };
 
 const VERSION_OPTIONS: ListboxOption[] = SUPPORTED_GUILD_VERSIONS.map((v) => ({
   value: v,
@@ -72,17 +72,17 @@ export function DirectoryFilters(props: DirectoryFilter) {
   const filters = [
     {
       key: "version",
-      label: "Game",
+      label: "Juego",
       options: VERSION_OPTIONS,
       value: version,
       set: (v: string) => go({ ...current, version: v as SupportedGuildVersion, realm: undefined }),
     },
     ...(VERSION_INFO[version].realms
-      ? [{ key: "realm", label: "Realm", options: realmOptions, value: realm ?? "", set: (v: string) => go({ ...current, realm: v || undefined }) }]
+      ? [{ key: "realm", label: "Reino", options: realmOptions, value: realm ?? "", set: (v: string) => go({ ...current, realm: v || undefined }) }]
       : []),
     {
       key: "region",
-      label: "Region",
+      label: "Región",
       options: REGION_OPTIONS,
       value: region ?? "",
       set: (v: string) => {
@@ -91,8 +91,8 @@ export function DirectoryFilters(props: DirectoryFilter) {
         go({ ...current, region: next, realm: keepRealm ? realm : undefined });
       },
     },
-    { key: "faction", label: "Faction", options: FACTION_FILTER_OPTIONS, value: faction ?? "", set: (v: string) => go({ ...current, faction: (v || undefined) as Faction | undefined }) },
-    { key: "ruleset", label: "Ruleset", options: RULESET_OPTIONS, value: ruleset ?? "", set: (v: string) => go({ ...current, ruleset: (v || undefined) as Ruleset | undefined }) },
+    { key: "faction", label: "Facción", options: FACTION_FILTER_OPTIONS, value: faction ?? "", set: (v: string) => go({ ...current, faction: (v || undefined) as Faction | undefined }) },
+    { key: "ruleset", label: "Tipo de reino", options: RULESET_OPTIONS, value: ruleset ?? "", set: (v: string) => go({ ...current, ruleset: (v || undefined) as Ruleset | undefined }) },
   ];
 
   return (

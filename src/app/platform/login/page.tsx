@@ -12,7 +12,7 @@ import { signInWithDiscord } from "@/server/actions/member";
 import { getSessionUser } from "@/server/context";
 import { afterSignInUrl, getRequestHost, resolveHost, validateDestination } from "@/server/hosts";
 
-export const metadata: Metadata = { title: "Sign in" };
+export const metadata: Metadata = { title: "Iniciar sesión" };
 
 /** The guild a sign-in is headed for, so the test login can label seeded accounts by their standing there. */
 async function targetGuild(target: string) {
@@ -43,24 +43,24 @@ export default async function PlatformLoginPage({ searchParams }: PageProps<"/pl
       <Panel>
         <div className="flex flex-col items-center text-center">
           <GuildbookMark className="h-16 w-16" />
-          <h1 className="mt-4 text-xl font-bold text-gold">{guild ? `Sign in to ${guild.name}` : "Sign in to Guildbook"}</h1>
+          <h1 className="mt-4 text-xl font-bold text-gold">{guild ? `Inicia sesión en ${guild.name}` : "Inicia sesión en Guildbook"}</h1>
           <hr className="rule-gold my-4 w-24" />
           <p className="mb-6 text-sm text-muted">
-            One Guildbook account works for every guild. We sign you in with Discord and never ask for a password.
+            Una sola cuenta de Guildbook sirve para todas las hermandades. Inicias sesión con Discord y nunca te pedimos contraseña.
           </p>
           {user && (
             <a href={redirectTo} className="btn btn-ghost mb-3 w-full">
-              Continue as {user.name ?? "yourself"}
+              Continuar como {user.name ?? "tú"}
             </a>
           )}
           <form action={signInWithDiscord.bind(null, redirectTo)} className="w-full">
             <button type="submit" className="btn btn-gold w-full">
-              Sign in with Discord
+              Iniciar sesión con Discord
             </button>
           </form>
           <LegalConsent />
           {testModeEnabled && (
-            <TestLogin guildId={guild?.id ?? null} callbackUrl={target} currentName={user ? (user.name ?? "an unnamed user") : null} />
+            <TestLogin guildId={guild?.id ?? null} callbackUrl={target} currentName={user ? (user.name ?? "un usuario sin nombre") : null} />
           )}
         </div>
       </Panel>

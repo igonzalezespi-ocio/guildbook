@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const image = brandPreviewImage("guildbook");
   return {
     metadataBase: new URL(current.apexOrigin),
-    title: { absolute: "Guildbook: guild sites for World of Warcraft: Forever", template: "%s | Guildbook" },
+    title: { absolute: "Guildbook: webs de hermandad para World of Warcraft: Forever", template: "%s | Guildbook" },
     description: GUILDBOOK_DESCRIPTION,
     applicationName: "Guildbook",
     icons: brandIcons("guildbook"),
@@ -34,15 +34,15 @@ export default async function PlatformLayout({ children }: LayoutProps<"/platfor
     <div className="platform flex min-h-screen flex-1 flex-col">
       <header className="sticky top-0 z-20 border-b border-line bg-ink/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-          <Link href="/" aria-label="Guildbook home">
+          <Link href="/" aria-label="Inicio de Guildbook">
             <GuildbookWordmark />
           </Link>
-          <nav aria-label="Main" className="flex items-center gap-3 sm:gap-5">
+          <nav aria-label="Principal" className="flex items-center gap-3 sm:gap-5">
             <Link href="/guilds" className="font-display text-sm tracking-wider text-bone hover:text-gold">
-              Directory
+              Directorio
             </Link>
             <Link href="/create" className="btn btn-gold btn-sm hidden sm:inline-flex">
-              Create a guild
+              Crea una hermandad
             </Link>
             {user ? (
               <PlatformAccountMenu
@@ -52,7 +52,7 @@ export default async function PlatformLayout({ children }: LayoutProps<"/platfor
               />
             ) : (
               <Link href="/login" className="btn btn-ghost btn-sm">
-                Sign in
+                Iniciar sesión
               </Link>
             )}
           </nav>
@@ -63,35 +63,35 @@ export default async function PlatformLayout({ children }: LayoutProps<"/platfor
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 py-8 text-center">
           <GuildbookWordmark />
           <p className="text-xs text-muted">
-            &copy; {year} Guildbook. Fan-made guild sites, not affiliated with Blizzard Entertainment. World of Warcraft is a
-            trademark of Blizzard Entertainment, Inc.
+            &copy; {year} Guildbook. Webs de hermandad hechas por fans, sin relación con Blizzard Entertainment. World of Warcraft
+            es una marca registrada de Blizzard Entertainment, Inc.
           </p>
-          <nav aria-label="Legal" className="flex flex-wrap justify-center gap-4 text-xs">
+          <nav aria-label="Información legal" className="flex flex-wrap justify-center gap-4 text-xs">
             <Link href="/vigil" className="text-bone/70 hover:text-gold">
-              Vigil companion
+              App Vigil
             </Link>
             <Link href="/terms" className="text-bone/70 hover:text-gold">
-              Terms of Service
+              Términos del servicio
             </Link>
             <Link href="/privacy" className="text-bone/70 hover:text-gold">
-              Privacy Policy
+              Política de privacidad
             </Link>
             <Link href="/support" className="text-bone/70 hover:text-gold">
-              Support
+              Soporte
             </Link>
             <a
               href={SOURCE_URL}
-              aria-label="Source on GitHub"
+              aria-label="Código fuente en GitHub"
               className="inline-flex items-center gap-1.5 text-bone/70 hover:text-gold"
               target="_blank"
               rel="noopener noreferrer"
             >
               <GitHubIcon size={13} />
-              Source
+              Código fuente
             </a>
             <a
               href={X_URL}
-              aria-label="Guildbook on X"
+              aria-label="Guildbook en X"
               className="inline-flex items-center gap-1.5 text-bone/70 hover:text-gold"
               target="_blank"
               rel="noopener noreferrer"
