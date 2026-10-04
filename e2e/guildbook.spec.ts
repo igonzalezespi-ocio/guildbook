@@ -135,7 +135,7 @@ test.describe("Guildbook platform", () => {
     await expect(page.getByTestId("footer-region")).toHaveText("Europa");
 
     await page.goto(`${guildOrigin(slug)}/charter`);
-    await expect(page.getByRole("heading", { name: "Guild Charter" }).first()).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Reglamento de la hermandad" }).first()).toBeVisible();
     await expect(page.getByRole("heading", { name: `Ranks of ${name}` })).toBeVisible();
     await expect(page.getByRole("main").getByText(/the Order|Saint Michael|Grand Master|knight/i)).toHaveCount(0);
 
@@ -152,12 +152,12 @@ test.describe("Guildbook platform", () => {
 
     // Custom domain foundations: a pending domain with DNS instructions.
     await page.goto(`${guildOrigin(slug)}/admin/guild`);
-    await page.getByLabel("Domain").fill(`${slug}.example.com`);
-    await page.getByRole("button", { name: "Add domain" }).click();
+    await page.getByLabel("Dominio").fill(`${slug}.example.com`);
+    await page.getByRole("button", { name: "Añadir dominio" }).click();
     const card = page.getByTestId("custom-domain").filter({ hasText: `${slug}.example.com` });
     await expect(card).toBeVisible();
     await expect(card.getByText(`_guildbook.${slug}.example.com`)).toBeVisible();
-    await expect(card.getByText("Waiting for DNS")).toBeVisible();
+    await expect(card.getByText("Esperando al DNS")).toBeVisible();
 
     // The apex session is still there and lists the new guild.
     await page.goto(`${APEX}/`);
@@ -169,7 +169,7 @@ test.describe("Guildbook platform", () => {
     const suffix = uniqueSuffix();
     await signInOnApex(page, `e2e-visitor-${suffix}`, `Visitor ${suffix}`, `${guildOrigin("osm")}/apply`);
     await expect(page).toHaveURL(`${guildOrigin("osm")}/apply`);
-    await expect(page.getByRole("heading", { name: "Apply to the Order" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Únete a la Orden" })).toBeVisible();
     await expect(page.getByText(/sesión con Discord/)).toHaveCount(0);
   });
 

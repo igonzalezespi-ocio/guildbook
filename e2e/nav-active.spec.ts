@@ -37,7 +37,7 @@ test("the navbar marks the current section, including child pages", async ({ pag
 
 test("the admin nav marks only the current section", async ({ page, isMobile }) => {
   await signIn(page, "seed-tor", "Tor", "/admin");
-  const admin = page.getByRole("navigation", { name: "Admin" });
+  const admin = page.getByRole("navigation", { name: "Administración" });
 
   await expect(admin.getByRole("link", { name: "Resumen" })).toHaveAttribute("aria-current", "page");
   await expect(admin.locator('a[aria-current="page"]')).toHaveCount(1);

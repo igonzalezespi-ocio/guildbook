@@ -45,7 +45,7 @@ export default async function ApplicationsPage({ params, searchParams }: PagePro
                 <p className="text-lg">
                   <ClassName wowClass={a.wowClass}>{fullName(a.characterName, a.characterSurname)}</ClassName>{" "}
                   <span className="text-sm text-muted">
-                    Nivel {a.level} · {specLabel(a.spec)}
+                    {specLabel(a.spec)}, nivel {a.level}
                   </span>
                 </p>
                 <p className="flex flex-wrap gap-x-4 text-xs text-muted">

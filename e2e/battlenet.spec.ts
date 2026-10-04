@@ -44,7 +44,7 @@ test("an applicant links Battle.net, picks a character, and the officer sees it 
   await chooseOption(application.getByLabel("Rol en banda", { exact: true }), "healer");
   await fillFreeText(application, applicantId);
   await application.getByRole("button", { name: "Submit application" }).click();
-  await expect(page.getByRole("heading", { name: "Your application" })).toBeInViewport();
+  await expect(page.getByRole("heading", { name: "Tu solicitud" })).toBeInViewport();
   await expect(page.getByText("before applying.")).toHaveCount(0);
   await expect(page.getByRole("main").getByRole("img", { name: "Verificado con Battle.net" })).toBeVisible();
 
@@ -53,14 +53,14 @@ test("an applicant links Battle.net, picks a character, and the officer sees it 
   await expect(row.getByText("Verificado con Battle.net", { exact: true })).toBeVisible();
   await row.click();
   await expect(page.getByRole("main").getByText("Verificado con Battle.net", { exact: true })).toBeVisible();
-  await expect(page.getByText(/were read from Pilgrim#\d{4}/)).toBeVisible();
-  await page.getByRole("button", { name: "Accept as member" }).click();
-  await expect(page.getByText(/accepted on/)).toBeVisible();
+  await expect(page.getByText(/leídos de Pilgrim#\d{4}/)).toBeVisible();
+  await page.getByRole("button", { name: "Aceptar como miembro" }).click();
+  await expect(page.getByText(/aceptada el/)).toBeVisible();
 
   await signIn(page, applicantId, "Pilgrim", "/members/characters");
   const card = page.getByRole("main").locator("li", { hasText: `Brenna ${surname}` });
   await expect(card.getByRole("img", { name: "Verificado con Battle.net" })).toBeVisible();
-  await expect(card.getByText("Unverified")).toHaveCount(0);
+  await expect(card.getByText("Sin verificar")).toHaveCount(0);
 
   await page.goto("/roster");
   const entry = page.getByRole("main").locator("li", { hasText: `Brenna ${surname}` });
@@ -81,7 +81,7 @@ test("without Battle.net, manual entry still works and the officer sees it unver
   await chooseOption(page.getByLabel("Rol en banda", { exact: true }), "ranged");
   await fillFreeText(page, applicantId);
   await page.getByRole("button", { name: "Submit application" }).click();
-  await expect(page.getByRole("heading", { name: "Your application" })).toBeInViewport();
+  await expect(page.getByRole("heading", { name: "Tu solicitud" })).toBeInViewport();
   await expect(page.getByText("before applying.")).toHaveCount(0);
 
   await signIn(page, "seed-ironvow", "Ironvow", "/admin/applications");
@@ -100,7 +100,7 @@ test("a member imports verified characters and an officer syncs their levels", a
 
   await page.getByRole("link", { name: "Vincular Battle.net" }).click();
   await expect(page.getByTestId("battlenet-account")).toContainText(/Pilgrim#\d{4}/);
-  await expect(page.getByText("Import characters (3)")).toBeVisible();
+  await expect(page.getByText("Importar personajes (3)")).toBeVisible();
 
   for (const [name, spec, role] of [
     ["Aldric", "Holy", "healer"],
@@ -109,24 +109,24 @@ test("a member imports verified characters and an officer syncs their levels", a
     await page.getByLabel(`${name} surname`).fill(surname);
     await chooseOption(page.getByLabel(`${name} spec`), spec);
     await chooseOption(page.getByLabel(`${name} role`), role);
-    await page.locator("li", { has: page.getByLabel(`${name} surname`) }).getByRole("button", { name: "Import" }).click();
-    await expect(page.getByText(`Imported as ${name} ${surname}`)).toBeVisible();
+    await page.locator("li", { has: page.getByLabel(`Apellido de ${name}`) }).getByRole("button", { name: "Importar" }).click();
+    await expect(page.getByText(`Importado como ${name} ${surname}`)).toBeVisible();
   }
 
   const brenna = page.getByRole("main").locator("li.panel", { hasText: `Brenna ${surname}` });
   await expect(brenna.getByRole("img", { name: "Verificado con Battle.net" })).toBeVisible();
-  await expect(brenna.getByText("Level 42 Shadow")).toBeVisible();
+  await expect(brenna.getByText("Sacerdote Sombra de nivel 42")).toBeVisible();
 
   await signIn(page, "seed-ironvow", "Ironvow", "/admin/members");
   const sync = page.getByTestId("battlenet-sync");
-  await sync.getByRole("button", { name: "Sync now" }).click();
-  await expect(sync.getByText(/Synced \d+ verified characters?: [1-9]\d* updated/)).toBeVisible();
+  await sync.getByRole("button", { name: "Sincronizar ahora" }).click();
+  await expect(sync.getByText(/Sincronizados? \d+ personajes? verificados?: [1-9]\d* actualizados/)).toBeVisible();
   await page.goto("/admin/audit");
   await expect(page.getByText("battlenet.sync").first()).toBeVisible();
 
   await signIn(page, discordId, displayName, "/members/characters");
-  await expect(brenna.getByText("Level 44 Shadow")).toBeVisible();
-  await expect(brenna.getByText(/Synced from Battle.net/)).toBeVisible();
+  await expect(brenna.getByText("Sacerdote Sombra de nivel 44")).toBeVisible();
+  await expect(brenna.getByText(/Sincronizado desde Battle.net/)).toBeVisible();
 });
 
 test("the Guild Master verifies the guild through Battle.net", async ({ page }) => {
@@ -151,10 +151,10 @@ test("the Guild Master verifies the guild through Battle.net", async ({ page }) 
 
   await page.goto("/admin/guild");
   const panel = page.getByTestId("verify-guild");
-  await expect(panel.getByText(/Guild Master \(rank 0\) of an in-game guild named exactly/)).toBeVisible();
-  await panel.getByRole("button", { name: /^(Check verification|Check again)$/ }).click();
-  await expect(panel.getByRole("status").filter({ hasText: "Your guild is verified." })).toBeVisible();
-  await expect(panel.getByText(/Aldric is the in-game Guild Master/)).toBeVisible();
+  await expect(panel.getByText(/maestro de la hermandad \(rango 0\) de una hermandad del juego llamada exactamente/)).toBeVisible();
+  await panel.getByRole("button", { name: /^(Comprobar verificación|Volver a comprobar)$/ }).click();
+  await expect(panel.getByRole("status").filter({ hasText: "Tu hermandad está verificada." })).toBeVisible();
+  await expect(panel.getByText(/Aldric es el maestro de la hermandad en el juego/)).toBeVisible();
   await expect(page.getByRole("banner").getByTestId("verified-seal")).toBeVisible();
 
   await page.goto("/admin/audit");

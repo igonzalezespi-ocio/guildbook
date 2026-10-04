@@ -51,7 +51,7 @@ export function AdminNav({ links, more }: { links: readonly NavMenuItem[]; more:
   const mask = `linear-gradient(to right, ${edges.start ? "transparent" : "#000"}, #000 ${FADE}, #000 calc(100% - ${FADE}), ${edges.end ? "transparent" : "#000"})`;
 
   return (
-    <nav aria-label="Admin" className="-mx-4 mb-6 flex items-end border-b border-line px-4" data-testid="admin-nav">
+    <nav aria-label="Administración" className="-mx-4 mb-6 flex items-end border-b border-line px-4" data-testid="admin-nav">
       <div
         ref={scrollerRef}
         onScroll={measure}

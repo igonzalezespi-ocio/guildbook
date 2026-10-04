@@ -13,9 +13,9 @@ test("saving guild settings shows a success toast that can be dismissed", async 
 
 test("an error with no field to point at shows an error toast", async ({ page }) => {
   await signIn(page, "seed-tor", "Tor", "/admin/ranks");
-  const form = page.getByRole("main").locator("form").filter({ has: page.getByRole("button", { name: "Add rank" }) });
+  const form = page.getByRole("main").locator("form").filter({ has: page.getByRole("button", { name: "Añadir rango" }) });
   await form.locator('input[name="name"]').fill("Squire");
-  await form.getByRole("button", { name: "Add rank" }).click();
+  await form.getByRole("button", { name: "Añadir rango" }).click();
   const toast = page.getByRole("alert").and(page.getByTestId("toast"));
   await expect(toast).toBeVisible();
   await expect(toast).toHaveAttribute("data-kind", "error");

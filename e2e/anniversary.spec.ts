@@ -55,14 +55,14 @@ async function importCharacter(page: Page, name: string, spec: string, role: str
   const row = details.locator("li", { hasText: name });
   await chooseOption(row.getByLabel(`${name} spec`), spec);
   await chooseOption(row.getByLabel(`${name} role`), role);
-  await row.getByRole("button", { name: "Import" }).click();
-  await expect(row.getByText(`Imported as ${name}`)).toBeVisible();
+  await row.getByRole("button", { name: "Importar" }).click();
+  await expect(row.getByText(`Importado como ${name}`)).toBeVisible();
 }
 
 async function checkVerification(page: Page, site: string) {
   await page.goto(`${site}/admin/guild`);
   const panel = page.getByTestId("verify-guild");
-  await panel.getByRole("button", { name: /^(Check verification|Check again)$/ }).click();
+  await panel.getByRole("button", { name: /^(Comprobar verificación|Volver a comprobar)$/ }).click();
   return panel;
 }
 
@@ -73,7 +73,7 @@ test.describe("TBC Anniversary", () => {
     await linkBattlenet(page, site);
 
     const heading = page.getByTestId("import-version-heading");
-    await expect(heading).toHaveText("TBC Anniversary characters on Dreamscythe (US)");
+    await expect(heading).toHaveText("Personajes de TBC Anniversary en Dreamscythe (US)");
     const main = page.getByRole("main");
     await expect(main.getByText("Thranduil", { exact: true })).toBeVisible();
     await expect(main.getByText("Mattaeis", { exact: true })).toBeVisible();
@@ -83,10 +83,10 @@ test.describe("TBC Anniversary", () => {
     await expect(main.getByText("Aldric", { exact: true })).toHaveCount(0);
 
     const panel = await checkVerification(page, site);
-    await expect(panel.getByRole("status").filter({ hasText: "Your guild is verified." })).toBeVisible();
-    await expect(panel.getByText(/Thranduil is the in-game Guild Master/)).toBeVisible();
+    await expect(panel.getByRole("status").filter({ hasText: "Tu hermandad está verificada." })).toBeVisible();
+    await expect(panel.getByText(/Thranduil es el maestro de la hermandad en el juego/)).toBeVisible();
     await expect(page.getByRole("banner").getByTestId("verified-seal")).toBeVisible();
-    await expect(panel).toContainText(`named exactly ${name}, Horde, on Dreamscythe (US)`);
+    await expect(panel).toContainText(`llamada exactamente ${name}, de la Horda, en Dreamscythe (US)`);
     if (shoot) await panel.locator("xpath=ancestor::section[1]").screenshot({ path: `${SHOTS}/anniversary-verify-panel.png` });
 
     await page.goto(`${site}/members/characters`);
@@ -105,13 +105,13 @@ test.describe("TBC Anniversary", () => {
     await expect(page.getByTestId("guild-member-tag")).toHaveCount(0);
 
     const panel = await checkVerification(page, site);
-    await expect(panel.getByTestId("verify-result")).toContainText(/isn't its Guild Master \(rank 3\)/);
-    await expect(panel.getByTestId("verify-founder-not-gm")).toContainText("Mattaeis is in");
+    await expect(panel.getByTestId("verify-result")).toContainText(/no es su maestro de la hermandad \(rango 3\)/);
+    await expect(panel.getByTestId("verify-founder-not-gm")).toContainText("Mattaeis está en");
 
     await page.goto(`${site}/admin/setup`);
     const note = page.getByTestId("founder-not-gm");
-    await expect(note).toContainText("Mattaeis is in");
-    await expect(note).toContainText("(rank 3), but isn't its Guild Master");
+    await expect(note).toContainText("Mattaeis está en");
+    await expect(note).toContainText("(rango 3), pero no es su maestro de la hermandad");
     await expect(page.getByTestId("founder-invite")).toContainText("/apply?invite=");
     if (shoot) await note.locator("xpath=ancestor::section[1]").screenshot({ path: `${SHOTS}/anniversary-founder-not-gm.png` });
   });
@@ -134,18 +134,18 @@ test.describe("TBC Anniversary", () => {
     const { site, tag } = await createAnniversaryGuild(page, "ann-gm");
     await linkBattlenet(page, site);
     const verify = await checkVerification(page, site);
-    await expect(verify.getByRole("status").filter({ hasText: "Your guild is verified." })).toBeVisible();
+    await expect(verify.getByRole("status").filter({ hasText: "Tu hermandad está verificada." })).toBeVisible();
 
     // Automatic approval is on by default and joins at the accepted-applicant rank.
     const setting = page.getByTestId("auto-approve-toggle");
     await expect(setting).toBeChecked();
     const panel = setting.locator("xpath=ancestor::section[1]");
-    await expect(panel.getByLabel("Rank they join at")).toContainText("Same as accepted applicants");
+    await expect(panel.getByLabel("Rango con el que entran")).toContainText("Igual que los aspirantes aceptados");
     if (shoot) await panel.screenshot({ path: `${SHOTS}/confirmed-join-setting.png` });
 
     // The guild is still a draft, so the member comes in through the private invite link.
     await page.goto(`${site}/admin/setup`);
-    await page.getByRole("button", { name: "Create invite link" }).click();
+    await page.getByRole("button", { name: "Crear enlace de invitación" }).click();
     const invite = (await page.getByTestId("draft-invite").locator(".font-mono").textContent())!.trim();
 
     await page.context().clearCookies();
@@ -161,7 +161,7 @@ test.describe("TBC Anniversary", () => {
     const join = page.getByTestId("confirmed-join");
     await expect(join).toContainText("Mattaeis");
     await expect(join).toContainText(`<Mirkwood ${tag}>`);
-    await expect(page.getByText("Or send an application for review instead")).toBeVisible();
+    await expect(page.getByText("O envía una solicitud para que la revisen")).toBeVisible();
     await chooseOption(join.getByLabel("Especialización"), "Marksmanship");
     await chooseOption(join.getByLabel("Rol en banda"), "ranged");
     if (shoot) await join.locator("xpath=ancestor::section[1]").screenshot({ path: `${SHOTS}/confirmed-join-offer.png` });

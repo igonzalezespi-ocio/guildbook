@@ -6,9 +6,9 @@ test.describe("public pages", () => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1, name: "Order of Saint Michael" })).toBeVisible();
     await expect(page.getByText("Quis ut Deus").first()).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Raid Schedule" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Recruitment" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Apply to the Order" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Horario de bandas" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Reclutamiento" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Únete a la Orden" })).toBeVisible();
     if (isMobile) await openMenu(headerMenu(page, "Menú"));
     await expect(page.getByRole("banner").getByRole("link", { name: "Únete", exact: true }).filter({ visible: true })).toBeVisible();
     if (isMobile) await page.keyboard.press("Escape");
@@ -56,7 +56,7 @@ test.describe("public pages", () => {
   test("charter shows every rank with its insignia", async ({ page }) => {
     await page.goto("/charter");
     const ranks = page.locator("#ranks");
-    await expect(ranks.getByRole("heading", { name: "Ranks of the Order" })).toBeVisible();
+    await expect(ranks.getByRole("heading", { name: "Rangos de la Orden" })).toBeVisible();
     await expect(ranks.getByRole("heading", { level: 3 })).toHaveCount(10);
     await expect(ranks.getByRole("listitem").filter({ hasText: "Grand Master" }).locator("svg")).toBeVisible();
   });
@@ -65,9 +65,9 @@ test.describe("public pages", () => {
     await page.goto("/progression");
     await expect(page.getByRole("heading", { name: "Molten Core" })).toBeVisible();
     const ragnaros = page.getByRole("row").filter({ has: page.getByRole("cell", { name: "Ragnaros", exact: true }) });
-    await expect(ragnaros).toContainText("Jan 26, 2027");
+    await expect(ragnaros).toContainText("26 ene 2027");
     const onyxia = page.getByRole("row").filter({ has: page.getByRole("cell", { name: "Onyxia", exact: true }) });
-    await expect(onyxia).toContainText("Dec 8, 2026");
+    await expect(onyxia).toContainText("8 dic 2026");
   });
 });
 
@@ -147,7 +147,7 @@ test("apply, officer accepts, new member appears on the roster", async ({ page, 
   const applicantId = `e2e-${characterName.toLowerCase()}`;
 
   await page.goto("/apply");
-  await expect(page.getByRole("link", { name: "Sign in with Discord to apply" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Inicia sesión con Discord para solicitar" })).toBeVisible();
 
   await signIn(page, applicantId, characterName, "/apply");
   const charterLine = page.getByText("before applying.");
@@ -164,10 +164,10 @@ test("apply, officer accepts, new member appears on the roster", async ({ page, 
   await page.getByLabel("Discord handle").fill(characterName.toLowerCase());
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Submit application" }).click();
-  await expect(page.getByRole("heading", { name: "Your application" })).toBeInViewport();
+  await expect(page.getByRole("heading", { name: "Tu solicitud" })).toBeInViewport();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   await expect(charterLine).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Withdraw application" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Retirar solicitud" })).toBeVisible();
 
   const applicantCard = await openAccountCard(page, isMobile);
   await expect(applicantCard.getByText(characterName, { exact: true })).toBeVisible();
@@ -180,9 +180,9 @@ test("apply, officer accepts, new member appears on the roster", async ({ page, 
 
   await signIn(page, "seed-ironvow", "Ironvow", "/admin/applications");
   await page.getByRole("link", { name: new RegExp(characterName) }).click();
-  await page.getByRole("button", { name: "Accept as member" }).click();
-  await expect(page.getByText(/accepted on/)).toBeVisible();
-  const toast = page.getByRole("status").filter({ hasText: `${characterName} Faithful accepted as` });
+  await page.getByRole("button", { name: "Aceptar como miembro" }).click();
+  await expect(page.getByText(/aceptada el/)).toBeVisible();
+  const toast = page.getByRole("status").filter({ hasText: `${characterName} Faithful aceptado como` });
   await expect(toast).toBeVisible();
   await expect(toast).toHaveAttribute("data-testid", "toast");
 
@@ -191,7 +191,7 @@ test("apply, officer accepts, new member appears on the roster", async ({ page, 
 
   await signIn(page, applicantId, characterName, "/members/characters");
   await expect(page.getByRole("main").getByText(`${characterName} Faithful`, { exact: true })).toBeVisible();
-  await expect(page.getByText("Main", { exact: true })).toBeVisible();
+  await expect(page.getByText("Principal", { exact: true })).toBeVisible();
 
   await page.goto("/roster");
   await expect(page.getByRole("main").getByText(`${characterName} Faithful`, { exact: true })).toBeVisible();
@@ -211,22 +211,22 @@ test("the Grand Master changes a rank's insignia", async ({ page }) => {
 
   const squire = () => page.getByRole("listitem").filter({ has: page.getByText(/^\d+\. Squire$/) });
   const option = (label: string) => squire().locator("label").filter({ hasText: new RegExp(`^${label}$`) });
-  await option("Candle").click();
-  await expect(squire().getByLabel("Candle", { exact: true })).toBeChecked();
-  await squire().getByRole("button", { name: "Save" }).click();
-  await expect(squire().getByText("Saved.")).toBeVisible();
+  await option("Vela").click();
+  await expect(squire().getByLabel("Vela", { exact: true })).toBeChecked();
+  await squire().getByRole("button", { name: "Guardar" }).click();
+  await expect(squire().getByText("Guardado.")).toBeVisible();
   await page.reload();
-  await expect(squire().getByLabel("Candle", { exact: true })).toBeChecked();
+  await expect(squire().getByLabel("Vela", { exact: true })).toBeChecked();
 
-  await option("Helm").click();
-  await squire().getByRole("button", { name: "Save" }).click();
-  await expect(squire().getByText("Saved.")).toBeVisible();
+  await option("Yelmo").click();
+  await squire().getByRole("button", { name: "Guardar" }).click();
+  await expect(squire().getByText("Guardado.")).toBeVisible();
 });
 
 test("a member registers an alt and makes it their main", async ({ page }) => {
   const alt = randomCharacterName();
   await signIn(page, "seed-perpetua", "Perpetua", "/members/characters");
-  await page.getByRole("link", { name: "Register character" }).click();
+  await page.getByRole("link", { name: "Registrar personaje" }).click();
   await page.getByLabel("Nombre", { exact: true }).fill(alt);
   await page.getByLabel("Apellido").fill("Oakenfield");
   await chooseOption(page.getByLabel("Clase", { exact: true }), "hunter");
@@ -234,13 +234,13 @@ test("a member registers an alt and makes it their main", async ({ page }) => {
   await chooseOption(page.getByLabel("Rol en banda", { exact: true }), "ranged");
   await page.getByLabel("Nivel", { exact: true }).fill("60");
   await page.getByRole("checkbox", { name: "Herbalism" }).check();
-  await page.getByRole("button", { name: "Register" }).click();
+  await page.getByRole("button", { name: "Registrar" }).click();
   await expect(page).toHaveURL(/\/members\/characters$/);
   // The action redirects, so the toast rides a flash cookie to the next page.
   await expect(page.getByTestId("toast").filter({ hasText: `${alt} Oakenfield added to your characters.` })).toBeVisible();
 
   const card = page.getByRole("main").locator("li", { hasText: alt });
   await expect(card).toBeVisible();
-  await card.getByRole("button", { name: "Make main" }).click();
-  await expect(card.getByText("Main", { exact: true })).toBeVisible();
+  await card.getByRole("button", { name: "Hacer principal" }).click();
+  await expect(card.getByText("Principal", { exact: true })).toBeVisible();
 });
