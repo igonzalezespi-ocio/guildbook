@@ -13,9 +13,9 @@ test("visitors are sent to sign in; members see the ledger, raid nights and reve
   await expect(main.getByRole("heading", { name: "Botín", level: 1 })).toBeVisible();
   await expect(main.getByRole("link", { name: "Eskhandar's Right Claw" }).first()).toHaveAttribute("href", /wowhead\.com\/classic\/item=18203/);
 
-  await main.getByRole("link", { name: /Dec 10, 2026/ }).first().click();
+  await main.getByRole("link", { name: /10 dic 2026/ }).first().click();
   await expect(page).toHaveURL(/\/members\/loot\/raids\/2026-12-10$/);
-  await expect(page.getByRole("navigation", { name: "Breadcrumb" }).getByRole("link", { name: "Botín" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Ruta de navegación" }).getByRole("link", { name: "Botín" })).toBeVisible();
   await expect(main.getByText("Clicked the wrong paladin; the gauntlets went to Tor")).toBeVisible();
   await expect(main.getByRole("heading", { name: "Molten Core, Garr" })).toBeVisible();
 });
