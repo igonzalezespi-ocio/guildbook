@@ -13,15 +13,15 @@ export function SetupCard({ slug, summary }: { slug: string; summary: SetupSumma
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 id="setup-card-heading" className="text-lg font-semibold text-gold">
-            Finish setting up your guild
+            Termina de configurar tu hermandad
           </h2>
           <p className="mt-1 text-sm text-muted">
-            {summary.done} of {summary.total} steps done
+            {summary.done} de {summary.total} pasos hechos
           </p>
         </div>
         <ActionForm action={dismissSetupAction.bind(null, slug, true)}>
           <SubmitButton variant="ghost" size="sm">
-            Hide
+            Ocultar
           </SubmitButton>
         </ActionForm>
       </div>
@@ -42,7 +42,7 @@ export function SetupCard({ slug, summary }: { slug: string; summary: SetupSumma
         </ul>
       )}
       <Link href={guildHref(slug, "/admin/setup")} className="btn btn-primary btn-sm mt-4">
-        Open the setup checklist
+        Abrir la lista de configuración
       </Link>
     </section>
   );

@@ -72,12 +72,12 @@ export function AdminNav({ links, more }: { links: readonly NavMenuItem[]; more:
       </div>
       {more.length > 0 && (
         <NavMenu
-          label="More admin sections"
+          label="Más secciones de administración"
           items={more}
           className="shrink-0 border-l border-line/60 pl-0.5"
           buttonClassName={clsx(TAB, "cursor-pointer data-[current]:border-gold data-[current]:bg-gold/10 data-[current]:text-gold aria-expanded:text-gold")}
         >
-          More
+          Más
         </NavMenu>
       )}
     </nav>

@@ -9,7 +9,7 @@ import { updateContentAction } from "@/server/actions/admin";
 import { requirePage } from "@/server/context";
 import { getContentPage } from "@/server/services/content";
 
-export const metadata: Metadata = { title: "Edit Page" };
+export const metadata: Metadata = { title: "Editar página" };
 
 export default async function EditContentPage({ params }: PageProps<"/[guild]/admin/content/[slug]">) {
   const { guild: slug, slug: pageSlug } = await params;
@@ -19,18 +19,18 @@ export default async function EditContentPage({ params }: PageProps<"/[guild]/ad
 
   return (
     <div className="mx-auto max-w-3xl">
-      <PageHeader title={`Edit: ${page.title}`} />
+      <PageHeader title={`Editar: ${page.title}`} />
       <Panel>
         <ActionForm action={updateContentAction.bind(null, slug)} className="space-y-4">
           <input type="hidden" name="slug" value={page.slug} />
-          <Field label="Title" name="title">
+          <Field label="Título" name="title">
             <input id="title" name="title" className="field" defaultValue={page.title} required />
           </Field>
-          <Field label="Body (Markdown)" name="bodyMd">
+          <Field label="Texto (Markdown)" name="bodyMd">
             <MarkdownEditor name="bodyMd" defaultValue={page.bodyMd} />
           </Field>
           <FormMessage />
-          <SubmitButton>Save page</SubmitButton>
+          <SubmitButton>Guardar página</SubmitButton>
         </ActionForm>
       </Panel>
     </div>

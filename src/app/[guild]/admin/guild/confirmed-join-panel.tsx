@@ -16,20 +16,20 @@ export async function ConfirmedJoinPanel({ guild }: { guild: Guild }) {
   const options = [
     {
       value: "",
-      label: accept ? `Same as accepted applicants (${accept.name})` : "Same as accepted applicants",
-      description: "Follows the rank set under Ranks",
+      label: accept ? `Igual que los aspirantes aceptados (${accept.name})` : "Igual que los aspirantes aceptados",
+      description: "Sigue el rango elegido en Rangos",
     },
     ...choices.map((r) => ({ value: r.id, label: r.name, description: TIER_LABELS[r.tier] })),
   ];
 
   return (
-    <Panel title="Members confirmed in game" actions={guild.verifiedAt ? undefined : <Tag>Needs verification</Tag>}>
+    <Panel title="Miembros confirmados en el juego" actions={guild.verifiedAt ? undefined : <Tag>Requiere verificación</Tag>}>
       <ActionForm action={updateConfirmedJoinSettingsAction.bind(null, guild.slug)} className="space-y-4 text-sm">
         <p className="leading-relaxed text-muted">
-          When someone with a linked Battle.net account opens your application page and Battle.net shows one of their
-          characters in your in-game guild, they can join in one click after accepting the charter. Admins get a notice
-          for every join.
-          {!guild.verifiedAt && " This only applies once the guild is verified."}
+          Cuando alguien con una cuenta de Battle.net vinculada abre tu página de solicitud y Battle.net muestra uno de sus
+          personajes en tu hermandad del juego, puede unirse con un clic tras aceptar el reglamento. Los administradores
+          reciben un aviso por cada entrada.
+          {!guild.verifiedAt && " Esto solo se aplica cuando la hermandad está verificada."}
         </p>
         <label className="flex items-start gap-3">
           <input
@@ -39,13 +39,13 @@ export async function ConfirmedJoinPanel({ guild }: { guild: Guild }) {
             className="mt-0.5 h-5 w-5 accent-crimson"
             data-testid="auto-approve-toggle"
           />
-          <span>Let members confirmed in game join without application review</span>
+          <span>Dejar que los miembros confirmados en el juego entren sin revisar su solicitud</span>
         </label>
-        <Field label="Rank they join at" name="autoApproveRankId">
+        <Field label="Rango con el que entran" name="autoApproveRankId">
           <Listbox id="autoApproveRankId" name="autoApproveRankId" options={options} defaultValue={guild.autoApproveRankId ?? ""} />
         </Field>
         <FormMessage />
-        <SubmitButton variant="ghost">Save</SubmitButton>
+        <SubmitButton variant="ghost">Guardar</SubmitButton>
       </ActionForm>
     </Panel>
   );

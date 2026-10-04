@@ -12,7 +12,7 @@ import { getGuildSetup } from "@/server/services/guild-setup";
 import { listMembers } from "@/server/services/ranks";
 import { SetupCard } from "./setup/setup-card";
 
-export const metadata: Metadata = { title: "Admin" };
+export const metadata: Metadata = { title: "Administración" };
 
 export default async function AdminHome({ params }: PageProps<"/[guild]/admin">) {
   const { guild: slug } = await params;
@@ -27,28 +27,28 @@ export default async function AdminHome({ params }: PageProps<"/[guild]/admin">)
 
   return (
     <div className="space-y-6">
-      <PageHeader title={guild.preset === "order" ? "Chapter House" : "Guild Admin"} eyebrow="Officer administration" />
+      <PageHeader title={guild.preset === "order" ? "Sala capitular" : "Administración de la hermandad"} eyebrow="Administración de oficiales" />
       {showSetup && <SetupCard slug={slug} summary={setup.summary} />}
       <div className="grid gap-4 sm:grid-cols-3">
         <Link href={guildHref(slug, "/admin/applications")} className="panel p-4 text-center hover:border-gold-dim">
           <p className="text-3xl font-bold text-gold">{pending.length}</p>
-          <p className="text-sm text-muted">Pending applications</p>
+          <p className="text-sm text-muted">Solicitudes pendientes</p>
         </Link>
         <Link href={guildHref(slug, "/admin/members")} className="panel p-4 text-center hover:border-gold-dim">
           <p className="text-3xl font-bold text-gold">{members.length}</p>
-          <p className="text-sm text-muted">Active members</p>
+          <p className="text-sm text-muted">Miembros activos</p>
         </Link>
         <div className="panel p-4 text-center">
-          <p className="text-3xl font-bold text-gold">{guild.recruitmentOpen ? "Open" : "Closed"}</p>
-          <p className="text-sm text-muted">Recruitment</p>
+          <p className="text-3xl font-bold text-gold">{guild.recruitmentOpen ? "Abierto" : "Cerrado"}</p>
+          <p className="text-sm text-muted">Reclutamiento</p>
         </div>
       </div>
-      <Panel title="Recent officer actions" actions={<Link href={guildHref(slug, "/admin/audit")} className="link text-sm">Full log</Link>}>
+      <Panel title="Acciones recientes de los oficiales" actions={<Link href={guildHref(slug, "/admin/audit")} className="link text-sm">Registro completo</Link>}>
         <ul className="divide-y divide-line text-sm">
           {audit.map(({ entry, actorName, targetName }) => (
             <li key={entry.id} className="flex flex-wrap justify-between gap-2 py-2">
               <span className="flex flex-wrap items-baseline gap-2">
-                <span className="text-gold">{actorName ?? "System"}</span>
+                <span className="text-gold">{actorName ?? "Sistema"}</span>
                 <code className="font-mono text-xs text-muted">{entry.action}</code>
                 {targetName && <span>{targetName}</span>}
               </span>
