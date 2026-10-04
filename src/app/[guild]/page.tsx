@@ -37,7 +37,7 @@ export default async function HomePage({ params }: PageProps<"/[guild]">) {
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           {!isMember && guild.publishedAt && guild.recruitmentOpen && (
             <Link href={guildHref(slug, "/apply")} className="btn btn-primary">
-              {order ? "Únete a la Orden" : "Solicita unirte"}
+              {order ? "Solicita el ingreso en la Orden" : "Solicita unirte"}
             </Link>
           )}
           <Link href={guildHref(slug, "/charter")} className="btn btn-ghost">

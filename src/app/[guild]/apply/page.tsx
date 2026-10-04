@@ -28,7 +28,7 @@ export default async function ApplyPage({ params, searchParams }: PageProps<"/[g
   const guild = await getGuild(slug);
   const viewer = await getViewer(guild.id);
   const order = guild.preset === "order";
-  const title = order ? "Únete a la Orden" : `Únete a ${guild.name}`;
+  const title = order ? "Solicita el ingreso en la Orden" : `Solicita unirte a ${guild.name}`;
   const eyebrow = order ? "Postulantado" : "Reclutamiento";
   const invite = !guild.publishedAt && validDraftInvite(guild, sp.invite) ? String(sp.invite) : null;
   const applyPath = invite ? `/apply?invite=${encodeURIComponent(invite)}` : "/apply";

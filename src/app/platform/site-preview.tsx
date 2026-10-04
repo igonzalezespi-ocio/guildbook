@@ -144,7 +144,7 @@ function Frame({ site, now, example }: { site: PreviewSite; now: Date; example: 
             {site.motto && <p className="mt-1 font-display text-xs tracking-[0.3em] text-crimson-bright uppercase">{site.motto}</p>}
             <div className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start">
               {site.recruitmentOpen && (
-                <span className="btn btn-primary min-h-0 px-3 py-1.5 text-[0.65rem]">{order ? "Únete a la Orden" : "Solicita unirte"}</span>
+                <span className="btn btn-primary min-h-0 px-3 py-1.5 text-[0.65rem]">{order ? "Solicita el ingreso en la Orden" : "Solicita unirte"}</span>
               )}
               <span className="btn btn-ghost min-h-0 px-3 py-1.5 text-[0.65rem]">Lee el reglamento</span>
             </div>
