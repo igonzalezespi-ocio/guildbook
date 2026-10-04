@@ -124,7 +124,7 @@ test.describe("Guildbook platform", () => {
 
     // The handoff sets a session on the new subdomain and lands on its setup checklist, as an unlisted draft.
     await page.waitForURL(`${guildOrigin(slug)}/admin/setup`);
-    await expect(page.getByRole("heading", { name: `Set up ${name}` })).toBeVisible();
+    await expect(page.getByRole("heading", { name: `Configura ${name}` })).toBeVisible();
     await expect(page.getByTestId("draft-banner")).toBeVisible();
 
     await page.goto(`${guildOrigin(slug)}/`);
@@ -169,7 +169,7 @@ test.describe("Guildbook platform", () => {
     const suffix = uniqueSuffix();
     await signInOnApex(page, `e2e-visitor-${suffix}`, `Visitor ${suffix}`, `${guildOrigin("osm")}/apply`);
     await expect(page).toHaveURL(`${guildOrigin("osm")}/apply`);
-    await expect(page.getByRole("heading", { name: "Únete a la Orden" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Solicita el ingreso en la Orden" })).toBeVisible();
     await expect(page.getByText(/sesión con Discord/)).toHaveCount(0);
   });
 
