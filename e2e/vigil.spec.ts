@@ -33,7 +33,7 @@ test("upload a combat log, keep one fight, open the report and control who sees 
   await expect(report.getByTestId("vigil-timeline")).toBeVisible();
   await expect(report.getByRole("heading", { name: "Estimate versus actual" })).toBeVisible();
   await expect(report.getByText("Continuidad del ataque automático")).toBeVisible();
-  await expect(report.getByRole("heading", { name: "Priority adherence" })).toBeVisible();
+  await expect(report.getByRole("heading", { name: "Seguimiento de prioridades" })).toBeVisible();
   await expect(report.getByText("Judgement en cuanto se recargue").first()).toBeVisible();
   await expect(report.getByText("Seal of Righteousness").first()).toBeVisible();
   await expect(main.getByLabel("Who can see this report")).toHaveAttribute("data-value", "private");

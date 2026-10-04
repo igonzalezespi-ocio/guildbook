@@ -2,7 +2,7 @@ import Link from "next/link";
 import { type ReactNode, useId } from "react";
 import { RankInsignia } from "@/components/rank-insignia";
 import { VerifiedMark } from "@/components/ui";
-import { CLASS_INFO, fullName } from "@/lib/game";
+import { CLASS_INFO, fullName, specLabel } from "@/lib/game";
 import { insigniaFor } from "@/lib/insignia";
 import { characterHref, guildHref } from "@/lib/paths";
 import { battlenetEnabled, blizzardConfigFromEnv } from "@/server/blizzard";
@@ -11,7 +11,7 @@ import { signOutAction } from "@/server/actions/member";
 
 /** Main character's full name, falling back to the Discord display name. */
 export function accountName(viewer: Viewer): string {
-  return viewer.main ? fullName(viewer.main.name, viewer.main.surname) : (viewer.user?.name ?? "Signed in");
+  return viewer.main ? fullName(viewer.main.name, viewer.main.surname) : (viewer.user?.name ?? "Sesión iniciada");
 }
 
 /** Profile card for the signed-in viewer: insignia, main character, level line and rank. */
@@ -31,10 +31,10 @@ export function AccountCard({ viewer, guildSlug }: { viewer: Viewer; guildSlug: 
           {main.verified && <VerifiedMark size={12} />}
         </p>
         <p className="text-xs text-muted">
-          Level {main.level}{" "}
           <span style={{ color: CLASS_INFO[main.wowClass].color }}>
-            {main.spec} {CLASS_INFO[main.wowClass].label}
-          </span>
+            {CLASS_INFO[main.wowClass].label} {specLabel(main.spec)}
+          </span>{" "}
+          de nivel {main.level}
         </p>
       </Link>
     );
@@ -46,7 +46,7 @@ export function AccountCard({ viewer, guildSlug }: { viewer: Viewer; guildSlug: 
       <>
         {name}
         <Link href={h("/apply")} className="text-xs text-gold underline-offset-2 hover:underline">
-          Application pending
+          Solicitud pendiente
         </Link>
       </>
     );
@@ -54,7 +54,7 @@ export function AccountCard({ viewer, guildSlug }: { viewer: Viewer; guildSlug: 
     identity = (
       <>
         {name}
-        <p className="text-xs text-muted">Signed in with Discord</p>
+        <p className="text-xs text-muted">Sesión iniciada con Discord</p>
       </>
     );
   }
@@ -76,7 +76,7 @@ export function AccountCard({ viewer, guildSlug }: { viewer: Viewer; guildSlug: 
 /** Call to action for an active member without a main character; the characters page offers Battle.net import and manual registration. */
 function AddMainCharacterLink({ href }: { href: string }) {
   const helperId = useId();
-  const helper = battlenetEnabled(blizzardConfigFromEnv()) ? "Link Battle.net or add it manually" : "Register it to appear on the roster";
+  const helper = battlenetEnabled(blizzardConfigFromEnv()) ? "Vincula Battle.net o añádelo a mano" : "Regístralo para aparecer en la plantilla";
   return (
     <Link
       href={href}
@@ -91,7 +91,7 @@ function AddMainCharacterLink({ href }: { href: string }) {
       </span>
       <span className="min-w-0 leading-tight">
         <span className="block font-display text-[0.8125rem] font-semibold text-gold group-hover:text-gold-bright">
-          Add your main character
+          Añade tu personaje principal
         </span>
         <span id={helperId} className="mt-0.5 block text-[0.7rem] text-muted">
           {helper}
@@ -102,7 +102,7 @@ function AddMainCharacterLink({ href }: { href: string }) {
 }
 
 /** Guild hosts redirect /account to the Guildbook apex, where the account lives, so this is a full navigation. */
-export function AccountSettingsLink({ className = "btn btn-ghost btn-sm w-full", children = "Account and privacy" }: { className?: string; children?: ReactNode }) {
+export function AccountSettingsLink({ className = "btn btn-ghost btn-sm w-full", children = "Cuenta y privacidad" }: { className?: string; children?: ReactNode }) {
   return (
     // eslint-disable-next-line @next/next/no-html-link-for-pages
     <a href="/account" className={className} data-testid="account-settings-link">
@@ -111,7 +111,7 @@ export function AccountSettingsLink({ className = "btn btn-ghost btn-sm w-full",
   );
 }
 
-export function SignOutButton({ className = "btn btn-ghost btn-sm w-full", children = "Sign out" }: { className?: string; children?: ReactNode }) {
+export function SignOutButton({ className = "btn btn-ghost btn-sm w-full", children = "Cerrar sesión" }: { className?: string; children?: ReactNode }) {
   return (
     <form action={signOutAction}>
       <button type="submit" className={className}>

@@ -26,14 +26,14 @@ test.describe("Guild onboarding", () => {
     const site = guildOrigin(slug);
 
     await signInOnApex(page, `e2e-onboard-${suffix}`, `Founder ${suffix}`, "/create");
-    await page.getByLabel("Guild name").fill(name);
-    await page.getByLabel("Subdomain").fill(slug);
-    await expect(page.getByTestId("slug-status")).toHaveText("Available");
+    await page.getByLabel("Nombre de la hermandad").fill(name);
+    await page.getByLabel("Subdominio").fill(slug);
+    await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
     await page.getByLabel("Horde").check();
     await page.getByLabel(/^Normal/).check();
     await page.getByLabel(/public Guildbook directory/).check();
     await page.getByRole("radio", { name: /^Social/ }).check();
-    await page.getByRole("button", { name: "Create guild" }).click();
+    await page.getByRole("button", { name: "Crear hermandad" }).click();
 
     await page.waitForURL(`${site}/admin/setup`);
     await expect(page.getByRole("heading", { name: `Set up ${name}` })).toBeVisible();

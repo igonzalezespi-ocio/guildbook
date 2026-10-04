@@ -15,28 +15,28 @@ import { type Guild, offersApply, type Viewer } from "@/server/context";
 export function SiteHeader({ guild, viewer }: { guild: Guild; viewer: Viewer }) {
   const h = (p: string) => guildHref(guild.slug, p);
   const links = [
-    { href: h("/charter"), label: "Charter" },
-    { href: h("/lore"), label: "Lore" },
-    { href: h("/roster"), label: "Roster" },
-    { href: h("/progression"), label: "Progression" },
+    { href: h("/charter"), label: "Reglamento" },
+    { href: h("/lore"), label: "Historia" },
+    { href: h("/roster"), label: "Plantilla" },
+    { href: h("/progression"), label: "Progreso" },
     { href: h("/addons"), label: "Addons" },
-    ...(canViewLoot(viewer.actor, guild) ? [{ href: h("/members/loot"), label: "Loot" }] : []),
-    ...(can(viewer.actor, "member.area") ? [{ href: h("/members/characters"), label: "Characters" }] : []),
-    ...(can(viewer.actor, "admin.area") ? [{ href: h("/admin"), label: "Admin" }] : []),
+    ...(canViewLoot(viewer.actor, guild) ? [{ href: h("/members/loot"), label: "Botín" }] : []),
+    ...(can(viewer.actor, "member.area") ? [{ href: h("/members/characters"), label: "Personajes" }] : []),
+    ...(can(viewer.actor, "admin.area") ? [{ href: h("/admin"), label: "Administración" }] : []),
   ];
   const showApply = offersApply(viewer, guild);
 
   const signIn = (
     <Link href={h("/login")} className="btn btn-ghost btn-sm">
-      Sign in
+      Iniciar sesión
     </Link>
   );
 
   const missingMain = viewer.membershipStatus === "active" && !viewer.main;
   const desktopAccount = viewer.user ? (
     <DropdownMenu
-      label="Account"
-      description={missingMain ? "No main character yet" : undefined}
+      label="Cuenta"
+      description={missingMain ? "Aún no tienes personaje principal" : undefined}
       className="relative"
       summaryClassName="flex items-center gap-2 rounded border border-transparent px-2 py-1 hover:border-line"
       summary={
@@ -83,7 +83,7 @@ export function SiteHeader({ guild, viewer }: { guild: Guild; viewer: Viewer }) 
           <GameVersionBadge version={guild.gameVersion} className="shrink-0" />
         </Link>
 
-        <nav className="hidden items-center gap-5 xl:flex" aria-label="Main">
+        <nav className="hidden items-center gap-5 xl:flex" aria-label="Principal">
           {links.map((l) => (
             <NavLink
               key={l.href}
@@ -95,13 +95,13 @@ export function SiteHeader({ guild, viewer }: { guild: Guild; viewer: Viewer }) 
           ))}
           {showApply && (
             <Link href={h("/apply")} className="btn btn-primary btn-sm">
-              Apply
+              Únete
             </Link>
           )}
           {desktopAccount}
         </nav>
 
-        <DropdownMenu label="Menu" summary="Menu" className="relative xl:hidden">
+        <DropdownMenu label="Menú" summary="Menú" className="relative xl:hidden">
           <div className="panel absolute right-0 mt-2 flex w-72 flex-col gap-1 p-3">
             {viewer.user && (
               <>
@@ -120,7 +120,7 @@ export function SiteHeader({ guild, viewer }: { guild: Guild; viewer: Viewer }) 
             ))}
             {showApply && (
               <Link href={h("/apply")} className="btn btn-primary mt-2">
-                Apply
+                Únete
               </Link>
             )}
             <hr className="rule-gold my-2" />

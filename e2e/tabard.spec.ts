@@ -20,13 +20,13 @@ async function createGuild(page: Page, slug: string, name: string) {
   await form.getByPlaceholder("Nombre").fill("Founder");
   await form.getByRole("button", { name: "Entrar (prueba)" }).click();
   await page.waitForURL(`${APEX}/create`);
-  await page.getByLabel("Guild name").fill(name);
-  await page.getByLabel("Subdomain").fill(slug);
-  await expect(page.getByTestId("slug-status")).toHaveText("Available");
+  await page.getByLabel("Nombre de la hermandad").fill(name);
+  await page.getByLabel("Subdominio").fill(slug);
+  await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
   await page.getByLabel("Alliance").check();
   await page.getByLabel(/^Normal/).check();
-  await page.getByLabel("Motto").fill("Hold the line");
-  await page.getByRole("button", { name: "Create guild" }).click();
+  await page.getByLabel("Lema").fill("Hold the line");
+  await page.getByRole("button", { name: "Crear hermandad" }).click();
   await page.waitForURL(`${guildOrigin(slug)}/admin/setup`);
 }
 

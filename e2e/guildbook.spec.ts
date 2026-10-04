@@ -40,25 +40,25 @@ test.describe("Guildbook platform", () => {
     await expect(page).toHaveURL(`${APEX}/guilds`);
 
     await page.goto(`${APEX}/guilds`);
-    await expect(page.getByRole("heading", { name: "Guild directory" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Directorio de hermandades" })).toBeVisible();
     await expect(page.getByTestId("directory").getByRole("link", { name: "Order of Saint Michael" })).toHaveAttribute("href", guildOrigin("osm"));
     await expect(page.getByTestId("directory").getByTestId("ruleset-badge").first()).toBeVisible();
     await expect(page.getByTestId("directory").getByTestId("region-badge").first()).toBeVisible();
     const filters = page.getByTestId("directory-filters");
     await expect(filters.getByRole("combobox")).toHaveCount(4);
-    await chooseOption(filters.getByLabel("Region"), "eu");
+    await chooseOption(filters.getByLabel("Región"), "eu");
     await expect(page).toHaveURL(`${APEX}/guilds?region=eu`);
     await expect(page.getByRole("link", { name: "Order of Saint Michael" })).toHaveCount(0);
-    await expect(filters.getByLabel("Region")).toHaveText("Europe");
+    await expect(filters.getByLabel("Región")).toHaveText("Europa");
     await page.goto(`${APEX}/guilds`);
-    await chooseOption(filters.getByLabel("Faction"), "horde");
+    await chooseOption(filters.getByLabel("Facción"), "horde");
     await expect(page).toHaveURL(`${APEX}/guilds?faction=horde`);
     await expect(page.getByRole("link", { name: "Order of Saint Michael" })).toHaveCount(0);
     // Choosing "All" again drops the filter from the shareable URL.
-    await chooseOption(filters.getByLabel("Faction"), "All");
+    await chooseOption(filters.getByLabel("Facción"), "Cualquiera");
     await expect(page).toHaveURL(`${APEX}/guilds`);
     await page.goto(`${APEX}/guilds?region=us&faction=alliance&ruleset=normal`);
-    await expect(filters.getByLabel("Ruleset")).toHaveText("Normal");
+    await expect(filters.getByLabel("Tipo de reino")).toHaveText("Normal");
     await expect(page.getByTestId("directory").getByRole("link", { name: "Order of Saint Michael" })).toBeVisible();
 
     await page.goto(`${guildOrigin("osm")}/charter`);
@@ -84,29 +84,29 @@ test.describe("Guildbook platform", () => {
     await expect(page).toHaveURL(`${APEX}/create`);
     await expect(page.getByRole("heading", { name: "Create your guild" })).toBeVisible();
 
-    const slugInput = page.getByLabel("Subdomain");
+    const slugInput = page.getByLabel("Subdominio");
     await slugInput.fill("www");
     await expect(page.getByTestId("slug-status")).toHaveText("That name is reserved");
     await slugInput.fill("osm");
     await expect(page.getByTestId("slug-status")).toHaveText("That subdomain is taken");
     await slugInput.fill("");
 
-    await page.getByLabel("Guild name").fill(name);
+    await page.getByLabel("Nombre de la hermandad").fill(name);
     // The name suggests a slug until the slug is edited, but the slug was edited above.
     await slugInput.fill(slug);
-    await expect(page.getByTestId("slug-status")).toHaveText("Available");
+    await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
     await expect(page.getByTestId("region-choice").getByRole("radio")).toHaveCount(2);
     await expect(page.getByLabel(/^Americas/)).toBeChecked();
     await page.getByLabel(/^Europe/).check();
     await expect(page.getByTestId("faction-choice").getByRole("radio")).toHaveCount(2);
     await page.getByLabel("Horde").check();
     await page.getByLabel(/^PvP/).check();
-    await page.getByLabel("Motto").fill("Hold the line");
+    await page.getByLabel("Lema").fill("Hold the line");
 
     // A server-side rejection names the field, focuses it and offers subdomains that set this guild apart.
     await slugInput.fill("osm");
     await expect(page.getByTestId("slug-suggestions").getByRole("button", { name: "osm-pvp" })).toBeVisible();
-    await page.getByRole("button", { name: "Create guild" }).click();
+    await page.getByRole("button", { name: "Crear hermandad" }).click();
     const summary = page.getByTestId("form-error-summary");
     await expect(summary).toContainText("Subdomain: That subdomain is taken");
     await expect(slugInput).toBeFocused();
@@ -117,10 +117,10 @@ test.describe("Guildbook platform", () => {
     await page.getByTestId("slug-suggestions").getByRole("button", { name: "osm-horde" }).click();
     await expect(slugInput).toHaveValue("osm-horde");
     await slugInput.fill(slug);
-    await expect(page.getByTestId("slug-status")).toHaveText("Available");
+    await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
     // Left unlisted so repeated runs don't fill the local directory.
     await expect(page.getByLabel(/public Guildbook directory/)).not.toBeChecked();
-    await page.getByRole("button", { name: "Create guild" }).click();
+    await page.getByRole("button", { name: "Crear hermandad" }).click();
 
     // The handoff sets a session on the new subdomain and lands on its setup checklist, as an unlisted draft.
     await page.waitForURL(`${guildOrigin(slug)}/admin/setup`);
@@ -132,7 +132,7 @@ test.describe("Guildbook platform", () => {
     await expect(page.getByRole("main").getByText("Hold the line")).toBeVisible();
     await expect(page.getByText("Sancte Michael Archangele")).toHaveCount(0);
     await expect(page.getByTestId("footer-ruleset")).toHaveText("PvP");
-    await expect(page.getByTestId("footer-region")).toHaveText("Europe");
+    await expect(page.getByTestId("footer-region")).toHaveText("Europa");
 
     await page.goto(`${guildOrigin(slug)}/charter`);
     await expect(page.getByRole("heading", { name: "Guild Charter" }).first()).toBeVisible();

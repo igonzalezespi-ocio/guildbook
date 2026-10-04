@@ -18,9 +18,9 @@ test("an applicant links Battle.net, picks a character, and the officer sees it 
   const applicantId = `e2e-bnet-${surname.toLowerCase()}`;
   await signIn(page, applicantId, "Pilgrim", "/apply");
 
-  await page.getByRole("link", { name: "Link Battle.net" }).click();
-  await expect(page.getByRole("main").getByRole("status").filter({ hasText: "Battle.net linked." })).toBeVisible();
-  await expect(page.getByTestId("toast").filter({ hasText: "Battle.net linked." })).toBeVisible();
+  await page.getByRole("link", { name: "Vincular Battle.net" }).click();
+  await expect(page.getByRole("main").getByRole("status").filter({ hasText: "Battle.net vinculado." })).toBeVisible();
+  await expect(page.getByTestId("toast").filter({ hasText: "Battle.net vinculado." })).toBeVisible();
   await expect(page).not.toHaveURL(/bnet=/);
   await expect(page.getByTestId("battlenet-account")).toContainText(/Pilgrim#\d{4}/);
 
@@ -72,7 +72,7 @@ test("without Battle.net, manual entry still works and the officer sees it unver
   const applicantId = `e2e-manual-${name.toLowerCase()}`;
   await signIn(page, applicantId, name, "/apply");
 
-  await expect(page.getByRole("link", { name: "Link Battle.net" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Vincular Battle.net" })).toBeVisible();
   await expect(page.getByRole("radio")).toHaveCount(0);
   await page.getByLabel("Nombre", { exact: true }).fill(name);
   await page.getByLabel("Apellido").fill("Handwritten");
@@ -98,7 +98,7 @@ test("a member imports verified characters and an officer syncs their levels", a
   const surname = randomCharacterName();
   await signIn(page, discordId, displayName, "/members/characters");
 
-  await page.getByRole("link", { name: "Link Battle.net" }).click();
+  await page.getByRole("link", { name: "Vincular Battle.net" }).click();
   await expect(page.getByTestId("battlenet-account")).toContainText(/Pilgrim#\d{4}/);
   await expect(page.getByText("Import characters (3)")).toBeVisible();
 
@@ -134,7 +134,7 @@ test("the Guild Master verifies the guild through Battle.net", async ({ page }) 
   // Tor is the only Guild Master and both projects share the database, so the second project finds Tor linked and
   // the guild already verified; re-checking must still succeed.
   await signIn(page, "seed-tor", "Tor", "/members/characters");
-  const link = page.getByRole("link", { name: "Link Battle.net" });
+  const link = page.getByRole("link", { name: "Vincular Battle.net" });
   const account = page.getByTestId("battlenet-account");
   await expect(link.or(account)).toBeVisible();
   if (await link.isVisible()) {
@@ -143,7 +143,7 @@ test("the Guild Master verifies the guild through Battle.net", async ({ page }) 
     // The mock answers app-token character lookups with the IDs of whoever last listed their characters, and other
     // tests have linked since; refreshing lists Tor's again.
     await expect(async () => {
-      await account.getByRole("button", { name: "Refresh characters" }).click();
+      await account.getByRole("button", { name: "Actualizar personajes" }).click();
       await expect(account.getByRole("status").filter({ hasText: /Found \d+ WoW: Forever characters/ })).toBeVisible({ timeout: 3000 });
     }).toPass();
   }

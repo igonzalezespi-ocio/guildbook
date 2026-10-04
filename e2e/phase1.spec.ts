@@ -9,8 +9,8 @@ test.describe("public pages", () => {
     await expect(page.getByRole("heading", { name: "Raid Schedule" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Recruitment" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Apply to the Order" })).toBeVisible();
-    if (isMobile) await openMenu(headerMenu(page, "Menu"));
-    await expect(page.getByRole("banner").getByRole("link", { name: "Apply", exact: true }).filter({ visible: true })).toBeVisible();
+    if (isMobile) await openMenu(headerMenu(page, "Menú"));
+    await expect(page.getByRole("banner").getByRole("link", { name: "Únete", exact: true }).filter({ visible: true })).toBeVisible();
     if (isMobile) await page.keyboard.press("Escape");
 
     const footer = page.getByRole("contentinfo");
@@ -31,7 +31,7 @@ test.describe("public pages", () => {
   test("mobile menu closes on outside click, Escape and navigation", async ({ page, isMobile }) => {
     test.skip(!isMobile, "The menu only renders below the xl breakpoint");
     await page.goto("/");
-    const menu = headerMenu(page, "Menu");
+    const menu = headerMenu(page, "Menú");
 
     await openMenu(menu);
     await page.getByRole("main").click({ position: { x: 5, y: 5 } });
@@ -42,7 +42,7 @@ test.describe("public pages", () => {
     await expect(menu).not.toHaveAttribute("open");
 
     await openMenu(menu);
-    await menu.getByRole("link", { name: "Roster" }).click();
+    await menu.getByRole("link", { name: "Plantilla" }).click();
     await expect(page).toHaveURL(/\/roster$/);
     await expect(menu).not.toHaveAttribute("open");
   });
@@ -73,7 +73,7 @@ test.describe("public pages", () => {
 
 /** Opens the header menu that holds the account card: the Menu on mobile, the Account dropdown on desktop. */
 async function openAccountCard(page: Page, isMobile: boolean) {
-  const menu = headerMenu(page, isMobile ? "Menu" : "Account");
+  const menu = headerMenu(page, isMobile ? "Menú" : "Cuenta");
   await openMenu(menu);
   return menu.getByTestId("account-card");
 }
@@ -81,24 +81,24 @@ async function openAccountCard(page: Page, isMobile: boolean) {
 test("the account card shows the main character, level, rank and a separate sign out row", async ({ page, isMobile }) => {
   await signIn(page, "seed-tor", "Tor", "/roster");
   if (!isMobile) {
-    const trigger = page.getByRole("banner").locator('summary[aria-label="Account"]');
+    const trigger = page.getByRole("banner").locator('summary[aria-label="Cuenta"]');
     await expect(trigger).toContainText("Tor Whitecross");
     await expect(trigger).toContainText("Grand Master");
   }
 
   const card = await openAccountCard(page, isMobile);
   await expect(card.getByText("Tor Whitecross", { exact: true })).toBeVisible();
-  await expect(card.getByText("Level 60 Holy Paladin", { exact: true })).toBeVisible();
+  await expect(card.getByText("Paladín Sagrado de nivel 60", { exact: true })).toBeVisible();
   await expect(card.getByText("Grand Master", { exact: true })).toBeVisible();
   await expect(card.locator("svg").first()).toBeVisible();
 
-  const signOut = page.getByRole("banner").getByRole("button", { name: "Sign out" }).filter({ visible: true });
+  const signOut = page.getByRole("banner").getByRole("button", { name: "Cerrar sesión" }).filter({ visible: true });
   await expect(signOut).toBeVisible();
   const cardBox = (await card.boundingBox())!;
   const signOutBox = (await signOut.boundingBox())!;
   expect(signOutBox.y).toBeGreaterThanOrEqual(cardBox.y + cardBox.height);
 
-  await expect(page.getByRole("banner").getByRole("link", { name: "Apply", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("banner").getByRole("link", { name: "Únete", exact: true })).toHaveCount(0);
   await expect(page.getByRole("contentinfo").getByRole("link", { name: "Apply", exact: true })).toHaveCount(0);
 
   await card.getByRole("link", { name: /Tor Whitecross/ }).click();
@@ -118,10 +118,10 @@ test("a tester already signed in with a mistyped ID can switch to seed-tor from 
 
   const card = await openAccountCard(page, isMobile);
   await expect(card.getByText("Tor Whitecross", { exact: true })).toBeVisible();
-  await expect(card.getByText("Level 60 Holy Paladin", { exact: true })).toBeVisible();
+  await expect(card.getByText("Paladín Sagrado de nivel 60", { exact: true })).toBeVisible();
   await expect(card.getByText("Grand Master", { exact: true })).toBeVisible();
   await expect(card.locator("svg").first()).toBeVisible();
-  await expect(page.getByRole("banner").getByRole("link", { name: "Apply", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("banner").getByRole("link", { name: "Únete", exact: true })).toHaveCount(0);
 });
 
 test("the test login quick-pick lists seeded accounts and signs in a fresh recruit in one click", async ({ page }) => {
@@ -171,8 +171,8 @@ test("apply, officer accepts, new member appears on the roster", async ({ page, 
 
   const applicantCard = await openAccountCard(page, isMobile);
   await expect(applicantCard.getByText(characterName, { exact: true })).toBeVisible();
-  await expect(applicantCard.getByRole("link", { name: "Application pending" })).toBeVisible();
-  await expect(page.getByRole("banner").getByRole("link", { name: "Apply", exact: true })).toHaveCount(0);
+  await expect(applicantCard.getByRole("link", { name: "Solicitud pendiente" })).toBeVisible();
+  await expect(page.getByRole("banner").getByRole("link", { name: "Únete", exact: true })).toHaveCount(0);
 
   // The applicant cannot reach the admin area.
   await page.goto("/admin");

@@ -29,14 +29,14 @@ async function createAnniversaryGuild(page: Page, roles: string, realm = "dreams
   await form.getByRole("button", { name: "Entrar (prueba)" }).click();
   await page.waitForURL((url) => !url.pathname.startsWith("/login"));
 
-  await chooseOption(page.getByLabel("Game version"), "anniversary");
-  await page.getByLabel("Guild name").fill(name);
-  await page.getByLabel("Subdomain").fill(slug);
-  await expect(page.getByTestId("slug-status")).toHaveText("Available");
+  await chooseOption(page.getByLabel("Versión del juego"), "anniversary");
+  await page.getByLabel("Nombre de la hermandad").fill(name);
+  await page.getByLabel("Subdominio").fill(slug);
+  await expect(page.getByTestId("slug-status")).toHaveText("Disponible");
   await page.getByLabel(/^Americas/).check();
-  await chooseOption(page.getByLabel("Realm"), realm);
+  await chooseOption(page.getByLabel("Reino", { exact: true }), realm);
   await page.getByLabel("Horde").check();
-  await page.getByRole("button", { name: "Create guild" }).click();
+  await page.getByRole("button", { name: "Crear hermandad" }).click();
   const site = guildOrigin(slug);
   await page.waitForURL(`${site}/admin/setup`);
   return { name, site, tag };
@@ -44,7 +44,7 @@ async function createAnniversaryGuild(page: Page, roles: string, realm = "dreams
 
 async function linkBattlenet(page: Page, site: string) {
   await page.goto(`${site}/members/characters`);
-  await page.getByRole("link", { name: "Link Battle.net" }).click();
+  await page.getByRole("link", { name: "Vincular Battle.net" }).click();
   await expect(page.getByTestId("battlenet-account")).toContainText(/Pilgrim#\d{4}/);
 }
 
@@ -155,7 +155,7 @@ test.describe("TBC Anniversary", () => {
     await form.getByPlaceholder("Nombre").fill(`Member ${tag}`);
     await form.getByRole("button", { name: "Entrar (prueba)" }).click();
     await page.waitForURL((url) => url.pathname === "/apply");
-    await page.getByRole("link", { name: "Link Battle.net" }).click();
+    await page.getByRole("link", { name: "Vincular Battle.net" }).click();
     await expect(page.getByTestId("battlenet-account")).toContainText(/Pilgrim#\d{4}/);
 
     const join = page.getByTestId("confirmed-join");
