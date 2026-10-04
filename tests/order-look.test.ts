@@ -85,7 +85,7 @@ describe("the Order of Saint Michael's look is unchanged", () => {
     const image = guildPreviewImage(guild, "orderofsaintmichael.com", "charter");
     expect(image).toMatchObject({ width: 1200, height: 630 });
     expect(image.url).toBe(`/api/brand/osm/og.png?v=${previewVersion(guild, "orderofsaintmichael.com")}&page=charter`);
-    expect(image.alt).toContain("crimson banner");
+    expect(image.alt).toContain("estandarte carmesí");
     const v = (g: PreviewGuild, host = "orderofsaintmichael.com") => previewVersion(g, host);
     expect(v({ ...guild, recruitmentOpen: false })).not.toBe(v(guild));
     expect(v({ ...guild, name: "Order of Saint Michael the Archangel" })).not.toBe(v(guild));
@@ -104,7 +104,7 @@ describe("generic tabard crests", () => {
   it("give other guilds their tabard and versioned generated icons", () => {
     const brand = guildBrand(standardGuild);
     expect(brandFile(brand, "icon-192.png")).toBe(`/api/brand/silver-dawn/icon-192.png?v=${tabardKey(ORDER_TABARD)}`);
-    expect(renderToStaticMarkup(createElement(GuildEmblem, { guild: standardGuild }))).toContain('aria-label="Silver Dawn tabard"');
+    expect(renderToStaticMarkup(createElement(GuildEmblem, { guild: standardGuild }))).toContain('aria-label="Tabardo de Silver Dawn"');
   });
 
   it("version their link previews by tabard, base style and colour overrides", () => {
