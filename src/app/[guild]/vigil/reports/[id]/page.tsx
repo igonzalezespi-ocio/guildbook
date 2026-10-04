@@ -15,7 +15,7 @@ import { requirePage } from "@/server/context";
 import { NotFoundError } from "@/server/errors";
 import { getVigilReport } from "@/server/services/vigil";
 
-export const metadata: Metadata = { title: "Vigil report" };
+export const metadata: Metadata = { title: "Informe de Vigil" };
 
 export default async function VigilReportPage({ params }: PageProps<"/[guild]/vigil/reports/[id]">) {
   const { guild: slug, id } = await params;
@@ -31,7 +31,7 @@ export default async function VigilReportPage({ params }: PageProps<"/[guild]/vi
 
   return (
     <div className="mx-auto max-w-5xl space-y-4">
-      <PageHeader title={row.fightLabel} eyebrow="Vigil report">
+      <PageHeader title={row.fightLabel} eyebrow="Informe de Vigil">
         {row.characterName && row.characterClass ? (
           <ClassName wowClass={row.characterClass}>
             {row.characterName} {row.characterSurname}
@@ -46,9 +46,9 @@ export default async function VigilReportPage({ params }: PageProps<"/[guild]/vi
 
       {row.versionMismatch && row.gameVersion && (
         <p className="rounded border border-gold-dim/60 bg-gold/5 px-3 py-2 text-sm text-bone" role="note" data-testid="vigil-version-mismatch">
-          This log is from {VERSION_INFO[row.gameVersion].label}, but {guild.name} is a {VERSION_INFO[guild.gameVersion].label} guild.
-          Reports from another game are kept with this note until WoW: Forever launches on {versionLaunchLabel("forever")}; after that, Vigil
-          refuses them. Pair Vigil with your {VERSION_INFO[row.gameVersion].label} guild instead.
+          Este registro es de {VERSION_INFO[row.gameVersion].label}, pero {guild.name} es una hermandad de {VERSION_INFO[guild.gameVersion].label}.
+          Los informes de otro juego se guardan con esta nota hasta que salga WoW: Forever el {versionLaunchLabel("forever")}; después, Vigil
+          los rechaza. Empareja Vigil con tu hermandad de {VERSION_INFO[row.gameVersion].label}.
         </p>
       )}
 
@@ -56,16 +56,16 @@ export default async function VigilReportPage({ params }: PageProps<"/[guild]/vi
         <Panel>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <ReportVisibilityForm slug={slug} id={row.id} value={row.visibility} />
-            <ActionForm action={deleteVigilReportAction.bind(null, slug, row.id)} confirm="Delete this report?">
-              <SubmitButton size="sm" variant="danger" pendingLabel="Deleting…">
-                Delete
+            <ActionForm action={deleteVigilReportAction.bind(null, slug, row.id)} confirm="¿Borrar este informe?">
+              <SubmitButton size="sm" variant="danger" pendingLabel="Borrando…">
+                Borrar
               </SubmitButton>
               <FormMessage />
             </ActionForm>
           </div>
         </Panel>
       ) : (
-        <p className="text-center text-xs text-muted">{VISIBILITY_LABELS[row.visibility]} by its owner.</p>
+        <p className="text-center text-xs text-muted">Visibilidad elegida por su dueño: {VISIBILITY_LABELS[row.visibility].toLowerCase()}.</p>
       )}
 
       <FightReportView report={report} />

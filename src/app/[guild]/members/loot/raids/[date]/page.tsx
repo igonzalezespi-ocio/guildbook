@@ -9,13 +9,13 @@ import { guildHref } from "@/lib/paths";
 import { requireLootPage } from "@/server/loot-page";
 import { raidLoot, type LootRow } from "@/server/services/loot";
 
-export const metadata: Metadata = { title: "Raid loot" };
+export const metadata: Metadata = { title: "Botín de la banda" };
 
 /** Groups a night's loot by instance, then boss, in the order it dropped. */
 function byBoss(rows: LootRow[]) {
   const groups = new Map<string, { title: string; rows: LootRow[] }>();
   for (const row of [...rows].reverse()) {
-    const title = [row.instanceName, row.bossName].filter(Boolean).join(", ") || "Other loot";
+    const title = [row.instanceName, row.bossName].filter(Boolean).join(", ") || "Otro botín";
     const group = groups.get(title) ?? { title, rows: [] };
     group.rows.push(row);
     groups.set(title, group);
@@ -32,13 +32,13 @@ export default async function RaidLootPage({ params }: PageProps<"/[guild]/membe
 
   return (
     <div className="space-y-6">
-      <Breadcrumbs items={[{ label: "Loot", href: guildHref(slug, "/members/loot") }, { label: formatCalendarDate(date) }]} />
-      <PageHeader title={formatCalendarDate(date, "full")} eyebrow="Raid loot">
-        {given} item{given === 1 ? "" : "s"} awarded
+      <Breadcrumbs items={[{ label: "Botín", href: guildHref(slug, "/members/loot") }, { label: formatCalendarDate(date) }]} />
+      <PageHeader title={formatCalendarDate(date, "full")} eyebrow="Botín de la banda">
+        {given} objeto{given === 1 ? "" : "s"} entregado{given === 1 ? "" : "s"}
       </PageHeader>
       {rows.length === 0 ? (
         <Panel>
-          <LootTable slug={slug} rows={[]} empty="No loot was recorded on this night." />
+          <LootTable slug={slug} rows={[]} empty="No se registró botín esa noche." />
         </Panel>
       ) : (
         byBoss(rows).map((g) => (

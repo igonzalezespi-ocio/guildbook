@@ -7,7 +7,7 @@ import { requirePage } from "@/server/context";
 import { listOwnCharacters } from "@/server/services/characters";
 import { getVigilPreferences } from "@/server/services/vigil";
 
-export const metadata: Metadata = { title: "Upload a combat log" };
+export const metadata: Metadata = { title: "Subir un registro de combate" };
 
 export default async function VigilUploadPage({ params }: PageProps<"/[guild]/vigil/upload">) {
   const { guild: slug } = await params;
@@ -16,9 +16,9 @@ export default async function VigilUploadPage({ params }: PageProps<"/[guild]/vi
 
   return (
     <div className="mx-auto max-w-3xl">
-      <PageHeader title="Upload a combat log" eyebrow="Vigil">
-        In game, type <code className="text-gold">/combatlog</code> (or <code className="text-gold">/vigil log on</code>) before
-        you fight, then pick <code className="text-gold">Logs/WoWCombatLog.txt</code> here.
+      <PageHeader title="Subir un registro de combate" eyebrow="Vigil">
+        En el juego, escribe <code className="text-gold">/combatlog</code> (o <code className="text-gold">/vigil log on</code>) antes
+        de luchar y luego elige aquí <code className="text-gold">Logs/WoWCombatLog.txt</code>.
       </PageHeader>
       <VigilUploadFlow
         slug={slug}

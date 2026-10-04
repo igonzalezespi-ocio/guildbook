@@ -11,7 +11,7 @@ import { requirePage } from "@/server/context";
 import { NotFoundError } from "@/server/errors";
 import { getOwnCharacter } from "@/server/services/characters";
 
-export const metadata: Metadata = { title: "Edit Character" };
+export const metadata: Metadata = { title: "Editar personaje" };
 
 export default async function EditCharacterPage({ params }: PageProps<"/[guild]/members/characters/[id]">) {
   const { guild: slug, id } = await params;
@@ -24,11 +24,11 @@ export default async function EditCharacterPage({ params }: PageProps<"/[guild]/
 
   return (
     <div className="mx-auto max-w-2xl">
-      <PageHeader title={`Edit ${fullName(character.name, character.surname)}`} />
+      <PageHeader title={`Editar a ${fullName(character.name, character.surname)}`} />
       <Panel>
         <CharacterForm action={updateCharacterAction.bind(null, slug, id)} 
           character={character}
-          submitLabel="Save"
+          submitLabel="Guardar"
           showFaction={!guild.faction}
           gameVersion={guild.gameVersion}
         />
