@@ -25,9 +25,9 @@ import detailShot from "./shots/detail.webp";
 import intelShot from "./shots/intel.webp";
 import liveShot from "./shots/live.webp";
 
-const TITLE = "Vigil, the combat log companion";
+const TITLE = "Vigil, la app complementaria para el registro de combate";
 const DESCRIPTION =
-  "Vigil watches your World of Warcraft: Forever combat log, calls out mistakes as you play and uploads every fight to your guild's Guildbook. Free for Windows, macOS and Linux.";
+  "Vigil vigila tu registro de combate de World of Warcraft: Forever, te avisa de los fallos mientras juegas y sube cada combate al Guildbook de tu hermandad. Gratis para Windows, macOS y Linux.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -40,9 +40,9 @@ export const metadata: Metadata = {
 const PLATFORMS: CompanionPlatform[] = ["mac", "windows", "linux"];
 
 const PLATFORM_DETAIL: Record<CompanionPlatform, string> = {
-  mac: "universal for Apple silicon and Intel",
-  windows: "64-bit, Windows 10 and 11",
-  linux: "AppImage, 64-bit",
+  mac: "universal para Apple silicon e Intel",
+  windows: "64 bits, Windows 10 y 11",
+  linux: "AppImage, 64 bits",
 };
 
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-bright";
@@ -88,17 +88,17 @@ function Downloads({
             data-testid={hero ? "vigil-download-primary" : undefined}
           >
             <DownloadIcon />
-            Download for {PLATFORM_LABELS[platform]}
+            Descargar para {PLATFORM_LABELS[platform]}
           </a>
           <p className="text-xs text-muted">
-            Version {release.version}, {formatBytes(main.size)}, {PLATFORM_DETAIL[platform]}
+            Versión {release.version}, {formatBytes(main.size)}, {PLATFORM_DETAIL[platform]}
           </p>
         </div>
       ) : (
         <p className="max-w-md text-sm text-muted">
           {platform
-            ? `There is no ${PLATFORM_LABELS[platform]} build of version ${release.version} yet.`
-            : `Vigil is a desktop app. Download version ${release.version} on the computer you play on.`}
+            ? `Aún no hay versión para ${PLATFORM_LABELS[platform]} de la ${release.version}.`
+            : `Vigil es una app de escritorio. Descarga la versión ${release.version} en el ordenador con el que juegas.`}
         </p>
       )}
       {others.length > 0 && (
@@ -109,7 +109,7 @@ function Downloads({
             hero && "lg:justify-start",
           )}
         >
-          {main && <span className="text-xs text-muted">Also for</span>}
+          {main && <span className="text-xs text-muted">También para</span>}
           {others.map((p) => {
             const asset = primaryAsset(release, p)!;
             return (
@@ -117,7 +117,7 @@ function Downloads({
                 key={p}
                 href={asset.url}
                 className={clsx("btn btn-ghost btn-sm", !main && "w-full sm:w-auto", FOCUS)}
-                aria-label={`Download for ${PLATFORM_LABELS[p]}, ${formatBytes(asset.size)}`}
+                aria-label={`Descargar para ${PLATFORM_LABELS[p]}, ${formatBytes(asset.size)}`}
               >
                 <DownloadIcon />
                 {PLATFORM_LABELS[p]}
@@ -136,11 +136,11 @@ function NoRelease({ ok, hero = false }: { ok: boolean; hero?: boolean }) {
     <div className={clsx("flex flex-col items-center gap-3", hero && "lg:items-start")} data-testid={hero ? "vigil-no-release" : undefined}>
       <a href={COMPANION_RELEASES_URL} className={clsx("btn btn-gold min-h-13 px-8 text-sm", FOCUS)} target="_blank" rel="noopener noreferrer">
         <DownloadIcon />
-        Get Vigil on GitHub
+        Consigue Vigil en GitHub
       </a>
       <p className="max-w-md text-xs text-muted">
-        {ok ? "The first release is on its way." : "The latest version could not be loaded just now."} Every build is published on
-        the releases page.
+        {ok ? "La primera versión está en camino." : "Ahora mismo no se ha podido cargar la última versión."} Todas las versiones se
+        publican en la página de versiones.
       </p>
     </div>
   );
@@ -148,54 +148,54 @@ function NoRelease({ ok, hero = false }: { ok: boolean; hero?: boolean }) {
 
 const STEPS: { title: string; body: ReactNode }[] = [
   {
-    title: "Install Vigil",
-    body: "Download it for Windows, macOS or Linux and open it. It finds your World of Warcraft Logs folder on its own.",
+    title: "Instala Vigil",
+    body: "Descárgalo para Windows, macOS o Linux y ábrelo. Encuentra solo la carpeta Logs de World of Warcraft.",
   },
   {
-    title: "Turn on combat logging",
+    title: "Activa el registro de combate",
     body: (
       <>
-        In game, enable Advanced Combat Logging under System, Network, then type <code className="text-gold">/combatlog</code> each time you
-        log in.
+        En el juego, activa el registro de combate avanzado en Sistema &gt; Red y escribe <code className="text-gold">/combatlog</code> cada
+        vez que entres.
       </>
     ),
   },
   {
-    title: "Pair it with your guild",
-    body: "On your guild's site, open Vigil and choose Connect Vigil companion for a pairing code. Enter it in the app and you're set.",
+    title: "Emparéjalo con tu hermandad",
+    body: "En la web de tu hermandad, abre Vigil y elige Conectar la app de Vigil para obtener un código de emparejamiento. Escríbelo en la app y listo.",
   },
 ];
 
 const FEATURES: { icon: FeatureIcon; title: string; body: string }[] = [
   {
     icon: "callouts",
-    title: "Callouts as you play",
-    body: "Missed procs, idle time, dropped buffs and capped rage show up the moment they happen, alongside a live score, GCD use and uptimes marked with their spell icons.",
+    title: "Avisos mientras juegas",
+    body: "Procs desaprovechados, tiempo parado, beneficios caídos e ira al máximo aparecen en el momento en que pasan, junto a una puntuación en directo, el uso del GCD y el tiempo activo de auras con sus iconos de hechizo.",
   },
   {
     icon: "intel",
-    title: "Boss Intel",
-    body: "Molten Core and Onyxia's Lair, ability by ability: what each one does and what to do about it, with Blizzard's spell icons and boss portraits, plus what Vigil saw in your pull.",
+    title: "Información de jefes",
+    body: "Molten Core y Onyxia's Lair, habilidad a habilidad: qué hace cada una y qué hacer al respecto, con los iconos de hechizo y retratos de jefes de Blizzard, y lo que Vigil vio en tu pull.",
   },
   {
     icon: "reports",
-    title: "The whole raid at a glance",
-    body: "A damage and healing meter for your party or raid with class icons, every death with its killing blow, and the damage each boss ability did and who it hit.",
+    title: "Toda la banda de un vistazo",
+    body: "Un medidor de daño y sanación para tu grupo o banda con iconos de clase, cada muerte con su golpe final, y el daño de cada habilidad del jefe y a quién alcanzó.",
   },
   {
     icon: "upload",
-    title: "Every pull, reviewed",
-    body: "Each finished fight uploads to your guild's site, retried if your connection drops, and becomes a report with rotation priority, uptimes, cooldowns and a timeline. You choose who sees it.",
+    title: "Cada pull, analizado",
+    body: "Cada combate terminado se sube a la web de tu hermandad, con reintentos si se cae la conexión, y se convierte en un informe con prioridad de rotación, tiempo activo de auras, reutilizaciones y una línea de tiempo. Tú eliges quién lo ve.",
   },
   {
     icon: "window",
-    title: "Made for a second screen",
-    body: "A slim window beside the game or a compact view pinned on top. Close it and Vigil keeps uploading from the menu bar or system tray, where you can pause uploads or open your guild's site.",
+    title: "Pensado para una segunda pantalla",
+    body: "Una ventana estrecha junto al juego o una vista compacta fijada encima. Ciérrala y Vigil sigue subiendo desde la barra de menús o la bandeja del sistema, donde puedes pausar las subidas o abrir la web de tu hermandad.",
   },
   {
     icon: "privacy",
-    title: "Reads the log, nothing else",
-    body: "Vigil never touches the game client. Fights are analysed on your computer and only the report is sent. It's free and open source under the AGPL-3.0, so anyone can check.",
+    title: "Lee el registro y nada más",
+    body: "Vigil nunca toca el cliente del juego. Los combates se analizan en tu ordenador y solo se envía el informe. Es gratis y de código abierto con licencia AGPL-3.0, así que cualquiera puede comprobarlo.",
   },
 ];
 
@@ -205,17 +205,19 @@ function Faq({ release, platform }: { release: CompanionRelease | null; platform
   if (unsigned("mac")) {
     items.push({
       key: "mac",
-      question: "macOS says Vigil can't be opened",
+      question: "macOS dice que Vigil no se puede abrir",
       open: platform === "mac",
       answer: (
         <>
           <p>
-            This build isn&apos;t notarized by Apple yet, so macOS stops it the first time. Open the disk image and drag Vigil to
-            Applications. Then right-click (or Control-click) Vigil in Applications, choose Open, and confirm Open.
+            Esta versión aún no está notarizada por Apple, así que macOS la bloquea la primera vez. Abre la imagen de disco y arrastra
+            Vigil a Aplicaciones. Después haz clic derecho (o Control-clic) en Vigil dentro de Aplicaciones, elige Abrir y confirma con
+            Abrir.
           </p>
           <p>
-            On macOS 15 and later, try opening Vigil once, then go to System Settings, Privacy &amp; Security, and click Open Anyway.
-            Until builds are notarized, Vigil can&apos;t update itself on macOS; it tells you when a new version is out.
+            En macOS 15 o posterior, intenta abrir Vigil una vez y luego ve a Ajustes del Sistema &gt; Privacidad y seguridad y pulsa
+            Abrir igualmente. Hasta que las versiones estén notarizadas, Vigil no puede actualizarse solo en macOS; te avisa cuando sale
+            una versión nueva.
           </p>
         </>
       ),
@@ -224,12 +226,12 @@ function Faq({ release, platform }: { release: CompanionRelease | null; platform
   if (unsigned("windows")) {
     items.push({
       key: "windows",
-      question: "Windows says it protected my PC",
+      question: "Windows dice que ha protegido mi PC",
       open: platform === "windows",
       answer: (
         <p>
-          The installer isn&apos;t code-signed yet, so Microsoft Defender SmartScreen may warn you. Click More info, then Run anyway.
-          Updates after that install on their own.
+          El instalador aún no tiene firma de código, así que Microsoft Defender SmartScreen puede avisarte. Pulsa Más información y
+          luego Ejecutar de todas formas. A partir de ahí, las actualizaciones se instalan solas.
         </p>
       ),
     });
@@ -237,37 +239,39 @@ function Faq({ release, platform }: { release: CompanionRelease | null; platform
   items.push(
     {
       key: "linux",
-      question: "How do I run it on Linux?",
+      question: "¿Cómo lo ejecuto en Linux?",
       answer: (
         <p>
-          Download the AppImage, make it executable (right-click, Properties, or <code className="text-gold">chmod +x</code> in a terminal)
-          and open it.
+          Descarga el AppImage, hazlo ejecutable (clic derecho, Propiedades, o <code className="text-gold">chmod +x</code> en una terminal)
+          y ábrelo.
         </p>
       ),
     },
     {
       key: "safe",
-      question: "Can Vigil get my account in trouble?",
+      question: "¿Puede Vigil meter en problemas a mi cuenta?",
       answer: (
         <p>
-          Vigil only reads the combat log file the game writes to your Logs folder. It doesn&apos;t inject anything, automate anything or
-          talk to the game. The optional Vigil addon, which you can install from the app&apos;s settings, is an ordinary addon.
+          Vigil solo lee el archivo del registro de combate que el juego escribe en tu carpeta Logs. No inyecta nada, no automatiza nada
+          y no se comunica con el juego. El addon opcional de Vigil, que puedes instalar desde los ajustes de la app, es un addon
+          normal.
         </p>
       ),
     },
     {
       key: "pairing",
-      question: "Where do I get a pairing code?",
+      question: "¿Dónde consigo un código de emparejamiento?",
       answer: (
         <p>
-          Sign in to your guild&apos;s site, open Vigil, then Connect Vigil companion, and create a code. You can also click Open in the
-          companion to pair in one step. Each computer shows up on that page, where you can revoke it. Not in a guild on Guildbook yet?{" "}
+          Inicia sesión en la web de tu hermandad, abre Vigil, luego Conectar la app de Vigil, y crea un código. También puedes pulsar
+          Abrir en la app para emparejar en un solo paso. Cada ordenador aparece en esa página, donde puedes revocarlo. ¿Aún no estás en
+          ninguna hermandad de Guildbook?{" "}
           <Link href="/guilds" className={clsx("link", FOCUS)}>
-            Find one
+            Busca una
           </Link>{" "}
-          or{" "}
+          o{" "}
           <Link href="/create" className={clsx("link", FOCUS)}>
-            create your own
+            crea la tuya
           </Link>
           .
         </p>
@@ -320,24 +324,24 @@ export default async function VigilDownloadPage() {
           <div className="flex items-center gap-5">
             <Image
               src="/brand/vigil/icon-512.png"
-              alt="Vigil app icon"
+              alt="Icono de la app Vigil"
               width={96}
               height={96}
               priority
               className="h-20 w-20 drop-shadow-[0_0_30px_rgba(168,24,47,0.55)] sm:h-24 sm:w-24"
             />
             <div className="text-left">
-              <p className="font-display text-xs tracking-[0.3em] text-gold/80 uppercase">Guildbook companion</p>
+              <p className="font-display text-xs tracking-[0.3em] text-gold/80 uppercase">App complementaria de Guildbook</p>
               <h1 id="vigil-title" className="mt-1 font-title text-5xl text-gold sm:text-6xl">
                 Vigil
               </h1>
             </div>
           </div>
-          <p className="mt-7 font-display text-xl text-bone sm:text-2xl">Keep watch over every pull.</p>
+          <p className="mt-7 font-display text-xl text-bone sm:text-2xl">Vigila cada pull.</p>
           <hr className="rule-gold mt-5 w-48 lg:ml-0" />
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-bone/85">
-            Vigil watches your World of Warcraft: Forever combat log while you play, calls out mistakes as they happen, briefs you on every
-            boss and uploads each raid fight to your guild&apos;s Guildbook for a full review.
+            Vigil vigila tu registro de combate de World of Warcraft: Forever mientras juegas, te avisa de los fallos en cuanto ocurren, te
+            explica cada jefe y sube cada combate de banda al Guildbook de tu hermandad para un análisis completo.
           </p>
           <div className="mt-8 w-full">
             {release ? <Downloads release={release} platform={platform} hero /> : <NoRelease ok={ok} hero />}
@@ -345,16 +349,16 @@ export default async function VigilDownloadPage() {
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-muted lg:justify-start">
             <span className="inline-flex items-center gap-1.5">
               <GitHubIcon size={13} />
-              Free and open source,{" "}
+              Gratis y de código abierto,{" "}
               <External href={COMPANION_REPO_URL}>AGPL-3.0</External>
             </span>
-            <External href={COMPANION_RELEASES_URL}>See all releases</External>
+            <External href={COMPANION_RELEASES_URL}>Ver todas las versiones</External>
           </div>
         </div>
         <AppScreenshot
           src={liveShot}
-          alt="The Vigil window during a Ragnaros kill: a live score of 88 with GCD use, idle time and threat per second, Shield Block and Sunder Armor uptimes, Boss Intel listing Ragnaros's abilities with the damage each has done, a group damage meter with class icons, and a death to Wrath of Ragnaros."
-          caption="Demo data from a synthetic Ragnaros kill."
+          alt="La ventana de Vigil durante una muerte de Ragnaros: puntuación en directo de 88 con uso del GCD, tiempo parado y amenaza por segundo, tiempo activo de Shield Block y Sunder Armor, información del jefe con las habilidades de Ragnaros y el daño de cada una, un medidor de daño del grupo con iconos de clase y una muerte por Wrath of Ragnaros."
+          caption="Datos de demostración de una muerte sintética de Ragnaros."
           sizes="(min-width: 432px) 384px, calc(100vw - 3rem)"
           priority
           glow
@@ -363,7 +367,7 @@ export default async function VigilDownloadPage() {
       </section>
 
       <section aria-labelledby="how-heading">
-        <SectionHeading id="how-heading" title="Up and running in three steps" lead="A few minutes of setup, then Vigil keeps watch every time you play." />
+        <SectionHeading id="how-heading" title="En marcha en tres pasos" lead="Unos minutos de configuración y Vigil vigila cada vez que juegas." />
         <ol className="grid gap-4 sm:grid-cols-3">
           {STEPS.map((s, i) => (
             <li key={s.title} className="panel flex flex-col items-center p-6 text-center">
@@ -378,7 +382,7 @@ export default async function VigilDownloadPage() {
       </section>
 
       <section aria-labelledby="features-heading">
-        <SectionHeading id="features-heading" title="Built for raid night" lead="Everything you need to learn from each pull, without alt-tabbing out of the fight." />
+        <SectionHeading id="features-heading" title="Hecho para la noche de banda" lead="Todo lo que necesitas para aprender de cada pull, sin salir del combate con Alt+Tab." />
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
             <li key={f.title} className="panel p-5 transition-colors hover:border-gold-dim">
@@ -395,32 +399,33 @@ export default async function VigilDownloadPage() {
         <div className="mx-auto mt-12 grid max-w-4xl items-start gap-10 sm:grid-cols-2">
           <AppScreenshot
             src={intelShot}
-            alt="Boss Intel for Ragnaros: his portrait and a summary, then Wrath of Ragnaros, Elemental Fire and Magma Blast, each with its spell icon, role tags, what it does, what to do and the damage it did in the last fight."
-            caption="Boss Intel for Ragnaros. Demo data."
+            alt="Información del jefe Ragnaros: su retrato y un resumen, y después Wrath of Ragnaros, Elemental Fire y Magma Blast, cada una con su icono de hechizo, etiquetas de rol, qué hace, qué hacer y el daño que hizo en el último combate."
+            caption="Información del jefe Ragnaros. Datos de demostración."
             sizes="(min-width: 1024px) 428px, (min-width: 640px) calc(50vw - 3rem), calc(100vw - 3rem)"
             fade
             className="max-w-md"
           />
           <AppScreenshot
             src={detailShot}
-            alt="Damage taken by ability after a Ragnaros kill: each ability with its icon, total damage, hits, players hit and deaths, and the players it hit shown with their class icons."
-            caption="Damage taken, from a finished fight. Demo data."
+            alt="Daño recibido por habilidad tras una muerte de Ragnaros: cada habilidad con su icono, daño total, golpes, jugadores alcanzados y muertes, y los jugadores alcanzados con sus iconos de clase."
+            caption="Daño recibido en un combate terminado. Datos de demostración."
             sizes="(min-width: 1024px) 428px, (min-width: 640px) calc(50vw - 3rem), calc(100vw - 3rem)"
             className="max-w-md"
           />
         </div>
         <p className="mx-auto mt-6 max-w-xl text-center text-xs text-muted">
-          Spell icons and boss portraits are from Blizzard Entertainment&apos;s World of Warcraft. Vigil is not affiliated with Blizzard.
+          Los iconos de hechizos y retratos de jefes son del World of Warcraft de Blizzard Entertainment. Vigil no tiene relación con
+          Blizzard.
         </p>
       </section>
 
       <section aria-labelledby="faq-heading" className="mx-auto max-w-3xl">
-        <SectionHeading id="faq-heading" title="Questions" />
+        <SectionHeading id="faq-heading" title="Preguntas" />
         <Faq release={release} platform={platform} />
         <p className="mt-4 text-center text-sm text-muted">
-          Still stuck?{" "}
+          ¿Sigues atascado?{" "}
           <Link href="/support?category=vigil" className="text-gold underline-offset-2 hover:underline">
-            Contact support
+            Contacta con soporte
           </Link>
           .
         </p>
@@ -429,20 +434,20 @@ export default async function VigilDownloadPage() {
       {release && (
         <section aria-labelledby="release-heading" className="grid items-start gap-4 lg:grid-cols-2">
           <h2 id="release-heading" className="sr-only">
-            Version {release.version}
+            Versión {release.version}
           </h2>
           <div className="panel p-5 sm:p-6">
-            <h3 className="text-lg font-semibold text-gold">What&apos;s new in {release.version}</h3>
-            {released && <p className="mt-1 text-xs text-muted">Released {released}</p>}
+            <h3 className="text-lg font-semibold text-gold">Novedades de la {release.version}</h3>
+            {released && <p className="mt-1 text-xs text-muted">Publicada el {released}</p>}
             <div className="mt-4 text-sm">
-              {release.notes ? <Markdown tone="dark">{release.notes}</Markdown> : <p className="text-muted">No release notes for this version.</p>}
+              {release.notes ? <Markdown tone="dark">{release.notes}</Markdown> : <p className="text-muted">Esta versión no tiene notas.</p>}
             </div>
           </div>
           <div className="panel p-5 sm:p-6">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h3 className="text-lg font-semibold text-gold">All downloads</h3>
+              <h3 className="text-lg font-semibold text-gold">Todas las descargas</h3>
               <External href={release.url} className="text-sm">
-                Release on GitHub
+                Versión en GitHub
               </External>
             </div>
             <ul className="mt-4 divide-y divide-line text-sm" data-testid="vigil-assets">
@@ -454,14 +459,15 @@ export default async function VigilDownloadPage() {
                       {a.name}
                     </a>
                     <span className="text-xs text-muted">
-                      {PLATFORM_LABELS[a.platform!]} {a.kind === "AppImage" ? a.kind : a.kind.toLowerCase()}
+                      {a.kind} para {PLATFORM_LABELS[a.platform!]}
                     </span>
                     <span className="w-16 text-right text-xs text-muted tabular-nums">{formatBytes(a.size)}</span>
                   </li>
                 ))}
             </ul>
             <p className="mt-3 text-xs text-muted">
-              Update feeds and block maps, which the app reads to update itself, are on the <External href={release.url}>release page</External>.
+              Los canales de actualización y los block maps, que la app lee para actualizarse, están en la{" "}
+              <External href={release.url}>página de la versión</External>.
             </p>
           </div>
         </section>
@@ -471,9 +477,9 @@ export default async function VigilDownloadPage() {
         <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgb(168_24_47/0.18),transparent_65%)]" />
         <div className="relative flex flex-col items-center">
           <Image src="/brand/vigil/icon-512.png" alt="" width={56} height={56} className="h-14 w-14" />
-          <h2 className="mt-4 font-title text-2xl text-gold sm:text-3xl">Keep watch tonight</h2>
+          <h2 className="mt-4 font-title text-2xl text-gold sm:text-3xl">Vigila esta misma noche</h2>
           <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">
-            Install Vigil before your next raid and every pull lands on your guild&apos;s site, ready to review.
+            Instala Vigil antes de tu próxima banda y cada pull llegará a la web de tu hermandad, listo para analizar.
           </p>
           <div className="mt-6 flex justify-center">
             {release ? <Downloads release={release} platform={platform} /> : <NoRelease ok={ok} />}
@@ -481,7 +487,7 @@ export default async function VigilDownloadPage() {
           {release && (
             <p className="mt-6 text-xs text-muted">
               Vigil {release.version}
-              {released && `, released ${released}`}
+              {released && `, publicada el ${released}`}
             </p>
           )}
         </div>
