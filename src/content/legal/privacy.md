@@ -1,229 +1,229 @@
-# Guildbook Privacy Policy
+# Política de privacidad
 
-Last updated: September 28, 2026
+Última actualización: 28 de septiembre de 2026
 
-This policy explains what information Guildbook collects, why, who can see it, and the choices you have. It covers guildbook.io, every guild site on a guildbook.io subdomain (for example osm.guildbook.io), custom domains that guilds connect to Guildbook, and the Vigil companion app. Guildbook is run by Matthew Rosendin ("we", "us"), who is the data controller for the service.
+Esta política explica qué información recoge Guildbook, por qué, quién puede verla y qué opciones tienes. Cubre guildbook.io, cada sitio de hermandad en un subdominio de guildbook.io (por ejemplo osm.guildbook.io), los dominios propios que las hermandades conectan a Guildbook y la app complementaria Vigil. Guildbook lo gestiona Matthew Rosendin ("nosotros"), que es el responsable del tratamiento de los datos del servicio.
 
-Guildbook is free and non-commercial. **We don't sell your data, we don't show ads, and we don't use analytics or tracking tools.**
+Guildbook es gratuito y sin ánimo de lucro. **No vendemos tus datos, no mostramos anuncios y no usamos herramientas de analítica ni de seguimiento.**
 
-## The short version
+## En resumen
 
-- You sign in with Discord. We get your Discord ID, username, display name, avatar and email address.
-- Linking Battle.net is optional. If you do, we store your Battle.net account ID, BattleTag and a snapshot of your character list. The Battle.net access token is encrypted and expires after about a day.
-- Guilds store what you give them: your characters, applications and rank. Roster and character pages are public. Applications and the audit log are visible only to that guild's officers.
-- Vigil analyses your combat log on your own computer. Only per-fight summaries are uploaded, they're private by default, and you choose who sees them.
+- Inicias sesión con Discord. Recibimos tu ID de Discord, tu nombre de usuario, tu nombre visible, tu avatar y tu dirección de correo.
+- Vincular Battle.net es opcional. Si lo haces, guardamos el ID de tu cuenta de Battle.net, tu BattleTag y una instantánea de tu lista de personajes. El token de acceso de Battle.net se guarda cifrado y caduca al cabo de un día aproximadamente.
+- Las hermandades guardan lo que tú les das: tus personajes, tus solicitudes y tu rango. La plantilla y las páginas de personajes son públicas. Las solicitudes y el registro de auditoría solo los ven los oficiales de esa hermandad.
+- Vigil analiza tu registro de combate en tu propio ordenador. Solo se suben resúmenes por combate, son privados por defecto y tú eliges quién los ve.
 
-## Information we collect
+## Información que recogemos
 
-### When you sign in with Discord
+### Cuando inicias sesión con Discord
 
-We ask Discord for the `identify` and `email` permissions. From Discord we receive and store:
+Pedimos a Discord los permisos `identify` y `email`. De Discord recibimos y guardamos:
 
-- your Discord user ID;
-- your Discord username and display name;
-- a link to your Discord avatar;
-- your email address, and whether Discord says it is verified.
+- tu ID de usuario de Discord;
+- tu nombre de usuario y tu nombre visible de Discord;
+- un enlace a tu avatar de Discord;
+- tu dirección de correo, y si Discord indica que está verificada.
 
-**We don't store Discord's access or refresh tokens.** Discord issues them when you sign in, and we discard them straight away; we keep only your Discord user ID and the permissions you granted. We never call Discord on your behalf.
+**No guardamos los tokens de acceso ni de actualización de Discord.** Discord los emite cuando inicias sesión y los descartamos de inmediato; solo conservamos tu ID de usuario de Discord y los permisos que concediste. Nunca llamamos a Discord en tu nombre.
 
-We don't receive your Discord password, your servers, your friends list or your messages.
+No recibimos tu contraseña de Discord, tus servidores, tu lista de amigos ni tus mensajes.
 
-### When you link Battle.net (optional)
+### Cuando vinculas Battle.net (opcional)
 
-Linking Battle.net lets you prove that your characters are really yours. We ask Blizzard only for the `wow.profile` permission. We store:
+Vincular Battle.net te permite demostrar que tus personajes son realmente tuyos. A Blizzard solo le pedimos el permiso `wow.profile`. Guardamos:
 
-- your Battle.net account ID, BattleTag and region;
-- a snapshot of the World of Warcraft characters on your account, in the Americas and Europe regions: character ID, name, surname, region, realm, level, class, race, faction and guild name;
-- when the snapshot was taken, and whether it was complete;
-- the Battle.net access token, **encrypted at rest** (AES-256-GCM). Blizzard doesn't issue a refresh token, so this token stops working after about 24 hours and we can't use it after that.
+- el ID de tu cuenta de Battle.net, tu BattleTag y tu región;
+- una instantánea de los personajes de World of Warcraft de tu cuenta, en las regiones de América y Europa: ID del personaje, nombre, apellido, región, reino, nivel, clase, raza, facción y nombre de la hermandad;
+- cuándo se tomó la instantánea y si estaba completa;
+- el token de acceso de Battle.net, **cifrado en reposo** (AES-256-GCM). Blizzard no emite un token de actualización, así que este token deja de funcionar al cabo de unas 24 horas y después no podemos usarlo.
 
-Battle.net is never used to sign in.
+Battle.net nunca se usa para iniciar sesión.
 
-### Guild membership and characters
+### Pertenencia a hermandades y personajes
 
-When you join or apply to a guild, that guild stores:
+Cuando te unes a una hermandad o envías una solicitud, esa hermandad guarda:
 
-- your membership status (applicant, active or former), rank, and the dates you joined and left;
-- your characters: name, surname, faction, class, specialisation, role, level, realm, which one is your main, professions and skill levels, and whether the character is verified through Battle.net;
-- for verified characters, the Blizzard character ID and when it was last synced.
+- tu estado de pertenencia (aspirante, activo o antiguo), tu rango y las fechas en que entraste y saliste;
+- tus personajes: nombre, apellido, facción, clase, especialización, rol, nivel, reino, cuál es tu principal, profesiones y niveles de habilidad, y si el personaje está verificado con Battle.net;
+- en los personajes verificados, el ID de personaje de Blizzard y cuándo se sincronizó por última vez.
 
-Once a day, and whenever an officer asks, Guildbook checks verified characters against Blizzard's public character profiles to update their level and class. This uses Guildbook's own Blizzard app credentials, not your account token. **If you unlink Battle.net, syncing stops:** your characters stay on the roster but are marked unverified, and we forget their Blizzard character IDs.
+Una vez al día, y siempre que lo pida un oficial, Guildbook comprueba los personajes verificados con los perfiles públicos de personaje de Blizzard para actualizar su nivel y su clase. Para ello usa las credenciales de la aplicación de Blizzard del propio Guildbook, no el token de tu cuenta. **Si desvinculas Battle.net, la sincronización se detiene:** tus personajes siguen en la plantilla pero se marcan como no verificados, y olvidamos sus ID de personaje de Blizzard.
 
-### Applications
+### Solicitudes
 
-When you apply to a guild, we store your answers:
+Cuando envías una solicitud a una hermandad, guardamos tus respuestas:
 
-- the character you're applying with (name, surname, faction, class, specialisation, role and level);
-- your free-text answers about raid experience, availability and why you want to join;
-- your Discord handle;
-- your agreement to the guild's charter;
-- if your character is verified, its Blizzard character ID, realm, your BattleTag and the time of the snapshot used;
-- the application's status, which officer reviewed it, when, and any decision note they wrote.
+- el personaje con el que te presentas (nombre, apellido, facción, clase, especialización, rol y nivel);
+- tus respuestas de texto libre sobre experiencia en bandas, disponibilidad y por qué quieres unirte;
+- tu usuario de Discord;
+- tu aceptación del reglamento de la hermandad;
+- si tu personaje está verificado, su ID de personaje de Blizzard, su reino, tu BattleTag y la hora de la instantánea utilizada;
+- el estado de la solicitud, qué oficial la revisó, cuándo, y cualquier nota sobre la decisión que escribiera.
 
-### Guild content and activity
+### Contenido y actividad de la hermandad
 
-Guild leaders create content such as guild pages (with a history of each edit and who made it), raid schedules, recruitment needs, boss kills (with an optional Warcraft Logs report code and note, and who recorded it) and addon listings. A guild can also store its Discord server ID and invite link, custom domains it has connected, and whether it appears in the public Guildbook directory. We record which user created each guild.
+Los líderes de la hermandad crean contenido como páginas de la hermandad (con un historial de cada edición y de quién la hizo), horarios de banda, necesidades de reclutamiento, muertes de jefes (con un código de informe de Warcraft Logs y una nota opcionales, y quién las registró) y listados de addons. Una hermandad también puede guardar el ID y el enlace de invitación de su servidor de Discord, los dominios propios que ha conectado y si aparece en el directorio público de Guildbook. Registramos qué usuario creó cada hermandad.
 
-### Audit log
+### Registro de auditoría
 
-Each guild has an audit log of important actions, such as applications being submitted and withdrawn, rank changes, member removals, content edits, character changes, Battle.net linking and unlinking, changes to Vigil sharing, and deletion of Vigil reports. Each entry records who acted, what they did, what it affected, and the values before and after the change. Audit entries record character names but not your BattleTag. The log can't be edited or selectively deleted, so the guild has a reliable record of what happened. The only exceptions are the ones described under "How long we keep it": when an account is deleted, or an old application is removed, the entries stay but the person's identity in them is replaced with "Deleted user". Uploading a Vigil report is deliberately not logged, so a private report leaves no trace officers can see.
+Cada hermandad tiene un registro de auditoría de las acciones importantes, como el envío y la retirada de solicitudes, los cambios de rango, las expulsiones de miembros, las ediciones de contenido, los cambios de personajes, la vinculación y desvinculación de Battle.net, los cambios en la visibilidad de Vigil y el borrado de informes de Vigil. Cada entrada registra quién actuó, qué hizo, a qué afectó y los valores antes y después del cambio. Las entradas de auditoría registran nombres de personajes pero no tu BattleTag. El registro no se puede editar ni borrar de forma selectiva, para que la hermandad tenga un registro fiable de lo ocurrido. Las únicas excepciones son las descritas en "Cuánto tiempo los conservamos": cuando se borra una cuenta, o se elimina una solicitud antigua, las entradas se mantienen pero la identidad de la persona en ellas se sustituye por «Usuario eliminado». Subir un informe de Vigil no se registra a propósito, para que un informe privado no deje ningún rastro que puedan ver los oficiales.
 
-### Vigil fight summaries
+### Resúmenes de combate de Vigil
 
-Vigil works from the combat log file that World of Warcraft writes on your computer.
+Vigil trabaja con el archivo de registro de combate que World of Warcraft escribe en tu ordenador.
 
-- **Your combat log never leaves your computer.** It is read and analysed locally, in your browser or in the companion app.
-- Only a **summary of each fight you choose to upload** is sent to Guildbook. A summary covers your own character: the fight name and type, the encounter, the enemies involved and damage done to them, your character's name, in-game ID and level, your damage, healing and threat totals, a timeline of your casts, spell statistics, buff uptimes, resource use, cooldown and rotation analysis, and a score. If you choose to include the Vigil addon's snapshot file, the summary can also include your character's gear and talents.
-- Summaries don't include other players' performance.
-- Summaries are **private by default**. You can share each one with your guild's officers or with the whole guild, and you can set your own default. Shared reports stop being visible to others if you leave the guild.
-- You can delete any of your reports at any time.
+- **Tu registro de combate nunca sale de tu ordenador.** Se lee y se analiza localmente, en tu navegador o en la app complementaria.
+- Solo se envía a Guildbook un **resumen de cada combate que decidas subir**. Un resumen trata de tu propio personaje: el nombre y el tipo del combate, el encuentro, los enemigos implicados y el daño que recibieron, el nombre, el ID en el juego y el nivel de tu personaje, tus totales de daño, sanación y amenaza, una cronología de tus lanzamientos, estadísticas de hechizos, tiempos activos de beneficios, uso de recursos, análisis de tiempos de reutilización y de rotación, y una puntuación. Si decides incluir el archivo de instantánea del addon Vigil, el resumen también puede incluir el equipo y los talentos de tu personaje.
+- Los resúmenes no incluyen el rendimiento de otros jugadores.
+- Los resúmenes son **privados por defecto**. Puedes compartir cada uno con los oficiales de tu hermandad o con toda la hermandad, y puedes fijar tu propio valor predeterminado. Los informes compartidos dejan de ser visibles para los demás si dejas la hermandad.
+- Puedes borrar cualquiera de tus informes en cualquier momento.
 
-### The Vigil companion app
+### La app complementaria Vigil
 
-- The companion app reads only the newest `WoWCombatLog*.txt` file in the World of Warcraft Logs folder you point it to. If you ask it to, it copies the Vigil addon into your game's AddOns folder. It doesn't read other files, and it never reads or interacts with the running game.
-- To pair it, you get a short-lived code on your guild site. We store only a **hash** of the code.
-- A paired device receives a token. On your computer it is kept in your operating system's secure storage (Keychain on macOS, DPAPI on Windows) where available. On our side we store only a **SHA-256 hash** of the token, plus the device name, the last few characters of the token (so you can tell devices apart), when it was created and last used, whether it has been revoked, and a per-minute upload counter used for rate limiting.
-- You can revoke a device at any time from your guild site.
-- The companion app contains no analytics or tracking. It only talks to the Guildbook site you paired it with.
+- La app complementaria solo lee el archivo `WoWCombatLog*.txt` más reciente de la carpeta Logs de World of Warcraft que le indiques. Si se lo pides, copia el addon Vigil en la carpeta AddOns del juego. No lee otros archivos y nunca lee el juego en ejecución ni interactúa con él.
+- Para emparejarla, obtienes un código de corta duración en el sitio de tu hermandad. Solo guardamos un **hash** del código.
+- Un dispositivo emparejado recibe un token. En tu ordenador se guarda en el almacenamiento seguro de tu sistema operativo (Llavero en macOS, DPAPI en Windows) cuando está disponible. En nuestro lado solo guardamos un **hash SHA-256** del token, además del nombre del dispositivo, los últimos caracteres del token (para que puedas distinguir los dispositivos), cuándo se creó y se usó por última vez, si se ha revocado y un contador de subidas por minuto que se usa para limitar el ritmo.
+- Puedes revocar un dispositivo en cualquier momento desde el sitio de tu hermandad.
+- La app complementaria no contiene analítica ni seguimiento. Solo se comunica con el sitio de Guildbook con el que la emparejaste.
 
-### Support requests
+### Solicitudes de soporte
 
-When you send a support request from guildbook.io/support, we store its category, subject and message, the guild you chose (if any), the reply-to email you gave (if any), and details that help us answer: your user ID, Discord name, the page you came from, your browser's user agent and the site version. We email a copy to the Guildbook operator so we can reply.
+Cuando envías una solicitud de soporte desde guildbook.io/support, guardamos su categoría, su asunto y su mensaje, la hermandad que elegiste (si la hay), el correo de respuesta que indicaste (si lo hay) y datos que nos ayudan a responder: tu ID de usuario, tu nombre de Discord, la página de la que venías, el agente de usuario de tu navegador y la versión del sitio. Enviamos una copia por correo al operador de Guildbook para poder responder.
 
-### Technical information
+### Información técnica
 
-Like any website, our hosting provider receives your IP address, browser details and the pages you request when you visit. We use IP addresses briefly, in memory, to limit abusive traffic; we don't store them in our database. Our host may keep request and error logs for a short period, typically from an hour to a few days depending on our hosting plan, before they are deleted automatically.
+Como en cualquier sitio web, nuestro proveedor de alojamiento recibe tu dirección IP, los datos de tu navegador y las páginas que solicitas cuando nos visitas. Usamos las direcciones IP brevemente, en memoria, para limitar el tráfico abusivo; no las guardamos en nuestra base de datos. Nuestro proveedor puede conservar registros de peticiones y de errores durante un periodo corto, normalmente de una hora a unos pocos días según nuestro plan de alojamiento, antes de que se borren automáticamente.
 
-## Why we use your information, and our legal bases
+## Por qué usamos tu información y nuestras bases legales
 
-If you're in the European Economic Area, the UK or a similar jurisdiction, these are the legal bases we rely on:
+Si estás en el Espacio Económico Europeo, el Reino Unido o una jurisdicción similar, estas son las bases legales en las que nos apoyamos:
 
-| What | Why | Legal basis |
+| Qué | Por qué | Base legal |
 | --- | --- | --- |
-| Discord sign-in data | To create your account, sign you in and show your name and avatar | Contract (providing the service you asked for) |
-| Guild membership, characters, applications | To run the guilds you join or apply to | Contract |
-| Battle.net link and snapshot | To verify your characters | Consent (you choose to link, and can unlink at any time) |
-| Sharing Vigil reports | To show your summaries to officers or your guild | Consent (you choose each report's visibility) |
-| Vigil summaries you keep private | To give you your own performance review | Contract |
-| Support requests | To answer your question or fix your problem | Contract |
-| Audit log, rate limiting, security logs | To keep guilds accountable and the service secure | Legitimate interests |
+| Datos de inicio de sesión de Discord | Para crear tu cuenta, iniciar tu sesión y mostrar tu nombre y tu avatar | Contrato (prestarte el servicio que pediste) |
+| Pertenencia a hermandades, personajes, solicitudes | Para gestionar las hermandades a las que te unes o envías solicitud | Contrato |
+| Vínculo e instantánea de Battle.net | Para verificar tus personajes | Consentimiento (tú decides vincular, y puedes desvincular en cualquier momento) |
+| Compartir informes de Vigil | Para mostrar tus resúmenes a los oficiales o a tu hermandad | Consentimiento (tú eliges la visibilidad de cada informe) |
+| Resúmenes de Vigil que mantienes privados | Para darte tu propio análisis de rendimiento | Contrato |
+| Solicitudes de soporte | Para responder a tu pregunta o resolver tu problema | Contrato |
+| Registro de auditoría, límites de uso, registros de seguridad | Para que las hermandades rindan cuentas y el servicio sea seguro | Intereses legítimos |
 
-We don't use your information for advertising, profiling or automated decisions with legal or similarly significant effects. Vigil scores are for your own review.
+No usamos tu información para publicidad, elaboración de perfiles ni decisiones automatizadas con efectos jurídicos o efectos igualmente significativos. Las puntuaciones de Vigil son para tu propio análisis.
 
-## Who can see what
+## Quién puede ver qué
 
-### Public (anyone on the internet)
+### Público (cualquiera en internet)
 
-On a guild's site, anyone can see:
+En el sitio de una hermandad, cualquiera puede ver:
 
-- the guild's name, description, pages, charter, schedule, recruitment needs, progression (boss kills) and addon listings;
-- the **roster**: each active member's main character and alts, with name, surname, faction, class, specialisation, role, level, rank and whether the character is verified;
-- **character pages**: the same details plus realm, professions and skill levels, the member's join date, when the character was last synced, and the member's other characters.
+- el nombre, la descripción, las páginas, el reglamento, el horario, las necesidades de reclutamiento, el progreso (muertes de jefes) y los listados de addons de la hermandad;
+- la **plantilla**: el personaje principal y los alters de cada miembro activo, con nombre, apellido, facción, clase, especialización, rol, nivel, rango y si el personaje está verificado;
+- las **páginas de personajes**: los mismos datos más el reino, las profesiones y los niveles de habilidad, la fecha de entrada del miembro, cuándo se sincronizó el personaje por última vez y los demás personajes del miembro.
 
-This means anyone can see which characters belong to the same member. Former members and archived characters aren't shown. Your Discord name, email, BattleTag and applications are never shown publicly.
+Esto significa que cualquiera puede ver qué personajes pertenecen al mismo miembro. Los antiguos miembros y los personajes archivados no se muestran. Tu nombre de Discord, tu correo, tu BattleTag y tus solicitudes nunca se muestran públicamente.
 
-If a guild opts into the Guildbook directory, its name and active member count are listed on guildbook.io.
+Si una hermandad decide aparecer en el directorio de Guildbook, su nombre y su número de miembros activos aparecen en guildbook.io.
 
-### Visible to a guild's officers
+### Visible para los oficiales de una hermandad
 
-- Applications to that guild, including your free-text answers, Discord handle and BattleTag.
-- The guild's member list and ranks.
-- The guild's audit log.
-- Vigil reports you've shared with officers or the guild.
+- Las solicitudes a esa hermandad, incluidas tus respuestas de texto libre, tu usuario de Discord y tu BattleTag.
+- La lista de miembros y los rangos de la hermandad.
+- El registro de auditoría de la hermandad.
+- Los informes de Vigil que hayas compartido con los oficiales o con la hermandad.
 
-### Visible to guild members
+### Visible para los miembros de la hermandad
 
-- Vigil reports you've shared with the guild.
+- Los informes de Vigil que hayas compartido con la hermandad.
 
-### Visible only to you
+### Visible solo para ti
 
-- Your private Vigil reports, your Battle.net link and character snapshot, and your paired devices.
-- Your support requests, which only you and the Guildbook operator can see.
+- Tus informes privados de Vigil, tu vínculo con Battle.net y tu instantánea de personajes, y tus dispositivos emparejados.
+- Tus solicitudes de soporte, que solo podéis ver tú y el operador de Guildbook.
 
-### Service providers
+### Proveedores de servicios
 
-We use these providers to run Guildbook:
+Usamos estos proveedores para gestionar Guildbook:
 
-- **Vercel** (hosting and serverless functions), United States.
-- **Neon** (Postgres database hosting), in the United States (AWS us-east-2, Ohio).
-- **Resend** (sending support requests to the operator by email), United States.
-- **Discord** (sign-in) and **Blizzard Entertainment** (optional Battle.net linking and public character data). These act as independent services under their own privacy policies.
+- **Vercel** (alojamiento y funciones serverless), Estados Unidos.
+- **Neon** (alojamiento de la base de datos Postgres), en Estados Unidos (AWS us-east-2, Ohio).
+- **Resend** (envío por correo de las solicitudes de soporte al operador), Estados Unidos.
+- **Discord** (inicio de sesión) y **Blizzard Entertainment** (vinculación opcional de Battle.net y datos públicos de personajes). Actúan como servicios independientes sujetos a sus propias políticas de privacidad.
 
-We don't share your information with anyone else, except where the law requires it, to protect people's safety or our rights, or as part of a transfer of the service to a new operator who agrees to this policy.
+No compartimos tu información con nadie más, salvo cuando lo exija la ley, para proteger la seguridad de las personas o nuestros derechos, o como parte de un traspaso del servicio a un nuevo operador que acepte esta política.
 
-## Where your data is stored
+## Dónde se guardan tus datos
 
-Your data is stored and processed in the United States. If you're outside the US, your information is transferred there. Where the law requires it, we rely on our providers' standard contractual clauses or equivalent safeguards for these transfers.
+Tus datos se guardan y se tratan en Estados Unidos. Si estás fuera de EE. UU., tu información se transfiere allí. Cuando la ley lo exige, nos apoyamos en las cláusulas contractuales tipo de nuestros proveedores o en garantías equivalentes para estas transferencias.
 
-## How long we keep it
+## Cuánto tiempo los conservamos
 
-- **Account and Discord details:** until you delete your account.
-- **Battle.net link:** until you unlink it or delete your account. **Unlinking deletes your stored Battle.net ID, BattleTag, character snapshot and token.** Characters you had verified stay on the guild roster but are marked unverified and stop syncing from Blizzard. The audit log keeps a record that you unlinked, without your BattleTag.
-- **Battle.net access token:** it expires after about 24 hours. It's cleared if Blizzard rejects it, and deleted when you unlink.
-- **Characters:** archived characters leave the roster but are kept so guild history stays intact, until the guild or your account is deleted.
-- **Applications:** pending and accepted applications are kept for the guild's records until the guild or your account is deleted. **Withdrawn and declined applications are deleted automatically {{applicationRetentionDays}} days** after they were decided (or, if never reviewed, submitted), and the applicant's name is replaced with "Deleted user" in the audit entries about them.
-- **Vigil reports:** until you delete them, or your membership, the guild or your account is deleted.
-- **Support requests:** until your account is deleted. Copies emailed to the operator are kept in the operator's mailbox for as long as needed to handle the request.
-- **Companion devices:** until the membership, guild or account is deleted. Revoked devices stop working immediately.
-- **Audit log:** kept for as long as the guild exists. When an account is deleted, its entries stay, de-identified as described below.
-- **Guild content:** until guild leaders delete it or the guild is deleted. A guild's owner can delete the guild, with all of its members' guild data and its audit log, from the guild's settings.
-- **Hosting logs:** as described under Technical information.
+- **Cuenta y datos de Discord:** hasta que borres tu cuenta.
+- **Vínculo con Battle.net:** hasta que lo desvincules o borres tu cuenta. **Al desvincularlo se borran tu ID de Battle.net, tu BattleTag, tu instantánea de personajes y tu token guardados.** Los personajes que habías verificado siguen en la plantilla de la hermandad pero se marcan como no verificados y dejan de sincronizarse con Blizzard. El registro de auditoría conserva constancia de que desvinculaste la cuenta, sin tu BattleTag.
+- **Token de acceso de Battle.net:** caduca al cabo de unas 24 horas. Se elimina si Blizzard lo rechaza, y se borra cuando desvinculas.
+- **Personajes:** los personajes archivados salen de la plantilla pero se conservan para que el historial de la hermandad siga intacto, hasta que se borre la hermandad o tu cuenta.
+- **Solicitudes:** las solicitudes pendientes y aceptadas se conservan en los registros de la hermandad hasta que se borre la hermandad o tu cuenta. **Las solicitudes retiradas y rechazadas se borran automáticamente {{applicationRetentionDays}} días** después de resolverse (o, si nunca se revisaron, de enviarse), y el nombre del aspirante se sustituye por «Usuario eliminado» en las entradas de auditoría que le afectan.
+- **Informes de Vigil:** hasta que los borres, o se borre tu pertenencia, la hermandad o tu cuenta.
+- **Solicitudes de soporte:** hasta que se borre tu cuenta. Las copias enviadas por correo al operador se conservan en su buzón el tiempo necesario para atender la solicitud.
+- **Dispositivos complementarios:** hasta que se borre la pertenencia, la hermandad o la cuenta. Los dispositivos revocados dejan de funcionar de inmediato.
+- **Registro de auditoría:** se conserva mientras exista la hermandad. Cuando se borra una cuenta, sus entradas se mantienen, desidentificadas como se describe más abajo.
+- **Contenido de la hermandad:** hasta que los líderes de la hermandad lo borren o se borre la hermandad. El propietario de una hermandad puede borrarla, con todos los datos de la hermandad de sus miembros y su registro de auditoría, desde los ajustes de la hermandad.
+- **Registros del alojamiento:** según se describe en Información técnica.
 
-## Your rights
+## Tus derechos
 
-Depending on where you live, you may have the right to:
+Según dónde vivas, puedes tener derecho a:
 
-- **access** the personal information we hold about you;
-- **export** it in a portable format;
-- **correct** it;
-- **delete** it;
-- **object to** or **restrict** some uses;
-- **withdraw consent** at any time, for example by unlinking Battle.net or making a Vigil report private again. This doesn't affect anything we did before you withdrew it.
+- **acceder** a la información personal que tenemos sobre ti;
+- **exportarla** en un formato portable;
+- **rectificarla**;
+- **suprimirla**;
+- **oponerte** a algunos usos o **limitarlos**;
+- **retirar tu consentimiento** en cualquier momento, por ejemplo desvinculando Battle.net o volviendo a hacer privado un informe de Vigil. Esto no afecta a nada de lo que hicimos antes de que lo retiraras.
 
-Most of this you can do yourself:
+La mayor parte puedes hacerlo tú mismo:
 
-- **Export your data:** on guildbook.io/account, "Download my data" gives you a JSON file with your profile, memberships, characters, applications, Vigil reports, devices, support requests and the audit entries you made.
-- **Delete your account:** on guildbook.io/account, type your name to confirm. If you're the only admin of a guild that has other members, you'll be asked to promote another member to an admin rank (or delete the guild) first. A guild where you're the only member is deleted along with your account.
-- Edit or archive your characters, withdraw pending applications, change the visibility of or delete Vigil reports, revoke companion devices, and unlink Battle.net.
+- **Exportar tus datos:** en guildbook.io/account, «Descargar mis datos» te da un archivo JSON con tu perfil, tus pertenencias, tus personajes, tus solicitudes, tus informes de Vigil, tus dispositivos, tus solicitudes de soporte y las entradas de auditoría que generaste.
+- **Borrar tu cuenta:** en guildbook.io/account, escribe tu nombre para confirmar. Si eres el único administrador de una hermandad que tiene otros miembros, se te pedirá que primero asciendas a otro miembro a un rango de administrador (o que borres la hermandad). Una hermandad en la que eres el único miembro se borra junto con tu cuenta.
+- Editar o archivar tus personajes, retirar solicitudes pendientes, cambiar la visibilidad de tus informes de Vigil o borrarlos, revocar dispositivos complementarios y desvincular Battle.net.
 
-For anything else, email [matt.rosendin@gmail.com](mailto:matt.rosendin@gmail.com) from the address on your Discord account, or tell us your Discord username so we can confirm it's you. We'll respond within 7 days.
+Para cualquier otra cosa, escribe a [matt.rosendin@gmail.com](mailto:matt.rosendin@gmail.com) desde la dirección de tu cuenta de Discord, o dinos tu nombre de usuario de Discord para que podamos confirmar que eres tú. Responderemos en un plazo de 7 días.
 
-When you delete your account, we delete your profile, Discord sign-in, memberships, characters, applications, Vigil reports and preferences, companion devices, support requests and Battle.net link and token. Guild content you edited as an officer stays with the guild, without your name attached. **Audit log entries are de-identified:** each entry is kept with its action and date, but you're shown as "Deleted user" and your name, character names, BattleTag and Discord handle in it are replaced with "Deleted user". Copies in our database provider's backups expire on its normal backup schedule.
+Cuando borras tu cuenta, borramos tu perfil, tu inicio de sesión de Discord, tus pertenencias, tus personajes, tus solicitudes, tus informes y preferencias de Vigil, tus dispositivos complementarios, tus solicitudes de soporte y tu vínculo y token de Battle.net. El contenido de la hermandad que editaste como oficial se queda con la hermandad, sin tu nombre. **Las entradas del registro de auditoría se desidentifican:** cada entrada se conserva con su acción y su fecha, pero apareces como «Usuario eliminado», y tu nombre, los nombres de tus personajes, tu BattleTag y tu usuario de Discord que figuren en ella se sustituyen por «Usuario eliminado». Las copias en las copias de seguridad de nuestro proveedor de base de datos caducan según su calendario normal de copias de seguridad.
 
-You can also complain to your local data protection authority.
+También puedes presentar una reclamación ante tu autoridad local de protección de datos.
 
-## Children
+## Menores
 
-Guildbook is not for children under 13, and you must also meet Discord's minimum age where you live. We don't knowingly collect information from anyone under 13. If you believe a child under 13 is using Guildbook, contact us and we'll delete the account.
+Guildbook no está pensado para menores de 13 años, y además debes cumplir la edad mínima de Discord donde vivas. No recogemos a sabiendas información de nadie menor de 13 años. Si crees que un menor de 13 años está usando Guildbook, contacta con nosotros y borraremos la cuenta.
 
-## Security
+## Seguridad
 
-We protect your information with:
+Protegemos tu información con:
 
-- HTTPS for all traffic;
-- signed, HTTP-only session cookies;
-- AES-256-GCM encryption for Battle.net access tokens;
-- storing only hashes of companion pairing codes and device tokens;
-- access controls that keep each guild's data separate and limit applications, the audit log and shared reports to the right ranks;
-- one-time, 60-second tokens when signing you in to a guild's custom domain;
-- rate limiting on companion pairing, Vigil uploads from the companion, and guild creation.
+- HTTPS para todo el tráfico;
+- cookies de sesión firmadas y solo HTTP;
+- cifrado AES-256-GCM para los tokens de acceso de Battle.net;
+- guardando solo hashes de los códigos de emparejamiento y de los tokens de dispositivo de la app complementaria;
+- controles de acceso que mantienen separados los datos de cada hermandad y limitan las solicitudes, el registro de auditoría y los informes compartidos a los rangos adecuados;
+- tokens de un solo uso de 60 segundos al iniciar tu sesión en el dominio propio de una hermandad;
+- límites de uso en el emparejamiento de la app complementaria, en las subidas de Vigil desde la app complementaria y en la creación de hermandades.
 
-No system is perfectly secure. If a breach affects your personal information, we'll notify you and the authorities as the law requires.
+Ningún sistema es perfectamente seguro. Si una brecha afecta a tu información personal, te lo notificaremos a ti y a las autoridades según exija la ley.
 
 ## Cookies
 
-We use **only essential cookies**, needed for sign-in and security:
+Usamos **solo cookies esenciales**, necesarias para iniciar sesión y para la seguridad:
 
-- **Session cookie** (`authjs.session-token`): a signed, encrypted token (JWT) that keeps you signed in, for up to 30 days. It's shared across guildbook.io and its guild subdomains so you only sign in once. A guild on a custom domain gets its own session cookie for that domain.
-- **Sign-in security cookies** set by our sign-in library (such as `authjs.csrf-token`, `authjs.callback-url`, and short-lived OAuth state cookies) to protect the Discord sign-in flow.
-- **Battle.net linking cookie** (`bnet_oauth`): protects the Battle.net linking flow and expires after 10 minutes.
+- **Cookie de sesión** (`authjs.session-token`): un token firmado y cifrado (JWT) que mantiene tu sesión iniciada, durante un máximo de 30 días. Se comparte entre guildbook.io y los subdominios de las hermandades para que solo tengas que iniciar sesión una vez. Una hermandad en un dominio propio tiene su propia cookie de sesión para ese dominio.
+- **Cookies de seguridad del inicio de sesión** que pone nuestra biblioteca de inicio de sesión (como `authjs.csrf-token`, `authjs.callback-url` y cookies de estado de OAuth de corta duración) para proteger el proceso de inicio de sesión con Discord.
+- **Cookie de vinculación de Battle.net** (`bnet_oauth`): protege el proceso de vinculación de Battle.net y caduca a los 10 minutos.
 
-We don't use analytics, advertising or tracking cookies, and we don't use third-party trackers. Because these cookies are essential, we don't ask for consent to them. Blocking them will stop you signing in.
+No usamos cookies de analítica, de publicidad ni de seguimiento, ni rastreadores de terceros. Como estas cookies son esenciales, no pedimos consentimiento para ellas. Si las bloqueas, no podrás iniciar sesión.
 
-## Changes to this policy
+## Cambios en esta política
 
-We may update this policy. When we do, we'll change the "Last updated" date above, and for significant changes we'll try to give notice on the site before they take effect.
+Podemos actualizar esta política. Cuando lo hagamos, cambiaremos la fecha de "Última actualización" de arriba y, en los cambios importantes, intentaremos avisar en el sitio antes de que entren en vigor.
 
-## Contact
+## Contacto
 
-Questions or requests about your privacy: [matt.rosendin@gmail.com](mailto:matt.rosendin@gmail.com).
+Preguntas o peticiones sobre tu privacidad: [matt.rosendin@gmail.com](mailto:matt.rosendin@gmail.com).
