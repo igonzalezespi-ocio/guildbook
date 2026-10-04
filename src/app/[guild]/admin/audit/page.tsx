@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { EmptyState, PageHeader } from "@/components/ui";
 import { db } from "@/db";
-import { formatDateTime } from "@/lib/format";
+import { formatDateTime, shownName } from "@/lib/format";
 import { guildHref } from "@/lib/paths";
 import { requirePage } from "@/server/context";
 import { listAuditLog } from "@/server/services/content";
@@ -22,10 +22,10 @@ export default async function AuditPage({ params }: PageProps<"/[guild]/admin/au
           <li key={entry.id} className="panel p-3 text-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span>
-                <span className="font-semibold text-gold">{actorName ?? "Sistema"}</span>
+                <span className="font-semibold text-gold">{actorName ? shownName(actorName) : "Sistema"}</span>
                 {actorDiscord && <span className="text-muted"> @{actorDiscord}</span>}
                 <span className="ml-2 rounded bg-ink px-1.5 py-0.5 font-mono text-xs">{entry.action}</span>
-                {targetName && <span className="ml-2">{targetName}</span>}
+                {targetName && <span className="ml-2">{shownName(targetName)}</span>}
               </span>
               <time className="text-xs text-muted" dateTime={entry.createdAt.toISOString()}>
                 {formatDateTime(entry.createdAt, guild.timezone)}

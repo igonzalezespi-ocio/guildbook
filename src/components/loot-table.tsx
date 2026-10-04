@@ -2,14 +2,14 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { BlizzardItemAttribution, ItemLink } from "@/components/item-link";
 import { CharacterLink, EmptyState, Tag } from "@/components/ui";
-import { formatCalendarDate } from "@/lib/format";
+import { formatCalendarDate, shownName } from "@/lib/format";
 import { LOOT_RESPONSE_LABELS, NO_RECIPIENT_RESPONSES } from "@/lib/loot/constants";
 import { guildHref } from "@/lib/paths";
 import type { LootRow } from "@/server/services/loot";
 
 function Recipient({ slug, row }: { slug: string; row: LootRow }) {
   if (row.character) return <CharacterLink guildSlug={slug} character={row.character} />;
-  if (row.recipientName) return <span className="text-bone">{row.recipientName}</span>;
+  if (row.recipientName) return <span className="text-bone">{shownName(row.recipientName)}</span>;
   return <span className="text-muted">{NO_RECIPIENT_RESPONSES.has(row.response) ? LOOT_RESPONSE_LABELS[row.response] : "Desconocido"}</span>;
 }
 
@@ -71,7 +71,7 @@ export function LootTable({
                         {row.reversal.reason}
                       </p>
                     )}
-                    {row.note && !reversed && <p className="mt-1 text-xs text-muted italic">{row.note}</p>}
+                    {row.note && !reversed && <p className="mt-1 text-xs text-muted italic">{shownName(row.note)}</p>}
                   </td>
                   {showRecipient && (
                     <td className={`py-2 pr-4 ${reversed ? "line-through opacity-60" : ""}`}>
