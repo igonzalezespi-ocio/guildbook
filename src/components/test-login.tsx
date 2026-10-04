@@ -5,9 +5,9 @@ import { signInForTests } from "@/server/actions/member";
 import { listTestAccounts, nextRecruitId, type TestAccount } from "@/server/test-accounts";
 
 const GROUP_LABELS: Record<TestAccount["group"], string> = {
-  member: "Members",
-  applicant: "Applicants",
-  other: "Other seeded accounts",
+  member: "Miembros",
+  applicant: "Aspirantes",
+  other: "Otras cuentas de prueba",
 };
 
 function QuickPick({ account, callbackUrl }: { account: Pick<TestAccount, "discordId" | "name" | "displayName" | "standing">; callbackUrl: string }) {
@@ -54,19 +54,19 @@ export async function TestLogin({
   return (
     <div className="mt-6 w-full space-y-3 border-t border-line pt-4 text-left" data-testid="test-login">
       <div className="flex items-center justify-center gap-2">
-        <Tag>Test mode</Tag>
-        <p className="text-xs text-muted">Pick an account to sign in</p>
+        <Tag>Modo de prueba</Tag>
+        <p className="text-xs text-muted">Elige una cuenta para iniciar sesión</p>
       </div>
       {currentName !== null && (
         <p className="text-center text-xs text-bone" data-testid="test-login-current">
-          Signed in as {currentName}. Signing in again switches accounts.
+          Sesión iniciada como {currentName}. Si vuelves a iniciar sesión, cambias de cuenta.
         </p>
       )}
 
       <div className="max-h-80 overflow-y-auto rounded border border-line bg-ink" data-testid="test-login-accounts">
         <ul className="divide-y divide-line">
           <QuickPick
-            account={{ discordId: recruitId, name: `Recruit ${recruitNumber}`, displayName: "New recruit", standing: "Unused account" }}
+            account={{ discordId: recruitId, name: `Recruit ${recruitNumber}`, displayName: "Nuevo recluta", standing: "Cuenta sin usar" }}
             callbackUrl={callbackUrl}
           />
         </ul>
@@ -86,15 +86,15 @@ export async function TestLogin({
 
       <form action={signInForTests} className="space-y-2" data-testid="test-login-other">
         <label className="field-label" htmlFor="test-login-discord-id">
-          Other ID
+          Otro ID
         </label>
         <div className="flex gap-2">
-          <input id="test-login-discord-id" name="discordId" placeholder="Discord ID" className="field" autoComplete="off" required />
-          <input name="name" placeholder="Name" aria-label="Name" className="field" autoComplete="off" required />
+          <input id="test-login-discord-id" name="discordId" placeholder="ID de Discord" className="field" autoComplete="off" required />
+          <input name="name" placeholder="Nombre" aria-label="Nombre" className="field" autoComplete="off" required />
         </div>
         <input type="hidden" name="callbackUrl" value={callbackUrl} />
         <button type="submit" className="btn btn-ghost w-full">
-          Test sign in
+          Entrar (prueba)
         </button>
       </form>
     </div>

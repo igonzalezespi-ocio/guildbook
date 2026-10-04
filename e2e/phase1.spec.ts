@@ -111,7 +111,7 @@ test("a tester already signed in with a mistyped ID can switch to seed-tor from 
 
   await page.goto("/login");
   const form = page.getByTestId("test-login");
-  await expect(form.getByTestId("test-login-current")).toContainText("Signed in as Typo");
+  await expect(form.getByTestId("test-login-current")).toContainText("Sesión iniciada como Typo");
   await expect(form.locator("datalist")).toHaveCount(0);
   await form.getByRole("button", { name: "Tor Whitecross, Grand Master (seed-tor)" }).click();
   await page.waitForURL((url) => !url.pathname.startsWith("/login"));
@@ -131,14 +131,14 @@ test("the test login quick-pick lists seeded accounts and signs in a fresh recru
   await expect(accounts.getByRole("button", { name: "Ironvow Thornwall, Marshal (seed-ironvow)" })).toBeVisible();
   await expect(accounts.getByRole("button", { name: /^Francis Greyfriar, .+ \(seed-francis\)$/ })).toBeVisible();
 
-  const recruit = accounts.getByRole("button", { name: /^New recruit, Unused account \(recruit-\d+\)$/ });
+  const recruit = accounts.getByRole("button", { name: /^Nuevo recluta, Cuenta sin usar \(recruit-\d+\)$/ });
   const recruitId = (await recruit.getAttribute("aria-label"))!.match(/recruit-(\d+)/)![1];
   await recruit.click();
   await page.waitForURL((url) => !url.pathname.startsWith("/login"));
 
   await page.goto("/login");
-  await expect(page.getByTestId("test-login-current")).toContainText(`Signed in as Recruit ${recruitId}.`);
-  const nextLabel = await accounts.getByRole("button", { name: /^New recruit, / }).getAttribute("aria-label");
+  await expect(page.getByTestId("test-login-current")).toContainText(`Sesión iniciada como Recruit ${recruitId}.`);
+  const nextLabel = await accounts.getByRole("button", { name: /^Nuevo recluta, / }).getAttribute("aria-label");
   expect(Number(nextLabel!.match(/recruit-(\d+)/)![1])).toBeGreaterThan(Number(recruitId));
 });
 
@@ -152,12 +152,12 @@ test("apply, officer accepts, new member appears on the roster", async ({ page, 
   await signIn(page, applicantId, characterName, "/apply");
   const charterLine = page.getByText("before applying.");
   await expect(charterLine).toBeVisible();
-  await page.getByLabel("First name").fill(characterName);
-  await page.getByLabel("Surname").fill("Faithful");
-  await expect(page.getByLabel("Faction", { exact: true })).toHaveCount(0);
-  await chooseOption(page.getByLabel("Class", { exact: true }), "paladin");
-  await chooseOption(page.getByLabel("Spec", { exact: true }), "Protection");
-  await chooseOption(page.getByLabel("Raid role", { exact: true }), "tank");
+  await page.getByLabel("Nombre", { exact: true }).fill(characterName);
+  await page.getByLabel("Apellido").fill("Faithful");
+  await expect(page.getByLabel("Facción", { exact: true })).toHaveCount(0);
+  await chooseOption(page.getByLabel("Clase", { exact: true }), "paladin");
+  await chooseOption(page.getByLabel("Especialización", { exact: true }), "Protection");
+  await chooseOption(page.getByLabel("Rol en banda", { exact: true }), "tank");
   await page.getByLabel("Raid experience").fill("Main tank through Naxxramas in Classic Era.");
   await page.getByLabel("Availability").fill("Sundays 7-10 PM Eastern.");
   await page.getByLabel("Why the Order of Saint Michael?").fill("A guild that raids well and keeps the faith.");
@@ -227,12 +227,12 @@ test("a member registers an alt and makes it their main", async ({ page }) => {
   const alt = randomCharacterName();
   await signIn(page, "seed-perpetua", "Perpetua", "/members/characters");
   await page.getByRole("link", { name: "Register character" }).click();
-  await page.getByLabel("First name").fill(alt);
-  await page.getByLabel("Surname").fill("Oakenfield");
-  await chooseOption(page.getByLabel("Class", { exact: true }), "hunter");
-  await chooseOption(page.getByLabel("Spec", { exact: true }), "Beast Mastery");
-  await chooseOption(page.getByLabel("Raid role", { exact: true }), "ranged");
-  await page.getByLabel("Level", { exact: true }).fill("60");
+  await page.getByLabel("Nombre", { exact: true }).fill(alt);
+  await page.getByLabel("Apellido").fill("Oakenfield");
+  await chooseOption(page.getByLabel("Clase", { exact: true }), "hunter");
+  await chooseOption(page.getByLabel("Especialización", { exact: true }), "Beast Mastery");
+  await chooseOption(page.getByLabel("Rol en banda", { exact: true }), "ranged");
+  await page.getByLabel("Nivel", { exact: true }).fill("60");
   await page.getByRole("checkbox", { name: "Herbalism" }).check();
   await page.getByRole("button", { name: "Register" }).click();
   await expect(page).toHaveURL(/\/members\/characters$/);

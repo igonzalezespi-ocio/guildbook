@@ -16,9 +16,9 @@ async function signInOnApex(page: Page, discordId: string, name: string, callbac
   await page.context().clearCookies();
   await page.goto(`${APEX}/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   const form = page.getByTestId("test-login-other");
-  await form.getByPlaceholder("Discord ID").fill(discordId);
-  await form.getByPlaceholder("Name").fill(name);
-  await form.getByRole("button", { name: "Test sign in" }).click();
+  await form.getByPlaceholder("ID de Discord").fill(discordId);
+  await form.getByPlaceholder("Nombre").fill(name);
+  await form.getByRole("button", { name: "Entrar (prueba)" }).click();
   await page.waitForURL((url) => !url.pathname.startsWith("/login"));
 }
 
@@ -42,11 +42,11 @@ test.describe("Game versions", () => {
     await expect(page.getByTestId("slug-status")).toHaveText("Available");
     // The realm sets the ruleset; Europe offers only its own realms.
     await page.getByLabel(/^Europe/).check();
-    await expect(page.getByTestId("realm-ruleset")).toHaveText("The realm sets the ruleset.");
+    await expect(page.getByTestId("realm-ruleset")).toHaveText("El reino define el tipo de reino.");
     await chooseOption(page.getByLabel("Realm"), "spineshatter");
-    await expect(page.getByTestId("realm-ruleset")).toContainText("PvP");
+    await expect(page.getByTestId("realm-ruleset")).toContainText("JcJ");
     await page.getByLabel(/^Americas/).check();
-    await expect(page.getByTestId("realm-ruleset")).toHaveText("The realm sets the ruleset.");
+    await expect(page.getByTestId("realm-ruleset")).toHaveText("El reino define el tipo de reino.");
     await chooseOption(page.getByLabel("Realm"), "dreamscythe");
     await expect(page.getByTestId("realm-ruleset")).toContainText("Normal");
     await page.getByLabel("Horde").check();

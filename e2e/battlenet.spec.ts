@@ -33,15 +33,15 @@ test("an applicant links Battle.net, picks a character, and the officer sees it 
   // A click that lands before hydration is reset by React, so retry until the form follows the choice.
   await expect(async () => {
     await application.getByRole("radio", { name: /Brenna/ }).check();
-    await expect(application.getByLabel("First name")).toHaveValue("Brenna", { timeout: 1000 });
+    await expect(application.getByLabel("Nombre", { exact: true })).toHaveValue("Brenna", { timeout: 1000 });
   }).toPass();
-  await expect(application.getByLabel("First name")).toHaveAttribute("readonly", "");
-  await expect(application.getByLabel("Level", { exact: true })).toHaveValue("42");
-  await expect(application.getByLabel("Class", { exact: true })).toHaveValue("Priest");
+  await expect(application.getByLabel("Nombre", { exact: true })).toHaveAttribute("readonly", "");
+  await expect(application.getByLabel("Nivel", { exact: true })).toHaveValue("42");
+  await expect(application.getByLabel("Clase", { exact: true })).toHaveValue("Sacerdote");
   await expect(application.getByLabel("Realm", { exact: true })).toHaveCount(0);
-  await application.getByLabel("Surname").fill(surname);
-  await chooseOption(application.getByLabel("Spec", { exact: true }), "Holy");
-  await chooseOption(application.getByLabel("Raid role", { exact: true }), "healer");
+  await application.getByLabel("Apellido").fill(surname);
+  await chooseOption(application.getByLabel("Especialización", { exact: true }), "Holy");
+  await chooseOption(application.getByLabel("Rol en banda", { exact: true }), "healer");
   await fillFreeText(application, applicantId);
   await application.getByRole("button", { name: "Submit application" }).click();
   await expect(page.getByRole("heading", { name: "Your application" })).toBeInViewport();
@@ -74,11 +74,11 @@ test("without Battle.net, manual entry still works and the officer sees it unver
 
   await expect(page.getByRole("link", { name: "Link Battle.net" })).toBeVisible();
   await expect(page.getByRole("radio")).toHaveCount(0);
-  await page.getByLabel("First name").fill(name);
-  await page.getByLabel("Surname").fill("Handwritten");
-  await chooseOption(page.getByLabel("Class", { exact: true }), "mage");
-  await chooseOption(page.getByLabel("Spec", { exact: true }), "Frost");
-  await chooseOption(page.getByLabel("Raid role", { exact: true }), "ranged");
+  await page.getByLabel("Nombre", { exact: true }).fill(name);
+  await page.getByLabel("Apellido").fill("Handwritten");
+  await chooseOption(page.getByLabel("Clase", { exact: true }), "mage");
+  await chooseOption(page.getByLabel("Especialización", { exact: true }), "Frost");
+  await chooseOption(page.getByLabel("Rol en banda", { exact: true }), "ranged");
   await fillFreeText(page, applicantId);
   await page.getByRole("button", { name: "Submit application" }).click();
   await expect(page.getByRole("heading", { name: "Your application" })).toBeInViewport();

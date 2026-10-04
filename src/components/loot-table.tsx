@@ -10,7 +10,7 @@ import type { LootRow } from "@/server/services/loot";
 function Recipient({ slug, row }: { slug: string; row: LootRow }) {
   if (row.character) return <CharacterLink guildSlug={slug} character={row.character} />;
   if (row.recipientName) return <span className="text-bone">{row.recipientName}</span>;
-  return <span className="text-muted">{NO_RECIPIENT_RESPONSES.has(row.response) ? LOOT_RESPONSE_LABELS[row.response] : "Unknown"}</span>;
+  return <span className="text-muted">{NO_RECIPIENT_RESPONSES.has(row.response) ? LOOT_RESPONSE_LABELS[row.response] : "Desconocido"}</span>;
 }
 
 /** The ledger as a table. Reversed awards stay visible, struck through, with the reason. */
@@ -20,7 +20,7 @@ export function LootTable({
   showDate = true,
   showRecipient = true,
   actions,
-  empty = "No loot recorded yet.",
+  empty = "Aún no hay botín registrado.",
 }: {
   slug: string;
   rows: LootRow[];
@@ -37,13 +37,13 @@ export function LootTable({
         <table className="w-full text-left text-sm">
           <thead className="text-xs tracking-wider text-muted uppercase">
             <tr className="border-b border-line">
-              {showDate && <th className="py-2 pr-4 font-normal">Raid</th>}
-              <th className="py-2 pr-4 font-normal">Item</th>
-              {showRecipient && <th className="py-2 pr-4 font-normal">Recipient</th>}
-              <th className="py-2 pr-4 font-normal">Awarded for</th>
-              <th className="py-2 pr-4 font-normal">Boss</th>
+              {showDate && <th className="py-2 pr-4 font-normal">Banda</th>}
+              <th className="py-2 pr-4 font-normal">Objeto</th>
+              {showRecipient && <th className="py-2 pr-4 font-normal">Destinatario</th>}
+              <th className="py-2 pr-4 font-normal">Motivo</th>
+              <th className="py-2 pr-4 font-normal">Jefe</th>
               {actions && <th className="py-2 font-normal">
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">Acciones</span>
               </th>}
             </tr>
           </thead>
@@ -67,7 +67,7 @@ export function LootTable({
                     </div>
                     {row.reversal && (
                       <p className="mt-1 text-xs text-muted">
-                        <Tag className="mr-1.5">Reversed</Tag>
+                        <Tag className="mr-1.5">Anulada</Tag>
                         {row.reversal.reason}
                       </p>
                     )}
@@ -88,7 +88,7 @@ export function LootTable({
                     )}
                   </td>
                   <td className="py-2 pr-4 text-muted">
-                    {row.bossName ?? "Unknown"}
+                    {row.bossName ?? "Desconocido"}
                     {row.instanceName && <span className="block text-xs">{row.instanceName}</span>}
                   </td>
                   {actions && <td className="py-2">{actions(row)}</td>}

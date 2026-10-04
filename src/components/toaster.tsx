@@ -29,7 +29,7 @@ export function Toaster() {
 
   return (
     <section
-      aria-label="Notifications"
+      aria-label="Notificaciones"
       className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex justify-center px-4 sm:inset-x-auto sm:top-18 sm:right-4 sm:bottom-auto sm:px-0"
     >
       <ol className="flex w-full max-w-sm flex-col gap-2">
@@ -78,7 +78,7 @@ function ToastItem({ toast }: { toast: Toast }) {
       <button
         type="button"
         onClick={() => toastStore.dismiss(toast.id)}
-        aria-label="Dismiss notification"
+        aria-label="Cerrar notificación"
         className="-my-1 flex size-8 shrink-0 items-center justify-center rounded text-muted hover:bg-gold/10 hover:text-gold focus-visible:outline-2 focus-visible:outline-gold-dim"
       >
         <svg viewBox="0 0 16 16" className="size-3.5" aria-hidden="true">

@@ -12,9 +12,9 @@ async function signInOnApex(page: Page, discordId: string, name: string, callbac
   await page.context().clearCookies();
   await page.goto(`${APEX}/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   const form = page.getByTestId("test-login-other");
-  await form.getByPlaceholder("Discord ID").fill(discordId);
-  await form.getByPlaceholder("Name").fill(name);
-  await form.getByRole("button", { name: "Test sign in" }).click();
+  await form.getByPlaceholder("ID de Discord").fill(discordId);
+  await form.getByPlaceholder("Nombre").fill(name);
+  await form.getByRole("button", { name: "Entrar (prueba)" }).click();
   await page.waitForURL((url) => !url.pathname.startsWith("/login"));
 }
 

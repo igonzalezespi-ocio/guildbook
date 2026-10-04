@@ -16,9 +16,9 @@ async function createGuild(page: Page, slug: string, name: string) {
   await page.context().clearCookies();
   await page.goto(`${APEX}/login?callbackUrl=${encodeURIComponent("/create")}`);
   const form = page.getByTestId("test-login-other");
-  await form.getByPlaceholder("Discord ID").fill(`e2e-tabard-${slug}`);
-  await form.getByPlaceholder("Name").fill("Founder");
-  await form.getByRole("button", { name: "Test sign in" }).click();
+  await form.getByPlaceholder("ID de Discord").fill(`e2e-tabard-${slug}`);
+  await form.getByPlaceholder("Nombre").fill("Founder");
+  await form.getByRole("button", { name: "Entrar (prueba)" }).click();
   await page.waitForURL(`${APEX}/create`);
   await page.getByLabel("Guild name").fill(name);
   await page.getByLabel("Subdomain").fill(slug);

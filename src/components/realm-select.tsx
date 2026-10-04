@@ -52,9 +52,9 @@ export function RealmSelect({
           setUncontrolled(v);
           onChange?.(v);
         }}
-        placeholder="Choose a realm"
+        placeholder="Elige un reino"
         required
-        requiredMessage="Choose your guild's realm"
+        requiredMessage="Elige el reino de tu hermandad"
         disabled={disabled}
         data-testid="realm-select"
       />
@@ -63,11 +63,11 @@ export function RealmSelect({
           <>
             <RulesetIcon ruleset={chosen.ruleset} size={13} className="text-gold-dim" />
             <span>
-              Ruleset: <span className="text-bone">{RULESET_INFO[chosen.ruleset].label}</span>, set by the realm
+              Tipo de reino: <span className="text-bone">{RULESET_INFO[chosen.ruleset].label}</span>, según el reino
             </span>
           </>
         ) : (
-          "The realm sets the ruleset."
+          "El reino define el tipo de reino."
         )}
       </p>
     </div>

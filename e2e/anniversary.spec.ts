@@ -24,9 +24,9 @@ async function createAnniversaryGuild(page: Page, roles: string, realm = "dreams
   await page.context().clearCookies();
   await page.goto(`${APEX}/login?callbackUrl=${encodeURIComponent("/create")}`);
   const form = page.getByTestId("test-login-other");
-  await form.getByPlaceholder("Discord ID").fill(`e2e-${roles}-ann-guild-${tag}`);
-  await form.getByPlaceholder("Name").fill(`Founder ${tag}`);
-  await form.getByRole("button", { name: "Test sign in" }).click();
+  await form.getByPlaceholder("ID de Discord").fill(`e2e-${roles}-ann-guild-${tag}`);
+  await form.getByPlaceholder("Nombre").fill(`Founder ${tag}`);
+  await form.getByRole("button", { name: "Entrar (prueba)" }).click();
   await page.waitForURL((url) => !url.pathname.startsWith("/login"));
 
   await chooseOption(page.getByLabel("Game version"), "anniversary");
@@ -151,9 +151,9 @@ test.describe("TBC Anniversary", () => {
     await page.context().clearCookies();
     await page.goto(`${APEX}/login?callbackUrl=${encodeURIComponent(invite)}`);
     const form = page.getByTestId("test-login-other");
-    await form.getByPlaceholder("Discord ID").fill(`e2e-ann-member-ann-guild-${tag}`);
-    await form.getByPlaceholder("Name").fill(`Member ${tag}`);
-    await form.getByRole("button", { name: "Test sign in" }).click();
+    await form.getByPlaceholder("ID de Discord").fill(`e2e-ann-member-ann-guild-${tag}`);
+    await form.getByPlaceholder("Nombre").fill(`Member ${tag}`);
+    await form.getByRole("button", { name: "Entrar (prueba)" }).click();
     await page.waitForURL((url) => url.pathname === "/apply");
     await page.getByRole("link", { name: "Link Battle.net" }).click();
     await expect(page.getByTestId("battlenet-account")).toContainText(/Pilgrim#\d{4}/);
@@ -162,8 +162,8 @@ test.describe("TBC Anniversary", () => {
     await expect(join).toContainText("Mattaeis");
     await expect(join).toContainText(`<Mirkwood ${tag}>`);
     await expect(page.getByText("Or send an application for review instead")).toBeVisible();
-    await chooseOption(join.getByLabel("Spec"), "Marksmanship");
-    await chooseOption(join.getByLabel("Raid role"), "ranged");
+    await chooseOption(join.getByLabel("Especialización"), "Marksmanship");
+    await chooseOption(join.getByLabel("Rol en banda"), "ranged");
     if (shoot) await join.locator("xpath=ancestor::section[1]").screenshot({ path: `${SHOTS}/confirmed-join-offer.png` });
 
     // The charter must be accepted first.

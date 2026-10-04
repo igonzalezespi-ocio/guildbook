@@ -7,7 +7,7 @@ test("saving guild settings shows a success toast that can be dismissed", async 
   const toast = page.getByTestId("toast").filter({ hasText: "Guild settings saved." });
   await expect(toast).toBeVisible();
   await expect(toast).toHaveAttribute("role", "status");
-  await toast.getByRole("button", { name: "Dismiss notification" }).click();
+  await toast.getByRole("button", { name: "Cerrar notificación" }).click();
   await expect(toast).toHaveCount(0);
 });
 
