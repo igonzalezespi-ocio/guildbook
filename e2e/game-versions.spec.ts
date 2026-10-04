@@ -50,7 +50,7 @@ test.describe("Game versions", () => {
     await chooseOption(page.getByLabel("Reino", { exact: true }), "dreamscythe");
     await expect(page.getByTestId("realm-ruleset")).toContainText("Normal");
     await page.getByLabel("Horda").check();
-    await page.getByLabel(/public Guildbook directory/).check();
+    await page.getByLabel(/directorio público de Guildbook/).check();
     // The sticky site header would cover part of the form in an element screenshot.
     if (shoot) await page.addStyleTag({ content: "header { position: static !important; }" });
     if (shoot) await page.locator("form", { has: page.getByRole("button", { name: "Crear hermandad" }) }).screenshot({ path: `${SHOTS}/create-form-anniversary.png` });
