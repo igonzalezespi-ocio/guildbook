@@ -159,7 +159,7 @@ describe("device tokens", () => {
     expect((await listCompanionDevices(db, member)).map((d) => d.id)).toEqual([device.id]);
     expect(await listCompanionDevices(db, other)).toEqual([]);
 
-    await expect(revokeCompanionDevice(db, other, device.id)).rejects.toThrow("Device not found");
+    await expect(revokeCompanionDevice(db, other, device.id)).rejects.toThrow("No se ha encontrado el dispositivo");
     await revokeCompanionDevice(db, member, device.id);
     expect(await listCompanionDevices(db, member)).toEqual([]);
     await expect(authenticateDevice(db, token)).rejects.toMatchObject({ code: "unauthenticated" });
@@ -193,7 +193,7 @@ describe("companion upload API", () => {
     const { id, url } = await res.json();
     expect(url).toBe(`http://${guild.guild.slug}.localhost:3000/vigil/reports/${id}`);
     expect(await getVigilReport(db, member, id)).toMatchObject({ visibility: "private", fightLabel: "Rockhide Boar" });
-    await expect(getVigilReport(db, officer, id)).rejects.toThrow("Report not found");
+    await expect(getVigilReport(db, officer, id)).rejects.toThrow("No se ha encontrado el informe");
 
     await setVigilDefaultVisibility(db, member, "guild");
     const shared = await (await upload(token)).json();
@@ -201,7 +201,7 @@ describe("companion upload API", () => {
 
     const override = await (await upload(token, { visibility: "private" })).json();
     expect(await getVigilReport(db, member, override.id)).toMatchObject({ visibility: "private" });
-    await expect(getVigilReport(db, officer, override.id)).rejects.toThrow("Report not found");
+    await expect(getVigilReport(db, officer, override.id)).rejects.toThrow("No se ha encontrado el informe");
   });
 
   it("attaches the member's character by name and reports who the token belongs to", async () => {
@@ -251,8 +251,8 @@ describe("companion upload API", () => {
     const [row] = await db.select().from(vigilReports).where(eq(vigilReports.id, id));
     expect(row!.guildId).toBe(a.guild.id);
     expect(await listOwnVigilReports(db, memberInB)).toEqual([]);
-    await expect(getVigilReport(db, officerB, id)).rejects.toThrow("Report not found");
-    await expect(getVigilReport(db, memberInB, id)).rejects.toThrow("Report not found");
+    await expect(getVigilReport(db, officerB, id)).rejects.toThrow("No se ha encontrado el informe");
+    await expect(getVigilReport(db, memberInB, id)).rejects.toThrow("No se ha encontrado el informe");
   });
 
   it("validates reports with the upload schema and rate-limits each device", async () => {

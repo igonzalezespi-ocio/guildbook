@@ -31,7 +31,7 @@ import { DomainError, NotFoundError } from "@/server/errors";
 import { findItemByName, type ItemLookupClient, listKnownItems, recordItemFacts, resolveItems } from "@/server/services/items";
 
 /** Replaces a deleted user's name on their loot rows (same wording as the audit log's tombstone). */
-const TOMBSTONE = "Deleted user";
+const TOMBSTONE = "Usuario eliminado";
 /** Drafts nobody committed are deleted after this long; they hold pasted names. */
 const DRAFT_RETENTION_DAYS = 7;
 

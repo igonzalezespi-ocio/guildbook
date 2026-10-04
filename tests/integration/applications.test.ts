@@ -162,7 +162,7 @@ describe("characters", () => {
     const a = await createMember(db, guild, "Knight");
     const b = await createMember(db, guild, "Knight");
     const char = await createCharacter(db, a, { ...base, name: "Sebastian" });
-    await expect(setMainCharacter(db, b, char.id)).rejects.toThrow(/not found/);
+    await expect(setMainCharacter(db, b, char.id)).rejects.toThrow(/No se ha encontrado/);
   });
 
   it("uses the guild's faction when none is given", async () => {

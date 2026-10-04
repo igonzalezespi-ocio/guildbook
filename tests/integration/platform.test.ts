@@ -280,7 +280,7 @@ describe("subdomain suggestions", () => {
     const err = await createGuildForUser(db, other.id, form("dawnguard", { name: "Dawnguard", faction: "horde" }), limits).catch((e: unknown) => e);
     expect(actionError(err)).toEqual({
       ok: false,
-      error: "Please fix these fields:",
+      error: "Corrige estos campos:",
       fieldErrors: { slug: ["That subdomain is taken"] },
       suggestions: { slug: ["dawnguard-horde"] },
     });
@@ -289,7 +289,7 @@ describe("subdomain suggestions", () => {
   it("reports validation failures per field, including fields a form might not render", async () => {
     const user = await newUser();
     const err = await createGuildForUser(db, user.id, form("no-region-field", { region: "" }), limits).catch((e: unknown) => e);
-    expect(actionError(err)).toMatchObject({ ok: false, error: "Please fix these fields:", fieldErrors: { region: ["Elige la región de tu hermandad"] } });
+    expect(actionError(err)).toMatchObject({ ok: false, error: "Corrige estos campos:", fieldErrors: { region: ["Elige la región de tu hermandad"] } });
   });
 });
 

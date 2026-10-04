@@ -134,7 +134,7 @@ describe("audit redaction guard", () => {
 });
 
 describe("account deletion", () => {
-  it("removes the user's data, keeps audit rows and replaces their identity with Deleted user", async () => {
+  it("removes the user's data, keeps audit rows and replaces their identity with Usuario eliminado", async () => {
     const guild = await createGuild(db);
     const marshal = await createMember(db, guild, "Marshal");
     await createCharacter(db, marshal, { ...character, name: "Ironvow", surname: "Thornwall" });

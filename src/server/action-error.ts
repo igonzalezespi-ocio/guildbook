@@ -9,14 +9,14 @@ export function actionError(err: unknown): ActionResult {
     const flat = z.flattenError(err);
     return {
       ok: false,
-      error: flat.formErrors[0] ?? "Please fix these fields:",
+      error: flat.formErrors[0] ?? "Corrige estos campos:",
       fieldErrors: flat.fieldErrors as Record<string, string[] | undefined>,
     };
   }
   if (err instanceof DomainError && err.field) {
     return {
       ok: false,
-      error: "Please fix these fields:",
+      error: "Corrige estos campos:",
       fieldErrors: { [err.field]: [err.message] },
       ...(err.suggestions?.length ? { suggestions: { [err.field]: err.suggestions } } : {}),
     };

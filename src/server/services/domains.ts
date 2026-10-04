@@ -32,9 +32,9 @@ export function dnsInstructions(domain: GuildDomain) {
   const isApex = domain.domain.split(".").length === 2;
   return [
     isApex
-      ? { type: "A", name: "@", value: VERCEL_A_RECORD, purpose: "Points the domain at Guildbook" }
-      : { type: "CNAME", name: domain.domain.split(".")[0]!, value: VERCEL_CNAME, purpose: "Points the domain at Guildbook" },
-    { type: "TXT", name: `${TXT_PREFIX}.${domain.domain}`, value: `${TXT_VALUE_PREFIX}${domain.verificationToken}`, purpose: "Proves the guild controls the domain" },
+      ? { type: "A", name: "@", value: VERCEL_A_RECORD, purpose: "Apunta el dominio a Guildbook" }
+      : { type: "CNAME", name: domain.domain.split(".")[0]!, value: VERCEL_CNAME, purpose: "Apunta el dominio a Guildbook" },
+    { type: "TXT", name: `${TXT_PREFIX}.${domain.domain}`, value: `${TXT_VALUE_PREFIX}${domain.verificationToken}`, purpose: "Demuestra que la hermandad controla el dominio" },
   ];
 }
 
@@ -56,7 +56,7 @@ export async function listGuildDomains(db: Db, guildId: string): Promise<GuildDo
 function assertNotPlatformDomain(domain: string, hosts: HostConfig) {
   const own = [hosts.rootDomain, ...hosts.altDomains, LOCAL_ROOT, "vercel.app"];
   if (own.some((d) => domain === d || domain.endsWith(`.${d}`))) {
-    throw new DomainError("Use a domain you own. Guildbook subdomains are set by the guild's slug.");
+    throw new DomainError("Usa un dominio que sea tuyo. Los subdominios de Guildbook dependen del identificador de la hermandad.");
   }
 }
 
@@ -65,7 +65,7 @@ export async function addGuildDomain(db: Db, actor: Actor, raw: unknown, deps: D
   const { domain } = customDomainInput.parse(raw);
   assertNotPlatformDomain(domain, deps.hosts ?? hostConfigFromEnv());
   const [{ n } = { n: 0 }] = await db.select({ n: count() }).from(guildDomains).where(eq(guildDomains.guildId, actor.guildId));
-  if (n >= MAX_DOMAINS_PER_GUILD) throw new DomainError(`A guild can connect up to ${MAX_DOMAINS_PER_GUILD} domains.`);
+  if (n >= MAX_DOMAINS_PER_GUILD) throw new DomainError(`Una hermandad puede conectar hasta ${MAX_DOMAINS_PER_GUILD} dominios.`);
 
   let row: GuildDomain;
   try {
@@ -78,7 +78,7 @@ export async function addGuildDomain(db: Db, actor: Actor, raw: unknown, deps: D
       return inserted!;
     });
   } catch (err) {
-    if (isUniqueViolation(err)) throw new DomainError("That domain is already connected to a guild.");
+    if (isUniqueViolation(err)) throw new DomainError("Ese dominio ya está conectado a una hermandad.");
     throw err;
   }
 
@@ -86,7 +86,7 @@ export async function addGuildDomain(db: Db, actor: Actor, raw: unknown, deps: D
     try {
       await deps.provider.add(domain);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Could not add the domain to the hosting project";
+      const message = err instanceof Error ? err.message : "No se ha podido añadir el dominio al proyecto de alojamiento";
       [row] = await db.update(guildDomains).set({ lastError: message }).where(eq(guildDomains.id, row.id)).returning() as [GuildDomain];
     }
   }
@@ -113,7 +113,7 @@ export async function verifyGuildDomain(db: Db, actor: Actor, id: string, deps: 
 
   const problems: string[] = [];
   if (!(await hasTxtToken(domain, deps.resolveTxt))) {
-    problems.push(`TXT record ${TXT_PREFIX}.${domain.domain} not found yet`);
+    problems.push(`Aún no se encuentra el registro TXT ${TXT_PREFIX}.${domain.domain}`);
   }
   if (deps.provider) {
     try {
@@ -125,13 +125,13 @@ export async function verifyGuildDomain(db: Db, actor: Actor, id: string, deps: 
       if (!status.verified) {
         problems.push(
           status.challenges.length
-            ? `Vercel asks for TXT ${status.challenges.map((c) => `${c.domain} = ${c.value}`).join(", ")}`
-            : "Vercel has not verified the domain yet",
+            ? `Vercel pide TXT ${status.challenges.map((c) => `${c.domain} = ${c.value}`).join(", ")}`
+            : "Vercel aún no ha verificado el dominio",
         );
       }
-      if (status.misconfigured) problems.push("DNS does not point at Guildbook yet");
+      if (status.misconfigured) problems.push("El DNS aún no apunta a Guildbook");
     } catch (err) {
-      problems.push(err instanceof Error ? err.message : "The hosting provider check failed");
+      problems.push(err instanceof Error ? err.message : "Ha fallado la comprobación del proveedor de alojamiento");
     }
   }
 

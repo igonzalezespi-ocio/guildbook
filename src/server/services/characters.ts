@@ -11,7 +11,7 @@ import { DomainError, NotFoundError } from "@/server/errors";
 import { resolveFaction } from "@/server/faction";
 
 function requireMembership(actor: Actor): string {
-  if (!actor.membershipId) throw new DomainError("You need an active membership to manage characters.");
+  if (!actor.membershipId) throw new DomainError("Necesitas ser miembro activo para gestionar personajes.");
   return actor.membershipId;
 }
 
@@ -76,7 +76,7 @@ async function guildVersionOf(db: Db, guildId: string) {
 
 function rethrowNameConflict(err: unknown, input: CharacterInput): never {
   if (isUniqueViolation(err)) {
-    throw new DomainError(`A character named ${fullName(input.name, input.surname)} is already registered.`);
+    throw new DomainError(`Ya hay registrado un personaje llamado ${fullName(input.name, input.surname)}.`);
   }
   throw err;
 }
@@ -126,7 +126,7 @@ export async function updateCharacter(db: Db, actor: Actor, id: string, raw: unk
         : null;
       const faction = locked?.faction ?? (await resolveFaction(tx, actor.guildId, input.faction));
       const wowClass = locked?.wowClass ?? input.wowClass;
-      if (locked && !isValidSpec(wowClass, input.spec)) throw new DomainError("Spec does not belong to that class.");
+      if (locked && !isValidSpec(wowClass, input.spec)) throw new DomainError("Esa especialización no es de esa clase.");
       const makeMain = input.isMain || (current.isMain && !(await hasOtherMain(tx, current.membershipId, id)));
       if (makeMain) await clearMain(tx, current.membershipId, id);
       const [updated] = await tx

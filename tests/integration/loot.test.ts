@@ -143,7 +143,7 @@ describe("recording by hand", () => {
     await expect(award(g, { awardedOn: "2026-10-01" })).rejects.toThrow(/before World of Warcraft: Forever launched/);
     await expect(award(g, { awardedOn: "2027-01-01" })).rejects.toThrow(/future/);
     const other = await setup();
-    await expect(award(g, { characterId: other.cassian.id })).rejects.toThrow(/Character not found/);
+    await expect(award(g, { characterId: other.cassian.id })).rejects.toThrow(/No se ha encontrado el personaje/);
   });
 
   it("names an ID-only item from Blizzard when configured, else as a placeholder", async () => {

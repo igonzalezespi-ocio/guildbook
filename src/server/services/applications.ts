@@ -3,14 +3,14 @@ import type { Db } from "@/db/types";
 import { applications, characters, guilds, memberships, ranks, users } from "@/db/schema";
 import { type Actor, assertCan } from "@/lib/authz/policy";
 import { tierAtLeast } from "@/lib/authz/tiers";
-import { fullName } from "@/lib/game";
+import { APPLICATION_STATUS_LABELS as APPLICATION_STATUS_ES, fullName } from "@/lib/game";
 import { applicationDecision, applicationInputFor, bnetCharacterId } from "@/lib/validation";
 import { recordAudit } from "@/server/audit";
 import { DomainError, NotFoundError } from "@/server/errors";
 import { resolveFaction } from "@/server/faction";
 import { defaultEligibility, type Eligibility, resolveVerifiedCharacter } from "@/server/services/battlenet";
 
-export const DRAFT_APPLICATIONS_CLOSED = "This guild isn't open for applications yet. Check back once it's published.";
+export const DRAFT_APPLICATIONS_CLOSED = "Esta hermandad aún no acepta solicitudes. Vuelve cuando esté publicada.";
 
 /** Drafts take applications only through the private invite link an admin shares from the setup checklist. */
 export function validDraftInvite(guild: { setup: { inviteCode?: string } }, given: unknown): boolean {
@@ -35,7 +35,7 @@ export async function submitApplication(
   eligibility: Eligibility = defaultEligibility(),
 ) {
   assertCan(actor, "application.submit");
-  if (tierAtLeast(actor.tier, "member")) throw new DomainError("You are already a member of the guild.");
+  if (tierAtLeast(actor.tier, "member")) throw new DomainError("Ya eres miembro de la hermandad.");
   const form = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
   const claimed = typeof form.bnetCharacterId === "string" && form.bnetCharacterId.trim() !== "";
   const bnet = claimed
@@ -68,8 +68,8 @@ export async function submitApplication(
   return db.transaction(async (tx) => {
     const guild = await loadGuild(tx, actor.guildId);
     if (!guild.publishedAt && !validDraftInvite(guild, form.invite)) throw new DomainError(DRAFT_APPLICATIONS_CLOSED);
-    if (!guild.recruitmentOpen) throw new DomainError("Recruitment is currently closed.");
-    if (!guild.applicantRankId) throw new DomainError("The guild has not configured an applicant rank.");
+    if (!guild.recruitmentOpen) throw new DomainError("El reclutamiento está cerrado ahora mismo.");
+    if (!guild.applicantRankId) throw new DomainError("La hermandad no ha configurado un rango para aspirantes.");
     const faction = await resolveFaction(tx, actor.guildId, input.faction);
 
     const [pending] = await tx
@@ -82,7 +82,7 @@ export async function submitApplication(
           eq(applications.status, "pending"),
         ),
       );
-    if (pending) throw new DomainError("You already have an application under review.");
+    if (pending) throw new DomainError("Ya tienes una solicitud en revisión.");
 
     await tx
       .insert(memberships)
@@ -169,7 +169,7 @@ export async function reviewApplication(db: Db, actor: Actor, raw: unknown) {
       .where(and(eq(applications.guildId, actor.guildId), eq(applications.id, applicationId)))
       .for("update");
     if (!app) throw new NotFoundError("Application");
-    if (app.status !== "pending") throw new DomainError(`This application was already ${app.status}.`);
+    if (app.status !== "pending") throw new DomainError(`Esta solicitud ya estaba ${APPLICATION_STATUS_ES[app.status] ?? app.status}.`);
 
     await tx
       .update(applications)
@@ -191,7 +191,7 @@ export async function reviewApplication(db: Db, actor: Actor, raw: unknown) {
       }
     } else {
       const rankId = decision === "accepted" ? guild.acceptRankId : guild.trialRankId;
-      if (!rankId) throw new DomainError(`The guild has not configured a rank for "${decision}" applicants.`);
+      if (!rankId) throw new DomainError(`La hermandad no ha configurado un rango para los aspirantes «${APPLICATION_STATUS_ES[decision] ?? decision}».`);
       const [rank] = await tx
         .select({ name: ranks.name })
         .from(ranks)
@@ -229,7 +229,7 @@ export async function reviewApplication(db: Db, actor: Actor, raw: unknown) {
           ),
         );
       if (existing && existing.membershipId !== active.id) {
-        throw new DomainError(`Another member already registered ${fullName(app.characterName, app.characterSurname)}.`);
+        throw new DomainError(`Otro miembro ya ha registrado a ${fullName(app.characterName, app.characterSurname)}.`);
       }
       const verification = app.verified
         ? {

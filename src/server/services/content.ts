@@ -179,7 +179,7 @@ export async function createInstance(db: Db, actor: Actor, raw: unknown) {
       await recordAudit(tx, actor, { action: "instance.create", targetType: "instance", targetId: row?.id, after: input });
     });
   } catch (err) {
-    if (isUniqueViolation(err)) throw new DomainError("An instance with that name already exists.");
+    if (isUniqueViolation(err)) throw new DomainError("Ya existe una instancia con ese nombre.");
     throw err;
   }
 }
@@ -263,7 +263,7 @@ export async function saveAddon(db: Db, actor: Actor, raw: unknown) {
       await recordAudit(tx, actor, { action: "addon.save", targetType: "addon", targetId: id, after: input });
     });
   } catch (err) {
-    if (isUniqueViolation(err)) throw new DomainError("An addon with that slug already exists.");
+    if (isUniqueViolation(err)) throw new DomainError("Ya existe un addon con ese identificador.");
     throw err;
   }
   return { name: input.name, created: !id };

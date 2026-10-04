@@ -24,7 +24,7 @@ import { exportLootFor, redactLootFor } from "@/server/services/loot";
 
 /** Stands in for deleted users in audit history, so entries keep their shape but show "Deleted user". */
 export const DELETED_USER_ID = "deleted-user";
-export const TOMBSTONE = "Deleted user";
+export const TOMBSTONE = "Usuario eliminado";
 
 /** Payload keys that describe the person an entry is about; redacted on entries tied to a deleted user. */
 const IDENTITY_KEYS: ReadonlySet<string> = new Set(["characterName", "battletag", "discordHandle", "note"]);
@@ -258,18 +258,18 @@ export interface DeletionResult {
  * identity fields become "Deleted user". Guilds where they're the only member are deleted too.
  */
 export async function deleteUserAccount(db: Db, userId: string, confirmName: string): Promise<DeletionResult> {
-  if (userId === DELETED_USER_ID) throw new DomainError("This account can't be deleted.");
+  if (userId === DELETED_USER_ID) throw new DomainError("Esta cuenta no se puede borrar.");
   return db.transaction(async (tx) => {
     const [user] = await tx.select().from(users).where(eq(users.id, userId)).for("update");
     if (!user) throw new NotFoundError("Account");
     const display = accountDisplayName(user);
-    if (!display || !sameName(confirmName, display)) throw new DomainError(`Type ${display} exactly to confirm.`);
+    if (!display || !sameName(confirmName, display)) throw new DomainError(`Escribe ${display} exactamente para confirmar.`);
 
     const plan = await planAccountDeletion(tx, userId);
     if (plan.blockers.length > 0) {
       const names = plan.blockers.map((g) => g.name).join(", ");
       throw new DomainError(
-        `You're the only admin of ${names}. Promote another member to an admin rank, or delete the guild, before deleting your account.`,
+        `Eres el único administrador de ${names}. Asciende a otro miembro a un rango de administrador, o borra la hermandad, antes de borrar tu cuenta.`,
       );
     }
 
@@ -381,14 +381,14 @@ export async function deleteGuild(
   opts: { protectedSlug?: string } = {},
 ): Promise<{ slug: string; releasedDomains: string[] }> {
   assertCan(actor, "guild.settings");
-  if (!(await canDeleteGuild(db, actor))) throw new DomainError("Only the guild's owner can delete it.");
+  if (!(await canDeleteGuild(db, actor))) throw new DomainError("Solo el propietario de la hermandad puede borrarla.");
   return db.transaction(async (tx) => {
     const [guild] = await tx.select().from(guilds).where(eq(guilds.id, actor.guildId)).for("update");
     if (!guild) throw new NotFoundError("Guild");
     if (opts.protectedSlug && guild.slug === opts.protectedSlug) {
-      throw new DomainError("This guild is the site's default guild and can't be deleted here.");
+      throw new DomainError("Esta es la hermandad predeterminada del sitio y no se puede borrar desde aquí.");
     }
-    if (!sameName(confirmName, guild.name)) throw new DomainError(`Type ${guild.name} exactly to confirm.`);
+    if (!sameName(confirmName, guild.name)) throw new DomainError(`Escribe ${guild.name} exactamente para confirmar.`);
     const releasedDomains = await purgeGuild(tx, guild.id);
     return { slug: guild.slug, releasedDomains };
   });

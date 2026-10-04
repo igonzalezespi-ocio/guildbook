@@ -155,3 +155,29 @@ export const MAX_IN_GAME_RANKS = 10;
 export const WOWF_LAUNCH_DATE = "2026-11-04";
 
 export const DAYS_OF_WEEK = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"] as const;
+
+/** Spanish display names for database enum values shown in the UI. The values themselves never change. */
+export const APPLICATION_STATUS_LABELS: Record<string, string> = {
+  pending: "pendiente",
+  accepted: "aceptada",
+  trial: "a prueba",
+  declined: "rechazada",
+  withdrawn: "retirada",
+};
+export const ADDON_STATUS_LABELS: Record<string, string> = {
+  planned: "Previsto",
+  in_development: "En desarrollo",
+  beta: "Beta",
+  released: "Publicado",
+};
+export const RECRUITMENT_PRIORITY_LABELS: Record<string, string> = {
+  closed: "Cerrado",
+  low: "Baja",
+  medium: "Media",
+  high: "Alta",
+};
+export const DOMAIN_STATUS_LABELS: Record<string, string> = {
+  pending: "Pendiente",
+  verified: "Verificado",
+  failed: "Fallido",
+};
