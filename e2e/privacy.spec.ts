@@ -44,8 +44,8 @@ test.describe("Legal pages", () => {
   test("guild sites link to the apex policies and send /terms there", async ({ page, request }) => {
     await page.goto(`${guildOrigin("osm")}/`);
     const legal = page.getByRole("contentinfo").getByRole("navigation", { name: "Legal" });
-    await expect(legal.getByRole("link", { name: "Terms" })).toHaveAttribute("href", `${APEX}/terms`);
-    await expect(legal.getByRole("link", { name: "Privacy" })).toHaveAttribute("href", `${APEX}/privacy`);
+    await expect(legal.getByRole("link", { name: "Términos" })).toHaveAttribute("href", `${APEX}/terms`);
+    await expect(legal.getByRole("link", { name: "Privacidad" })).toHaveAttribute("href", `${APEX}/privacy`);
     const footer = page.getByRole("contentinfo");
     await expect(footer.getByRole("link", { name: "Guildbook", exact: true })).toHaveAttribute("href", APEX);
     await expect(footer.getByRole("link", { name: "Código fuente de Guildbook en GitHub" })).toHaveAttribute(
