@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActionForm, Field, FieldError, FormMessage, SubmitButton, useActionResult } from "@/components/action-form";
 import { ClassSpecFields } from "@/components/class-spec-fields";
 import type { BattlenetCharacterSnapshot } from "@/db/schema";
-import { CLASS_INFO } from "@/lib/game";
+import { CLASS_INFO, raceLabel } from "@/lib/game";
 import { type GuildVersion, hasSurnames, maxLevelFor } from "@/lib/game-versions";
 import { scrollIntoViewGently, scrollToTop } from "@/lib/scroll";
 import type { ActionResult } from "@/server/action-types";
@@ -92,7 +92,7 @@ export function ApplicationForm({
                       {c.name}
                     </span>
                     <span className="block text-xs text-muted">
-                      {CLASS_INFO[c.wowClass].label} {c.race} de nivel {c.level}
+                      {CLASS_INFO[c.wowClass].label} {raceLabel(c.race)} de nivel {c.level}
                     </span>
                     {c.guildName && <span className="block truncate text-xs text-gold-dim">&lt;{c.guildName}&gt;</span>}
                   </span>

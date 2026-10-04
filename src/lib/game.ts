@@ -181,3 +181,22 @@ export const DOMAIN_STATUS_LABELS: Record<string, string> = {
   verified: "Verificado",
   failed: "Fallido",
 };
+
+/** Battle.net sends race names in English; shown with the es-ES client names (masculine form). */
+const RACE_LABELS: Record<string, string> = {
+  Human: "Humano",
+  Dwarf: "Enano",
+  "Night Elf": "Elfo de la noche",
+  Gnome: "Gnomo",
+  Draenei: "Draenei",
+  Worgen: "Huargen",
+  Orc: "Orco",
+  Undead: "No-muerto",
+  Tauren: "Tauren",
+  Troll: "Trol",
+  "Blood Elf": "Elfo de sangre",
+  Goblin: "Goblin",
+  Pandaren: "Pandaren",
+  Dracthyr: "Dracthyr",
+};
+export const raceLabel = (race: string): string => RACE_LABELS[race] ?? race;

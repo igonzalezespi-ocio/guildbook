@@ -21,7 +21,7 @@ import {
 import { db } from "@/db";
 import type { BattlenetCharacterSnapshot } from "@/db/schema";
 import { formatDateTime } from "@/lib/format";
-import { CLASS_INFO, fullName, PROFESSION_LABELS, specLabel } from "@/lib/game";
+import { CLASS_INFO, fullName, PROFESSION_LABELS, raceLabel, specLabel } from "@/lib/game";
 import { hasSurnames, realmLabel, SUPPORTED_GUILD_VERSIONS, VERSION_INFO } from "@/lib/game-versions";
 import { guildHref } from "@/lib/paths";
 import { importBattlenetCharacterAction } from "@/server/actions/battlenet";
@@ -52,7 +52,7 @@ function ImportRow({
         {bnet.name}
       </p>
       <p className="flex flex-wrap items-center gap-1.5 text-xs text-muted">
-        {bnet.race} {info.label} de nivel {bnet.level}, {bnet.realmName}
+        {info.label} {raceLabel(bnet.race)} de nivel {bnet.level}, {bnet.realmName}
         <RegionTag region={snapshotRegion(bnet)} />
       </p>
       {bnet.guildName && <p className="text-xs text-gold-dim">&lt;{bnet.guildName}&gt;</p>}

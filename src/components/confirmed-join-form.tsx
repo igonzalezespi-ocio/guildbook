@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ActionForm, Field, FormMessage, SubmitButton } from "@/components/action-form";
 import { ClassSpecFields } from "@/components/class-spec-fields";
 import type { BattlenetCharacterSnapshot } from "@/db/schema";
-import { CLASS_INFO } from "@/lib/game";
+import { CLASS_INFO, raceLabel } from "@/lib/game";
 import { type GuildVersion, hasSurnames } from "@/lib/game-versions";
 import type { ActionResult } from "@/server/action-types";
 
@@ -43,7 +43,7 @@ export function ConfirmedJoinForm({
         oficial revise una solicitud.
       </p>
       <p className="text-xs text-muted">
-        {CLASS_INFO[character.wowClass].label} {character.race} de nivel {character.level}
+        {CLASS_INFO[character.wowClass].label} {raceLabel(character.race)} de nivel {character.level}
       </p>
       {askSurname && (
         <Field label="Apellido" name="surname" htmlFor="confirmed-join-surname" hint="Battle.net aún no facilita apellidos, así que escribe el tuyo.">
