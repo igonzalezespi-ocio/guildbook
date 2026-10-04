@@ -92,7 +92,7 @@ describe("new guilds", () => {
     const pages = await db.select().from(contentPages).where(eq(contentPages.guildId, guild.id));
     expect(pages.map((p) => p.slug).sort()).toEqual(["charter", "loot-policy", "lore"]);
     for (const p of pages) expect(`${p.title} ${p.bodyMd}`).not.toMatch(ORDER_WORDS);
-    expect(pages.find((p) => p.slug === "charter")!.bodyMd).toMatch(/starter charter/);
+    expect(pages.find((p) => p.slug === "charter")!.bodyMd).toMatch(/reglamento de ejemplo/);
 
     const { summary, facts } = await getGuildSetup(db, actor);
     expect(facts).toMatchObject({ order: false, published: false, ranksMatchOrder: false, contentMatchesOrder: false, charterEdited: false });
@@ -131,7 +131,7 @@ describe("new guilds", () => {
     const [other] = await db.insert(users).values({ name: "Copycat", discordId: `copycat-${++n}` }).returning();
     await expect(
       createGuildForUser(db, other!.id, { name: guild.name, slug: `copy-${n}`, region: "us", faction: "horde", ruleset: "pvp", timezone: "America/New_York" }, limits),
-    ).rejects.toThrow(/already on Guildbook/);
+    ).rejects.toThrow(/Ya hay en Guildbook/);
   });
 });
 
@@ -159,17 +159,17 @@ describe("applications to drafts", () => {
 describe("publishing", () => {
   it("requires the tabard, reviewed ranks and an edited charter, and says what is missing", async () => {
     const { guild, actor } = await found();
-    await expect(publishGuild(db, actor)).rejects.toThrow(/tabard[\s\S]*ranks[\s\S]*charter/);
+    await expect(publishGuild(db, actor)).rejects.toThrow(/tabardo[\s\S]*rangos[\s\S]*reglamento/);
 
     await updateGuildTabard(db, actor, tabardForm);
-    await expect(publishGuild(db, actor)).rejects.toThrow(/ranks/);
+    await expect(publishGuild(db, actor)).rejects.toThrow(/rangos/);
     await confirmRanks(db, actor);
-    await expect(publishGuild(db, actor)).rejects.toThrow(/charter/);
+    await expect(publishGuild(db, actor)).rejects.toThrow(/reglamento/);
 
     // Saving the starter text unchanged doesn't count as editing it.
     const [charter] = await db.select().from(contentPages).where(and(eq(contentPages.guildId, guild.id), eq(contentPages.slug, "charter")));
     await updateContentPage(db, actor, { slug: "charter", title: charter!.title, bodyMd: charter!.bodyMd });
-    await expect(publishGuild(db, actor)).rejects.toThrow(/charter/);
+    await expect(publishGuild(db, actor)).rejects.toThrow(/reglamento/);
 
     await updateContentPage(db, actor, { slug: "charter", title: "Guild Charter", bodyMd: "Our own rules." });
     await publishGuild(db, actor);
@@ -191,7 +191,7 @@ describe("publishing", () => {
     await finishMinimumSteps(actor);
     await publishGuild(db, actor);
     const g = { guild, ranks: await listRanks(db, guild.id) };
-    const officer = await createMember(db, g as never, "Officer");
+    const officer = await createMember(db, g as never, "Oficial");
     await expect(unpublishGuild(db, officer)).rejects.toBeInstanceOf(AuthorizationError);
 
     await unpublishGuild(db, actor);
@@ -226,7 +226,7 @@ describe("rank presets", () => {
     const { guild, actor } = await found();
     const g = { guild, ranks: await listRanks(db, guild.id) };
     const raider = await createMember(db, g as never, "Raider");
-    const trial = await createMember(db, g as never, "Trial");
+    const trial = await createMember(db, g as never, "A prueba");
 
     await applyRankPreset(db, actor, "roleplay");
     const after = await listRanks(db, guild.id);
@@ -240,12 +240,12 @@ describe("rank presets", () => {
         .where(and(eq(memberships.guildId, guild.id), eq(memberships.userId, userId)));
       return row;
     };
-    expect(await tierOf(raider.userId)).toEqual({ tier: "raider", name: "Veteran" });
-    expect(await tierOf(trial.userId)).toEqual({ tier: "member", name: "Recruit" });
-    expect(await tierOf(actor.userId)).toEqual({ tier: "admin", name: "Commander" });
+    expect(await tierOf(raider.userId)).toEqual({ tier: "raider", name: "Veterano" });
+    expect(await tierOf(trial.userId)).toEqual({ tier: "member", name: "Recluta" });
+    expect(await tierOf(actor.userId)).toEqual({ tier: "admin", name: "Comandante" });
     const saved = await readGuild(guild.id);
     const nameOf = (id: string | null) => after.find((r) => r.id === id)?.name;
-    expect([nameOf(saved.applicantRankId), nameOf(saved.acceptRankId), nameOf(saved.trialRankId)]).toEqual(["Petitioner", "Sworn", "Recruit"]);
+    expect([nameOf(saved.applicantRankId), nameOf(saved.acceptRankId), nameOf(saved.trialRankId)]).toEqual(["Peticionario", "Juramentado", "Recluta"]);
   });
 
   it("supports a custom seven-rank ladder like Oathbound's, up to the in-game limit", async () => {
@@ -270,7 +270,7 @@ describe("rank presets", () => {
     for (const name of ["Fifteen chars ok", "Ninth", "Tenth"].map((x) => x.slice(0, 15))) {
       await createRank(db, actor, { name, tier: "member", inGame: "on" });
     }
-    await expect(createRank(db, actor, { name: "Eleventh", tier: "member", inGame: "on" })).rejects.toThrow(/at most 10/);
+    await expect(createRank(db, actor, { name: "Eleventh", tier: "member", inGame: "on" })).rejects.toThrow(/como máximo 10/);
   });
 
   it("refuses to touch the Order", async () => {
@@ -328,12 +328,12 @@ describe("neutral defaults for guilds that got the Order's preset", () => {
     expect(rows).toHaveLength(people.length + 2);
     for (const r of rows) expect(r.tier).toBe(tiersBefore.get(r.userId));
     const rankOf = (userId: string) => rows.find((r) => r.userId === userId)!.rank;
-    expect(rankOf(gm.userId)).toBe("Guild Master");
-    expect(rankOf(people[0]!.userId)).toBe("Guild Master");
-    expect(rankOf(people[2]!.userId)).toBe("Officer");
-    expect(rankOf(people[4]!.userId)).toBe("Veteran");
-    expect(rankOf(people[6]!.userId)).toBe("Initiate");
-    expect(rankOf(applicant.userId)).toBe("Applicant");
+    expect(rankOf(gm.userId)).toBe("Líder");
+    expect(rankOf(people[0]!.userId)).toBe("Líder");
+    expect(rankOf(people[2]!.userId)).toBe("Oficial");
+    expect(rankOf(people[4]!.userId)).toBe("Veterano");
+    expect(rankOf(people[6]!.userId)).toBe("Iniciado");
+    expect(rankOf(applicant.userId)).toBe("Aspirante");
     expect(resolveTier({ status: "active", rankTier: rows.find((r) => r.userId === gm.userId)!.tier })).toBe("admin");
 
     const pages = await db.select().from(contentPages).where(eq(contentPages.guildId, g.guild.id)).orderBy(asc(contentPages.sortOrder));
@@ -348,7 +348,7 @@ describe("neutral defaults for guilds that got the Order's preset", () => {
 
     const { summary } = await getGuildSetup(db, gm);
     expect(summary.offerNeutralDefaults).toBe(false);
-    await expect(applyNeutralDefaults(db, gm, "social")).rejects.toThrow(/no longer has/);
+    await expect(applyNeutralDefaults(db, gm, "social")).rejects.toThrow(/ya no tiene/);
   });
 
   it("leaves ranks alone once the guild has changed them, still replacing the Order's pages", async () => {

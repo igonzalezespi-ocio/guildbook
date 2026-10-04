@@ -164,7 +164,7 @@ export async function importInGameTabard(db: Db, actor: Actor, client: BlizzardC
   const current = guildLook(guild).tabard;
   const mapped = tabardFromCrest(lookup.crest, current);
   if (!mapped.ok) {
-    throw new DomainError(`${lookup.name}'s in-game emblem (number ${mapped.id}) isn't in Guildbook's set yet. Pick the closest one below.`);
+    throw new DomainError(`El emblema del juego de ${lookup.name} (número ${mapped.id}) aún no está en el catálogo de Guildbook. Elige el más parecido de abajo.`);
   }
 
   const tabard = mapped.tabard;

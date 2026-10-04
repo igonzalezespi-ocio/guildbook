@@ -91,7 +91,7 @@ describe("services enforce permissions on the server", () => {
     await createRank(db, gm, { name: "Pilgrim", description: "", tier: "member", inGame: "on" });
     await expect(
       createRank(db, gm, { name: "Hermit", description: "", tier: "member", inGame: "on" }),
-    ).rejects.toThrow(/at most 10/);
+    ).rejects.toThrow(/como máximo 10/);
     await expect(createRank(db, gm, { name: "Hermit", description: "", tier: "member" })).resolves.toBeTruthy();
   });
 

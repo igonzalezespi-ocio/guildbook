@@ -72,8 +72,8 @@ describe("vigil reports", () => {
     expect((await listSharedVigilReports(db, member))[0]).toMatchObject({ id, ownerName: expect.any(String) });
     const applicant = await createMember(db, guild, "Postulant", "applicant");
     const visitor = await createVisitor(db, guild.guild.id);
-    await expect(getVigilReport(db, applicant, id)).rejects.toThrow("Requires member");
-    await expect(getVigilReport(db, visitor, id)).rejects.toThrow("Requires member");
+    await expect(getVigilReport(db, applicant, id)).rejects.toThrow("Necesitas permisos de Miembro");
+    await expect(getVigilReport(db, visitor, id)).rejects.toThrow("Necesitas permisos de Miembro");
   });
 
   it("stop being shared when the owner leaves the guild", async () => {
@@ -84,7 +84,7 @@ describe("vigil reports", () => {
     await expect(getVigilReport(db, officer, id)).rejects.toThrow("No se ha encontrado el informe");
     expect(await listSharedVigilReports(db, officer)).toHaveLength(0);
     const former = await reloadActor(db, owner);
-    await expect(listOwnVigilReports(db, former)).rejects.toThrow("Requires member");
+    await expect(listOwnVigilReports(db, former)).rejects.toThrow("Necesitas permisos de Miembro");
   });
 
   it("are isolated per guild", async () => {
@@ -151,7 +151,7 @@ describe("vigil reports", () => {
     expect(await getVigilReport(db, owner, id)).toMatchObject({ characterName: "Tor", characterClass: "paladin" });
     await expect(createVigilReport(db, owner, { report: { ...report, version: 99 } })).rejects.toThrow("format");
     const huge = { ...report, notes: ["x".repeat(1_000_000)] };
-    await expect(createVigilReport(db, owner, { report: huge })).rejects.toThrow("too large");
+    await expect(createVigilReport(db, owner, { report: huge })).rejects.toThrow("demasiado grande");
     await expect(getVigilReport(db, owner, "not-a-uuid")).rejects.toThrow("No se ha encontrado el informe");
   });
 });
@@ -164,7 +164,7 @@ describe("vigil report game versions", () => {
 
   it("derives the version from the log when an older Vigil did not send it", async () => {
     const guild = await createGuild(db, { gameVersion: "anniversary", realmSlug: "thunderstrike", region: "eu" });
-    const owner = await createMember(db, guild, "Member");
+    const owner = await createMember(db, guild, "Miembro");
     const saved = await createVigilReport(db, owner, { report: { ...report!, log: tbcLog } }, AFTER_LAUNCH);
     expect(saved).toMatchObject({ gameVersion: "anniversary", versionMismatch: false, warning: null });
     expect(await stored(saved.id)).toMatchObject({ gameVersion: "anniversary", versionMismatch: false });
@@ -184,13 +184,13 @@ describe("vigil report game versions", () => {
 
     const saved = await createVigilReport(db, owner, { report: era }, BEFORE_LAUNCH);
     expect(saved).toMatchObject({ gameVersion: "era", versionMismatch: true });
-    expect(saved.warning).toContain("From Nov 4, Vigil refuses logs from another game");
+    expect(saved.warning).toContain("A partir del 4 nov, Vigil rechaza registros de otro juego");
     expect(await getVigilReport(db, owner, saved.id)).toMatchObject({ gameVersion: "era", versionMismatch: true });
 
     const refused = createVigilReport(db, owner, { report: { ...report!, log: tbcLog } }, AFTER_LAUNCH);
     await expect(refused).rejects.toBeInstanceOf(VersionMismatchError);
     await expect(createVigilReport(db, owner, { report: { ...report!, log: tbcLog } }, AFTER_LAUNCH)).rejects.toThrow(
-      "This log is from TBC Anniversary; Forever Guild is a WoW: Forever guild. Pair Vigil with your TBC Anniversary guild.",
+      "Este registro es de TBC Anniversary; Forever Guild es una hermandad de WoW: Forever. Empareja Vigil con tu hermandad de TBC Anniversary.",
     );
   });
 });

@@ -21,10 +21,10 @@ describe("listTestAccounts", () => {
     expect(accounts[0]).toEqual({ discordId: "seed-tor", name: "Tor", displayName: "Tor Whitecross", standing: "Grand Master", group: "member" });
     expect(accounts).toContainEqual(expect.objectContaining({ discordId: "seed-ironvow", displayName: "Ironvow Thornwall", standing: "Marshal" }));
     expect(accounts).toContainEqual(
-      expect.objectContaining({ discordId: "seed-joanofarc", displayName: "Joanofarc Domremy", standing: "Applicant", group: "applicant" }),
+      expect.objectContaining({ discordId: "seed-joanofarc", displayName: "Joanofarc Domremy", standing: "Aspirante", group: "applicant" }),
     );
     expect(accounts).toContainEqual(
-      expect.objectContaining({ discordId: "seed-mordred", displayName: "Mordred Blackthorn", standing: "Application declined", group: "applicant" }),
+      expect.objectContaining({ discordId: "seed-mordred", displayName: "Mordred Blackthorn", standing: "Solicitud rechazada", group: "applicant" }),
     );
     const groups = accounts.map((a) => a.group);
     expect(groups.lastIndexOf("member")).toBeLessThan(groups.indexOf("applicant"));

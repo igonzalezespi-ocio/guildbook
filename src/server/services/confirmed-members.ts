@@ -205,7 +205,7 @@ export async function joinAsConfirmedMember(
         )
         .orderBy(sql`${characters.bnetCharacterId} is null`)
         .limit(1);
-      if (existing && existing.membershipId !== membership.id) throw new DomainError(`${name} is already registered by another member.`);
+      if (existing && existing.membershipId !== membership.id) throw new DomainError(`Otro miembro ya ha registrado a ${name}.`);
       const [main] = await tx
         .select({ id: characters.id })
         .from(characters)

@@ -250,7 +250,7 @@ export async function importBattlenetCharacter(
         .orderBy(sql`${characters.bnetCharacterId} is null`)
         .limit(1);
       if (existing && existing.membershipId !== membershipId) {
-        throw new DomainError(`${fullName(existing.name, existing.surname)} is already registered by another member.`);
+        throw new DomainError(`Otro miembro ya ha registrado a ${fullName(existing.name, existing.surname)}.`);
       }
 
       const [main] = await tx

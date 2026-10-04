@@ -22,3 +22,7 @@ export function formatCalendarDate(ymd: string, style: "medium" | "full" = "medi
 export function formatDateTime(d: Date, timeZone?: string): string {
   return new Intl.DateTimeFormat("es-ES", { dateStyle: "medium", timeStyle: "short", timeZone }).format(d);
 }
+
+/** The database stores "Deleted user" for redacted people (a trigger enforces the exact value); show it in Spanish. */
+export const DELETED_USER = "Deleted user";
+export const shownName = <T extends string | null | undefined>(name: T): T | string => (name === DELETED_USER ? "Usuario eliminado" : name);

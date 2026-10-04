@@ -35,7 +35,7 @@ const VERSIONS: Array<{ version: GuildVersion; realm: string; faction: Faction; 
 async function setup(v: (typeof VERSIONS)[number], opts: { verified?: boolean; rosterStatus?: number } = {}) {
   const name = `Mirkwood ${++seq}`;
   const guild = await createGuild(db, { name, faction: v.faction, gameVersion: v.version, realmSlug: v.realmSlug });
-  const gm = await createMember(db, guild, v.version === "forever" ? "Grand Master" : "Guild Master");
+  const gm = await createMember(db, guild, v.version === "forever" ? "Grand Master" : "Líder");
   if (opts.verified !== false) await db.update(guilds).set({ verifiedAt: new Date(), verifiedUserId: gm.userId }).where(eq(guilds.id, guild.guild.id));
 
   const bnet = new FakeBattlenet();
@@ -141,7 +141,7 @@ describe.each(VERSIONS)("joining as a confirmed in-game member ($version)", (v) 
     const { bnet, member, visitor } = await setup(v);
     await expect(
       joinAsConfirmedMember(db, visitor, joinForm(member, v, { respectsFaith: "" }), bnet.client(), { eligibility: ALL_REALMS }),
-    ).rejects.toThrow(/charter/);
+    ).rejects.toThrow(/reglamento/);
     expect((await reloadActor(db, visitor)).tier).toBe("public");
   });
 });
@@ -164,7 +164,7 @@ describe("confirmed-join details", () => {
     const actor = await reloadActor(db, visitor);
     expect(actor.tier).toBe("raider");
     await db.update(memberships).set({ rankId: guild.guild.acceptRankId! }).where(eq(memberships.id, actor.membershipId!));
-    await expect(deleteRank(db, gm, raider.id)).rejects.toThrow(/Change that setting first/);
+    await expect(deleteRank(db, gm, raider.id)).rejects.toThrow(/Cambia primero ese ajuste/);
   });
 
   it("refuses applicant and admin ranks for confirmed joins", async () => {
@@ -194,7 +194,7 @@ describe("confirmed-join details", () => {
     const { bnet, member, visitor } = await setup(forever);
     const form = joinForm(member, forever);
     delete (form as { surname?: string }).surname;
-    await expect(joinAsConfirmedMember(db, visitor, form, bnet.client(), { eligibility: ALL_REALMS })).rejects.toThrow(/surname/);
+    await expect(joinAsConfirmedMember(db, visitor, form, bnet.client(), { eligibility: ALL_REALMS })).rejects.toThrow(/apellido/);
   });
 
   it("refuses a character that isn't the confirmed one", async () => {

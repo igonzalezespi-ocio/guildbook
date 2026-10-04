@@ -134,7 +134,7 @@ describe("audit redaction guard", () => {
 });
 
 describe("account deletion", () => {
-  it("removes the user's data, keeps audit rows and replaces their identity with Usuario eliminado", async () => {
+  it("removes the user's data, keeps audit rows and replaces their identity with Deleted user", async () => {
     const guild = await createGuild(db);
     const marshal = await createMember(db, guild, "Marshal");
     await createCharacter(db, marshal, { ...character, name: "Ironvow", surname: "Thornwall" });
@@ -182,7 +182,7 @@ describe("account deletion", () => {
     await createMember(db, guild, "Knight");
     const [gmUser] = await db.select().from(users).where(eq(users.id, gm.userId));
     expect((await planAccountDeletion(db, gm.userId)).blockers.map((g) => g.slug)).toEqual([guild.guild.slug]);
-    await expect(deleteUserAccount(db, gm.userId, gmUser!.name!)).rejects.toThrow(/only admin.*Promote another member/);
+    await expect(deleteUserAccount(db, gm.userId, gmUser!.name!)).rejects.toThrow(/único administrador.*Asciende a otro miembro/);
 
     await createMember(db, guild, "Seneschal");
     expect((await planAccountDeletion(db, gm.userId)).blockers).toEqual([]);
@@ -209,8 +209,8 @@ describe("guild deletion", () => {
     const marshal = await createMember(db, guild, "Marshal");
     await createCharacter(db, marshal, { ...character, name: "Leftbehind", surname: "Stone" });
     await expect(deleteGuild(db, marshal, guild.guild.name)).rejects.toThrow();
-    await expect(deleteGuild(db, gm, "nope")).rejects.toThrow(/Type/);
-    await expect(deleteGuild(db, gm, guild.guild.name, { protectedSlug: guild.guild.slug })).rejects.toThrow(/default guild/);
+    await expect(deleteGuild(db, gm, "nope")).rejects.toThrow(/Escribe/);
+    await expect(deleteGuild(db, gm, guild.guild.name, { protectedSlug: guild.guild.slug })).rejects.toThrow(/hermandad predeterminada/);
     await deleteGuild(db, gm, guild.guild.name);
     expect(await db.select().from(guilds).where(eq(guilds.id, guild.guild.id))).toHaveLength(0);
     expect(await db.select().from(memberships).where(eq(memberships.guildId, guild.guild.id))).toHaveLength(0);

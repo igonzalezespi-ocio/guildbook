@@ -67,7 +67,7 @@ describe("companion pairing", () => {
     expect(JSON.stringify(device)).not.toContain(result.token);
     expect(device!.tokenHint).toBe(result.token.slice(-4));
 
-    await expect(exchangePairingCode(db, { code, deviceName: "Again" })).rejects.toThrow("not valid or has expired");
+    await expect(exchangePairingCode(db, { code, deviceName: "Again" })).rejects.toThrow("no es válido o ha caducado");
   });
 
   it("rejects expired and superseded codes, and codes from members who lost access", async () => {
@@ -75,23 +75,23 @@ describe("companion pairing", () => {
     const member = await createMember(db, guild, "Squire");
     const first = await createPairingCode(db, member);
     const second = await createPairingCode(db, member);
-    await expect(exchangePairingCode(db, { code: first.code })).rejects.toThrow("not valid");
+    await expect(exchangePairingCode(db, { code: first.code })).rejects.toThrow("no es válido");
 
     await db.update(vigilCompanionPairings).set({ expiresAt: new Date(Date.now() - 1000) }).where(eq(vigilCompanionPairings.membershipId, member.membershipId!));
-    await expect(exchangePairingCode(db, { code: second.code })).rejects.toThrow("not valid");
+    await expect(exchangePairingCode(db, { code: second.code })).rejects.toThrow("no es válido");
 
     const leaving = await createMember(db, guild, "Squire");
     const { code } = await createPairingCode(db, leaving);
     await db.update(memberships).set({ status: "former" }).where(eq(memberships.id, leaving.membershipId!));
-    await expect(exchangePairingCode(db, { code })).rejects.toThrow("not valid");
+    await expect(exchangePairingCode(db, { code })).rejects.toThrow("no es válido");
   });
 
   it("is for members only", async () => {
     const guild = await createGuild(db);
     const applicant = await createMember(db, guild, "Squire", "applicant");
     const visitor = await createVisitor(db, guild.guild.id);
-    await expect(createPairingCode(db, applicant)).rejects.toThrow("Requires member");
-    await expect(createPairingCode(db, visitor)).rejects.toThrow("Requires member");
+    await expect(createPairingCode(db, applicant)).rejects.toThrow("Necesitas permisos de Miembro");
+    await expect(createPairingCode(db, visitor)).rejects.toThrow("Necesitas permisos de Miembro");
   });
 
   it("serves the pairing exchange over HTTP with a per-address rate limit", async () => {
@@ -166,7 +166,7 @@ describe("device tokens", () => {
 
     const res = await upload(token);
     expect(res.status).toBe(401);
-    expect((await res.json()).error).toMatch(/revoked/);
+    expect((await res.json()).error).toMatch(/se revocó/);
     await expect(authenticateDevice(db, "nope")).rejects.toMatchObject({ code: "unauthenticated" });
     await expect(authenticateDevice(db, `${token}x`)).rejects.toMatchObject({ code: "unauthenticated" });
   });
@@ -244,7 +244,7 @@ describe("companion upload API", () => {
 
     const wrongGuild = await upload(token, { guild: b.guild.slug, visibility: "guild" });
     expect(wrongGuild.status).toBe(403);
-    expect((await wrongGuild.json()).error).toMatch(/different guild/);
+    expect((await wrongGuild.json()).error).toMatch(/otra hermandad/);
 
     const ok = await upload(token, { guild: a.guild.slug, visibility: "guild" });
     const { id } = await ok.json();
@@ -294,14 +294,14 @@ describe("companion uploads from another game", () => {
       expect(kept.status).toBe(201);
       const body = await kept.json();
       expect(body).toMatchObject({ gameVersion: "anniversary", versionMismatch: true });
-      expect(body.warning).toMatch(/This log is from TBC Anniversary; Order Test is a WoW: Forever guild/);
+      expect(body.warning).toMatch(/Este registro es de TBC Anniversary; Order Test es una hermandad de WoW: Forever/);
 
       vi.setSystemTime(new Date("2026-11-04T00:00:00Z"));
       const refused = await upload(token, { report: tbc });
       expect(refused.status).toBe(409);
       expect(await refused.json()).toEqual({
         code: "version_mismatch",
-        error: "This log is from TBC Anniversary; Order Test is a WoW: Forever guild. Pair Vigil with your TBC Anniversary guild.",
+        error: "Este registro es de TBC Anniversary; Order Test es una hermandad de WoW: Forever. Empareja Vigil con tu hermandad de TBC Anniversary.",
       });
     } finally {
       vi.useRealTimers();
@@ -310,7 +310,7 @@ describe("companion uploads from another game", () => {
 
   it("accepts Anniversary logs in an Anniversary guild and tells the companion the guild's version", async () => {
     const guild = await createGuild(db, { gameVersion: "anniversary", realmSlug: "dreamscythe", faction: "horde" });
-    const member = await createMember(db, guild, "Member");
+    const member = await createMember(db, guild, "Miembro");
     const { token } = await pair(member);
     const res = await upload(token, { report: tbc });
     expect(res.status).toBe(201);

@@ -562,7 +562,7 @@ export async function claimGuildName(db: Db, actor: Actor, client: BlizzardClien
       let renamedHolder: string | null = null;
       if (holder) {
         if (holder.verifiedAt) {
-          throw new DomainError(`${holder.name} is a verified guild on Guildbook. A verified guild's name can't be claimed.`);
+          throw new DomainError(`${holder.name} es una hermandad verificada en Guildbook. El nombre de una hermandad verificada no se puede reclamar.`);
         }
         renamedHolder = await freeUnverifiedName(tx, identity);
         const notice = `Una hermandad verificada reclamó el nombre «${holder.name}» (${describeIdentity(identity)}) el ${now.toISOString().slice(0, 10)}: su maestro de la hermandad demostró con Battle.net que dirige la hermandad del juego con ese nombre. Esta hermandad ha pasado a llamarse «${renamedHolder}». Tu subdominio, tus dominios propios, tus miembros y tu contenido no cambian. Puedes cambiar el nombre de la hermandad en Ajustes de la hermandad.`;

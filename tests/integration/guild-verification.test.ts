@@ -131,7 +131,7 @@ describe("verifying a guild", () => {
     const { state, result } = await verifyGuild(db, gm, bnet.client(), PRE_LAUNCH);
     expect(state).toBe("unverified");
     expect(result).toMatchObject({ verified: false, reason: "prelaunch" });
-    expect(result.message).toMatch(/Forever launches on Nov 4, 2026/);
+    expect(result.message).toMatch(/Forever sale el 4 de noviembre de 2026/);
     expect((await row(guild.id)).verifiedAt).toBeNull();
 
     expect((await verifyGuild(db, gm, bnet.client(), AFTER_LAUNCH)).result.reason).toBe("no_version_characters");
@@ -150,7 +150,7 @@ describe("verifying a guild", () => {
     const { state, result } = await verifyGuild(db, gm, bnet.client(), AFTER_LAUNCH);
     expect(state).toBe("unverified");
     expect(result).toMatchObject({ reason: "not_guild_master", conclusive: true });
-    expect(result.message).toMatch(/isn't its Guild Master \(rank 1\)/);
+    expect(result.message).toMatch(/no es su maestro de la hermandad \(rango 1\)/);
     expect((await row(guild.id)).verifiedAt).toBeNull();
   });
 
@@ -165,7 +165,7 @@ describe("verifying a guild", () => {
     const other = await setup({ name: "Grey Watch", ruleset: "normal", characters: [pvp] });
     const { result } = await verifyGuild(db, other.gm, bnet.client(), AFTER_LAUNCH);
     expect(result.reason).toBe("ruleset_mismatch");
-    expect(result.message).toMatch(/on the PvP ruleset, but this guild is Normal/);
+    expect(result.message).toMatch(/en el tipo de reino JcJ, pero esta hermandad es Normal/);
   });
 
   it("checks an EU guild against the EU API with its EU characters", async () => {
@@ -174,7 +174,7 @@ describe("verifying a guild", () => {
     const { guild, gm } = await setup({ name: "Nordwacht", region: "eu", characters: [char] });
     const { state, result } = await verifyGuild(db, gm, bnet.client(), AFTER_LAUNCH);
     expect(state).toBe("verified");
-    expect(result.message).toMatch(/\(Europe, Alliance, Normal\)/);
+    expect(result.message).toMatch(/\(Europa, Alianza, Normal\)/);
     expect(bnet.profileRegions).toEqual(["eu"]);
     expect((await row(guild.id)).verifiedCharacterName).toBe(char.name);
 
@@ -193,7 +193,7 @@ describe("verifying a guild", () => {
     const { state, result } = await verifyGuild(db, gm, bnet.client(), AFTER_LAUNCH);
     expect(state).toBe("unverified");
     expect(result).toMatchObject({ verified: false, reason: "region_mismatch", conclusive: true });
-    expect(result.message).toMatch(/this guild is in the Americas region/);
+    expect(result.message).toMatch(/esta hermandad está en la región de América/);
     expect(bnet.profileRegions).toEqual([]);
     expect((await row(guild.id)).verifiedAt).toBeNull();
 
@@ -232,25 +232,25 @@ describe("claiming a guild name", () => {
     expect(check.result).toMatchObject({ reason: "name_mismatch", claim: { name: "Knights of Dawn", holderName: "Knights of Dawn", holderVerified: false } });
 
     const claimed = await claimGuildName(db, gm, bnet.client(), AFTER_LAUNCH);
-    expect(claimed).toEqual({ renamedHolder: "Knights of Dawn (unverified)", name: "Knights of Dawn" });
+    expect(claimed).toEqual({ renamedHolder: "Knights of Dawn (sin verificar)", name: "Knights of Dawn" });
     expect(await row(guild.id)).toMatchObject({ name: "Knights of Dawn", verifiedAt: AFTER_LAUNCH, verifiedCharacterName: char.name });
 
     const renamed = await row(holder.guild.id);
-    expect(renamed.name).toBe("Knights of Dawn (unverified)");
+    expect(renamed.name).toBe("Knights of Dawn (sin verificar)");
     expect(renamed.slug).toBe(holder.guild.slug);
-    expect(renamed.adminNotice).toMatch(/A verified guild claimed the name "Knights of Dawn"/);
+    expect(renamed.adminNotice).toMatch(/Una hermandad verificada reclamó el nombre «Knights of Dawn»/);
     expect(await actions(holder.guild.id)).toContain("guild.name_claimed");
     expect(await actions(guild.id)).toEqual(expect.arrayContaining(["guild.claim_name", "guild.verify"]));
   });
 
   it("numbers the unverified name when it's taken", async () => {
     const bnet = new FakeBattlenet();
-    await createGuild(db, { name: "Lions Pride (unverified)" });
+    await createGuild(db, { name: "Lions Pride (sin verificar)" });
     const holder = await createGuild(db, { name: "Lions Pride" });
     const char = guildMaster(bnet, "Lions Pride");
     const { gm } = await setup({ name: "Lions Pride Placeholder", characters: [char] });
-    expect((await claimGuildName(db, gm, bnet.client(), AFTER_LAUNCH)).renamedHolder).toBe("Lions Pride (unverified 2)");
-    expect((await row(holder.guild.id)).name).toBe("Lions Pride (unverified 2)");
+    expect((await claimGuildName(db, gm, bnet.client(), AFTER_LAUNCH)).renamedHolder).toBe("Lions Pride (sin verificar 2)");
+    expect((await row(holder.guild.id)).name).toBe("Lions Pride (sin verificar 2)");
   });
 
   it("never takes the name from a verified guild", async () => {
@@ -260,7 +260,7 @@ describe("claiming a guild name", () => {
     const char = guildMaster(bnet, "Sworn Shield");
     const { guild, gm } = await setup({ name: "Sworn Shield Two", characters: [char] });
 
-    await expect(claimGuildName(db, gm, bnet.client(), AFTER_LAUNCH)).rejects.toThrow(/verified guild's name can't be claimed/);
+    await expect(claimGuildName(db, gm, bnet.client(), AFTER_LAUNCH)).rejects.toThrow(/El nombre de una hermandad verificada no se puede reclamar/);
     expect((await row(holder.guild.id)).name).toBe("Sworn Shield");
     expect(await row(guild.id)).toMatchObject({ name: "Sworn Shield Two", verifiedAt: null });
   });
@@ -296,7 +296,7 @@ describe("claiming a subdomain", () => {
     const moved = await claimGuildSlug(db, gm, AFTER_LAUNCH);
     expect(moved).toEqual({ slug: "oathbound", previousSlug: guild.slug, movedHolderTo: "oathbound-horde" });
     expect((await row(holder.guild.id)).slug).toBe("oathbound-horde");
-    expect((await row(holder.guild.id)).adminNotice).toMatch(/subdomain is now "oathbound-horde"/);
+    expect((await row(holder.guild.id)).adminNotice).toMatch(/subdominio de esta hermandad ahora es «oathbound-horde»/);
   });
 
   it("falls back to a numbered subdomain when nothing sets the holder apart", async () => {
@@ -308,18 +308,18 @@ describe("claiming a subdomain", () => {
     expect(moved).toEqual({ slug: "morning-star", previousSlug: guild.slug, movedHolderTo: "morning-star-2" });
     expect((await row(guild.id)).slug).toBe("morning-star");
     expect(await row(holder.guild.id)).toMatchObject({ slug: "morning-star-2", name: "Somebody Else" });
-    expect((await row(holder.guild.id)).adminNotice).toMatch(/claimed the subdomain "morning-star"/);
+    expect((await row(holder.guild.id)).adminNotice).toMatch(/reclamó el subdominio «morning-star»/);
     expect(await actions(holder.guild.id)).toContain("guild.slug_claimed");
   });
 
   it("refuses unverified claimants and verified holders", async () => {
     const holder = await createGuild(db, { slug: "evening-star", name: "Held" });
     const { guild, gm } = await setup({ name: "Evening Star" });
-    await expect(claimGuildSlug(db, gm, AFTER_LAUNCH)).rejects.toThrow(/Only verified guilds/);
+    await expect(claimGuildSlug(db, gm, AFTER_LAUNCH)).rejects.toThrow(/Solo las hermandades verificadas/);
 
     await db.update(guilds).set({ verifiedAt: new Date() }).where(eq(guilds.id, guild.id));
     await db.update(guilds).set({ verifiedAt: new Date() }).where(eq(guilds.id, holder.guild.id));
-    await expect(claimGuildSlug(db, gm, AFTER_LAUNCH)).rejects.toThrow(/verified guild uses that subdomain/);
+    await expect(claimGuildSlug(db, gm, AFTER_LAUNCH)).rejects.toThrow(/Una hermandad verificada usa ese subdominio/);
   });
 });
 
@@ -427,7 +427,7 @@ describe("TBC Anniversary guilds", () => {
       gameVersion: "anniversary",
       realmSlug: opts.realmSlug ?? "dreamscythe",
     });
-    const gm = await createMember(db, guild, "Guild Master");
+    const gm = await createMember(db, guild, "Líder");
     return { guild, gm };
   }
 
@@ -513,7 +513,7 @@ describe("TBC Anniversary guilds", () => {
       .insert(ranks)
       .values({ guildId: guild.guild.id, name: "Co-Leader", sortOrder: 999, tier: "admin" })
       .returning();
-    const gm = await createMember(db, guild, "Officer");
+    const gm = await createMember(db, guild, "Oficial");
     await db.update(memberships).set({ rankId: coLeader!.id }).where(eq(memberships.id, gm.membershipId!));
     await link(gm.userId, [leader]);
     expect((await verifyGuild(db, founder, bnet.client(), AFTER_LAUNCH)).state).toBe("verified");
@@ -522,8 +522,8 @@ describe("TBC Anniversary guilds", () => {
     expect(verified.setup.founderNotGm).toBeUndefined();
 
     const handover = await guildMasterHandover(db, verified);
-    expect(handover).toMatchObject({ membershipId: gm.membershipId, topRank: { name: "Guild Master" }, characterName: leader.name });
-    expect(await promoteVerifiedGuildMaster(db, founder)).toMatchObject({ rankName: "Guild Master", characterName: leader.name });
+    expect(handover).toMatchObject({ membershipId: gm.membershipId, topRank: { name: "Líder" }, characterName: leader.name });
+    expect(await promoteVerifiedGuildMaster(db, founder)).toMatchObject({ rankName: "Líder", characterName: leader.name });
     expect(await guildMasterHandover(db, verified)).toBeNull();
     expect(await actions(guild.guild.id)).toContain("member.assignRank");
     await expect(promoteVerifiedGuildMaster(db, founder)).rejects.toThrow(DomainError);
@@ -550,7 +550,7 @@ describe("TBC Anniversary guilds", () => {
     bnet.roster("dreamscythe", name, [[mine.id, 4]]);
     await link(founder.userId, [mine]);
 
-    const raider = await createMember(db, guild, "Officer");
+    const raider = await createMember(db, guild, "Oficial");
     expect((await recheckAdminStanding(db, { ...raider, tier: "officer" }, bnet.client(), AFTER_LAUNCH)).status).toBe("unknown");
     expect((await row(guild.guild.id)).setup.founderNotGm).toBeUndefined();
 

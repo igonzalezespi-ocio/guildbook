@@ -24,7 +24,7 @@ import { exportLootFor, redactLootFor } from "@/server/services/loot";
 
 /** Stands in for deleted users in audit history, so entries keep their shape but show "Deleted user". */
 export const DELETED_USER_ID = "deleted-user";
-export const TOMBSTONE = "Usuario eliminado";
+export const TOMBSTONE = "Deleted user";
 
 /** Payload keys that describe the person an entry is about; redacted on entries tied to a deleted user. */
 const IDENTITY_KEYS: ReadonlySet<string> = new Set(["characterName", "battletag", "discordHandle", "note"]);

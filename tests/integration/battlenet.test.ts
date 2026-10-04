@@ -142,7 +142,7 @@ describe("linking", () => {
     const first = await createVisitor(db, guild.guild.id);
     const second = await createVisitor(db, guild.guild.id);
     await link(first);
-    await expect(link(second, first.userId)).rejects.toThrow(/already linked to another Discord account/);
+    await expect(link(second, first.userId)).rejects.toThrow(/ya está vinculada a otra cuenta de Discord/);
   });
 
   it("refreshes while the token is valid and asks to reconnect once it expires", async () => {
@@ -152,7 +152,7 @@ describe("linking", () => {
     await expect(refreshBattlenetSnapshot(db, visitor, deps)).resolves.toMatchObject({ status: "ok" });
 
     await db.update(battlenetLinks).set({ tokenExpiresAt: new Date(Date.now() - 1000) }).where(eq(battlenetLinks.userId, visitor.userId));
-    await expect(refreshBattlenetSnapshot(db, visitor, deps)).rejects.toThrow(/Reconnect Battle.net/);
+    await expect(refreshBattlenetSnapshot(db, visitor, deps)).rejects.toThrow(/Vuelve a conectar Battle.net/);
   });
 
   it("unlinks with an audit entry; signed-out visitors can't link", async () => {
@@ -215,7 +215,7 @@ describe("verified applications", () => {
 
     // No link at all.
     await expect(submitApplication(db, visitor, { ...validApplication, bnetCharacterId: theirs.id }, anyRealm)).rejects.toThrow(
-      /isn't on your linked Battle.net account/,
+      /no está en tu cuenta de Battle.net vinculada/,
     );
 
     await link(visitor);
@@ -290,7 +290,7 @@ describe("verified applications", () => {
 describe("member import", () => {
   it("offers a TBC Anniversary guild only its realm's Anniversary characters, and confirms in-game members on import", async () => {
     const guild = await createGuild(db, { name: "Mirkwood", faction: "horde", gameVersion: "anniversary", realmSlug: "dreamscythe" });
-    const member = await createMember(db, guild, "Member");
+    const member = await createMember(db, guild, "Miembro");
     const { eligible, byName } = await link(member, `${member.userId}.ann-member`);
     expect(eligible.map((c) => [c.name, c.gameVersion])).toEqual([["Mattaeis", "anniversary"]]);
 
@@ -306,7 +306,7 @@ describe("member import", () => {
 
     // A guild of the same name on another realm doesn't confirm anyone.
     const elsewhere = await createGuild(db, { name: "Mirkwood", faction: "horde", gameVersion: "anniversary", realmSlug: "nightslayer", ruleset: "pvp" });
-    const other = await createMember(db, elsewhere, "Member");
+    const other = await createMember(db, elsewhere, "Miembro");
     const { eligible: offered } = await link(other, `${other.userId}.ann-member`);
     expect(offered).toEqual([]);
   });
@@ -360,7 +360,7 @@ describe("member import", () => {
     const { byName } = await link(member);
     await expect(
       importBattlenetCharacter(db, member, { bnetCharacterId: strangersAldric.id, surname: "Ash", spec: "Holy", role: "healer" }, anyRealm),
-    ).rejects.toThrow(/isn't on your linked Battle.net account/);
+    ).rejects.toThrow(/no está en tu cuenta de Battle.net vinculada/);
 
     const { character } = await importBattlenetCharacter(
       db,
