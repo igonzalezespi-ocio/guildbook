@@ -15,11 +15,11 @@ import { submitSupportTicketAction } from "@/server/actions/support";
 
 /** Summary labels for every field `supportTicketInput` validates. */
 export const SUPPORT_LABELS = {
-  category: "Category",
-  guildId: "Related guild",
-  subject: "Subject",
-  message: "Message",
-  replyTo: "Reply-to email",
+  category: "Categoría",
+  guildId: "Hermandad relacionada",
+  subject: "Asunto",
+  message: "Mensaje",
+  replyTo: "Correo de respuesta",
 } as const;
 
 const CATEGORY_OPTIONS: ListboxOption[] = SUPPORT_CATEGORY_KEYS.map((key) => ({
@@ -51,7 +51,7 @@ export function SupportForm({
   }, []);
 
   const guildOptions: ListboxOption[] = [
-    { value: "", label: "No specific guild" },
+    { value: "", label: "Ninguna en concreto" },
     ...guilds.map((g) => ({ value: g.id, label: g.name, description: g.detail })),
   ];
   const length = message.trim().length;
@@ -60,32 +60,32 @@ export function SupportForm({
     <ActionForm action={submitSupportTicketAction} className="space-y-5" labels={SUPPORT_LABELS}>
       <input type="hidden" name="page" value={page} />
 
-      <Field label="Category" name="category">
+      <Field label="Categoría" name="category">
         <Listbox
           id="category"
           name="category"
           options={CATEGORY_OPTIONS}
           defaultValue={defaultCategory}
-          placeholder="Choose a category"
+          placeholder="Elige una categoría"
           required
-          requiredMessage="Choose a category"
+          requiredMessage="Elige una categoría"
           data-testid="support-category"
         />
       </Field>
 
       {guilds.length > 0 && (
-        <Field label="Related guild" name="guildId" hint="Optional. Pick the guild this is about, if any.">
+        <Field label="Hermandad relacionada" name="guildId" hint="Opcional. Elige la hermandad de la que trata, si hay alguna.">
           <Listbox id="guildId" name="guildId" options={guildOptions} defaultValue="" data-testid="support-guild" />
         </Field>
       )}
 
-      <Field label="Subject" name="subject">
-        <input id="subject" name="subject" className="field" required maxLength={SUPPORT_SUBJECT_MAX} placeholder="Short summary" />
+      <Field label="Asunto" name="subject">
+        <input id="subject" name="subject" className="field" required maxLength={SUPPORT_SUBJECT_MAX} placeholder="Resumen breve" />
       </Field>
 
       <div>
         <label htmlFor="message" className="field-label">
-          Message
+          Mensaje
         </label>
         <textarea
           id="message"
@@ -96,10 +96,10 @@ export function SupportForm({
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           aria-describedby="message-hint"
-          placeholder="What happened, what you expected, and any steps to reproduce it"
+          placeholder="Qué ha pasado, qué esperabas y, si puedes, los pasos para reproducirlo"
         />
         <p id="message-hint" className="mt-1 flex justify-between gap-2 text-xs text-muted">
-          <span>At least {SUPPORT_MESSAGE_MIN} characters.</span>
+          <span>Al menos {SUPPORT_MESSAGE_MIN} caracteres.</span>
           <span className={length > 0 && length < SUPPORT_MESSAGE_MIN ? "text-red-300" : undefined} data-testid="support-message-count">
             {length}/{SUPPORT_MESSAGE_MAX}
           </span>
@@ -108,32 +108,32 @@ export function SupportForm({
       </div>
 
       <Field
-        label="Reply-to email"
+        label="Correo de respuesta"
         name="replyTo"
-        hint="Optional. Discord doesn't always share your email with us; leave this blank and we'll reply via Discord."
+        hint="Opcional. Discord no siempre nos comparte tu correo; si lo dejas en blanco, te responderemos por Discord."
       >
         <input id="replyTo" name="replyTo" type="email" className="field" defaultValue={defaultEmail} maxLength={254} autoComplete="email" />
       </Field>
 
       <details className="rounded border border-line px-3 py-2 text-xs text-muted">
-        <summary className="cursor-pointer text-bone/80">Sent with your request</summary>
+        <summary className="cursor-pointer text-bone/80">Se envía con tu solicitud</summary>
         <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 break-all">
-          <dt className="text-gold-dim">User ID</dt>
+          <dt className="text-gold-dim">ID de usuario</dt>
           <dd className="font-mono">{context.userId}</dd>
           <dt className="text-gold-dim">Discord</dt>
           <dd>{context.discordName}</dd>
-          <dt className="text-gold-dim">Page</dt>
-          <dd>{page || "This page"}</dd>
-          <dt className="text-gold-dim">Browser</dt>
-          <dd>{userAgent || "Your browser"}</dd>
-          <dt className="text-gold-dim">App version</dt>
+          <dt className="text-gold-dim">Página</dt>
+          <dd>{page || "Esta página"}</dd>
+          <dt className="text-gold-dim">Navegador</dt>
+          <dd>{userAgent || "Tu navegador"}</dd>
+          <dt className="text-gold-dim">Versión de la app</dt>
           <dd className="font-mono">{context.appVersion}</dd>
         </dl>
       </details>
 
       <FormMessage />
-      <SubmitButton variant="gold" pendingLabel="Sending…">
-        Send request
+      <SubmitButton variant="gold" pendingLabel="Enviando…">
+        Enviar solicitud
       </SubmitButton>
     </ActionForm>
   );

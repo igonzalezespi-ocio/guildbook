@@ -11,18 +11,18 @@ import { getRequestHost } from "@/server/hosts";
 import { appVersion, getOwnSupportTicket, getSupportProfile, listSupportGuilds } from "@/server/services/support";
 import { SupportForm } from "./support-form";
 
-export const metadata: Metadata = { title: "Support", robots: { index: false } };
+export const metadata: Metadata = { title: "Soporte", robots: { index: false } };
 
 const isCategory = (v: unknown): v is SupportCategory => typeof v === "string" && Object.hasOwn(SUPPORT_CATEGORIES, v);
 
 function FallbackLine() {
   return (
     <p className="text-xs text-muted" data-testid="support-fallback">
-      Can&apos;t sign in? Email{" "}
+      ¿No puedes iniciar sesión? Escribe a{" "}
       <a href={`mailto:${CONTACT_EMAIL}`} className="text-gold underline-offset-2 hover:underline">
         {CONTACT_EMAIL}
       </a>{" "}
-      with your Discord username and what went wrong.
+      con tu usuario de Discord y qué ha fallado.
     </p>
   );
 }
@@ -37,17 +37,18 @@ export default async function SupportPage({ searchParams }: PageProps<"/platform
         <Panel>
           <div className="flex flex-col items-center gap-4 text-center" data-testid="support-signed-out">
             <GuildbookMark className="h-14 w-14" />
-            <h1 className="text-xl font-bold text-gold">Guildbook support</h1>
+            <h1 className="text-xl font-bold text-gold">Soporte de Guildbook</h1>
             <p className="text-sm text-muted">
-              Sign in with Discord to send a support request. It lets us see your account and guilds, so we can help faster.
+              Inicia sesión con Discord para enviar una solicitud de soporte. Así vemos tu cuenta y tus hermandades y podemos
+              ayudarte antes.
             </p>
             <form action={signInWithDiscord.bind(null, `${current.origin}/support`)} className="w-full">
               <button type="submit" className="btn btn-gold w-full">
-                Sign in with Discord
+                Iniciar sesión con Discord
               </button>
             </form>
             <Link href="/login?callbackUrl=%2Fsupport" className="text-xs text-bone/70 hover:text-gold">
-              Other sign-in options
+              Otras formas de iniciar sesión
             </Link>
             <FallbackLine />
           </div>
@@ -67,39 +68,39 @@ export default async function SupportPage({ searchParams }: PageProps<"/platform
     const reference = ticketReference(ticket.id);
     return (
       <div className="mx-auto max-w-2xl">
-        <PageHeader title="Request sent" eyebrow="Guildbook support" />
+        <PageHeader title="Solicitud enviada" eyebrow="Soporte de Guildbook" />
         <Panel>
           <div role="status" className="space-y-4" data-testid="support-success">
-            <p className="text-sm text-muted">Your reference number</p>
+            <p className="text-sm text-muted">Tu número de referencia</p>
             <p className="font-mono text-2xl tracking-wider text-gold" data-testid="support-reference">
               {reference}
             </p>
             <p>
-              Thanks. We&apos;ve received your request about <strong className="text-bone">{ticket.subject}</strong>.{" "}
+              Gracias. Hemos recibido tu solicitud sobre <strong className="text-bone">{ticket.subject}</strong>.{" "}
               {ticket.replyTo ? (
                 <>
-                  We&apos;ll reply by email to <strong className="text-bone">{ticket.replyTo}</strong>.
+                  Te responderemos por correo a <strong className="text-bone">{ticket.replyTo}</strong>.
                 </>
               ) : (
                 <>
-                  You didn&apos;t leave an email, so we&apos;ll reply via Discord
+                  No has dejado un correo, así que te responderemos por Discord
                   {profile?.discordUsername ? (
                     <>
                       {" "}
-                      to <strong className="text-bone">@{profile.discordUsername}</strong>
+                      a <strong className="text-bone">@{profile.discordUsername}</strong>
                     </>
                   ) : null}
                   .
                 </>
               )}
             </p>
-            <p className="text-sm text-muted">Mention {reference} if you write to us about this again.</p>
+            <p className="text-sm text-muted">Menciona {reference} si vuelves a escribirnos sobre esto.</p>
             <div className="flex flex-wrap gap-2 pt-2">
               <Link href="/support" className="btn btn-ghost btn-sm">
-                Send another request
+                Enviar otra solicitud
               </Link>
               <Link href="/" className="btn btn-ghost btn-sm">
-                Back to Guildbook
+                Volver a Guildbook
               </Link>
             </div>
           </div>
@@ -108,31 +109,31 @@ export default async function SupportPage({ searchParams }: PageProps<"/platform
     );
   }
 
-  const discordName = profile?.discordUsername ? `@${profile.discordUsername}` : (profile?.name ?? "Unknown");
+  const discordName = profile?.discordUsername ? `@${profile.discordUsername}` : (profile?.name ?? "Desconocido");
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <PageHeader title="Support" eyebrow="Guildbook">
-        Tell us what&apos;s wrong or what you need. A person reads every request and replies, usually within a few days.
+      <PageHeader title="Soporte" eyebrow="Guildbook">
+        Cuéntanos qué falla o qué necesitas. Una persona lee cada solicitud y responde, normalmente en pocos días.
       </PageHeader>
       <Panel>
         <SupportForm
-          guilds={guilds.map((g) => ({ id: g.id, name: g.name, detail: g.status === "applicant" ? "Applicant" : g.rankName }))}
+          guilds={guilds.map((g) => ({ id: g.id, name: g.name, detail: g.status === "applicant" ? "Aspirante" : g.rankName }))}
           defaultCategory={isCategory(sp.category) ? sp.category : undefined}
           defaultEmail={profile?.email ?? ""}
           context={{ userId: user.id, discordName, appVersion: appVersion() }}
         />
       </Panel>
       <p className="text-center text-xs text-muted">
-        To export or delete your data yourself, use{" "}
+        Para exportar o borrar tus datos tú mismo, usa{" "}
         <Link href="/account" className="text-gold underline-offset-2 hover:underline">
-          Account and privacy
+          Cuenta y privacidad
         </Link>
-        . See the{" "}
+        . Consulta la{" "}
         <Link href="/privacy" className="text-gold underline-offset-2 hover:underline">
-          Privacy Policy
+          Política de privacidad
         </Link>{" "}
-        for how we handle support requests.
+        para saber cómo tratamos las solicitudes de soporte.
       </p>
     </div>
   );

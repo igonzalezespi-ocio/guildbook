@@ -9,9 +9,9 @@ import { getSessionUser } from "@/server/context";
 import { getRequestHost, guildOrigin } from "@/server/hosts";
 import { getAccountOverview } from "@/server/services/account";
 
-export const metadata: Metadata = { title: "Account and privacy", robots: { index: false } };
+export const metadata: Metadata = { title: "Cuenta y privacidad", robots: { index: false } };
 
-const STATUS_LABEL = { active: "Member", applicant: "Applicant", former: "Former member" } as const;
+const STATUS_LABEL = { active: "Miembro", applicant: "Aspirante", former: "Antiguo miembro" } as const;
 
 export default async function AccountPage({ searchParams }: PageProps<"/platform/account">) {
   const params = await searchParams;
@@ -20,11 +20,12 @@ export default async function AccountPage({ searchParams }: PageProps<"/platform
     if (params.deleted === "1") {
       return (
         <div className="mx-auto max-w-2xl">
-          <PageHeader title="Account deleted" eyebrow="Guildbook" />
+          <PageHeader title="Cuenta borrada" eyebrow="Guildbook" />
           <Panel>
             <p data-testid="account-deleted">
-              Your Guildbook account and the data tied to it have been deleted. Guild audit logs now show your past actions
-              as &quot;Deleted user&quot;. You can sign in again at any time to start fresh.
+              Tu cuenta de Guildbook y los datos asociados se han borrado. Los registros de auditoría de las hermandades ahora
+              muestran tus acciones pasadas como &quot;Usuario eliminado&quot;. Puedes volver a iniciar sesión cuando quieras para
+              empezar de cero.
             </p>
           </Panel>
         </div>
@@ -41,8 +42,8 @@ export default async function AccountPage({ searchParams }: PageProps<"/platform
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <PageHeader title="Account and privacy" eyebrow="Guildbook">
-        Signed in with Discord as <span className="text-bone">{overview.displayName}</span>
+      <PageHeader title="Cuenta y privacidad" eyebrow="Guildbook">
+        Has iniciado sesión con Discord como <span className="text-bone">{overview.displayName}</span>
         {overview.user.discordUsername && overview.user.discordUsername !== overview.displayName && (
           <span> (@{overview.user.discordUsername})</span>
         )}
@@ -51,13 +52,13 @@ export default async function AccountPage({ searchParams }: PageProps<"/platform
 
       {guildDeleted && (
         <p role="status" className="panel border-emerald-700/50 p-4 text-sm text-emerald-300">
-          The guild {guildDeleted} has been deleted.
+          La hermandad {guildDeleted} se ha borrado.
         </p>
       )}
 
-      <Panel title="Your guilds">
+      <Panel title="Tus hermandades">
         {overview.guilds.length === 0 ? (
-          <p className="text-sm text-muted">You haven&apos;t joined or applied to a guild yet.</p>
+          <p className="text-sm text-muted">Aún no te has unido a ninguna hermandad ni has enviado solicitudes.</p>
         ) : (
           <ul className="divide-y divide-line">
             {overview.guilds.map((g) => (
@@ -74,47 +75,48 @@ export default async function AccountPage({ searchParams }: PageProps<"/platform
         )}
         {overview.battletag && (
           <p className="mt-4 text-xs text-muted">
-            Battle.net linked as {overview.battletag}. Unlink it from any guild&apos;s character page.
+            Battle.net vinculado como {overview.battletag}. Desvincúlalo desde la página de personajes de cualquier hermandad.
           </p>
         )}
       </Panel>
 
-      <Panel title="Export your data">
+      <Panel title="Exporta tus datos">
         <p className="mb-4 text-sm text-muted">
-          Download everything Guildbook stores about you as a JSON file: your profile, guild memberships, characters,
-          applications, Vigil reports, support requests and the audit entries you made.
+          Descarga en un archivo JSON todo lo que Guildbook guarda sobre ti: tu perfil, tus hermandades, personajes,
+          solicitudes, informes de Vigil, solicitudes de soporte y las entradas de auditoría que generaste.
         </p>
         <a href="/api/account/export" download className="btn btn-ghost" data-testid="export-data">
-          Download my data
+          Descargar mis datos
         </a>
       </Panel>
 
-      <Panel title="Delete your account" className="border-red-900/60">
+      <Panel title="Borra tu cuenta" className="border-red-900/60">
         <div className="space-y-3 text-sm text-muted" data-testid="delete-account">
           <p>
-            This permanently deletes your Guildbook account: your Discord sign-in, Battle.net link, guild memberships,
-            characters, applications, Vigil reports, support requests and companion devices. Entries in guild audit logs are kept, with your
-            name replaced by &quot;Deleted user&quot;. This can&apos;t be undone.
+            Esto borra para siempre tu cuenta de Guildbook: tu inicio de sesión con Discord, el vínculo con Battle.net, tus
+            pertenencias a hermandades, personajes, solicitudes, informes de Vigil, solicitudes de soporte y apps emparejadas. Las
+            entradas de los registros de auditoría de las hermandades se conservan, con tu nombre sustituido por &quot;Usuario
+            eliminado&quot;. No se puede deshacer.
           </p>
           {plan.soloGuilds.length > 0 && (
             <p className="text-bone">
-              You&apos;re the only member of {plan.soloGuilds.map((g) => g.name).join(", ")}, so{" "}
-              {plan.soloGuilds.length === 1 ? "that guild" : "those guilds"} will be deleted too.
+              Eres el único miembro de {plan.soloGuilds.map((g) => g.name).join(", ")}, así que{" "}
+              {plan.soloGuilds.length === 1 ? "esa hermandad también se borrará" : "esas hermandades también se borrarán"}.
             </p>
           )}
           {plan.blockers.length > 0 ? (
             <div role="alert" className="rounded border border-red-900/60 p-3 text-red-200" data-testid="delete-blocked">
-              <p className="font-semibold">You&apos;re the only admin of {plan.blockers.map((g) => g.name).join(", ")}.</p>
+              <p className="font-semibold">Eres el único administrador de {plan.blockers.map((g) => g.name).join(", ")}.</p>
               <p className="mt-1">
-                Before deleting your account, promote another member to an admin rank on the guild&apos;s admin{" "}
-                <span className="text-bone">Members</span> page, or delete the guild from its admin{" "}
-                <span className="text-bone">Guild</span> page.
+                Antes de borrar tu cuenta, asciende a otro miembro a un rango de administrador en la página{" "}
+                <span className="text-bone">Miembros</span> de la administración de la hermandad, o borra la hermandad desde su
+                página <span className="text-bone">Hermandad</span> de la administración.
               </p>
               <ul className="mt-2 flex flex-wrap gap-3">
                 {plan.blockers.map((g) => (
                   <li key={g.slug}>
                     <a href={`${guildOrigin(g.slug, current)}/admin/members`} className="text-gold underline-offset-2 hover:underline">
-                      Manage {g.name} members
+                      Gestionar los miembros de {g.name}
                     </a>
                   </li>
                 ))}
@@ -124,16 +126,16 @@ export default async function AccountPage({ searchParams }: PageProps<"/platform
             <ConfirmDeleteForm
               action={deleteAccountAction}
               expected={overview.displayName}
-              buttonLabel="Delete my account"
-              pendingLabel="Deleting…"
+              buttonLabel="Borrar mi cuenta"
+              pendingLabel="Borrando…"
             />
           )}
         </div>
       </Panel>
 
       <p className="text-center text-xs text-muted">
-        See the <Link href="/privacy" className="text-gold hover:underline">Privacy Policy</Link> for what we store and why.
-        Questions or problems? <Link href="/support" className="text-gold hover:underline">Contact support</Link>.
+        Consulta la <Link href="/privacy" className="text-gold hover:underline">Política de privacidad</Link> para saber qué
+        guardamos y por qué. ¿Dudas o problemas? <Link href="/support" className="text-gold hover:underline">Contacta con soporte</Link>.
       </p>
     </div>
   );
