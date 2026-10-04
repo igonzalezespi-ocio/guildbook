@@ -13,7 +13,7 @@ import { getProgression, listRecruitmentNeeds, listScheduleSlots } from "@/serve
 import { type CarouselSite, PreviewCarousel } from "./preview-carousel";
 
 /** The public links in a guild site's header, for a signed-out visitor. */
-const NAV = ["Charter", "Lore", "Roster", "Progression", "Addons"];
+const NAV = ["Reglamento", "Historia", "Plantilla", "Progreso", "Addons"];
 
 type Slot = { dayOfWeek: number; startTime: string; endTime: string; label: string };
 type Tier = { name: string; killed: number; total: number };
@@ -53,7 +53,7 @@ export async function loadShowcase(db: Db, guild: ShowcaseGuild, address: string
     slots,
     needs: CLASSES.filter((c) => needs.some((n) => n.wowClass === c && n.priority !== "closed")),
     tier: currentTier(progression, now),
-    link: { href, label: `Visit ${guild.name}` },
+    link: { href, label: `Visita ${guild.name}` },
   };
 }
 
@@ -79,8 +79,8 @@ export function exampleSites(domain: string): PreviewSite[] {
       recruitmentOpen: true,
       timezone: "America/Los_Angeles",
       slots: [
-        { dayOfWeek: 3, startTime: "19:30", endTime: "22:30", label: "Main raid" },
-        { dayOfWeek: 6, startTime: "18:00", endTime: "21:00", label: "Main raid" },
+        { dayOfWeek: 3, startTime: "19:30", endTime: "22:30", label: "Banda principal" },
+        { dayOfWeek: 6, startTime: "18:00", endTime: "21:00", label: "Banda principal" },
       ],
       needs: ["hunter", "druid", "priest"],
       tier: { name: "Molten Core", killed: 6, total: 10 },
@@ -95,8 +95,8 @@ export function exampleSites(domain: string): PreviewSite[] {
       recruitmentOpen: true,
       timezone: "America/Chicago",
       slots: [
-        { dayOfWeek: 1, startTime: "20:00", endTime: "23:00", label: "Main raid" },
-        { dayOfWeek: 4, startTime: "20:00", endTime: "23:00", label: "Main raid" },
+        { dayOfWeek: 1, startTime: "20:00", endTime: "23:00", label: "Banda principal" },
+        { dayOfWeek: 4, startTime: "20:00", endTime: "23:00", label: "Banda principal" },
       ],
       needs: ["rogue", "warlock", "shaman"],
       tier: { name: "Molten Core", killed: 9, total: 10 },
@@ -133,7 +133,7 @@ function Frame({ site, now, example }: { site: PreviewSite; now: Date; example: 
             {NAV.map((item) => (
               <span key={item}>{item}</span>
             ))}
-            {site.recruitmentOpen && <span className="btn btn-primary min-h-0 px-2 py-0.5 text-[0.6rem]">Apply</span>}
+            {site.recruitmentOpen && <span className="btn btn-primary min-h-0 px-2 py-0.5 text-[0.6rem]">Únete</span>}
           </span>
         </div>
 
@@ -144,16 +144,16 @@ function Frame({ site, now, example }: { site: PreviewSite; now: Date; example: 
             {site.motto && <p className="mt-1 font-display text-xs tracking-[0.3em] text-crimson-bright uppercase">{site.motto}</p>}
             <div className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start">
               {site.recruitmentOpen && (
-                <span className="btn btn-primary min-h-0 px-3 py-1.5 text-[0.65rem]">{order ? "Apply to the Order" : "Apply to join"}</span>
+                <span className="btn btn-primary min-h-0 px-3 py-1.5 text-[0.65rem]">{order ? "Únete a la Orden" : "Solicita unirte"}</span>
               )}
-              <span className="btn btn-ghost min-h-0 px-3 py-1.5 text-[0.65rem]">Read the Charter</span>
+              <span className="btn btn-ghost min-h-0 px-3 py-1.5 text-[0.65rem]">Lee el reglamento</span>
             </div>
           </div>
         </div>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           <div className="panel p-3">
-            <p className={label}>Next raid</p>
+            <p className={label}>Próxima banda</p>
             {next ? (
               <>
                 <p className="mt-1 text-sm font-semibold text-bone">
@@ -164,15 +164,15 @@ function Frame({ site, now, example }: { site: PreviewSite; now: Date; example: 
                 </p>
               </>
             ) : (
-              <p className="mt-1 text-xs text-muted italic">Schedule to be announced.</p>
+              <p className="mt-1 text-xs text-muted italic">Horario por anunciar.</p>
             )}
           </div>
           <div className="panel p-3">
-            <p className={label}>Recruiting</p>
+            <p className={label}>Reclutamiento</p>
             {!site.recruitmentOpen ? (
-              <p className="mt-1 text-xs text-muted italic">Closed at present.</p>
+              <p className="mt-1 text-xs text-muted italic">Cerrado por ahora.</p>
             ) : site.needs.length === 0 ? (
-              <p className="mt-1 text-xs text-muted italic">All classes welcome.</p>
+              <p className="mt-1 text-xs text-muted italic">Todas las clases son bienvenidas.</p>
             ) : (
               <>
                 <p className="mt-1.5 flex flex-wrap gap-1">
@@ -185,7 +185,7 @@ function Frame({ site, now, example }: { site: PreviewSite; now: Date; example: 
             )}
           </div>
           <div className="panel p-3">
-            <p className={label}>Progression</p>
+            <p className={label}>Progreso</p>
             {tier ? (
               <>
                 <p className="mt-1 text-sm font-semibold text-bone">{tier.name}</p>
@@ -193,11 +193,11 @@ function Frame({ site, now, example }: { site: PreviewSite; now: Date; example: 
                   <div className="h-full rounded-full bg-linear-to-r from-gold-dim to-gold" style={{ width: `${(tier.killed / tier.total) * 100}%` }} />
                 </div>
                 <p className="mt-1 text-xs text-muted">
-                  {tier.killed === 0 && !launched ? `Opens ${launchLabel()}` : `${tier.killed} of ${tier.total} bosses`}
+                  {tier.killed === 0 && !launched ? `Abre el ${launchLabel()}` : `${tier.killed} de ${tier.total} jefes`}
                 </p>
               </>
             ) : (
-              <p className="mt-1 text-xs text-muted italic">No raids tracked yet.</p>
+              <p className="mt-1 text-xs text-muted italic">Aún no hay bandas registradas.</p>
             )}
           </div>
         </div>
@@ -223,16 +223,16 @@ export function SitePreview({ sites, now }: { sites: PreviewSite[]; now: Date })
     frame: <Frame site={site} now={now} example={!site.link} />,
     caption: site.link ? (
       <>
-        A guild site on Guildbook.{" "}
+        Una web de hermandad en Guildbook.{" "}
         <a href={site.link.href} className="link">
           {site.link.label}
         </a>
       </>
     ) : (
       <>
-        {site.name} is an example of a tabard theme.{" "}
+        {site.name} es un ejemplo de tema de tabardo.{" "}
         <Link href="/create" className="link">
-          Your guild here
+          Tu hermandad aquí
         </Link>
       </>
     ),

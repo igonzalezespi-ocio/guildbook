@@ -26,14 +26,14 @@ test.describe("Guildbook platform", () => {
     await expect(page.getByRole("heading", { name: "A home for your guild" })).toBeVisible();
     await expect(page).toHaveTitle(/Guildbook/);
     // The guild site preview links to the Order on its subdomain.
-    await expect(page.getByRole("link", { name: "Visit Order of Saint Michael" })).toHaveAttribute("href", guildOrigin("osm"));
+    await expect(page.getByRole("link", { name: "Visita Order of Saint Michael" })).toHaveAttribute("href", guildOrigin("osm"));
     // Its theme picker switches to an example guild, which links to guild creation instead.
     await page.getByRole("button", { name: "Wardens of the Greenwood theme" }).click();
     await expect(page.getByRole("button", { name: "Wardens of the Greenwood theme" })).toHaveAttribute("aria-pressed", "true");
     await expect(page.getByTestId("preview-address")).toHaveText(/^greenwood\./);
-    await expect(page.getByRole("link", { name: "Your guild here" })).toHaveAttribute("href", "/create");
+    await expect(page.getByRole("link", { name: "Tu hermandad aquí" })).toHaveAttribute("href", "/create");
     await page.getByRole("button", { name: "Order of Saint Michael theme" }).click();
-    await expect(page.getByRole("link", { name: "Visit Order of Saint Michael" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Visita Order of Saint Michael" })).toBeVisible();
 
     // www redirects to the bare apex, keeping the path.
     await page.goto(`http://www.localhost:${PORT}/guilds`);
