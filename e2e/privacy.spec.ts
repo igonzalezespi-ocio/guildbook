@@ -21,18 +21,18 @@ async function signInOnApex(page: Page, discordId: string, name: string, callbac
 test.describe("Legal pages", () => {
   test("terms and privacy render on the apex with their operator details and cross-links", async ({ page }) => {
     await page.goto(`${APEX}/terms`);
-    await expect(page.getByRole("heading", { name: "Terms of Service", level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Términos del servicio", level: 1 })).toBeVisible();
     await expect(page.getByTestId("legal-body")).toContainText("matt.rosendin@gmail.com");
-    await expect(page.getByTestId("legal-body")).toContainText("State of California");
+    await expect(page.getByTestId("legal-body")).toContainText("Estado de California");
     await expect(page.getByTestId("legal-body")).not.toContainText("[");
 
     await page.goto(`${APEX}/privacy`);
-    await expect(page.getByRole("heading", { name: "Privacy Policy", level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Política de privacidad", level: 1 })).toBeVisible();
     const body = page.getByTestId("legal-body");
     await expect(body).toContainText("Matthew Rosendin");
     await expect(body).not.toContainText("PLACEHOLDER");
-    await expect(body).toContainText("We don't store Discord's access or refresh tokens.");
-    await expect(body).toContainText(/deleted automatically \d+ days/);
+    await expect(body).toContainText("No guardamos los tokens de acceso ni de actualización de Discord.");
+    await expect(body).toContainText(/se borran automáticamente \d+ días/);
     await expect(body).not.toContainText("{{");
 
     const footer = page.getByRole("contentinfo").getByRole("navigation", { name: "Legal" });
