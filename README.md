@@ -174,6 +174,7 @@ To test before launch with characters from another game (for example Anniversary
 | `CRON_SECRET` | on Vercel | Bearer secret for `/api/cron/daily` and `/api/cron/battlenet-sync`. |
 | `APPLICATION_RETENTION_DAYS` | no | Days before withdrawn and declined applications are deleted (default 180). Shown in the privacy policy. |
 | `GITHUB_TOKEN` | no | Raises the GitHub API rate limit for the Vigil download page's release lookup. Not needed for public repositories. |
+| `BOT_API_TOKEN` | no | Key of the guild's Discord bot for `/api/bot/*`: it reads the members and their characters, and records the raids and dungeon groups organised in Discord (shown on Members, Grupos). Without it that API answers 404. |
 | `AUTH_TEST_MODE` | dev/test only | `1` enables the test-login provider used by Playwright. |
 | `E2E_DATABASE_URL` | no | Database for Playwright runs (defaults to `DATABASE_URL`). **It is wiped and reseeded.** |
 
