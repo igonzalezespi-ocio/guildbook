@@ -1,4 +1,4 @@
-import { and, asc, eq, gt, inArray, isNull, or } from "drizzle-orm";
+import { and, asc, eq, gt, inArray, isNull, lt, or } from "drizzle-orm";
 import { z } from "zod";
 import type { Db } from "@/db/types";
 import { characters, groupEvents, groupSignups, memberships, ranks, users } from "@/db/schema";
@@ -18,6 +18,8 @@ import { DomainError, NotFoundError } from "@/server/errors";
 
 /** How long after starting a scheduled group counts as over. */
 export const FINISH_AFTER_MS = 5 * 3_600_000;
+/** Past groups, and who went to each, are deleted this many days after they start (owner decision, 2026-10-11). */
+export const GROUP_RETENTION_DAYS = 90;
 
 export type DiscordActor = Actor & { userId: string; discordId: string };
 
@@ -263,4 +265,14 @@ export async function removeSignup(db: Db, actor: DiscordActor, id: string, raw:
     }
     return (await loadViews(tx, [event]))[0]!;
   });
+}
+
+/** Daily job: deletes groups that started more than GROUP_RETENTION_DAYS ago; their sign-ups go with them. */
+export async function purgePastGroups(db: Db, now: Date = new Date()) {
+  const cutoff = new Date(now.getTime() - GROUP_RETENTION_DAYS * 86_400_000);
+  const rows = await db
+    .delete(groupEvents)
+    .where(and(lt(groupEvents.startsAt, cutoff), or(isNull(groupEvents.expiresAt), lt(groupEvents.expiresAt, cutoff))))
+    .returning({ id: groupEvents.id });
+  return rows.length;
 }

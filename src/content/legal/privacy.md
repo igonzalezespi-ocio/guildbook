@@ -90,7 +90,7 @@ Vigil trabaja con el archivo de registro de combate que World of Warcraft escrib
 
 Si la hermandad conecta su bot de Discord a esta web, el bot recibe, de cada miembro activo que haya entrado con Discord: su ID de usuario de Discord, el nivel de su rango (por ejemplo miembro u oficial) y sus personajes (nombre, apellido, clase, especialización, rol, nivel, cuál es el principal, si está verificado y sus profesiones con su nivel). Lo usa para dar los roles del servidor de Discord de la hermandad y para organizar bandas y mazmorras.
 
-Cuando te apuntas a un grupo desde Discord, guardamos el grupo (tipo, instancia, fecha, plazas, notas, quién lo organiza y el mensaje de Discord donde se anunció) y tu inscripción (con qué personaje, con qué rol, si vas de reserva y cuándo te apuntaste). Los grupos se borran con la hermandad, y tu inscripción con tu cuenta o con tu personaje.
+Cuando te apuntas a un grupo desde Discord, guardamos el grupo (tipo, instancia, fecha, plazas, notas, quién lo organiza y el mensaje de Discord donde se anunció) y tu inscripción (con qué personaje, con qué rol, si vas de reserva y cuándo te apuntaste). **Los grupos se borran automáticamente 90 días después de su fecha**, con todas sus inscripciones; antes, si se borra la hermandad. Tu inscripción también se borra con tu cuenta o con tu personaje.
 
 El bot **no** recibe tu correo, tu nombre de Discord ni tus datos de Battle.net, y no puede entrar en nuestra base de datos: solo ve lo que esta web le da con su clave. El bot lo gestiona un miembro de la hermandad, en su propio equipo.
 
@@ -172,6 +172,7 @@ Tus datos se guardan y se tratan en Estados Unidos. Si estás fuera de EE. UU., 
 - **Token de acceso de Battle.net:** caduca al cabo de unas 24 horas. Se elimina si Blizzard lo rechaza, y se borra cuando desvinculas.
 - **Personajes:** los personajes archivados salen de la plantilla pero se conservan para que el historial de la hermandad siga intacto, hasta que se borre la hermandad o tu cuenta.
 - **Solicitudes:** las solicitudes pendientes y aceptadas se conservan en los registros de la hermandad hasta que se borre la hermandad o tu cuenta. **Las solicitudes retiradas y rechazadas se borran automáticamente {{applicationRetentionDays}} días** después de resolverse (o, si nunca se revisaron, de enviarse), y el nombre del aspirante se sustituye por «Usuario eliminado» en las entradas de auditoría que le afectan.
+- **Grupos de Discord:** 90 días desde la fecha del grupo; después se borran automáticamente con quién iba en cada uno.
 - **Informes de Vigil:** hasta que los borres, o se borre tu pertenencia, la hermandad o tu cuenta.
 - **Solicitudes de soporte:** hasta que se borre tu cuenta. Las copias enviadas por correo al operador se conservan en su buzón el tiempo necesario para atender la solicitud.
 - **Dispositivos complementarios:** hasta que se borre la pertenencia, la hermandad o la cuenta. Los dispositivos revocados dejan de funcionar de inmediato.

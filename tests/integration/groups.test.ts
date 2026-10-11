@@ -1,10 +1,10 @@
 import { eq } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { auditLog, characters, users } from "@/db/schema";
+import { auditLog, characters, groupEvents, groupSignups, users } from "@/db/schema";
 import type { Db } from "@/db/types";
 import { handleCreateGroup, handleListGroups, handleListMembers, handleRemoveSignup, handleSignUp, handleUpdateGroup } from "@/server/bot-api";
 import { createCharacter } from "@/server/services/characters";
-import { actorForDiscord, createGroup, removeSignup, rosterOf, setBench, signUp, updateGroup } from "@/server/services/groups";
+import { actorForDiscord, createGroup, purgePastGroups, removeSignup, rosterOf, setBench, signUp, updateGroup } from "@/server/services/groups";
 import { createGuild, createMember, createTestDb } from "../support/db";
 
 let db: Db;
@@ -106,6 +106,22 @@ describe("groups", () => {
     expect(updated.remindedAt).toBeInstanceOf(Date);
     await expect(updateGroup(db, guild.guild.id, null, group.id, { status: "cancelled" })).rejects.toThrow("Solo el líder");
     expect((await updateGroup(db, guild.guild.id, null, group.id, { status: "finished" })).status).toBe("finished");
+  });
+
+  it("deletes groups 90 days after they start, with their sign-ups, and keeps the rest", async () => {
+    const guild = await createGuild(db);
+    const tor = await memberWith(guild, "Knight", "Tor", "warrior");
+    const old = await createGroup(db, tor.actor, { ...raid, startsAt: "2026-01-01T19:00:00Z" });
+    const recent = await createGroup(db, tor.actor, { ...raid, startsAt: "2026-03-15T19:00:00Z" });
+    await signUp(db, tor.actor, old.id, { characterId: tor.character.id, role: "tank" });
+    await signUp(db, tor.actor, recent.id, { characterId: tor.character.id, role: "tank" });
+
+    const now = new Date("2026-04-05T12:00:00Z");
+    expect(await purgePastGroups(db, now)).toBeGreaterThanOrEqual(1);
+    expect(await db.select().from(groupEvents).where(eq(groupEvents.id, old.id))).toHaveLength(0);
+    expect(await db.select().from(groupSignups).where(eq(groupSignups.eventId, old.id))).toHaveLength(0);
+    expect(await db.select().from(groupEvents).where(eq(groupEvents.id, recent.id))).toHaveLength(1);
+    expect(await db.select().from(groupSignups).where(eq(groupSignups.eventId, recent.id))).toHaveLength(1);
   });
 });
 
