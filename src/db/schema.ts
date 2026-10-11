@@ -26,6 +26,7 @@ import type { ParsedAward } from "@/lib/loot/types";
 import type { SupportTicketContext } from "@/lib/support";
 import type { GameVersion } from "@/lib/wow-versions";
 import { GUILD_VERSIONS } from "@/lib/game-versions";
+import { GROUP_KINDS, GROUP_ROLES, GROUP_STATUSES } from "@/lib/groups";
 
 // ---------------------------------------------------------------------------
 // Enums
@@ -800,6 +801,81 @@ export const vigilCompanionDevices = pgTable(
       foreignColumns: [memberships.guildId, memberships.id],
     }).onDelete("cascade"),
     index("vigil_companion_devices_owner_idx").on(t.guildId, t.membershipId),
+  ],
+);
+
+export const groupKindEnum = pgEnum("group_kind", GROUP_KINDS);
+export const groupStatusEnum = pgEnum("group_status", GROUP_STATUSES);
+export const groupRoleEnum = pgEnum("group_role", GROUP_ROLES);
+
+/**
+ * A raid, a dungeon run or a quick "looking for group" call, organised from Discord: the guild's Discord bot creates
+ * it and records sign-ups through /api/bot/groups, and the members area shows it. Instances are the bot's own keys
+ * and names (a guild's progression instances are a separate, officer-curated list).
+ */
+export const groupEvents = pgTable(
+  "group_events",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    guildId: uuid("guild_id")
+      .notNull()
+      .references(() => guilds.id, { onDelete: "cascade" }),
+    kind: groupKindEnum("kind").notNull(),
+    instanceKey: text("instance_key").notNull(),
+    instanceName: text("instance_name").notNull(),
+    startsAt: timestamp("starts_at", { withTimezone: true }).notNull(),
+    /** Quick calls end on their own; scheduled groups end some hours after they start. */
+    expiresAt: timestamp("expires_at", { withTimezone: true }),
+    leaderUserId: text("leader_user_id").references(() => users.id, { onDelete: "set null" }),
+    tanks: smallint("tanks").notNull(),
+    healers: smallint("healers").notNull(),
+    dps: smallint("dps").notNull(),
+    notes: text("notes").notNull().default(""),
+    status: groupStatusEnum("status").notNull().default("open"),
+    remindedAt: timestamp("reminded_at", { withTimezone: true }),
+    discordChannelId: text("discord_channel_id"),
+    discordMessageId: text("discord_message_id"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [
+    unique("group_events_guild_id_id_key").on(t.guildId, t.id),
+    index("group_events_guild_starts_idx").on(t.guildId, t.startsAt),
+    check("group_events_slots", sql`${t.tanks} >= 0 and ${t.healers} >= 0 and ${t.dps} >= 0 and ${t.tanks} + ${t.healers} + ${t.dps} between 1 and 40`),
+  ],
+);
+
+/** One member's place in a group, with one of their characters. Order of sign-up decides who gets the slots. */
+export const groupSignups = pgTable(
+  "group_signups",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    guildId: uuid("guild_id")
+      .notNull()
+      .references(() => guilds.id, { onDelete: "cascade" }),
+    eventId: uuid("event_id").notNull(),
+    characterId: uuid("character_id").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    role: groupRoleEnum("role").notNull(),
+    /** On the bench by their own choice or the leader's; otherwise it depends on the free slots. */
+    bench: boolean("bench").notNull().default(false),
+    /** Sign-up time: it orders the queue, and changing role or character moves you to its end. */
+    queuedAt: timestamp("queued_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    foreignKey({
+      name: "group_signups_event_fk",
+      columns: [t.guildId, t.eventId],
+      foreignColumns: [groupEvents.guildId, groupEvents.id],
+    }).onDelete("cascade"),
+    foreignKey({
+      name: "group_signups_character_fk",
+      columns: [t.guildId, t.characterId],
+      foreignColumns: [characters.guildId, characters.id],
+    }).onDelete("cascade"),
+    unique("group_signups_event_user_key").on(t.eventId, t.userId),
   ],
 );
 

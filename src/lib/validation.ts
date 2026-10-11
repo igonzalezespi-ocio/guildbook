@@ -14,6 +14,7 @@ import {
   RULESETS,
 } from "@/lib/game";
 import { cleanGuildName } from "@/lib/guild-identity";
+import { GROUP_KINDS, GROUP_ROLES, GROUP_STATUSES } from "@/lib/groups";
 import {
   findRealm,
   type GuildVersion,
@@ -131,7 +132,8 @@ export const characterInputFor = (version: GuildVersion) =>
       isMain: checkbox,
       professions: z
         .array(professionEntryFor(version))
-        .max(4, "Como máximo 4 profesiones")
+        // Two primary professions plus Cooking, First Aid and Fishing.
+        .max(5, "Como máximo 5 profesiones")
         .refine((list) => new Set(list.map((p) => p.profession)).size === list.length, "Profesión repetida"),
     })
     .superRefine(refineSpec);
@@ -467,4 +469,43 @@ export const lootCommitInput = z.object({
   batchId: uuid,
   decisions: z.record(z.string().max(120), lootNameDecision).default({}),
   remember: checkbox,
+});
+
+// --- Groups (organised from Discord) -------------------------------------------
+
+const slotCount = z.number().int().min(0).max(40);
+/** Discord snowflakes: numeric, kept as strings. */
+export const discordId = z.string().regex(/^\d{5,25}$/);
+
+export const groupCreateInput = z
+  .object({
+    kind: z.enum(GROUP_KINDS),
+    instanceKey: z.string().trim().min(1).max(64),
+    instanceName: z.string().trim().min(1).max(120),
+    startsAt: z.coerce.date(),
+    expiresAt: z.coerce.date().nullish(),
+    tanks: slotCount,
+    healers: slotCount,
+    dps: slotCount,
+    notes: trimmed(500).default(""),
+  })
+  .refine((v) => v.tanks + v.healers + v.dps >= 1 && v.tanks + v.healers + v.dps <= 40, "Un grupo tiene entre 1 y 40 plazas");
+
+export const groupUpdateInput = z.object({
+  status: z.enum(GROUP_STATUSES).optional(),
+  discordChannelId: discordId.nullish(),
+  discordMessageId: discordId.nullish(),
+  reminded: z.boolean().optional(),
+});
+
+export const groupSignupInput = z.object({
+  characterId: uuid,
+  role: z.enum(GROUP_ROLES),
+  bench: z.boolean().default(false),
+});
+
+/** Bench or remove someone: yourself when no target is given. */
+export const groupTargetInput = z.object({
+  targetDiscordId: discordId.nullish(),
+  bench: z.boolean().optional(),
 });

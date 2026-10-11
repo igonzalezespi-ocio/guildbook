@@ -21,6 +21,7 @@ export function SiteHeader({ guild, viewer }: { guild: Guild; viewer: Viewer }) 
     { href: h("/progression"), label: "Progreso" },
     { href: h("/addons"), label: "Addons" },
     ...(canViewLoot(viewer.actor, guild) ? [{ href: h("/members/loot"), label: "Botín" }] : []),
+    ...(can(viewer.actor, "member.area") ? [{ href: h("/members/groups"), label: "Grupos" }] : []),
     ...(can(viewer.actor, "member.area") ? [{ href: h("/members/characters"), label: "Personajes" }] : []),
     ...(can(viewer.actor, "admin.area") ? [{ href: h("/admin"), label: "Administración" }] : []),
   ];

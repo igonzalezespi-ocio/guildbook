@@ -1,6 +1,6 @@
 # Política de privacidad
 
-Última actualización: 28 de septiembre de 2026
+Última actualización: 11 de octubre de 2026
 
 Esta política explica qué información recoge Guildbook, por qué, quién puede verla y qué opciones tienes. Cubre guildbook.io, cada sitio de hermandad en un subdominio de guildbook.io (por ejemplo osm.guildbook.io), los dominios propios que las hermandades conectan a Guildbook y la app complementaria Vigil. Guildbook lo gestiona Matthew Rosendin ("nosotros"), que es el responsable del tratamiento de los datos del servicio.
 
@@ -86,6 +86,14 @@ Vigil trabaja con el archivo de registro de combate que World of Warcraft escrib
 - Puedes revocar un dispositivo en cualquier momento desde el sitio de tu hermandad.
 - La app complementaria no contiene analítica ni seguimiento. Solo se comunica con el sitio de Guildbook con el que la emparejaste.
 
+### Bot de Discord de la hermandad
+
+Si la hermandad conecta su bot de Discord a esta web, el bot recibe, de cada miembro activo que haya entrado con Discord: su ID de usuario de Discord, el nivel de su rango (por ejemplo miembro u oficial) y sus personajes (nombre, apellido, clase, especialización, rol, nivel, cuál es el principal, si está verificado y sus profesiones con su nivel). Lo usa para dar los roles del servidor de Discord de la hermandad y para organizar bandas y mazmorras.
+
+Cuando te apuntas a un grupo desde Discord, guardamos el grupo (tipo, instancia, fecha, plazas, notas, quién lo organiza y el mensaje de Discord donde se anunció) y tu inscripción (con qué personaje, con qué rol, si vas de reserva y cuándo te apuntaste). Los grupos se borran con la hermandad, y tu inscripción con tu cuenta o con tu personaje.
+
+El bot **no** recibe tu correo, tu nombre de Discord ni tus datos de Battle.net, y no puede entrar en nuestra base de datos: solo ve lo que esta web le da con su clave. El bot lo gestiona un miembro de la hermandad, en su propio equipo.
+
 ### Solicitudes de soporte
 
 Cuando envías una solicitud de soporte desde guildbook.io/support, guardamos su categoría, su asunto y su mensaje, la hermandad que elegiste (si la hay), el correo de respuesta que indicaste (si lo hay) y datos que nos ayudan a responder: tu ID de usuario, tu nombre de Discord, la página de la que venías, el agente de usuario de tu navegador y la versión del sitio. Enviamos una copia por correo al operador de Guildbook para poder responder.
@@ -134,6 +142,7 @@ Si una hermandad decide aparecer en el directorio de Guildbook, su nombre y su n
 ### Visible para los miembros de la hermandad
 
 - Los informes de Vigil que hayas compartido con la hermandad.
+- Los grupos organizados desde Discord y quién va en cada uno, con qué personaje.
 
 ### Visible solo para ti
 
@@ -147,6 +156,7 @@ Usamos estos proveedores para gestionar Guildbook:
 - **Vercel** (alojamiento y funciones serverless), Estados Unidos.
 - **Neon** (alojamiento de la base de datos Postgres), en Estados Unidos (AWS us-east-2, Ohio).
 - **Resend** (envío por correo de las solicitudes de soporte al operador), Estados Unidos.
+- **El bot de Discord de la hermandad**, si la hermandad lo conecta: recibe lo descrito en «Bot de Discord de la hermandad».
 - **Discord** (inicio de sesión) y **Blizzard Entertainment** (vinculación opcional de Battle.net y datos públicos de personajes). Actúan como servicios independientes sujetos a sus propias políticas de privacidad.
 
 No compartimos tu información con nadie más, salvo cuando lo exija la ley, para proteger la seguridad de las personas o nuestros derechos, o como parte de un traspaso del servicio a un nuevo operador que acepte esta política.

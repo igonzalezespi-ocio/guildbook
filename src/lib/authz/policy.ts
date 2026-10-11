@@ -15,6 +15,8 @@ export const POLICY = {
   "character.manageOwn": "member",
   "vigil.use": "member",
   "loot.view": "member",
+  "group.create": "member",
+  "group.join": "member",
 
   // Officer admin
   "admin.area": "officer",
@@ -26,6 +28,8 @@ export const POLICY = {
   "recruitment.edit": "officer",
   "progression.edit": "officer",
   "addons.edit": "officer",
+  /** Any group, not only one's own: close, cancel, bench or remove people. */
+  "group.manage": "officer",
   "audit.view": "officer",
   "loot.award": "officer",
   "loot.reverse": "officer",

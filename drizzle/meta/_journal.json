@@ -169,6 +169,13 @@
       "when": 1790731100000,
       "tag": "0023_item_cache_by_version",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1791741330653,
+      "tag": "0024_groups",
+      "breakpoints": true
     }
   ]
 }
