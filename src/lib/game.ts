@@ -147,6 +147,25 @@ export const PROFESSION_LABELS: Record<Profession, string> = {
   fishing: "Pesca",
 };
 
+/**
+ * The game's skill line ID of each profession, as the client's profession API and the Guild Professions & Recipes
+ * addon give them.
+ */
+export const PROFESSION_BY_SKILL_LINE: Readonly<Record<number, Profession>> = {
+  171: "alchemy",
+  164: "blacksmithing",
+  333: "enchanting",
+  202: "engineering",
+  182: "herbalism",
+  165: "leatherworking",
+  186: "mining",
+  393: "skinning",
+  197: "tailoring",
+  185: "cooking",
+  129: "first_aid",
+  356: "fishing",
+};
+
 export const MAX_LEVEL = 60;
 export const MAX_PROFESSION_SKILL = 300;
 export const MAX_IN_GAME_RANKS = 10;

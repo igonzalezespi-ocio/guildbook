@@ -30,6 +30,7 @@ export const POLICY = {
   "addons.edit": "officer",
   /** Any group, not only one's own: close, cancel, bench or remove people. */
   "group.manage": "officer",
+  "addonSync.manage": "officer",
   "audit.view": "officer",
   "loot.award": "officer",
   "loot.reverse": "officer",

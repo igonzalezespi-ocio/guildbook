@@ -26,6 +26,7 @@ export default async function AdminLayout({ children, params }: LayoutProps<"/[g
   ];
   const more = [
     { href: h("/addons"), label: "Addons" },
+    ...(can(viewer.actor, "addonSync.manage") ? [{ href: h("/addon-sync"), label: "Sincronizador del addon" }] : []),
     { href: h("/audit"), label: "Registro de auditoría" },
   ];
 
