@@ -471,6 +471,44 @@ export const lootCommitInput = z.object({
   remember: checkbox,
 });
 
+// --- Addon sync ------------------------------------------------------------
+
+export const addonSyncTokenInput = z.object({
+  name: trimmed(80).min(1, "Ponle un nombre, por ejemplo el del ordenador").default("Sincronizador"),
+});
+
+/** The addon's own clock check: it never accepts a record dated before September 2020 (see the addon's Data.lua). */
+const ADDON_MIN_TIME = 1_600_000_000;
+
+/**
+ * What the addon sync app sends: the guild's characters as the Guild Professions & Recipes addon knows them, with the
+ * professions each one has. `t` is the addon's own time of the character's last change (Unix seconds).
+ */
+export const addonProfessionsUpload = z.object({
+  addonVersion: z.string().trim().max(32).nullish(),
+  /** The in-game guild the data comes from; informative only. */
+  guild: z.string().trim().max(64).nullish(),
+  characters: z
+    .array(
+      z.object({
+        guid: z.string().regex(/^Player-\d+-[0-9A-Fa-f]+$/).max(64),
+        name: z.string().trim().min(1).max(64),
+        t: z.number().int().min(ADDON_MIN_TIME).max(4_102_444_800),
+        professions: z
+          .array(
+            z.object({
+              skillLine: z.number().int().positive(),
+              rank: z.number().int().min(0).max(1000),
+              maxRank: z.number().int().min(0).max(1000),
+            }),
+          )
+          .max(10),
+      }),
+    )
+    .max(2000),
+});
+export type AddonProfessionsUpload = z.infer<typeof addonProfessionsUpload>;
+
 // --- Groups (organised from Discord) -------------------------------------------
 
 const slotCount = z.number().int().min(0).max(40);

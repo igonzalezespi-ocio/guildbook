@@ -176,6 +176,13 @@
       "when": 1791741330653,
       "tag": "0024_groups",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1791800690105,
+      "tag": "0025_addon_sync",
+      "breakpoints": true
     }
   ]
 }

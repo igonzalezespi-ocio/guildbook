@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import {
   type AnyPgColumn,
+  bigint,
   boolean,
   check,
   foreignKey,
@@ -802,6 +803,85 @@ export const vigilCompanionDevices = pgTable(
     }).onDelete("cascade"),
     index("vigil_companion_devices_owner_idx").on(t.guildId, t.membershipId),
   ],
+);
+
+/**
+ * Keys for the addon sync app, which reads the Guild Professions & Recipes addon's saved data on an officer's PC and
+ * sends the guild's profession levels here. Officers create keys on the site; only a SHA-256 hash is stored.
+ */
+export const addonSyncTokens = pgTable(
+  "addon_sync_tokens",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    guildId: uuid("guild_id")
+      .notNull()
+      .references(() => guilds.id, { onDelete: "cascade" }),
+    membershipId: uuid("membership_id").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    tokenHash: text("token_hash").notNull().unique(),
+    tokenHint: text("token_hint").notNull(),
+    createdAt: createdAt(),
+    lastUsedAt: timestamp("last_used_at", { withTimezone: true }),
+    revokedAt: timestamp("revoked_at", { withTimezone: true }),
+  },
+  (t) => [
+    foreignKey({
+      name: "addon_sync_tokens_membership_fk",
+      columns: [t.guildId, t.membershipId],
+      foreignColumns: [memberships.guildId, memberships.id],
+    }).onDelete("cascade"),
+    index("addon_sync_tokens_guild_idx").on(t.guildId),
+  ],
+);
+
+/**
+ * A character as the addon knows it: its in-game GUID, and the addon's own time (`t`, Unix seconds) of the data last
+ * applied, so an older copy sent later from another officer's PC never overwrites a newer one.
+ */
+export const characterAddonLinks = pgTable(
+  "character_addon_links",
+  {
+    characterId: uuid("character_id").primaryKey(),
+    guildId: uuid("guild_id")
+      .notNull()
+      .references(() => guilds.id, { onDelete: "cascade" }),
+    guid: text("guid").notNull(),
+    addonTime: bigint("addon_time", { mode: "number" }).notNull(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [
+    foreignKey({
+      name: "character_addon_links_character_fk",
+      columns: [t.guildId, t.characterId],
+      foreignColumns: [characters.guildId, characters.id],
+    }).onDelete("cascade"),
+    unique("character_addon_links_guid_key").on(t.guildId, t.guid),
+  ],
+);
+
+/** One addon sync: what arrived and what was done with it. The newest few per guild are kept for the admin page. */
+export const addonSyncReports = pgTable(
+  "addon_sync_reports",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    guildId: uuid("guild_id")
+      .notNull()
+      .references(() => guilds.id, { onDelete: "cascade" }),
+    userId: text("user_id").references(() => users.id, { onDelete: "set null" }),
+    tokenName: text("token_name").notNull(),
+    addonVersion: text("addon_version"),
+    received: integer("received").notNull(),
+    updated: integer("updated").notNull(),
+    unchanged: integer("unchanged").notNull(),
+    skippedOld: integer("skipped_old").notNull(),
+    /** Names the addon knows that match no character on the site. */
+    unmatched: jsonb("unmatched").$type<string[]>().notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [index("addon_sync_reports_guild_idx").on(t.guildId, t.createdAt)],
 );
 
 export const groupKindEnum = pgEnum("group_kind", GROUP_KINDS);

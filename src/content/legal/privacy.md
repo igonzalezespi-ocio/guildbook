@@ -1,6 +1,6 @@
 # Política de privacidad
 
-Última actualización: 11 de octubre de 2026
+Última actualización: 12 de octubre de 2026
 
 Esta política explica qué información recoge Guildbook, por qué, quién puede verla y qué opciones tienes. Cubre guildbook.io, cada sitio de hermandad en un subdominio de guildbook.io (por ejemplo osm.guildbook.io), los dominios propios que las hermandades conectan a Guildbook y la app complementaria Vigil. Guildbook lo gestiona Matthew Rosendin ("nosotros"), que es el responsable del tratamiento de los datos del servicio.
 
@@ -94,6 +94,10 @@ Cuando te apuntas a un grupo desde Discord, guardamos el grupo (tipo, instancia,
 
 El bot **no** recibe tu correo, tu nombre de Discord ni tus datos de Battle.net, y no puede entrar en nuestra base de datos: solo ve lo que esta web le da con su clave. El bot lo gestiona un miembro de la hermandad, en su propio equipo.
 
+### Sincronizador de profesiones del addon
+
+Si un oficial usa el sincronizador, este programa lee en su PC lo que guarda el addon del juego Guild Professions & Recipes y envía a esta web, de cada personaje de la hermandad que el addon conoce: su nombre, su identificador del juego (GUID), sus profesiones con su nivel y la fecha en que el addon los vio. Con eso actualizamos las profesiones de tu personaje en la web. Guardamos el identificador del juego de tu personaje y esa fecha, para reconocerlo la próxima vez, hasta que se borre el personaje. Cada envío deja un informe para los oficiales (cuántos personajes llegaron y cuáles no se encontraron en la web, por su nombre del juego); se guardan los 20 últimos. Para enviar, el oficial usa una clave personal que crea en la web; guardamos solo una versión cifrada de esa clave, y deja de valer si la anula o si deja de ser oficial.
+
 ### Solicitudes de soporte
 
 Cuando envías una solicitud de soporte desde guildbook.io/support, guardamos su categoría, su asunto y su mensaje, la hermandad que elegiste (si la hay), el correo de respuesta que indicaste (si lo hay) y datos que nos ayudan a responder: tu ID de usuario, tu nombre de Discord, la página de la que venías, el agente de usuario de tu navegador y la versión del sitio. Enviamos una copia por correo al operador de Guildbook para poder responder.
@@ -138,6 +142,7 @@ Si una hermandad decide aparecer en el directorio de Guildbook, su nombre y su n
 - La lista de miembros y los rangos de la hermandad.
 - El registro de auditoría de la hermandad.
 - Los informes de Vigil que hayas compartido con los oficiales o con la hermandad.
+- Los informes del sincronizador de profesiones, con los nombres del juego que no se encontraron en la web.
 
 ### Visible para los miembros de la hermandad
 
@@ -172,6 +177,7 @@ Tus datos se guardan y se tratan en Estados Unidos. Si estás fuera de EE. UU., 
 - **Token de acceso de Battle.net:** caduca al cabo de unas 24 horas. Se elimina si Blizzard lo rechaza, y se borra cuando desvinculas.
 - **Personajes:** los personajes archivados salen de la plantilla pero se conservan para que el historial de la hermandad siga intacto, hasta que se borre la hermandad o tu cuenta.
 - **Solicitudes:** las solicitudes pendientes y aceptadas se conservan en los registros de la hermandad hasta que se borre la hermandad o tu cuenta. **Las solicitudes retiradas y rechazadas se borran automáticamente {{applicationRetentionDays}} días** después de resolverse (o, si nunca se revisaron, de enviarse), y el nombre del aspirante se sustituye por «Usuario eliminado» en las entradas de auditoría que le afectan.
+- **Identificador del juego de tus personajes** (del sincronizador): hasta que se borre el personaje. **Informes del sincronizador:** los 20 últimos de la hermandad.
 - **Grupos de Discord:** 90 días desde la fecha del grupo; después se borran automáticamente con quién iba en cada uno.
 - **Informes de Vigil:** hasta que los borres, o se borre tu pertenencia, la hermandad o tu cuenta.
 - **Solicitudes de soporte:** hasta que se borre tu cuenta. Las copias enviadas por correo al operador se conservan en su buzón el tiempo necesario para atender la solicitud.
